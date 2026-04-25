@@ -16,10 +16,14 @@ out/
 
 # Uploads & temporäre Dateien (Server-Disk)
 storage/uploads/*
+storage/uploads/images/*
+storage/uploads/videos/*
 storage/exports/*
 storage/thumbnails/*
 data/projects/*
 !storage/uploads/.gitkeep
+!storage/uploads/images/.gitkeep
+!storage/uploads/videos/.gitkeep
 !storage/exports/.gitkeep
 !storage/thumbnails/.gitkeep
 !data/projects/.gitkeep

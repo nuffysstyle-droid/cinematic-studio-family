@@ -8,6 +8,14 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 ## [Unreleased]
 
 ### Hinzugefügt
+- TODO #11: api/upload.php — sicherer Upload-Endpunkt
+  - POST-only, JSON-Response
+  - MIME-Type via finfo (nicht Browser-Header)
+  - Erlaubt: JPEG/PNG/WEBP (≤10 MB), MP4/WEBM/MOV (≤100 MB)
+  - Dateinamen: bin2hex(random_bytes(16)) — kein Original-Name
+  - Ziel: storage/uploads/images/ oder storage/uploads/videos/
+  - Ordner werden automatisch angelegt
+  - .gitignore um Upload-Unterordner erweitert
 - Mini-Fix: Toast-CSS in app.css ergänzt
   - .toast-container (fixed, rechts oben, z-index 9999)
   - .toast--info/success/error/warning (Dark + farbige Border-Left + Glow)
