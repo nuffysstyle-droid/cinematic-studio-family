@@ -8,6 +8,13 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 ## [Unreleased]
 
 ### Hinzugefügt
+- TODO #12: api/projects.php — Projekt-CRUD auf JSON-Basis
+  - Aktionen: list, create, get, update, delete
+  - Speicher: data/projects/projects.json (LOCK_EX, atomares Schreiben)
+  - IDs: bin2hex(random_bytes(8))
+  - JSON-Body + POST + GET als Input unterstützt
+  - Validierung: title + type required
+  - data/projects/projects.json als leeres Init-Array committed
 - TODO #11: api/upload.php — sicherer Upload-Endpunkt
   - POST-only, JSON-Response
   - MIME-Type via finfo (nicht Browser-Header)
