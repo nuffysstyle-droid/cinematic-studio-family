@@ -8,6 +8,14 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 ## [Unreleased]
 
 ### Hinzugefügt
+- TODO #9: assets/css/app.css — Dark Cinematic Basis-Stylesheet
+  - CSS Reset, :root Variablen (bg, text, accent-blue/orange, border, shadow)
+  - Layout: .app-layout, .sidebar (fixed 260px, collapsed-Vorbereitung), .main-content
+  - Sidebar: nav-items, hover/active states
+  - Topbar, Cards/Panels, Buttons (primary/secondary/danger/sm/lg)
+  - Form-Elemente im Dark-Stil mit sichtbarem Fokus-State
+  - Utility-Klassen (flex, grid, gap, mt, mb, text)
+  - Responsive Breakpoints 1024px + 768px vorbereitet
 - Projekt-Memory-Dateien angelegt (PROJECT_STATUS.md, ARCHITECTURE.md, TODO.md, CHANGELOG.md, CLAUDE_INSTRUCTIONS.md, PROMPT_TEMPLATES.md)
 - TODO #1 abgeschlossen
 
