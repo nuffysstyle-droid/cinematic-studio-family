@@ -26,7 +26,7 @@
 | 8 | includes/ (config, header, sidebar, footer,  | ✅     | P1        |
 |   | prompt-engine, guidance)                     |        |           |
 | 9 | assets/css/app.css Basis-Stylesheet          | ✅     | P1        |
-|10 | assets/js/ (app.js, editor.js, upload.js)    | ⬜     | P1        |
+|10 | assets/js/ (app.js, editor.js, upload.js)    | ✅     | P1        |
 |11 | api/upload.php — Datei-Upload Endpunkt       | ⬜     | P1        |
 |12 | api/projects.php — Projekt-CRUD              | ⬜     | P1        |
 |13 | FFmpeg via exec() in functions.php           | ⬜     | P1        |

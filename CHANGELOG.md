@@ -8,6 +8,12 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 ## [Unreleased]
 
 ### Hinzugefügt
+- TODO #10: assets/js/ — Basis-JS Grundgerüst
+  - app.js: Sidebar Toggle, Active Nav Highlight, Modal, Toast
+  - editor.js: PromptField Helper, 5 AI Action Buttons (Platzhalter)
+  - upload.js: UploadPreview, DropZone, Validierung (Bild/Video)
+  - footer.php: $extraJs auf Array-Support erweitert
+  - image-studio.php + video-studio.php: laden jetzt editor.js + upload.js
 - TODO #9: assets/css/app.css — Dark Cinematic Basis-Stylesheet
   - CSS Reset, :root Variablen (bg, text, accent-blue/orange, border, shadow)
   - Layout: .app-layout, .sidebar (fixed 260px, collapsed-Vorbereitung), .main-content

@@ -2,7 +2,7 @@
 require_once 'includes/config.php';
 require_once 'includes/guidance.php';
 $pageTitle = 'Image Studio';
-$extraJs   = 'editor.js';
+$extraJs   = ['editor.js', 'upload.js'];
 require_once 'includes/header.php';
 ?>
 
