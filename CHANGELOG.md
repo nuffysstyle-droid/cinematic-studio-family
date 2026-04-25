@@ -27,6 +27,11 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 - ARCHITECTURE.md komplett auf PHP umgeschrieben
 - TODO Phase 1 auf PHP-Tasks angepasst
 - TODO #6: Ordnerstruktur angelegt (includes/, api/, assets/, storage/, data/)
+- TODO #7+8: 14 PHP-Seiten Grundgerüst + 6 Includes angelegt
+  - Seiten: index, dashboard, new-project, api-key, image-studio, video-studio,
+    elements, tiktok-studio, tiktok-animation, tiktok-sticker,
+    ready-videos, trailer-builder, academy, settings
+  - Includes: config, header, sidebar, footer, prompt-engine, guidance
 
 ---
 
