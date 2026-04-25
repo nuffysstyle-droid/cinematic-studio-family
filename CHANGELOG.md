@@ -8,6 +8,19 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 ## [Unreleased]
 
 ### Hinzugefügt
+- TODO #13: includes/prompt-engine.php — Prompt Engine Core
+  - buildImagePrompt($input, $template) → positive + negative prompt
+    Templates: character, car, product, creature, startframe, endframe, character_sheet
+    Felder: SUBJECT, ACTION, ENVIRONMENT, LIGHTING, CAMERA, STYLE, MATERIALS, FINAL LOOK
+  - buildVideoPrompt($input, $template, $options) → positive + negative + meta
+    Templates: cinematic_scene, action_trailer, pov_car, product_ad, horror_creature,
+               transformation, blockbuster, tiktok_hook
+    Options: model, duration (5/8/10/15), quality, mode
+    Auto-Zeitstruktur (0s → midpoint → endPoint)
+  - improvePrompt(), fixFacesPrompt(), betterMotionPrompt(),
+    perfectTransitionPrompt(), cinematicUpgradePrompt()
+  - getAvailableTemplates(), sanitizePromptInput()
+  - Duplikat-Check beim Anhängen von Modifikatoren
 - TODO.md komplett neu strukturiert:
   - FFmpeg-Service verschoben von Phase 1 → Phase 4 (Multi-Scene + Export)
   - Phase 2 V1-Fokus: Prompt Engine, API-Key, Image/Video Studio, Elements, Guidance
