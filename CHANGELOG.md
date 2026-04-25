@@ -8,6 +8,11 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 ## [Unreleased]
 
 ### Hinzugefügt
+- Mini-Fix: Toast-CSS in app.css ergänzt
+  - .toast-container (fixed, rechts oben, z-index 9999)
+  - .toast--info/success/error/warning (Dark + farbige Border-Left + Glow)
+  - .toast--out + @keyframes toast-in/out (slide-in von rechts)
+  - Mobile: toast-container full-width unter 768px
 - TODO #10: assets/js/ — Basis-JS Grundgerüst
   - app.js: Sidebar Toggle, Active Nav Highlight, Modal, Toast
   - editor.js: PromptField Helper, 5 AI Action Buttons (Platzhalter)

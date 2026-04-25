@@ -484,7 +484,77 @@ select {
     color: var(--text-primary);
 }
 
-/* 11) RESPONSIVENESS (Vorbereitung)
+/* 11) TOAST / STATUS MESSAGES
+   ============================================================ */
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.toast {
+    pointer-events: all;
+    min-width: 260px;
+    max-width: 380px;
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.4;
+    border-left: 3px solid transparent;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    animation: toast-in 220ms ease forwards;
+}
+
+.toast--info {
+    background: var(--bg-elevated);
+    border-color: var(--accent-blue);
+    color: var(--text-primary);
+    box-shadow: var(--shadow), 0 0 12px var(--accent-blue-glow);
+}
+
+.toast--success {
+    background: var(--bg-elevated);
+    border-color: #4ade80;
+    color: var(--text-primary);
+    box-shadow: var(--shadow), 0 0 12px rgba(74, 222, 128, 0.15);
+}
+
+.toast--error {
+    background: var(--bg-elevated);
+    border-color: #f56565;
+    color: var(--text-primary);
+    box-shadow: var(--shadow), 0 0 12px rgba(245, 101, 101, 0.2);
+}
+
+.toast--warning {
+    background: var(--bg-elevated);
+    border-color: var(--accent-orange);
+    color: var(--text-primary);
+    box-shadow: var(--shadow), 0 0 12px var(--accent-orange-glow);
+}
+
+.toast--out {
+    animation: toast-out 200ms ease forwards;
+}
+
+@keyframes toast-in {
+    from { opacity: 0; transform: translateX(24px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes toast-out {
+    from { opacity: 1; transform: translateX(0); }
+    to   { opacity: 0; transform: translateX(24px); }
+}
+
+/* 12) RESPONSIVENESS
    ============================================================ */
 @media (max-width: 1024px) {
     .grid-4 { grid-template-columns: repeat(2, 1fr); }
@@ -517,5 +587,16 @@ select {
     .grid-3,
     .grid-4 {
         grid-template-columns: 1fr;
+    }
+
+    .toast-container {
+        top: 12px;
+        right: 12px;
+        left: 12px;
+    }
+
+    .toast {
+        min-width: unset;
+        max-width: 100%;
     }
 }

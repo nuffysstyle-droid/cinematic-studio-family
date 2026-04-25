@@ -25,7 +25,7 @@
 | 7 | 14 PHP-Seiten Grundgerüst anlegen             | ✅     | P1        |
 | 8 | includes/ (config, header, sidebar, footer,  | ✅     | P1        |
 |   | prompt-engine, guidance)                     |        |           |
-| 9 | assets/css/app.css Basis-Stylesheet          | ✅     | P1        |
+| 9 | assets/css/app.css Basis-Stylesheet + Toast  | ✅     | P1        |
 |10 | assets/js/ (app.js, editor.js, upload.js)    | ✅     | P1        |
 |11 | api/upload.php — Datei-Upload Endpunkt       | ⬜     | P1        |
 |12 | api/projects.php — Projekt-CRUD              | ⬜     | P1        |
