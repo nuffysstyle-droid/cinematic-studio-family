@@ -10,7 +10,7 @@
 | # | Aufgabe                                      | Status | Priorität |
 |---|----------------------------------------------|--------|-----------|
 | 1 | Projektstruktur & Memory-Dateien anlegen     | ✅     | P0        |
-| 2 | Tech-Stack entscheiden (Web-App + Node)      | ✅     | P0        |
+| 2 | Tech-Stack entscheiden (Web-App + PHP)       | ✅     | P0        |
 | 3 | Plattform-Ziele festlegen (Win + Mac)        | ✅     | P0        |
 | 4 | Video-Engine klären (FFmpeg nativ, server)   | ✅     | P0        |
 | 5 | Repo initialisieren (Git + .gitignore)       | ✅     | P0        |
@@ -22,53 +22,56 @@
 
 | # | Aufgabe                                      | Status | Priorität |
 |---|----------------------------------------------|--------|-----------|
-| 7 | 14 PHP-Seiten Grundgerüst anlegen             | ✅     | P1        |
+| 7 | 14 PHP-Seiten Grundgerüst anlegen            | ✅     | P1        |
 | 8 | includes/ (config, header, sidebar, footer,  | ✅     | P1        |
 |   | prompt-engine, guidance)                     |        |           |
 | 9 | assets/css/app.css Basis-Stylesheet + Toast  | ✅     | P1        |
 |10 | assets/js/ (app.js, editor.js, upload.js)    | ✅     | P1        |
 |11 | api/upload.php — Datei-Upload Endpunkt       | ✅     | P1        |
 |12 | api/projects.php — Projekt-CRUD              | ✅     | P1        |
-|13 | FFmpeg via exec() in functions.php           | ⬜     | P1        |
 
 ---
 
-## PHASE 2 — Kern-Features
+## PHASE 2 — Kern-Features V1
 
 | # | Aufgabe                                      | Status | Priorität |
 |---|----------------------------------------------|--------|-----------|
-|14 | Media Import (Drag & Drop, Datei-Dialog)     | ⬜     | P1        |
-|15 | Thumbnail-Generierung                        | ⬜     | P1        |
-|16 | Media-Bibliothek / Asset-Browser             | ⬜     | P2        |
-|17 | Timeline-Komponente (Basis)                  | ⬜     | P1        |
-|18 | Clip Trim / Cut / Split                      | ⬜     | P2        |
-|19 | Video-Preview / Playback                     | ⬜     | P1        |
-|20 | Projekt speichern / laden                    | ⬜     | P1        |
-|21 | Autosave                                     | ⬜     | P2        |
+|13 | includes/prompt-engine.php — Grundfunktionen | ⬜     | P1        |
+|14 | api-key.php — API-Key Eingabe & Session      | ⬜     | P1        |
+|15 | image-studio.php — UI + Prompt + Upload      | ⬜     | P1        |
+|16 | video-studio.php — UI + Prompt + Upload      | ⬜     | P1        |
+|17 | elements.php — Element Library Grundgerüst   | ⬜     | P2        |
+|18 | includes/guidance.php — Smart Guidance       | ⬜     | P2        |
+|19 | dashboard.php — Projektübersicht + CRUD      | ⬜     | P2        |
+|20 | new-project.php — Projekt-Erstellformular    | ⬜     | P2        |
 
 ---
 
-## PHASE 3 — Erweiterte Features
+## PHASE 3 — TikTok & Trailer Studio
 
 | # | Aufgabe                                      | Status | Priorität |
 |---|----------------------------------------------|--------|-----------|
-|22 | Template Engine (Jahresrückblick, Urlaub…)   | ⬜     | P2        |
-|23 | Text-Overlays / Titelkarten                  | ⬜     | P2        |
-|24 | Übergänge & Animationen                      | ⬜     | P2        |
-|25 | Audio-Modul (Musik, Voice-Over)              | ⬜     | P2        |
-|26 | Filter & Farbkorrektur                       | ⬜     | P3        |
-|27 | Musik-Bibliothek (royalty-free)              | ⬜     | P3        |
+|21 | tiktok-studio.php — UI + Prompt              | ⬜     | P2        |
+|22 | tiktok-animation.php — Animation-Editor      | ⬜     | P2        |
+|23 | tiktok-sticker.php — Sticker-Werkzeug        | ⬜     | P2        |
+|24 | trailer-builder.php — Trailer-Editor         | ⬜     | P2        |
+|25 | ready-videos.php — Vorlagen-Galerie          | ⬜     | P3        |
+|26 | academy.php — Tutorials & Guides             | ⬜     | P3        |
 
 ---
 
-## PHASE 4 — Export & Sharing
+## PHASE 4 — Multi-Scene + Export (FFmpeg)
 
 | # | Aufgabe                                      | Status | Priorität |
 |---|----------------------------------------------|--------|-----------|
-|28 | Export-Engine (MP4, WebM, GIF)               | ⬜     | P1        |
-|29 | Fortschrittsanzeige beim Export              | ⬜     | P2        |
-|30 | Export-Voreinstellungen (720p/1080p/4K)      | ⬜     | P2        |
-|31 | Teilen-Funktion (WhatsApp, YouTube…)         | ⬜     | P3        |
+|27 | includes/functions.php — FFmpeg-Service      | ⬜     | P2        |
+|28 | Multi-Scene Clip-Merge                       | ⬜     | P2        |
+|29 | api/export.php — Export-Endpunkt             | ⬜     | P2        |
+|30 | api/progress.php — Export-Fortschritt (SSE)  | ⬜     | P2        |
+|31 | api/thumbnail.php — Thumbnail-Generierung    | ⬜     | P2        |
+|32 | Export-Voreinstellungen (720p/1080p/4K)      | ⬜     | P2        |
+|33 | Fortschrittsanzeige im UI                    | ⬜     | P2        |
+|34 | Teilen-Funktion (Download, WhatsApp, YouTube)| ⬜     | P3        |
 
 ---
 
@@ -76,15 +79,16 @@
 
 | # | Aufgabe                                      | Status | Priorität |
 |---|----------------------------------------------|--------|-----------|
-|32 | Unit Tests (Vitest)                          | ⬜     | P2        |
-|33 | E2E Tests (Playwright)                       | ⬜     | P3        |
-|34 | Performance-Optimierung                      | ⬜     | P2        |
-|35 | App-Packaging (electron-builder)             | ⬜     | P2        |
-|36 | Auto-Updater                                 | ⬜     | P3        |
-|37 | Installer für Win/Mac/Linux                  | ⬜     | P3        |
+|35 | settings.php — App-Einstellungen UI          | ⬜     | P2        |
+|36 | Performance-Optimierung                      | ⬜     | P2        |
+|37 | storage/ + data/ gegen Web-Zugriff absichern | ⬜     | P1        |
+|38 | Render Deployment konfigurieren              | ⬜     | P1        |
+|39 | E2E Tests (Playwright)                       | ⬜     | P3        |
+|40 | Installer / Release Notes                    | ⬜     | P3        |
 
 ---
 
 ## Notizen
 - Prioritäten: P0 = Sofort, P1 = Phase-kritisch, P2 = Wichtig, P3 = Nice-to-have
-- Reihenfolge kann sich nach Tech-Stack-Entscheidung ändern
+- FFmpeg erst in Phase 4 — wird gebraucht wenn Multi-Scene + Clip-Merge gebaut wird
+- V1 Fokus: Prompt Engine → API-Key → Image Studio → Video Studio → Element Library → Guidance

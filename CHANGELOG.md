@@ -8,6 +8,12 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 ## [Unreleased]
 
 ### Hinzugefügt
+- TODO.md komplett neu strukturiert:
+  - FFmpeg-Service verschoben von Phase 1 → Phase 4 (Multi-Scene + Export)
+  - Phase 2 V1-Fokus: Prompt Engine, API-Key, Image/Video Studio, Elements, Guidance
+  - Phase 3: TikTok + Trailer Studio
+  - Phase 4: FFmpeg + Export-Pipeline
+  - 40 Tasks gesamt, klare Reihenfolge
 - TODO #12: api/projects.php — Projekt-CRUD auf JSON-Basis
   - Aktionen: list, create, get, update, delete
   - Speicher: data/projects/projects.json (LOCK_EX, atomares Schreiben)
