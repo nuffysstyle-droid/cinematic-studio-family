@@ -13,8 +13,8 @@
 | 2 | Tech-Stack entscheiden (Web-App + Node)      | ✅     | P0        |
 | 3 | Plattform-Ziele festlegen (Win + Mac)        | ✅     | P0        |
 | 4 | Video-Engine klären (FFmpeg nativ, server)   | ✅     | P0        |
-| 5 | Repo initialisieren (Git + .gitignore)       | 🟡     | P0        |
-| 6 | Basis-Projektstruktur aufsetzen              | ⬜     | P0        |
+| 5 | Repo initialisieren (Git + .gitignore)       | ✅     | P0        |
+| 6 | Basis-Projektstruktur aufsetzen (PHP)        | ✅     | P0        |
 
 ---
 
@@ -22,13 +22,13 @@
 
 | # | Aufgabe                                      | Status | Priorität |
 |---|----------------------------------------------|--------|-----------|
-| 7 | Node.js + Express + TypeScript Backend Setup | ⬜     | P1        |
-| 8 | React + TypeScript + Vite Frontend Setup     | ⬜     | P1        |
-| 9 | Tailwind CSS einrichten                      | ⬜     | P1        |
-|10 | Zustand State Management einrichten          | ⬜     | P1        |
-|11 | API-Client (Axios) einrichten                | ⬜     | P1        |
-|12 | FFmpeg-Service (serverseitig)                | ⬜     | P1        |
-|13 | Basis-Navigation / React Router              | ⬜     | P1        |
+| 7 | index.php + editor.php + export.php anlegen  | ⬜     | P1        |
+| 8 | includes/ (header, footer, functions.php)    | ⬜     | P1        |
+| 9 | assets/css/app.css Basis-Stylesheet          | ⬜     | P1        |
+|10 | assets/js/ (app.js, editor.js, upload.js)    | ⬜     | P1        |
+|11 | api/upload.php — Datei-Upload Endpunkt       | ⬜     | P1        |
+|12 | api/projects.php — Projekt-CRUD              | ⬜     | P1        |
+|13 | FFmpeg via exec() in functions.php           | ⬜     | P1        |
 
 ---
 

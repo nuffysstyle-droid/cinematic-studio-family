@@ -1,198 +1,151 @@
 # ARCHITECTURE.md — Cinematic Studio Family
 
-## Status: Architektur vollständig festgelegt (Stand 2026-04-25)
+## Status: Architektur vollständig festgelegt (Stand 2026-04-26)
 
 ### Festgelegte Entscheidungen
-| Entscheidung       | Wert                                          |
-|--------------------|-----------------------------------------------|
-| App-Typ            | **Web-App** (Browser-Frontend)                |
-| Ziel-Plattformen   | **Windows + macOS**                           |
-| Video-Verarbeitung | **FFmpeg nativ (serverseitig)**               |
-| Deployment         | **Cloud-gehostet** (öffentliche URL, kein Install) |
-| Auth / Login       | **Kein Login in v1** — kein Registrierungszwang |
-| API-Key-Handling   | **Session-temporär** — nie serverseitig gespeichert |
+| Entscheidung       | Wert                                               |
+|--------------------|----------------------------------------------------|
+| App-Typ            | **PHP Web-App** (kein Framework, einfaches MVP)    |
+| Struktur           | **Flat PHP** — kein Monorepo, kein Build-Step      |
+| Ziel-Plattformen   | **Windows + macOS** (Browser-basiert)              |
+| Video-Verarbeitung | **FFmpeg nativ** via PHP `exec()`                  |
+| Deployment         | **Render** (Cloud, öffentliche URL)                |
+| Datei-Speicher     | **Server-Disk temporär** (nach Export gelöscht)    |
+| Auth / Login       | **Kein Login in v1**                               |
+| API-Key-Handling   | **Session-temporär** — nur `sessionStorage` Browser |
 
 ---
 
 ## Architektur-Übersicht
 
 ```
-Browser (React)
-   ↕  REST + SSE
-Node.js API Server auf Render  ←→  FFmpeg (child_process)
+Browser (HTML + CSS + JS)
+   ↕  HTTP / fetch()
+PHP Seiten + API-Endpunkte auf Render
    ↕
-Server-Disk temporär (Uploads werden nach Export gelöscht)
+FFmpeg (exec/shell_exec)    storage/    data/
 ```
 
-- **Frontend:** React SPA, im Browser, über öffentliche Render-URL erreichbar
-- **Backend:** Node.js/Express auf Render, verarbeitet Uploads und FFmpeg-Jobs
-- **Datei-Speicher:** Server-Disk temporär — Upload → Verarbeitung → Download → Löschen
-- **API-Keys:** Nur in `sessionStorage` des Browsers, nie serverseitig gespeichert
-- **Upgrade-Pfad:** Server-Disk → Cloudflare R2/S3 sobald Persistenz nötig wird
+Keine Build-Pipeline. Kein npm. PHP läuft direkt auf dem Server.
 
 ---
 
-## Sicherheits-Regeln (API-Key)
-
-| Regel | Umsetzung |
-|---|---|
-| Key nie persistent speichern | Nur `sessionStorage` im Browser — wird bei Tab-Schließen gelöscht |
-| Key nie an Backend senden | Alle AI-Calls direkt vom Frontend mit dem User-Key |
-| Key nie loggen | Kein Logging von Authorization-Headern im Backend |
-| Key nie in URL | Kein API-Key als Query-Parameter |
-
----
-
-## Projektstruktur (geplant)
+## Projektstruktur
 
 ```
 cinematic-studio-family/
-├── frontend/                  # React SPA
-│   ├── src/
-│   │   ├── components/        # UI-Komponenten
-│   │   ├── pages/             # Haupt-Screens
-│   │   ├── hooks/             # Custom React Hooks
-│   │   ├── store/             # Zustand State Management
-│   │   ├── api/               # API-Client (fetch/axios)
-│   │   └── styles/            # Tailwind CSS
-│   ├── public/
-│   └── index.html
-├── backend/                   # Node.js API Server
-│   ├── src/
-│   │   ├── index.ts           # Server-Einstiegspunkt
-│   │   ├── routes/            # API-Routen
-│   │   ├── services/
-│   │   │   ├── ffmpeg.service.ts     # FFmpeg-Wrapping
-│   │   │   ├── project.service.ts    # Projekt-CRUD
-│   │   │   └── export.service.ts     # Export-Pipeline
-│   │   ├── middleware/        # Auth, Error, Upload
-│   │   └── types/             # Shared TypeScript Typen
-│   └── uploads/               # Temporäre Upload-Dateien
-├── shared/                    # Typen & Interfaces (Frontend + Backend)
-│   └── types.ts
-├── projects/                  # Gespeicherte Projekte (JSON)
+├── index.php                  # Startseite / Dashboard
+├── editor.php                 # Video-Editor
+├── export.php                 # Export-Seite
+│
+├── includes/                  # Wiederverwendbare PHP-Komponenten
+│   ├── header.php
+│   ├── footer.php
+│   ├── nav.php
+│   └── functions.php          # Hilfsfunktionen (FFmpeg, JSON, etc.)
+│
+├── api/                       # API-Endpunkte (JSON-Response)
+│   ├── upload.php             # POST: Datei hochladen
+│   ├── projects.php           # GET/POST/PUT/DELETE: Projekte
+│   ├── export.php             # POST: Export starten
+│   ├── progress.php           # GET: Export-Fortschritt (SSE)
+│   └── thumbnail.php          # GET: Thumbnail liefern
+│
+├── assets/
+│   ├── css/
+│   │   └── app.css            # Haupt-Stylesheet
+│   └── js/
+│       ├── app.js             # Haupt-JS (fetch, UI-Logik)
+│       ├── editor.js          # Timeline-Editor-Logik
+│       └── upload.js          # Drag & Drop Upload
+│
+├── storage/                   # Temporäre Dateien (in .gitignore)
+│   ├── uploads/               # Hochgeladene Rohdateien
+│   ├── exports/               # Fertige Export-Videos
+│   └── thumbnails/            # Generierte Thumbnails
+│
+├── data/                      # JSON-Projektdaten (in .gitignore)
+│   └── projects/              # Eine .json Datei pro Projekt
+│
 └── [Konfigurationsdateien]
 ```
 
 ---
 
-## Tech-Stack (festgelegt)
+## Tech-Stack
 
-| Schicht          | Technologie                  | Begründung                          |
-|------------------|------------------------------|-------------------------------------|
-| Frontend         | React + TypeScript           | Etabliert, große Ökosystem          |
-| Build-Tool       | Vite                         | Schnell, React-optimiert            |
-| Styling          | Tailwind CSS                 | Rapid UI, kein CSS-Overhead         |
-| State Management | Zustand                      | Leichtgewichtig, React-nativ        |
-| API-Client       | Axios                        | Interceptors, einfaches Error-Handling |
-| Backend          | Node.js + Express + TypeScript | FFmpeg child_process, Datei-IO     |
-| Video-Processing | FFmpeg (nativ, serverseitig) | Volle Codec-Unterstützung, schnell  |
-| Datei-Upload     | Multer                       | Multipart-Upload für Videos         |
-| Projekt-Daten    | JSON-Dateien (lokal)         | Einfach, kein DB-Setup nötig        |
-| Testing          | Vitest + Playwright          | Modern, schnell                     |
+| Schicht          | Technologie              | Begründung                            |
+|------------------|--------------------------|---------------------------------------|
+| Backend          | PHP 8.x                  | Kein Build-Step, direkt deploybar     |
+| Frontend         | Vanilla JS + HTML + CSS  | Kein Framework-Overhead in v1         |
+| Video-Processing | FFmpeg via PHP `exec()`  | Volle Codec-Unterstützung             |
+| Datei-Upload     | PHP `$_FILES`            | Nativ, kein Paket nötig               |
+| Projekt-Daten    | JSON-Dateien in `data/`  | Einfach, lesbar, kein DB-Setup        |
+| Deployment       | Render (PHP runtime)     | Einfaches Cloud-Deployment            |
+| Export-Progress  | Server-Sent Events (SSE) | PHP `ob_flush()` + `flush()`          |
 
 ---
 
-## Kern-Module (geplant)
-
-### 1. Media Import
-- Unterstützte Formate: MP4, MOV, MKV, JPG, PNG, HEIC
-- Drag & Drop Upload via Browser → Backend speichert in `/uploads`
-- Thumbnail-Generierung via FFmpeg (`ffmpeg -ss 00:00:01 -vframes 1`)
-
-### 2. Timeline Editor
-- Drag & Drop Clip-Anordnung (Frontend, React DnD)
-- Trim, Cut, Split (Metadaten im Frontend, Render auf Server)
-- Mehrspurige Audio/Video-Timeline
-
-### 3. Template Engine
-- Vorlagen: Jahresrückblick, Urlaub, Geburtstag, Baby-Film
-- Animationen, Übergänge, Titelkarten
-- Anpassbare Text-Overlays
-
-### 4. Audio-Modul
-- Hintergrundmusik-Bibliothek (royalty-free, lokal gebündelt)
-- Lautstärke-Hüllkurven
-- Voice-Over-Aufnahme (Web Audio API → Upload)
-
-### 5. Export-Engine (FFmpeg serverseitig)
-- Server empfängt Timeline-JSON → baut FFmpeg-Command → rendert Video
-- Ausgabe: MP4 (H.264), WebM, GIF
-- Auflösungen: 720p, 1080p, 4K
-- Progress via Server-Sent Events (SSE)
-
-### 6. Projekt-Verwaltung
-- Projekte als JSON gespeichert in `/projects/`
-- Autosave (alle 30s, PATCH /projects/:id)
-- Projektvorschau (Thumbnail des ersten Clips)
-
----
-
-## API-Routen (geplant)
+## API-Endpunkte
 
 ```
-POST   /api/upload              → Datei hochladen
-GET    /api/projects            → Alle Projekte
-POST   /api/projects            → Neues Projekt
-GET    /api/projects/:id        → Projekt laden
-PUT    /api/projects/:id        → Projekt speichern
-DELETE /api/projects/:id        → Projekt löschen
-POST   /api/export/:id          → Export starten
-GET    /api/export/:id/progress → Export-Fortschritt (SSE)
-GET    /api/thumbnail/:fileId   → Thumbnail abrufen
+POST   api/upload.php              → Datei hochladen → { fileId, fileName }
+GET    api/projects.php            → Alle Projekte   → [ project, ... ]
+POST   api/projects.php            → Neues Projekt   → { id, ... }
+GET    api/projects.php?id=X       → Projekt laden   → { project }
+PUT    api/projects.php?id=X       → Projekt speichern
+DELETE api/projects.php?id=X       → Projekt löschen
+POST   api/export.php              → Export starten  → { jobId }
+GET    api/progress.php?job=X      → Fortschritt SSE → data: { percent }
+GET    api/thumbnail.php?file=X    → Thumbnail-Bild
 ```
 
 ---
 
-## Datenmodell
+## Datenmodell (JSON)
 
-```typescript
-// shared/types.ts
-
-interface Project {
-  id: string
-  name: string
-  createdAt: string
-  updatedAt: string
-  clips: Clip[]
-  audioTracks: AudioTrack[]
-  template?: string
-  exportSettings: ExportSettings
-}
-
-interface Clip {
-  id: string
-  fileId: string        // Referenz auf Upload
-  fileName: string
-  startTime: number     // Sekunden im Quellmaterial
-  endTime: number
-  timelinePosition: number
-  duration: number
-  filters: Filter[]
-}
-
-interface AudioTrack {
-  id: string
-  fileId: string
-  volume: number        // 0–1
-  timelinePosition: number
-}
-
-interface ExportSettings {
-  format: 'mp4' | 'webm' | 'gif'
-  resolution: '720p' | '1080p' | '4k'
-  fps: 24 | 30 | 60
+```json
+// data/projects/{id}.json
+{
+  "id": "abc123",
+  "name": "Urlaub 2026",
+  "createdAt": "2026-04-26T10:00:00Z",
+  "updatedAt": "2026-04-26T10:00:00Z",
+  "clips": [
+    {
+      "id": "clip1",
+      "fileId": "upload_xyz",
+      "fileName": "video.mp4",
+      "startTime": 0,
+      "endTime": 10,
+      "timelinePosition": 0,
+      "duration": 10
+    }
+  ],
+  "audioTracks": [],
+  "exportSettings": {
+    "format": "mp4",
+    "resolution": "1080p",
+    "fps": 30
+  }
 }
 ```
 
 ---
 
-## Offene Architektur-Fragen
-- [x] **Deployment-Modell:** Cloud-gehostet ✅
-- [x] **Auth:** Kein Login in v1 ✅
-- [x] **API-Key-Handling:** Session-temporär, nie serverseitig ✅
-- [x] **Cloud-Provider:** **Render** ✅ (Node.js + FFmpeg, einfaches Deployment)
-- [x] **Datei-Speicher:** **Server-Disk temporär** ✅ (Dateien nach Export gelöscht)
-- [ ] **Projekt-Persistenz:** JSON in Cloud-Disk oder DB (SQLite/Postgres)? ← v2
+## Sicherheits-Regeln
 
-> **Upgrade-Pfad (v2+):** Wenn User-Accounts + dauerhafte Mediathek benötigt werden → Migration zu Cloudflare R2 / S3.
+| Regel | Umsetzung |
+|---|---|
+| API-Key nie persistent speichern | Nur `sessionStorage` im Browser |
+| API-Key nie ans Backend senden | Alle AI-Calls direkt vom Browser |
+| Upload-Validierung | Nur erlaubte MIME-Types, max. Dateigröße prüfen |
+| Kein `exec()` mit User-Input | FFmpeg-Parameter werden server-seitig gebaut, nie direkt aus Request |
+| `storage/` nicht webzugänglich | Via `.htaccess` oder Render-Konfiguration absichern |
+
+---
+
+## Offene Fragen (v2)
+- [ ] **Projekt-Persistenz:** JSON-Dateien reichen für v1 — SQLite/DB erst in v2
+- [ ] **Datei-Speicher Upgrade:** Server-Disk → Cloudflare R2/S3 in v2
+- [ ] **Auth:** Kein Login in v1 — User-Accounts erst in v2

@@ -15,8 +15,14 @@ out/
 *.env
 
 # Uploads & temporäre Dateien (Server-Disk)
-backend/uploads/
-backend/temp/
+storage/uploads/*
+storage/exports/*
+storage/thumbnails/*
+data/projects/*
+!storage/uploads/.gitkeep
+!storage/exports/.gitkeep
+!storage/thumbnails/.gitkeep
+!data/projects/.gitkeep
 *.tmp
 *.temp
 

@@ -19,8 +19,8 @@ Cinematic Studio Family ist eine Anwendung zur professionellen Erstellung und Ve
 | Projektplanung       | ✅ Fertig       | Memory-Dateien angelegt       |
 | Architektur          | ✅ Fertig       | Web-App + Node + FFmpeg nativ  |
 | UI/UX Design         | 🔲 Ausstehend   | Wireframes noch nicht erstellt |
-| Backend-Setup        | 🔲 Ausstehend   | Stack nicht festgelegt         |
-| Frontend-Setup       | 🔲 Ausstehend   | Stack nicht festgelegt         |
+| Backend-Setup        | 🟡 In Arbeit    | PHP + FFmpeg, Struktur angelegt |
+| Frontend-Setup       | 🟡 In Arbeit    | Vanilla JS + CSS, Struktur angelegt |
 | Kern-Features        | 🔲 Ausstehend   | Siehe TODO.md                  |
 | Testing              | 🔲 Ausstehend   | —                              |
 | Deployment           | 🔲 Ausstehend   | —                              |

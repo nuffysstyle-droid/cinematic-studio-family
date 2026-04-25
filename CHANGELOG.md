@@ -20,6 +20,13 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 - API-Key: nur Session-temporär im Browser (sessionStorage), nie serverseitig
 - ARCHITECTURE.md vollständig überarbeitet inkl. Sicherheits-Regeln für API-Keys
 - TODO #2, #3, #4 abgeschlossen
+- Cloud-Provider: Render (Node.js + FFmpeg)
+- Datei-Speicher: Server-Disk temporär für v1, Upgrade-Pfad zu R2/S3 dokumentiert
+- TODO #5: Git-Repo initialisiert, .gitignore erstellt, initialer Commit
+- Stack-Änderung: Node.js/React → PHP + Vanilla JS (einfacherer MVP)
+- ARCHITECTURE.md komplett auf PHP umgeschrieben
+- TODO Phase 1 auf PHP-Tasks angepasst
+- TODO #6: Ordnerstruktur angelegt (includes/, api/, assets/, storage/, data/)
 
 ---
 
