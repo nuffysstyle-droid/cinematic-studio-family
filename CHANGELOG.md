@@ -8,6 +8,13 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 ## [Unreleased]
 
 ### Hinzugefügt
+- TODO #14: api-key.php + api/test-key.php — API-Key Session-Handling
+  - includes/config.php: API_PROVIDER_LINK, API_PROVIDER_CREDITS_LINK, API_KEY_MIN_LENGTH
+  - api-key.php: Headline, Schritt-für-Schritt Anleitung, Status-Banner (connected/checking/error/empty)
+    Eingabefeld mit show/hide Toggle, Buttons (API holen, Credits kaufen, Verbindung testen)
+    Anleitung-Modal, Sicherheitshinweis, JS fetch → api/test-key.php
+  - api/test-key.php: POST-only, trim + Mindestlänge + Regex-Validierung, $_SESSION['api_key']
+    Kein Logging des Keys, kein DB-Speicher
 - TODO #13: includes/prompt-engine.php — Prompt Engine Core
   - buildImagePrompt($input, $template) → positive + negative prompt
     Templates: character, car, product, creature, startframe, endframe, character_sheet
