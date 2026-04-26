@@ -8,6 +8,17 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 ## [Unreleased]
 
 ### Hinzugefügt
+- TODO #17: elements.php — Element Library V1
+  - Typen: character, car, product, creature, environment, logo, object, style_reference
+  - Rollen: main_character, main_object, background, style_reference
+  - Formular: Name, Typ, Rolle, Beschreibung, Bild-Upload (api/upload.php)
+  - Upload → api/upload.php → URL in save-element gespeichert
+  - api/save-element.php: POST, Validierung, bin2hex ID, LOCK_EX JSON
+  - api/elements.php: list (neueste zuerst), delete, update vorbereitet (501)
+  - data/elements.json initialisiert, storage/elements/ angelegt
+  - Element Cards: Bild/Platzhalter, Type-Badge, Role-Badge, Name, Beschreibung, Löschen
+  - JS: loadElements(), prependCard(), deleteElement() mit confirm()
+  - .gitignore: storage/elements/*, data/elements.json
 - TODO #16: video-studio.php + api/generate-video.php + api/job-status.php
   - Hero, 4 Smart Guidance Tips, 2-Spalten-Layout
   - Seedance Optionen: Modell, Dauer (5/8/10/15s), Qualität, Modus

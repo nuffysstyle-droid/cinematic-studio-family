@@ -20,8 +20,11 @@ storage/uploads/images/*
 storage/uploads/videos/*
 storage/exports/*
 storage/thumbnails/*
+storage/elements/*
+!storage/elements/.gitkeep
 data/projects/*
 !data/projects/projects.json
+data/elements.json
 !storage/uploads/.gitkeep
 !storage/uploads/images/.gitkeep
 !storage/uploads/videos/.gitkeep
