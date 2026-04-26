@@ -8,6 +8,14 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 ## [Unreleased]
 
 ### Hinzugefügt
+- TODO #15: image-studio.php + api/generate-image.php — Image Studio V1
+  - Hero, Smart Guidance Bar (2 Tips), 2-Spalten-Layout
+  - Formular: Prompt Textarea (mit Zeichenzähler), Template-Auswahl (7 Templates)
+  - Upload: Dropzone + Preview + Dateiname/Größe (nutzt upload.js)
+  - Aktionen: Bild-Prompt erstellen, Prompt verbessern, Cinematic Upgrade, Element speichern (disabled)
+  - Ergebnis: Positiver/Negativer Prompt, Kopieren-Button, Preview-Platzhalter
+  - api/generate-image.php: POST, sanitizePromptInput, buildImagePrompt + Modifier-Actions
+  - Template-Wechsel-Hinweis via Toast
 - TODO #14: api-key.php + api/test-key.php — API-Key Session-Handling
   - includes/config.php: API_PROVIDER_LINK, API_PROVIDER_CREDITS_LINK, API_KEY_MIN_LENGTH
   - api-key.php: Headline, Schritt-für-Schritt Anleitung, Status-Banner (connected/checking/error/empty)
