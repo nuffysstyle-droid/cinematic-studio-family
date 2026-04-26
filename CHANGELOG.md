@@ -8,6 +8,17 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 ## [Unreleased]
 
 ### Hinzugefügt
+- TODO #16: video-studio.php + api/generate-video.php + api/job-status.php
+  - Hero, 4 Smart Guidance Tips, 2-Spalten-Layout
+  - Seedance Optionen: Modell, Dauer (5/8/10/15s), Qualität, Modus
+  - Upload: Startframe + Endframe — sichtbar je nach Modus (JS-gesteuert)
+  - 6 Aktions-Buttons (build + 5 Modifier), alle mit Loading-State
+  - Ergebnis: Positiver/Negativer Prompt + Meta-Grid (5 Felder) + Preview-Platzhalter
+  - api/generate-video.php: alle 5 Modifier-Actions, Duration-Validierung
+  - api/job-status.php: Platzhalter für Phase 4
+  - app.css: geteilte Studio-Styles zentralisiert (dropzone, upload-preview,
+    guidance-bar, studio-grid, prompt-block, result-empty …)
+  - image-studio.php: inline <style> auf Seiten-spezifisches reduziert
 - TODO #15: image-studio.php + api/generate-image.php — Image Studio V1
   - Hero, Smart Guidance Bar (2 Tips), 2-Spalten-Layout
   - Formular: Prompt Textarea (mit Zeichenzähler), Template-Auswahl (7 Templates)

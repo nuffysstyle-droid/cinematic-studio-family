@@ -554,7 +554,159 @@ select {
     to   { opacity: 0; transform: translateX(24px); }
 }
 
-/* 12) RESPONSIVENESS
+/* 12) STUDIO — Geteilte Styles (image-studio, video-studio, tiktok-studio …)
+   ============================================================ */
+
+.studio-page         { max-width: 1200px; }
+
+.studio-hero {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+.studio-hero__title  { font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; }
+.studio-hero__sub    { font-size: 0.9rem; max-width: 520px; }
+
+.badge-connected {
+    font-size: 0.75rem;
+    color: #4ade80;
+    background: rgba(74,222,128,0.1);
+    border: 1px solid rgba(74,222,128,0.3);
+    border-radius: 20px;
+    padding: 4px 10px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.guidance-bar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+.guidance-tip {
+    flex: 1;
+    min-width: 200px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-color);
+    border-left: 3px solid var(--accent-blue);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+.guidance-tip strong { color: var(--text-primary); }
+
+.studio-grid {
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+.action-buttons      { display: flex; flex-direction: column; gap: 8px; }
+
+/* Dropzone */
+.dropzone {
+    border: 2px dashed var(--border-color);
+    border-radius: var(--radius);
+    padding: 28px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color var(--transition), background var(--transition);
+}
+.dropzone:hover,
+.dropzone--active {
+    border-color: var(--accent-blue);
+    background: var(--accent-blue-glow);
+}
+.dropzone__label { color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 4px; }
+
+/* Upload Preview */
+.upload-preview {
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+}
+.upload-image-preview {
+    width: 56px; height: 56px;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    flex-shrink: 0;
+}
+.upload-meta { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+
+/* Result States */
+.result-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 60px 20px;
+    color: var(--text-muted);
+    text-align: center;
+    line-height: 1.6;
+}
+.result-empty__icon  { font-size: 2rem; opacity: 0.3; }
+.result-empty strong { color: var(--text-secondary); }
+
+/* Prompt Blocks */
+.prompt-block { display: flex; flex-direction: column; gap: 6px; }
+.prompt-block__label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-blue);
+}
+.prompt-block__label--neg { color: #f56565; }
+.prompt-block__text {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: 180px;
+    overflow-y: auto;
+}
+.prompt-block__text--neg { border-color: rgba(245,101,101,0.2); }
+
+/* Preview Placeholder */
+.preview-placeholder__box {
+    border: 2px dashed var(--border-color);
+    border-radius: var(--radius);
+    padding: 40px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+.preview-placeholder__icon { font-size: 2rem; opacity: 0.3; }
+
+.h-full { height: 100%; }
+
+@media (max-width: 900px) {
+    .studio-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+    .guidance-tip { min-width: 100%; }
+}
+
+/* 13) RESPONSIVENESS
    ============================================================ */
 @media (max-width: 1024px) {
     .grid-4 { grid-template-columns: repeat(2, 1fr); }

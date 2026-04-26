@@ -39,7 +39,7 @@
 |13 | includes/prompt-engine.php — Grundfunktionen | ✅     | P1        |
 |14 | api-key.php — API-Key Eingabe & Session      | ✅     | P1        |
 |15 | image-studio.php — UI + Prompt + Upload      | ✅     | P1        |
-|16 | video-studio.php — UI + Prompt + Upload      | ⬜     | P1        |
+|16 | video-studio.php — UI + Prompt + Upload      | ✅     | P1        |
 |17 | elements.php — Element Library Grundgerüst   | ⬜     | P2        |
 |18 | includes/guidance.php — Smart Guidance       | ⬜     | P2        |
 |19 | dashboard.php — Projektübersicht + CRUD      | ⬜     | P2        |
