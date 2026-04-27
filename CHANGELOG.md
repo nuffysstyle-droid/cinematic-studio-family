@@ -8,6 +8,21 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 ## [Unreleased]
 
 ### Hinzugefügt
+- TODO #23: tiktok-sticker.php — TikTok Sticker Studio (Service-Bereich)
+  - Hero: Headline + Subheadline + "← TikTok Studio"-Button
+  - Guidance Bar: 3 Tips (Einfachheit, Kontrast/Glow, Text-Kürze)
+  - 5 Kategorie-Cards: Emoji / Text / Logo / Reaction / Custom
+    – aria-pressed + Orange-Highlight + Checkmark
+    – Konditionale Felder: Text-Feld (text), Logo-Upload (logo)
+  - Showroom: 8 Demo-Cards mit stilspezifischen Glow-Vorschauen
+    (Neon/Glow/Gold/Fire/Minimal/Cartoon) — CSS-Klassen ohne JS
+  - Optionen: 6 Stile als Radio-Button-Grid, Format-Select, Größe-Select
+  - Vorschau-Box im Ergebnis: aktualisiert sich live mit Typ-Symbol + Stil-Glow
+  - api/sticker-request.php: POST, stkInput()-Helper,
+    VALID_STK_TYPES/STYLES/SIZES/FORMATS Whitelist, LOCK_EX JSON
+    Response: {success, message, id, request}
+  - Ergebnis: Erfolgs-Banner + Vorschau-Box + Beschreibung + 6-Felder-Param-Grid + Service-Hinweis
+  - data/sticker-requests.json: initialisiert, .gitignore ergänzt
 - TODO #22: tiktok-animation.php — TikTok Animation Studio (Service-Bereich)
   - Hero: Headline + Subheadline + "Zurück zum TikTok Studio"-Button
   - Guidance Bar: 3 Tips (Effektsparsamkeit, Logo-Bewegungen, Kurzeffekte)
