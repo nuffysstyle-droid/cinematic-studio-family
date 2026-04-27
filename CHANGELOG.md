@@ -8,6 +8,18 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 ## [Unreleased]
 
 ### Hinzugefügt
+- TODO #20: new-project.php — Projekt-Erstellformular + Bearbeiten-Modus
+  - Hero: Headline + Subheadline + "Zurück zum Dashboard"-Button
+  - Felder: Titel (required, max 120), Typ (Dropdown, 7 Optionen), Beschreibung (optional, max 600)
+  - Create-Modus (keine id in URL): leeres Formular, "Projekt erstellen", POST action=create
+  - Edit-Modus (?id=... in URL): Projekt laden (GET action=get), Formular befüllen, "Projekt speichern", POST action=update
+  - Clientseitige Validierung: Pflichtfelder mit roter Border + Fehlermeldung
+  - Beschreibungs-Zeichenzähler mit Orange-Warnung ab 90%
+  - Loading-State beim Laden (Edit) + beim Speichern
+  - Toast-Feedback + 900ms Redirect → dashboard.php nach Erfolg
+  - Seiteninfo-Card: Tipps + Typ-Übersicht (4 Typen mit Icon + Beschreibung)
+  - Sicherheit: ausschließlich DOM-API, kein innerHTML
+  - Responsive: 1-Spalten-Layout auf Mobile, Aktionsbuttons gestapelt
 - TODO #19: dashboard.php — Projektübersicht + CRUD
   - Hero: App-Headline + Subheadline + API-Key Status Badge
   - Quick Actions: 5 Karten (Neues Projekt, Image Studio, Video Studio, Elements, API Key)
