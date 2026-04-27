@@ -52,7 +52,7 @@
 | # | Aufgabe                                      | Status | Priorität |
 |---|----------------------------------------------|--------|-----------|
 |21 | tiktok-studio.php — UI + Prompt              | ✅     | P2        |
-|22 | tiktok-animation.php — Animation-Editor      | ⬜     | P2        |
+|22 | tiktok-animation.php — Animation-Editor      | ✅     | P2        |
 |23 | tiktok-sticker.php — Sticker-Werkzeug        | ⬜     | P2        |
 |24 | trailer-builder.php — Trailer-Editor         | ⬜     | P2        |
 |25 | ready-videos.php — Vorlagen-Galerie          | ⬜     | P3        |

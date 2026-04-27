@@ -8,6 +8,25 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 ## [Unreleased]
 
 ### Hinzugefügt
+- TODO #22: tiktok-animation.php — TikTok Animation Studio (Service-Bereich)
+  - Hero: Headline + Subheadline + "Zurück zum TikTok Studio"-Button
+  - Guidance Bar: 3 Tips (Effektsparsamkeit, Logo-Bewegungen, Kurzeffekte)
+  - 4 Kategorie-Cards: Booster (x5), Multiplikator (x2/x3), Logo, Custom
+    – visuelle Auswahl mit aria-pressed + Orange-Highlight + Checkmark
+    – synchronisiert sich mit Type-Select (bidirektional)
+  - Formular: Typ (Pflicht), Beschreibung (Pflicht, max 800, Zeichenzähler)
+  - Logo-Upload: Dropzone + Preview — nur sichtbar bei Logo-Typ
+  - Erweiterte Optionen (collapsible): Stil, Geschwindigkeit, Format, Loop (Toggle),
+    Start-/Endbeschreibung (für Transformationen)
+  - 3 Aktions-Buttons: Anfrage erstellen (primär), Prompt generieren, Make it Better
+  - Ergebnis: Erfolgs-Banner mit Referenz-ID, Animationsbeschreibung,
+    Parameter-Grid (6 Felder: Typ/Stil/Geschwindigkeit/Loop/Format/Status),
+    Service-Hinweis ("individuell erstellt"), optionaler Prompt-Block
+  - api/animation-request.php: POST, VALID_TYPES/STYLES/SPEEDS/FORMATS Validierung,
+    boolInput(), Speicher in data/animation-requests.json (LOCK_EX),
+    Response: {success, message, id, request}
+  - data/animation-requests.json initialisiert, .gitignore ergänzt
+  - Sicherheit: kein HTML-Injection, strip_tags auf allen Feldern
 - TODO #21: tiktok-studio.php — TikTok Studio UI + Prompt
   - Hero: Headline + Subheadline + API-Key Status Badge
   - Guidance Bar: 3 TikTok-spezifische Tips (Hook, Kürze, Ads)
