@@ -8,6 +8,25 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 ## [Unreleased]
 
 ### Hinzugefügt
+- TODO #26: academy.php — Cinematic Academy Wissens-Hub
+  - Hero: Eyebrow "📚 Cinematic Academy", Headline, Subheadline, 3 Stat-Badges
+    (13 Guides / 12 Kategorien / Kostenlos)
+  - Filter-Leiste: 12 Kategorie-Pills (Alle + 11 Themenbereiche) mit aktiver Markierung
+  - Ergebnis-Bar: "X Guides gefunden" + aktive Kategorie-Bezeichnung
+  - Guide-Cards: Kategorie-Badge, Difficulty-Badge (basic=grün, creator=blau, pro=orange),
+    Icon + Titel, Kurzbeschreibung, Lesezeit-Tag, "Guide öffnen"-Button
+  - 13 vollständige Guides mit je 5–8 Schritt-für-Schritt-Anleitungen:
+    Prompt-Basics, Image Studio, Video Studio, TikTok Hooks, Trailer,
+    Sticker, Animationen, Element Library, API-Key, Cinematic Grade,
+    Musik+Pacing, Workflows, Storytelling
+  - Guide-Modal: sticky Header (Icon + Titel + Schließen-Button), Steps-Liste,
+    CTA-Button mit Link zur zugehörigen Seite
+  - Steps via CSS counter (counter-reset/increment/content) — keine JS-Nummerierung
+  - Alle Steps via DOM API + textContent (kein innerHTML für dynamische Daten)
+  - Clientseitige Filterung: applyFilter(filter) ohne API-Call
+  - Escape-Taste + Backdrop-Klick schließen Modal
+  - PHP: $guides-Array mit 13 Einträgen, json_encode → JS const GUIDES
+  - Responsive: Card-Grid auto-fill minmax(300px), Modal max-width 700px
 - TODO #25: ready-videos.php — Sofort fertige Videos (Premium Showroom)
   - Hero: Eyebrow "Premium Showroom", Headline, Subheadline, 2 CTA-Buttons,
     3 Stat-Badges (Video-Anzahl / Kategorien / Laufzeit)
