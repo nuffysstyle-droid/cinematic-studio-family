@@ -1,9 +1,9 @@
 # PROJECT_STATUS.md — Cinematic Studio Family
 
 ## Aktueller Status
-**Phase:** Pre-Development / Planung  
-**Stand:** 2026-04-25  
-**Version:** 0.0.1 (Projektstart)
+**Phase:** Phase 2 — Kern-Features V1  
+**Stand:** 2026-04-27  
+**Version:** 0.0.1
 
 ---
 
@@ -21,7 +21,7 @@ Cinematic Studio Family ist eine Anwendung zur professionellen Erstellung und Ve
 | UI/UX Design         | 🔲 Ausstehend   | Wireframes noch nicht erstellt |
 | Backend-Setup        | ✅ Fertig       | Upload-API + Projects-CRUD fertig          |
 | Frontend-Setup       | ✅ Fertig       | CSS + JS Fundament vollständig           |
-| Kern-Features        | 🟡 In Arbeit    | Prompt Engine, API-Key, Image/Video Studio, Element Library fertig |
+| Kern-Features        | 🟡 In Arbeit    | Prompt Engine, API-Key, Image/Video Studio, Element Library, Smart Guidance fertig |
 | Testing              | 🔲 Ausstehend   | —                              |
 | Deployment           | 🔲 Ausstehend   | —                              |
 
@@ -42,10 +42,9 @@ Cinematic Studio Family ist eine Anwendung zur professionellen Erstellung und Ve
 ---
 
 ## Nächste Schritte
-1. Offene Entscheidungen mit User klären
-2. ARCHITECTURE.md befüllen
-3. TODO.md priorisieren
-4. Ersten Prototyp skizzieren
+1. TODO #19 — dashboard.php: Projektübersicht + CRUD
+2. TODO #20 — new-project.php: Projekt-Erstellformular
+3. Phase 3: TikTok Studio + Trailer Builder
 
 ---
 

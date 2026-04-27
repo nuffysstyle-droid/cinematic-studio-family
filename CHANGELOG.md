@@ -8,6 +8,21 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 ## [Unreleased]
 
 ### Hinzugefügt
+- TODO #18: includes/guidance.php — Smart Guidance System V1
+  - GUIDANCE_TIPS const: verschachtelt nach Context → Template/Mode → [{icon, title, text}]
+    - Contexts: image (7 Templates + _default), video (4 Modi + 4 Templates + _default),
+      element, tiktok_animation, sticker, ready_videos
+  - GUIDANCE_WARNINGS const: short_input, long_input, start_end_match, complex_action
+  - QUICK_FIX_SUGGESTIONS const: image (3), video (5), _default (2)
+  - getGuidanceTips(context, template, mode, input): max 4 Tips, keine Duplikate
+  - getGuidanceWarnings(context, template, mode, input): kontextabhängige Warnungen
+  - getQuickFixSuggestions(context, template, mode): schnelle Verbesserungsvorschläge
+  - renderGuidanceBar(context, template, mode, input): gibt HTML direkt aus
+  - getAllGuidanceTips(): für JS JSON-Embedding (keine API-Anfrage nötig)
+  - getGuidance() legacy-Funktion erhalten (für Sidebar)
+  - image-studio.php: renderGuidanceBar() + JS updateGuidanceBar() + updateWarnings()
+  - video-studio.php: renderGuidanceBar() + JS updateGuidanceBar(template, mode) + updateWarnings()
+  - app.css: .guidance-warnings + .guidance-warning (orange Border-Left + Glow-Hintergrund)
 - TODO #17: elements.php — Element Library V1
   - Typen: character, car, product, creature, environment, logo, object, style_reference
   - Rollen: main_character, main_object, background, style_reference

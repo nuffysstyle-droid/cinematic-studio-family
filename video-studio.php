@@ -1,7 +1,10 @@
 <?php
 require_once 'includes/config.php';
 require_once 'includes/prompt-engine.php';
-$pageTitle = 'Video Studio';
+require_once 'includes/guidance.php';
+$pageTitle       = 'Video Studio';
+$defaultTemplate = 'cinematic_scene';
+$defaultMode     = 'text';
 $extraJs   = ['editor.js', 'upload.js'];
 require_once 'includes/header.php';
 ?>
@@ -24,25 +27,8 @@ require_once 'includes/header.php';
         <?php endif; ?>
     </div>
 
-    <!-- ── Smart Guidance ─────────────────────────────────────── -->
-    <div class="guidance-bar">
-        <div class="guidance-tip">
-            🎬 <strong>Bewegungskette:</strong>
-            Für stabile Videos klare Bewegungsabläufe beschreiben — Anfang, Mitte, Ende.
-        </div>
-        <div class="guidance-tip">
-            🖼 <strong>Startframes:</strong>
-            Startframes funktionieren besser mit sauberer Komposition und eindeutigem Fokuspunkt.
-        </div>
-        <div class="guidance-tip">
-            🔚 <strong>Endframes:</strong>
-            Endframes sollten logisch zur beschriebenen Bewegung passen — kein abruptes Bild.
-        </div>
-        <div class="guidance-tip">
-            👤 <strong>Gesichter:</strong>
-            Für stabile Gesichter später den Character Sheet Workflow nutzen.
-        </div>
-    </div>
+    <!-- ── Smart Guidance (PHP-rendered, JS-updated on mode/template change) ── -->
+    <?php renderGuidanceBar('video', $defaultTemplate, $defaultMode); ?>
 
     <div class="studio-grid">
 
@@ -456,8 +442,56 @@ require_once 'includes/header.php';
             .catch(() => Toast.error('Kopieren fehlgeschlagen.'));
     });
 
+    // ── Guidance dynamisch updaten ────────────────────────────
+    const guidanceTips = <?php echo json_encode(getAllGuidanceTips(), JSON_UNESCAPED_UNICODE); ?>;
+
+    function updateGuidanceBar(template, mode) {
+        const bar  = document.getElementById('guidance-bar');
+        if (!bar) return;
+        const bank = guidanceTips['video'] ?? {};
+        const tips = [
+            ...(bank[mode]     ?? []),
+            ...(bank[template] ?? []),
+            ...(bank['_default'] ?? []),
+        ];
+        const unique = [];
+        tips.forEach(t => { if (!unique.find(u => u.text === t.text)) unique.push(t); });
+        bar.innerHTML = unique.slice(0, 4).map(t =>
+            `<div class="guidance-tip"><strong>${t.icon} ${t.title}:</strong> ${t.text}</div>`
+        ).join('');
+    }
+
+    function updateWarnings(input, template, mode) {
+        let existing = document.getElementById('guidance-warnings');
+        const warnings = [];
+        const len = input.trim().length;
+        if (len > 0 && len < 20)  warnings.push('⚠ Deine Beschreibung ist sehr kurz. Ergänze Aktion, Umgebung und Kamera.');
+        if (len > 1500)            warnings.push('⚠ Sehr lange Prompts können instabil werden. Kürze auf das Wesentliche.');
+        if (mode === 'start+end')  warnings.push('🔍 Achte darauf, dass Startframe und Endframe visuell zusammenpassen.');
+        if (['horror_creature', 'action_trailer', 'blockbuster'].includes(template))
+            warnings.push('🎬 Komplexe Templates: halte eine klare Hauptbewegung.');
+
+        if (!warnings.length) { if (existing) existing.remove(); return; }
+        if (!existing) {
+            existing = document.createElement('div');
+            existing.id = 'guidance-warnings';
+            existing.className = 'guidance-warnings';
+            document.getElementById('guidance-bar')?.insertAdjacentElement('afterend', existing);
+        }
+        existing.innerHTML = warnings.map(w => `<div class="guidance-warning">${w}</div>`).join('');
+    }
+
     templateSel?.addEventListener('change', () => {
+        updateGuidanceBar(templateSel.value, optMode?.value ?? 'text');
         if (currentPositive) Toast.info('Template geändert — Prompt neu erstellen für beste Ergebnisse.');
+    });
+
+    optMode?.addEventListener('change', () => {
+        updateGuidanceBar(templateSel?.value ?? 'cinematic_scene', optMode.value);
+    });
+
+    promptInput?.addEventListener('input', () => {
+        updateWarnings(promptInput.value, templateSel?.value ?? '', optMode?.value ?? '');
     });
 
 })();

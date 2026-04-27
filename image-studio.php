@@ -1,7 +1,9 @@
 <?php
 require_once 'includes/config.php';
 require_once 'includes/prompt-engine.php';
-$pageTitle = 'Image Studio';
+require_once 'includes/guidance.php';
+$pageTitle       = 'Image Studio';
+$defaultTemplate = 'character';
 $extraJs   = ['editor.js', 'upload.js'];
 require_once 'includes/header.php';
 ?>
@@ -24,17 +26,8 @@ require_once 'includes/header.php';
         <?php endif; ?>
     </div>
 
-    <!-- ── Smart Guidance ─────────────────────────────────────── -->
-    <div class="guidance-bar">
-        <div class="guidance-tip">
-            💡 <strong>Character Sheet:</strong>
-            Für stabile Charaktere nutze später den Character Sheet Workflow — er sichert konsistentes Aussehen über mehrere Bilder.
-        </div>
-        <div class="guidance-tip">
-            🎬 <strong>Startframes:</strong>
-            Startframes funktionieren besser mit klarer Komposition und eindeutigem Bildmittelpunkt.
-        </div>
-    </div>
+    <!-- ── Smart Guidance (PHP-rendered, JS-updated on template change) ── -->
+    <?php renderGuidanceBar('image', $defaultTemplate); ?>
 
     <div class="studio-grid">
 
@@ -277,11 +270,48 @@ require_once 'includes/header.php';
             .catch(() => Toast.error('Kopieren fehlgeschlagen.'));
     });
 
-    // Template-Wechsel → Hinweis
-    templateSel?.addEventListener('change', () => {
-        if (currentPositive) {
-            Toast.info('Template geändert — Prompt neu erstellen für beste Ergebnisse.');
+    // ── Template-Wechsel: Guidance + Toast ───────────────────
+    const guidanceTips = <?php echo json_encode(getAllGuidanceTips(), JSON_UNESCAPED_UNICODE); ?>;
+
+    function updateGuidanceBar(template) {
+        const bar      = document.getElementById('guidance-bar');
+        if (!bar) return;
+        const bank     = guidanceTips['image'] ?? {};
+        const tips     = [...(bank[template] ?? []), ...(bank['_default'] ?? [])];
+        const unique   = [];
+        tips.forEach(t => { if (!unique.find(u => u.text === t.text)) unique.push(t); });
+        const shown = unique.slice(0, 4);
+        bar.innerHTML  = shown.map(t =>
+            `<div class="guidance-tip"><strong>${t.icon} ${t.title}:</strong> ${t.text}</div>`
+        ).join('');
+    }
+
+    function updateWarnings(input, template) {
+        let existing = document.getElementById('guidance-warnings');
+        const warnings = [];
+        const len = input.trim().length;
+        if (len > 0 && len < 20)  warnings.push('⚠ Deine Beschreibung ist sehr kurz. Ergänze Aktion, Umgebung und Kamera.');
+        if (len > 1500)            warnings.push('⚠ Sehr lange Prompts können instabil werden. Kürze auf das Wesentliche.');
+        if (['horror_creature', 'action_trailer', 'blockbuster'].includes(template))
+            warnings.push('🎬 Komplexe Templates: halte eine klare Hauptaktion.');
+
+        if (!warnings.length) { if (existing) existing.remove(); return; }
+        if (!existing) {
+            existing = document.createElement('div');
+            existing.id = 'guidance-warnings';
+            existing.className = 'guidance-warnings';
+            document.getElementById('guidance-bar')?.insertAdjacentElement('afterend', existing);
         }
+        existing.innerHTML = warnings.map(w => `<div class="guidance-warning">${w}</div>`).join('');
+    }
+
+    templateSel?.addEventListener('change', () => {
+        updateGuidanceBar(templateSel.value);
+        if (currentPositive) Toast.info('Template geändert — Prompt neu erstellen für beste Ergebnisse.');
+    });
+
+    promptInput?.addEventListener('input', () => {
+        updateWarnings(promptInput.value, templateSel?.value ?? '');
     });
 
 })();

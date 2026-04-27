@@ -600,6 +600,24 @@ select {
 }
 .guidance-tip strong { color: var(--text-primary); }
 
+/* Guidance Warnings */
+.guidance-warnings {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 8px;
+}
+.guidance-warning {
+    background: rgba(245, 131, 61, 0.08);
+    border: 1px solid rgba(245, 131, 61, 0.3);
+    border-left: 3px solid var(--accent-orange);
+    border-radius: var(--radius);
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    color: var(--accent-orange);
+    line-height: 1.5;
+}
+
 .studio-grid {
     display: grid;
     grid-template-columns: 420px 1fr;
