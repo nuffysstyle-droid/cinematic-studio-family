@@ -8,6 +8,21 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 ## [Unreleased]
 
 ### Hinzugefügt
+- TODO #24: trailer-builder.php — Cinematic Trailer Builder
+  - Hero + 3-Tip Guidance Bar (Hook, Sparsamkeit, starkes Finale)
+  - Template-Grid (6 Optionen, Radio-Button-Style): Blockbuster/Action/Horror/Drama/Documentary/TikTok
+  - Optionen: Musik-Stil (6), Schnitt-Rhythmus (4), Dauer (10/15/30s)
+  - 4 Aktions-Buttons: Erstellen, Make it Better, Cinematic Upgrade, Copy (hidden bis Build)
+  - Timeline-Visualisierung: vertikale Linie + Dots (blau/orange/gold je Akt)
+    Szenen-Prompts pro Beat einklappbar (▸ Toggle-Button)
+    Beat-Typen: normal / finale (gold) / cut (orange)
+  - Gesamt-Prompt: Positiver + Negativer Prompt Block
+  - Meta-Grid (4 Felder): Template, Musik-Stil, Schnitt, Dauer
+  - api/generate-trailer.php: POST, VALID_TR_TEMPLATES/MUSIC/PACING/DURATIONS
+    Timeline-Blueprints für 10s/15s/30s, buildTimeline() erzeugt Szenen-Prompt per Beat
+    buildOverallTrailerPrompt() inkl. MUSIC_MODIFIERS + PACING_DESCRIPTORS
+    TRAILER_TEMPLATE_MAP → VIDEO_TEMPLATES; actions: build/improve/cinematic
+    Response: {success, timeline, positive, negative, meta}
 - TODO #23: tiktok-sticker.php — TikTok Sticker Studio (Service-Bereich)
   - Hero: Headline + Subheadline + "← TikTok Studio"-Button
   - Guidance Bar: 3 Tips (Einfachheit, Kontrast/Glow, Text-Kürze)

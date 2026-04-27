@@ -42,9 +42,9 @@ Cinematic Studio Family ist eine Anwendung zur professionellen Erstellung und Ve
 ---
 
 ## Nächste Schritte
-1. Phase 3: trailer-builder.php (TODO #24)
-2. Phase 3: ready-videos.php (TODO #25) + academy.php (TODO #26)
-3. Phase 4: FFmpeg + Export-Pipeline (TODO #27–34)
+1. Phase 3: ready-videos.php (TODO #25) + academy.php (TODO #26)
+2. Phase 4: FFmpeg + Export-Pipeline (TODO #27–34)
+3. Phase 5: Deployment + Release (TODO #35–40)
 
 ---
 
