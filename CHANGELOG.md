@@ -8,6 +8,20 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 ## [Unreleased]
 
 ### Hinzugefügt
+- TODO #21: tiktok-studio.php — TikTok Studio UI + Prompt
+  - Hero: Headline + Subheadline + API-Key Status Badge
+  - Guidance Bar: 3 TikTok-spezifische Tips (Hook, Kürze, Ads)
+  - Quick Cards: 4 Unterbereiche (Animation, Sticker, Ready Videos, Trailer Builder)
+  - Formular: Beschreibung, 6 TikTok Templates, 6 Stil-Richtungen, 5 CTA-Optionen
+  - 3 Aktions-Buttons: Erstellen, Make it Better, Cinematic Upgrade
+  - Ergebnis: Hook-Vorschlag (orange Highlight-Box), Positiver/Negativer Prompt, CTA-Block
+  - 2 Copy-Buttons (Prompt + Hook getrennt)
+  - 9:16 Preview-Platzhalter (vertikales Seitenverhältnis)
+  - api/generate-tiktok.php: POST, 6 TikTok-Templates → VIDEO_TEMPLATES Mapping
+    HOOK_SUGGESTIONS (4 je Template), CTA_SUGGESTIONS, STYLE_MODIFIERS
+    actions: build / improve / cinematic; nutzt buildVideoPrompt + Modifier-Funktionen
+    Response: {success, positive, negative, hook, cta, template, style, action}
+  - Sicherheit: kein HTML-Injection, kein externer API-Call
 - TODO #20: new-project.php — Projekt-Erstellformular + Bearbeiten-Modus
   - Hero: Headline + Subheadline + "Zurück zum Dashboard"-Button
   - Felder: Titel (required, max 120), Typ (Dropdown, 7 Optionen), Beschreibung (optional, max 600)

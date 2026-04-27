@@ -42,8 +42,8 @@ Cinematic Studio Family ist eine Anwendung zur professionellen Erstellung und Ve
 ---
 
 ## Nächste Schritte
-1. Phase 3: TikTok Studio (TODO #21–23) + Trailer Builder (TODO #24)
-2. Phase 3: Ready Videos (TODO #25) + Academy (TODO #26)
+1. Phase 3: tiktok-animation.php (TODO #22) + tiktok-sticker.php (TODO #23)
+2. Phase 3: trailer-builder.php (TODO #24) + ready-videos.php (TODO #25)
 3. Phase 4: FFmpeg + Export-Pipeline (TODO #27–34)
 
 ---
