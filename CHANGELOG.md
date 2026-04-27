@@ -8,6 +8,21 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 ## [Unreleased]
 
 ### Hinzugefügt
+- TODO #25: ready-videos.php — Sofort fertige Videos (Premium Showroom)
+  - Hero: Eyebrow "Premium Showroom", Headline, Subheadline, 2 CTA-Buttons,
+    3 Stat-Badges (Video-Anzahl / Kategorien / Laufzeit)
+  - Filter-Leiste: 8 Kategorien als Pill-Buttons, aktiver Zustand orange-blau
+  - Galerie-Grid: auto-fill minmax(280px), 12 Demo-Videos aus data/ready-videos.json
+  - Video-Cards: Thumbnail (icon + Hintergrundfarbe), Play-Overlay (Hover),
+    Dauer-Badge, Preis-Badge (Premium orange / Standard blau),
+    Kategorie-Badge, Stil, Titel, Beschreibung (2-zeilig geclipt),
+    2 Aktions-Buttons (Anfragen / Ähnliches), optionaler Prompt-Toggle
+  - Filter-Logik: clientseitig (kein API-Call), Zähler "X Videos gefunden"
+  - Leerzustand mit "Alle anzeigen"-Button
+  - Anfrage-Modal: Kontakt + Beschreibung-Felder, Toast-Feedback (kein Versand)
+  - USP-Bar: 4 Selling Points (Sofort / Premium / Anpassbar / Formate)
+  - data/ready-videos.json: 12 Demo-Einträge (alle 7 Kategorien, Platzhalter-Thumbnails)
+  - Sicherheit: JSON PHP→JS via json_encode, Cards via Template + textContent
 - TODO #24: trailer-builder.php — Cinematic Trailer Builder
   - Hero + 3-Tip Guidance Bar (Hook, Sparsamkeit, starkes Finale)
   - Template-Grid (6 Optionen, Radio-Button-Style): Blockbuster/Action/Horror/Drama/Documentary/TikTok
