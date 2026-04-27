@@ -21,7 +21,7 @@ Cinematic Studio Family ist eine Anwendung zur professionellen Erstellung und Ve
 | UI/UX Design         | 🔲 Ausstehend   | Wireframes noch nicht erstellt |
 | Backend-Setup        | ✅ Fertig       | Upload-API + Projects-CRUD fertig          |
 | Frontend-Setup       | ✅ Fertig       | CSS + JS Fundament vollständig           |
-| Kern-Features        | 🟡 In Arbeit    | Prompt Engine, API-Key, Image/Video Studio, Element Library, Smart Guidance fertig |
+| Kern-Features        | 🟡 In Arbeit    | Prompt Engine, API-Key, Image/Video Studio, Elements, Guidance, Dashboard fertig |
 | Testing              | 🔲 Ausstehend   | —                              |
 | Deployment           | 🔲 Ausstehend   | —                              |
 
@@ -42,9 +42,9 @@ Cinematic Studio Family ist eine Anwendung zur professionellen Erstellung und Ve
 ---
 
 ## Nächste Schritte
-1. TODO #19 — dashboard.php: Projektübersicht + CRUD
-2. TODO #20 — new-project.php: Projekt-Erstellformular
-3. Phase 3: TikTok Studio + Trailer Builder
+1. TODO #20 — new-project.php: Projekt-Erstellformular
+2. Phase 3: TikTok Studio + Trailer Builder
+3. Phase 4: FFmpeg + Export-Pipeline
 
 ---
 

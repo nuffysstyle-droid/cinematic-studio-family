@@ -8,6 +8,17 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 ## [Unreleased]
 
 ### Hinzugefügt
+- TODO #19: dashboard.php — Projektübersicht + CRUD
+  - Hero: App-Headline + Subheadline + API-Key Status Badge
+  - Quick Actions: 5 Karten (Neues Projekt, Image Studio, Video Studio, Elements, API Key)
+  - Projektübersicht: Grid-Cards aus api/projects.php?action=list (neueste zuerst)
+  - Projekt-Card: Typ-Badge, Erstelldatum, Titel, Beschreibung (2-zeilig geclipt),
+    Geändert-Datum, Öffnen-Button, Löschen-Button
+  - Leerzustand: Icon + Text + CTA-Button → new-project.php
+  - Loading-State: Spinner während API-Call
+  - JS: loadProjects(), renderProjectCard(), deleteProject(id) mit confirm() + Fade-Animation
+  - Sicherheit: nur textContent/DOM-API, kein innerHTML, kein HTML-Injection möglich
+  - Responsive: Quick-Actions auto-fill grid, Projekt-Grid 1-Spalte auf Mobile
 - TODO #18: includes/guidance.php — Smart Guidance System V1
   - GUIDANCE_TIPS const: verschachtelt nach Context → Template/Mode → [{icon, title, text}]
     - Contexts: image (7 Templates + _default), video (4 Modi + 4 Templates + _default),
