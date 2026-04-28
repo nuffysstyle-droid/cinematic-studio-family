@@ -7,6 +7,46 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## [Unreleased]
 
+### Hinzugefügt (Phase 4 — TODO #27)
+- TODO #27: includes/functions.php — FFmpeg Service Library
+  - `checkFfmpegAvailable()`: FFmpeg-Version prüfen, Binary-Pfad aus ENV
+  - `getVideoInfo(input)`: Metadaten via ffprobe (Duration, Format, Video/Audio-Streams,
+    FPS aus Bruchstring, Bitrate, Auflösung, Codec)
+  - `generateThumbnail(input, output, timeOffset)`: Einzelframe extrahieren
+    (-ss seek vor -i für schnelles Keyframe-Seeking, -q:v 2 JPEG-Qualität)
+  - `mergeClips(clips[], output)`: Concat-Demuxer (-f concat -c copy, kein Re-encode),
+    temporäre Filelist in storage/temp/, automatische Bereinigung
+  - `exportPreset(input, output, preset)`: Re-encode mit scale-Filter
+    (force_original_aspect_ratio=decrease + pad → Letterbox/Pillarbox beibehalten)
+    -movflags +faststart für Web-Streaming
+  - Presets: 720p (CRF 23 / fast), 1080p (CRF 20 / fast),
+    4k vorbereitet aber deaktiviert (available: false)
+  - Interne Helfer: csf_ffmpeg_run(), csf_ffprobe_run(), csf_proc_exec()
+    (proc_open + Non-blocking I/O + Timeout via SIGKILL),
+    csf_validate_path() (realpath + storage/-Root-Prüfung),
+    csf_within_storage(), csf_ensure_dir(), csf_eval_fps()
+  - Sicherheit: alle Shell-Args via escapeshellarg(), kein Shell-Injection möglich,
+    Pfad-Validierung verhindert Directory-Traversal
+  - ENV: FFMPEG_PATH, FFPROBE_PATH, FFMPEG_TIMEOUT (alle konfigurierbar)
+- Dockerfile: PHP 8.2-Apache + FFmpeg via apt-get
+  - GD-Extension (JPEG/PNG), php.ini (upload 150MB, exec 360s, memory 512MB)
+  - Apache: mod_rewrite + docker/apache.conf
+  - Verzeichnisse: storage/exports, storage/thumbnails, storage/temp angelegt
+  - ENV: FFMPEG_PATH, FFPROBE_PATH, FFMPEG_TIMEOUT
+- docker/apache.conf: VirtualHost-Konfiguration
+  - storage/, data/, includes/ gegen direkten Web-Zugriff gesperrt
+  - Directory-Listing deaktiviert
+- render.yaml: Render.com Deployment-Konfiguration
+  - env: docker, plan: starter, autoDeploy: true
+  - Disk-Konfiguration vorbereitet (auskommentiert, für Starter+)
+  - healthCheckPath: /index.php
+- .dockerignore: Build-Optimierung (git, docs, uploads, data-files ausgeschlossen)
+- storage/temp/ + .gitkeep angelegt, .gitignore erweitert
+- Entscheidungen Phase 4 dokumentiert:
+  - FFmpeg: Dockerfile (nicht Buildpacks)
+  - Format: nur MP4 in V1
+  - Progress: Polling-Loop (nicht SSE) in V1
+
 ### Phase-3-Freeze 🧊 — 2026-04-28
 - Working Tree clean — alle 26 TODOs committed
 - Phase 3 offiziell abgeschlossen: TikTok Studio, Animation, Sticker, Trailer Builder, Showroom, Academy

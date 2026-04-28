@@ -25,7 +25,7 @@ Cinematic Studio Family ist eine Anwendung zur professionellen Erstellung und Ve
 | Phase 1 — Fundament  | ✅ Fertig       | 14 Seiten-Grundgerüste, includes/, api/, assets/                          |
 | Phase 2 — Kern       | ✅ Fertig       | Prompt Engine, Studios, Elements, Guidance, Dashboard, Projektverwaltung  |
 | Phase 3 — TikTok+    | ✅ Fertig 🧊    | TikTok Studio, Animation, Sticker, Trailer, Showroom, Academy             |
-| Phase 4 — Export     | 🔲 Ausstehend   | FFmpeg-Service, Clip-Merge, Export-API, SSE Progress, Thumbnails          |
+| Phase 4 — Export     | 🟡 In Arbeit    | FFmpeg-Service ✅, Clip-Merge, Export-API, Polling-Progress, Thumbnails   |
 | Phase 5 — Release    | 🔲 Ausstehend   | Settings, Security, Render Deployment, Tests                              |
 
 ---
@@ -103,7 +103,7 @@ Cinematic Studio Family ist eine Anwendung zur professionellen Erstellung und Ve
 
 ## Nächste Schritte — Phase 4
 
-1. **TODO #27** — `includes/functions.php` — FFmpeg-Service (Basis-Wrapper)
+1. ~~**TODO #27** — `includes/functions.php` — FFmpeg-Service~~ ✅
 2. **TODO #28** — Multi-Scene Clip-Merge
 3. **TODO #29** — `api/export.php` — Export-Endpunkt
 4. **TODO #30** — `api/progress.php` — Export-Fortschritt (SSE)

@@ -1,0 +1,53 @@
+# .dockerignore — Cinematic Studio Family
+# Dateien die NICHT in das Docker-Image kopiert werden.
+
+# ── Git ───────────────────────────────────────────────────────────────────────
+.git
+.gitignore
+
+# ── Dokumentation (nicht im Image nötig) ─────────────────────────────────────
+ARCHITECTURE.md
+CHANGELOG.md
+CLAUDE_INSTRUCTIONS.md
+PROJECT_STATUS.md
+PROMPT_TEMPLATES.md
+TODO.md
+
+# ── Umgebungs-Dateien ─────────────────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+*.env
+
+# ── Upload-Inhalte (werden via Render Disk gemountet) ────────────────────────
+storage/uploads/images/*
+storage/uploads/videos/*
+storage/exports/*
+storage/thumbnails/*
+storage/temp/*
+storage/elements/*
+
+# ── Daten-Dateien (werden via Render Disk persistiert) ───────────────────────
+data/projects/*
+data/elements.json
+data/animation-requests.json
+data/sticker-requests.json
+
+# ── Temporäre Dateien ─────────────────────────────────────────────────────────
+*.tmp
+*.temp
+*.log
+
+# ── OS-spezifisch ─────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Editor ───────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── Node (falls jemals genutzt) ───────────────────────────────────────────────
+node_modules/

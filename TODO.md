@@ -64,7 +64,7 @@
 
 | # | Aufgabe                                      | Status | Priorität |
 |---|----------------------------------------------|--------|-----------|
-|27 | includes/functions.php — FFmpeg-Service      | ⬜     | P2        |
+|27 | includes/functions.php — FFmpeg-Service      | ✅     | P2        |
 |28 | Multi-Scene Clip-Merge                       | ⬜     | P2        |
 |29 | api/export.php — Export-Endpunkt             | ⬜     | P2        |
 |30 | api/progress.php — Export-Fortschritt (SSE)  | ⬜     | P2        |

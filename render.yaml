@@ -1,0 +1,42 @@
+# render.yaml — Render.com Deployment-Konfiguration
+# Cinematic Studio Family
+#
+# Entscheidung Phase 4: Docker-Deployment auf Render
+# Dokumentation: https://render.com/docs/render-yaml-reference
+#
+# Deploy: Render erkennt diese Datei automatisch bei Git-Push.
+
+services:
+  - type: web
+    name: cinematic-studio-family
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: starter              # Starter = $7/mo — kein Sleep, 512MB RAM
+    autoDeploy: true           # Automatischer Deploy bei Push auf main-Branch
+    branch: master
+
+    # ── Umgebungsvariablen ──────────────────────────────────────────────────
+    envVars:
+      - key: FFMPEG_PATH
+        value: /usr/bin/ffmpeg
+
+      - key: FFPROBE_PATH
+        value: /usr/bin/ffprobe
+
+      - key: FFMPEG_TIMEOUT
+        value: "300"
+
+      - key: PHP_SESSION_NAME
+        value: csf_session
+
+    # ── Persistenter Speicher (Render Disk) ─────────────────────────────────
+    # WICHTIG: Free Plan hat KEINEN persistenten Speicher.
+    # Bei Upgrade auf Starter/Standard: Disk aktivieren.
+    #
+    # disk:
+    #   name: csf-storage
+    #   mountPath: /var/www/html/storage
+    #   sizeGB: 10              # 10 GB — bei Bedarf erhöhen
+
+    # ── Health Check ────────────────────────────────────────────────────────
+    healthCheckPath: /index.php

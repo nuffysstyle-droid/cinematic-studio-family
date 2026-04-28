@@ -33,6 +33,8 @@ data/sticker-requests.json
 !storage/exports/.gitkeep
 !storage/thumbnails/.gitkeep
 !data/projects/.gitkeep
+storage/temp/*
+!storage/temp/.gitkeep
 *.tmp
 *.temp
 
