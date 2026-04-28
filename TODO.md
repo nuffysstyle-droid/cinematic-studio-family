@@ -67,7 +67,7 @@
 |27 | includes/functions.php — FFmpeg-Service      | ✅     | P2        |
 |28 | Multi-Scene Clip-Merge                       | ✅     | P2        |
 |29 | api/export.php — Export-Endpunkt             | ✅     | P2        |
-|30 | api/progress.php — Export-Fortschritt (SSE)  | ⬜     | P2        |
+|30 | api/progress.php — Export-Fortschritt (SSE)  | ✅     | P2        |
 |31 | api/thumbnail.php — Thumbnail-Generierung    | ⬜     | P2        |
 |32 | Export-Voreinstellungen (720p/1080p/4K)      | ⬜     | P2        |
 |33 | Fortschrittsanzeige im UI                    | ⬜     | P2        |

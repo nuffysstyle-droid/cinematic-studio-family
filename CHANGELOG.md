@@ -7,6 +7,20 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## [Unreleased]
 
+### Hinzugefügt (Phase 4 — TODO #30)
+- TODO #30: api/progress.php — Export-Job Polling-Endpunkt
+  - GET und POST erlaubt (Parameter: job_id)
+  - job_id-Validierung: Regex /^[a-zA-Z0-9_\-]{1,64}$/ — kein Traversal möglich
+  - Liest data/export-jobs.json mit LOCK_SH (shared lock, kein exklusives Lock nötig)
+  - Sucht neueste Einträge zuerst (array_reverse → break bei erstem Treffer)
+  - Progress-Logik V1: done=100, failed=100, pending=0, running=50
+  - Response: { success, job: { id, action, status, progress, output_url, error, created_at } }
+  - Optionale Felder: preset, offset (wenn im Job vorhanden)
+  - Sicherheit: keine internen Dateisystem-Pfade im Response, kein Shell-Aufruf,
+    nur freigegebene Felder aus dem Job-Objekt
+  - HTTP 404 wenn Job nicht gefunden, HTTP 400 bei ungültiger job_id
+  - Vorbereitet für echtes Async-Processing (status='running' + progress-Schätzung)
+
 ### Hinzugefügt (Phase 4 — TODO #29)
 - TODO #29: api/export.php — Zentraler Export-Endpunkt V1
   - Action-Routing: EXPORT_ACTIONS-Map mit post_only-Flag je Action
