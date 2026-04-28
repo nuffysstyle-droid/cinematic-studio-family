@@ -27,6 +27,7 @@ data/projects/*
 data/elements.json
 data/animation-requests.json
 data/sticker-requests.json
+data/export-jobs.json
 !storage/uploads/.gitkeep
 !storage/uploads/images/.gitkeep
 !storage/uploads/videos/.gitkeep

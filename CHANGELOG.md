@@ -7,6 +7,26 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## [Unreleased]
 
+### Hinzugefügt (Phase 4 — TODO #29)
+- TODO #29: api/export.php — Zentraler Export-Endpunkt V1
+  - Action-Routing: EXPORT_ACTIONS-Map mit post_only-Flag je Action
+  - action=convert: exportPreset() → storage/exports/, Preset-Whitelist (720p/1080p),
+    Output-Name optional sanitized, eindeutiger Dateiname mit bin2hex(8)-Suffix
+  - action=thumbnail: generateThumbnail() → storage/thumbnails/,
+    Offset via Regex bereinigt (nur [0-9:.]), Standard 00:00:01
+  - action=info: getVideoInfo() via ffprobe, GET oder POST erlaubt
+  - action=merge: Stub (HTTP 501) mit Hinweis auf api/merge-clips.php
+  - action=status: Stub (HTTP 501) mit Hinweis auf TODO #30
+  - Input-Auflösung: export_resolve_input() akzeptiert Dateiname, rel. URL oder abs. URL
+    → immer auf storage/uploads/videos/ validiert
+  - Job-Protokoll: export_log_job() → data/export-jobs.json (LOCK_EX, max. 500 Einträge,
+    Felder: id/action/input_file/output_file/output_url/preset|offset/status/created_at/error)
+  - FFmpeg-Check nur für convert/thumbnail (503 wenn fehlt)
+  - Einheitliches Response-Format: { success, action, job_id?, data? } / { success, action, error }
+  - data/export-jobs.json: initialisiert als [], .gitignore ergänzt
+  - docker/apache.conf: storage/thumbnails/ für Bild-Anzeige freigeschaltet
+    (analog zu storage/exports/, kein PHP-Exec, kein Directory-Listing)
+
 ### Hinzugefügt (Phase 4 — TODO #28)
 - TODO #28: merge-clips.php — Multi-Scene Clip-Merge UI
   - Hero: Eyebrow "⛓️ Phase 4 — Export", Headline, Subheadline
