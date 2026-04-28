@@ -47,7 +47,7 @@
 
 ---
 
-## PHASE 3 — TikTok & Trailer Studio
+## PHASE 3 — TikTok & Trailer Studio ✅ ABGESCHLOSSEN 🧊 (2026-04-28)
 
 | # | Aufgabe                                      | Status | Priorität |
 |---|----------------------------------------------|--------|-----------|
@@ -88,7 +88,20 @@
 
 ---
 
+## Offene Technische Schulden (vor Phase 5 beheben)
+
+| Punkt                                                        | Priorität |
+|--------------------------------------------------------------|-----------|
+| Logo-Upload in Animation + Sticker nicht mit api/upload.php  | P2        |
+| Anfrage-Modal in ready-videos.php sendet nicht wirklich      | P2        |
+| elements.php "Bearbeiten"-Button deaktiviert (API 501)       | P2        |
+| API_PROVIDER_LINK in config.php ist Platzhalter              | P3        |
+| storage/ + data/ ohne .htaccess-Schutz (TODO #37 → P1!)     | P1        |
+
+---
+
 ## Notizen
 - Prioritäten: P0 = Sofort, P1 = Phase-kritisch, P2 = Wichtig, P3 = Nice-to-have
 - FFmpeg erst in Phase 4 — wird gebraucht wenn Multi-Scene + Clip-Merge gebaut wird
 - V1 Fokus: Prompt Engine → API-Key → Image Studio → Video Studio → Element Library → Guidance
+- Phase 3 Freeze: 2026-04-28 — alle 26 TODOs committed, Working Tree clean
