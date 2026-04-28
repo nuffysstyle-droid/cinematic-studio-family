@@ -6,6 +6,7 @@ $navItems = [
     ['file' => 'new-project.php',      'label' => 'Neues Projekt',     'icon' => '➕'],
     ['file' => 'image-studio.php',     'label' => 'Image Studio',      'icon' => '🖼️'],
     ['file' => 'video-studio.php',     'label' => 'Video Studio',      'icon' => '🎬'],
+    ['file' => 'merge-clips.php',      'label' => 'Multi-Scene Export','icon' => '⛓️'],
     ['file' => 'tiktok-studio.php',    'label' => 'TikTok Studio',     'icon' => '🎵'],
     ['file' => 'tiktok-animation.php', 'label' => '↳ Animation',       'icon' => '✨'],
     ['file' => 'tiktok-sticker.php',   'label' => '↳ Sticker',         'icon' => '🎨'],

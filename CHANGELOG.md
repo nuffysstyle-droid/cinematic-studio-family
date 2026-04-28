@@ -7,6 +7,36 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## [Unreleased]
 
+### Hinzugefügt (Phase 4 — TODO #28)
+- TODO #28: merge-clips.php — Multi-Scene Clip-Merge UI
+  - Hero: Eyebrow "⛓️ Phase 4 — Export", Headline, Subheadline
+  - Upload-Dropzone: Drag-and-Drop + Klick, multiple files, video/* accept
+  - Clip-Liste: Template-Cloning, Status-Icons (⏳/✓/✗), Modifier-Klassen
+    (mc-clip--ready/error/uploading), Clip-Nummerierung (#1/#2…), Entfernen-Button
+  - Sequenzieller Upload: jede Datei einzeln an api/upload.php
+  - Validierung: nur video/*, max 100 MB — Warnung via Toast statt Abbruch
+  - Preset-Auswahl: 720p / 1080p als Radio-Button-Cards
+  - Optionaler Ausgabename (sanitized: nur [a-zA-Z0-9_-], max 60 Zeichen)
+  - Merge-Button: disabled bis ≥ 2 Clips ready, Loading-State während Export
+  - Fortschritts-Banner: sichtbar während API-Call ("1–3 Minuten")
+  - Ergebnis-Banner: 4-Felder Meta-Grid (Clips/Preset/Größe/Format),
+    Download-Link mit download-Attribut, "Neuer Export" Reset-Button
+  - Alle dynamischen Daten via textContent (kein innerHTML)
+  - Sidebar: merge-clips.php hinzugefügt (⛓️ Multi-Scene Export)
+- TODO #28: api/merge-clips.php — Merge + Export Backend
+  - POST only, JSON-Body: { clips[], preset, output_name }
+  - Dateiname-Regex: /^[a-f0-9]{32}\.(mp4|webm|mov)$/i (nur Upload-API-Muster)
+  - Pfad-Validierung via csf_validate_path() (realpath + CSF_STORAGE_ROOT)
+  - Limit: min. 2, max. 20 Clips
+  - Schritt 1: mergeClips() — Concat-Demuxer, kein Re-encode, temp _raw.mp4
+  - Schritt 2: exportPreset() — H.264/AAC Re-encode, Letterbox, +faststart
+  - Zwischendatei _raw.mp4 nach Export aufgeräumt (@unlink)
+  - Output: storage/exports/{name}_{preset}.mp4 mit eindeutigem bin2hex(8)-Suffix
+  - ffmpegCheck vor Verarbeitung (sauberer 503 wenn FFmpeg fehlt)
+  - Response: { success, url, filename, preset, clip_count, size_bytes }
+- docker/apache.conf: storage/exports/ für Downloads freigeschaltet
+  (Require all granted, Options -Indexes -ExecCGI, PHP-Execution verboten)
+
 ### Hinzugefügt (Phase 4 — TODO #27)
 - TODO #27: includes/functions.php — FFmpeg Service Library
   - `checkFfmpegAvailable()`: FFmpeg-Version prüfen, Binary-Pfad aus ENV
