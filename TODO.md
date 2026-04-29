@@ -81,7 +81,7 @@
 |---|----------------------------------------------|--------|-----------|
 |35 | settings.php — App-Einstellungen UI          | ⬜     | P2        |
 |36 | Performance-Optimierung                      | ⬜     | P2        |
-|37 | storage/ + data/ gegen Web-Zugriff absichern | ⬜     | P1        |
+|37 | storage/ + data/ gegen Web-Zugriff absichern | ✅     | P1        |
 |38 | Render Deployment konfigurieren              | ⬜     | P1        |
 |39 | E2E Tests (Playwright)                       | ⬜     | P3        |
 |40 | Installer / Release Notes                    | ⬜     | P3        |
@@ -96,7 +96,6 @@
 | Anfrage-Modal in ready-videos.php sendet nicht wirklich      | P2        |
 | elements.php "Bearbeiten"-Button deaktiviert (API 501)       | P2        |
 | API_PROVIDER_LINK in config.php ist Platzhalter              | P3        |
-| storage/ + data/ ohne .htaccess-Schutz (TODO #37 → P1!)     | P1        |
 
 ---
 

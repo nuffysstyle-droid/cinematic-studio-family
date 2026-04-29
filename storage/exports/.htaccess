@@ -1,0 +1,10 @@
+# Cinematic Studio Family — TODO #37
+# storage/exports/ — Download-Zugriff erlaubt (fertige MP4-Exporte).
+# Kein Directory-Listing, kein CGI/PHP-Execution.
+
+Require all granted
+Options -Indexes -ExecCGI
+
+<FilesMatch "\.(php|phtml|phar)$">
+    Require all denied
+</FilesMatch>

@@ -1,10 +1,10 @@
 # PROJECT_STATUS.md — Cinematic Studio Family
 
 ## Aktueller Status
-**Phase:** Phase 3 abgeschlossen — FREEZE 🧊  
-**Stand:** 2026-04-28  
+**Phase:** Phase 5 — In Arbeit (parallel zu Phase 4)  
+**Stand:** 2026-04-29  
 **Version:** 0.0.1  
-**Git:** Working Tree clean — alle 26 TODOs committed
+**Git:** Phase 4 läuft (#27–#30 ✅), Phase 5 #37 ✅
 
 ---
 
@@ -26,7 +26,7 @@ Cinematic Studio Family ist eine Anwendung zur professionellen Erstellung und Ve
 | Phase 2 — Kern       | ✅ Fertig       | Prompt Engine, Studios, Elements, Guidance, Dashboard, Projektverwaltung  |
 | Phase 3 — TikTok+    | ✅ Fertig 🧊    | TikTok Studio, Animation, Sticker, Trailer, Showroom, Academy             |
 | Phase 4 — Export     | 🟡 In Arbeit    | FFmpeg-Service ✅, Clip-Merge ✅, Export-API ✅, Polling ✅, Thumbnails      |
-| Phase 5 — Release    | 🔲 Ausstehend   | Settings, Security, Render Deployment, Tests                              |
+| Phase 5 — Release    | 🟡 In Arbeit    | Security ✅ (#37 .htaccess), Settings, Render Deployment, Tests           |
 
 ---
 
@@ -69,7 +69,6 @@ Cinematic Studio Family ist eine Anwendung zur professionellen Erstellung und Ve
 | Anfrage-Modal sendet nicht wirklich (nur Toast) | ready-videos.php | P2 |
 | elements.php "Bearbeiten"-Button disabled | elements.php + api/elements.php (501) | P2 |
 | API_PROVIDER_LINK ist Platzhalter | includes/config.php | P3 |
-| storage/ + data/ nicht gegen Web-Zugriff geschützt | .htaccess fehlt | P1 |
 
 ---
 
@@ -82,7 +81,7 @@ Cinematic Studio Family ist eine Anwendung zur professionellen Erstellung und Ve
 | **Ready-Videos ohne Zahlung** | Kein Payment-System — "Anfragen" ist nur Kontaktformular | 🟡 Mittel | V1 akzeptabel; V2 Stripe/Payment einplanen |
 | **API-Anbindung Platzhalter** | Seedance/AI-API noch nicht real angebunden — alles sind Prompt-Generatoren | 🟡 Mittel | Phase 4 real anbinden oder V1 explizit als "Prompt Tool" definieren |
 | **Große Rohdateien** | Video-Upload bis 100 MB — bei Multi-Scene-Merge steigt Speicherbedarf stark | 🟡 Mittel | Temporäre Cleanup-Routine in Export-API |
-| **Keine Authentifizierung** | Alle Daten in `data/` öffentlich erreichbar wenn kein .htaccess | 🟠 Mittel-Hoch | TODO #37 zwingend vor Deployment |
+| **Keine Authentifizierung** | Alle Daten in `data/` öffentlich erreichbar wenn kein .htaccess | 🟢 Behoben | TODO #37 ✅ — .htaccess in storage/, data/, includes/ (2026-04-29) |
 | **Concurrent JSON-Writes** | LOCK_EX schützt vor Race-Conditions, aber bei hoher Last trotzdem riskant | 🟢 Gering | V1 akzeptabel; bei Wachstum auf SQLite/DB migrieren |
 
 ---

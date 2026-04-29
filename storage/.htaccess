@@ -1,0 +1,6 @@
+# Cinematic Studio Family — TODO #37
+# storage/ — kein direkter Web-Zugriff (Apache lokal ohne Docker).
+# Rohdateien (uploads, temp, elements) sind ausschliesslich ueber API erreichbar.
+# Exports + Thumbnails haben eigene .htaccess mit selektiver Freigabe.
+
+Require all denied

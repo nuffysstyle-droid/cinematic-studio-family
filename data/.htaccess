@@ -1,0 +1,5 @@
+# Cinematic Studio Family — TODO #37
+# data/ — kein direkter Web-Zugriff.
+# Enthaelt JSON-Dateien (projects, export-jobs, ready-videos, etc.).
+
+Require all denied

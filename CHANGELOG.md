@@ -7,6 +7,24 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## [Unreleased]
 
+### Sicherheit (Phase 5 — TODO #37) — 2026-04-29
+- TODO #37: .htaccess-Schutz für storage/, data/, includes/
+  - Apache 2.4 Syntax (Require all denied/granted) — schützt lokales Apache ohne Docker
+  - storage/.htaccess → komplett denied (Default für alle Unterverzeichnisse)
+  - storage/exports/.htaccess → granted, Options -Indexes -ExecCGI,
+    PHP-Execution blockiert (\.php|\.phtml|\.phar) — Downloads bleiben möglich
+  - storage/thumbnails/.htaccess → analog zu exports (Bild-Anzeige im Browser)
+  - storage/uploads/.htaccess → komplett denied (Bilder/Videos nur via API,
+    signed URLs folgen in V2)
+  - storage/temp/.htaccess → komplett denied (Concat-Filelists, Zwischendateien)
+  - storage/elements/.htaccess → komplett denied (Element-Library Rohdateien)
+  - data/.htaccess → komplett denied (projects.json, export-jobs.json, etc.)
+  - includes/.htaccess → komplett denied (config, prompt-engine, guidance, functions)
+  - docker/apache.conf bleibt unverändert — VirtualHost-Regeln decken Render bereits ab
+  - .gitignore: explizite `!*/.htaccess` Whitelist-Eintraege fuer alle storage-Unterverzeichnisse
+    (sonst von `storage/uploads/*`, `storage/exports/*` etc. mitignoriert)
+  - Tech-Schuld "storage/ + data/ ohne .htaccess-Schutz" entfernt
+
 ### Hinzugefügt (Phase 4 — TODO #30)
 - TODO #30: api/progress.php — Export-Job Polling-Endpunkt
   - GET und POST erlaubt (Parameter: job_id)

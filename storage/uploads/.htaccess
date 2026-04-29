@@ -1,0 +1,5 @@
+# Cinematic Studio Family — TODO #37
+# storage/uploads/ — kein direkter Web-Zugriff.
+# Bilder + Videos sind nur ueber API zugaenglich. Signed URLs folgen spaeter.
+
+Require all denied

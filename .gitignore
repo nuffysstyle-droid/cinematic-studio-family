@@ -36,6 +36,13 @@ data/export-jobs.json
 !data/projects/.gitkeep
 storage/temp/*
 !storage/temp/.gitkeep
+
+# .htaccess Web-Schutz (TODO #37) — niemals ignorieren
+!storage/uploads/.htaccess
+!storage/exports/.htaccess
+!storage/thumbnails/.htaccess
+!storage/elements/.htaccess
+!storage/temp/.htaccess
 *.tmp
 *.temp
 

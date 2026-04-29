@@ -1,0 +1,5 @@
+# Cinematic Studio Family — TODO #37
+# includes/ — kein direkter Web-Zugriff.
+# Enthaelt PHP-Module (config, prompt-engine, guidance, functions).
+
+Require all denied
