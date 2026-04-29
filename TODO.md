@@ -60,18 +60,19 @@
 
 ---
 
-## PHASE 4 — Multi-Scene + Export (FFmpeg)
+## PHASE 4 — Multi-Scene + Export (FFmpeg) ✅ ABGESCHLOSSEN (2026-04-29)
 
 | # | Aufgabe                                      | Status | Priorität |
 |---|----------------------------------------------|--------|-----------|
 |27 | includes/functions.php — FFmpeg-Service      | ✅     | P2        |
 |28 | Multi-Scene Clip-Merge                       | ✅     | P2        |
 |29 | api/export.php — Export-Endpunkt             | ✅     | P2        |
-|30 | api/progress.php — Export-Fortschritt (SSE)  | ✅     | P2        |
-|31 | api/thumbnail.php — Thumbnail-Generierung    | ⬜     | P2        |
-|32 | Export-Voreinstellungen (720p/1080p/4K)      | ⬜     | P2        |
-|33 | Fortschrittsanzeige im UI                    | ⬜     | P2        |
-|34 | Teilen-Funktion (Download, WhatsApp, YouTube)| ⬜     | P3        |
+|30 | api/progress.php — Export-Polling-Endpunkt   | ✅     | P2        |
+|31 | Thumbnail-UI in merge-clips.php (Button + Vorschau) | ✅     | P2        |
+|   | ~~api/thumbnail.php (separat)~~ → in api/export.php?action=thumbnail integriert | | |
+|32 | Export-Button mit Preset (720p/1080p) — video-studio.php + merge-clips.php Re-Export | ✅     | P2        |
+|33 | Fortschrittsanzeige im UI (assets/js/progress.js + Progress-Bar) | ✅     | P2        |
+|34 | ~~Teilen-Funktion (Download, WhatsApp, YouTube)~~ → **Error Handling sichtbar machen (Fehlerbox + Mapping)** | ✅     | P2        |
 
 ---
 

@@ -9,6 +9,7 @@
 
 require_once 'includes/config.php';
 $pageTitle = 'Multi-Scene Export';
+$extraJs   = ['progress.js'];
 require_once 'includes/header.php';
 ?>
 
@@ -391,6 +392,27 @@ require_once 'includes/header.php';
     <span class="mc-progress__spinner">⚙️</span>
     <p class="mc-progress__title">Export läuft…</p>
     <p class="mc-progress__hint">FFmpeg verarbeitet deine Clips. Das kann 1–3 Minuten dauern.</p>
+
+    <!-- Progress-Bar (Phase 4 — TODO #33) -->
+    <div class="csf-progress" style="margin-top:16px;">
+        <div class="csf-progress__head">
+            <span class="csf-progress__label" id="mc-progress-status">Rendering…</span>
+            <span class="csf-progress__percent" id="mc-progress-percent">—</span>
+        </div>
+        <div class="csf-progress__bar">
+            <div class="csf-progress__fill" id="mc-progress-fill"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Fehlerbox (Phase 4 — TODO #34) -->
+<div id="mc-error-box" class="csf-error-box" hidden>
+    <span class="csf-error-box__icon" aria-hidden="true">⚠</span>
+    <div class="csf-error-box__body">
+        <p class="csf-error-box__title" id="mc-error-title">Es ist ein Fehler aufgetreten.</p>
+        <p class="csf-error-box__detail" id="mc-error-detail" hidden></p>
+    </div>
+    <button type="button" class="csf-error-box__close" id="mc-error-close" aria-label="Fehler schließen">✕</button>
 </div>
 
 <!-- Ergebnis-Banner (nach erfolgreichem Export) -->
@@ -426,9 +448,38 @@ require_once 'includes/header.php';
         <a id="download-btn" href="#" download class="btn btn-primary">
             ⬇ MP4 herunterladen
         </a>
+        <button id="btn-thumbnail" type="button" class="btn btn-secondary">
+            🖼 Thumbnail generieren
+        </button>
         <button id="btn-new-export" class="btn btn-secondary">
             ↺ Neuer Export
         </button>
+    </div>
+
+    <!-- Thumbnail-Vorschau (Phase 4 — TODO #31) -->
+    <div id="mc-thumb-preview" class="csf-thumb-preview" hidden>
+        <p class="csf-thumb-preview__label">Thumbnail (00:00:01)</p>
+        <img id="mc-thumb-img" src="" alt="Thumbnail des exportierten Videos">
+    </div>
+
+    <!-- Re-Export mit anderem Preset (Phase 4 — TODO #32) -->
+    <div class="csf-export-group" style="margin-top:20px;">
+        <p class="csf-export-group__title">Erneut exportieren mit anderem Preset</p>
+        <div class="csf-export-presets">
+            <label>
+                <input type="radio" name="re-preset" value="720p">
+                <span>720p · HD</span>
+            </label>
+            <label>
+                <input type="radio" name="re-preset" value="1080p" checked>
+                <span>1080p · Full HD</span>
+            </label>
+        </div>
+        <div class="csf-action-row">
+            <button id="btn-reexport" type="button" class="btn btn-primary">
+                ▶ Erneut exportieren
+            </button>
+        </div>
     </div>
 </div>
 
@@ -559,6 +610,23 @@ require_once 'includes/header.php';
     const outputName  = document.getElementById('output-name');
     const clipTpl     = document.getElementById('tpl-clip');
 
+    // Phase 4 — TODO #31/#32/#33/#34
+    const btnThumb       = document.getElementById('btn-thumbnail');
+    const btnReexport    = document.getElementById('btn-reexport');
+    const thumbPreview   = document.getElementById('mc-thumb-preview');
+    const thumbImg       = document.getElementById('mc-thumb-img');
+    const errorBox       = document.getElementById('mc-error-box');
+    const errorTitle     = document.getElementById('mc-error-title');
+    const errorDetail    = document.getElementById('mc-error-detail');
+    const errorClose     = document.getElementById('mc-error-close');
+    const progressFill   = document.getElementById('mc-progress-fill');
+    const progressStatus = document.getElementById('mc-progress-status');
+    const progressPct    = document.getElementById('mc-progress-percent');
+
+    // State für letzten Merge-Output (für Thumbnail + Re-Export)
+    let lastMergedFile = null;   // basename des Merge-Outputs (für action=convert/thumbnail)
+    let indeterminate  = null;   // Handle der Bar-Animation
+
     // ── Upload ────────────────────────────────────────────────────────────
 
     /**
@@ -685,9 +753,17 @@ require_once 'includes/header.php';
         btnMerge.textContent  = '⏳ Bitte warten…';
         resultSec.hidden      = true;
         progressSec.hidden    = false;
+        hideError();
+
+        // Indeterminate-Animation während des synchronen Requests
+        // (Hinweis: api/merge-clips.php blockiert bis fertig — kein Polling möglich)
+        progressPct.textContent = '';
+        if (indeterminate) indeterminate.stop();
+        indeterminate = csfIndeterminate(progressFill, progressStatus, 'Rendering…');
 
         const preset     = (document.querySelector('input[name="preset"]:checked') || {}).value || '1080p';
         const customName = outputName.value.trim();
+        let httpStatus = 0;
 
         try {
             const resp = await fetch('api/merge-clips.php', {
@@ -699,22 +775,32 @@ require_once 'includes/header.php';
                     output_name: customName,
                 }),
             });
+            httpStatus = resp.status;
 
             const data = await resp.json().catch(function () {
                 return { success: false, error: 'Ungültige Server-Antwort.' };
             });
 
-            progressSec.hidden = true;
+            // Indeterminate stoppen, finalen Wert setzen
+            if (indeterminate) {
+                indeterminate.stop(100, data.success ? 'Fertig.' : 'Fehlgeschlagen.');
+                indeterminate = null;
+            }
+            progressPct.textContent = '100%';
+
+            // Kurze Verzögerung damit der User die "Fertig"-Bar sieht
+            setTimeout(function () { progressSec.hidden = true; }, 400);
 
             if (data.success) {
                 showResult(data);
                 Toast.success('Export erfolgreich!');
             } else {
-                Toast.error(data.error || 'Export fehlgeschlagen.');
+                handleApiError(httpStatus, data.error);
             }
         } catch (_) {
+            if (indeterminate) { indeterminate.stop(0, 'Fehlgeschlagen.'); indeterminate = null; }
             progressSec.hidden = true;
-            Toast.error('Netzwerkfehler beim Export.');
+            handleApiError(0, 'Netzwerkfehler beim Export.');
         }
 
         merging               = false;
@@ -724,6 +810,8 @@ require_once 'includes/header.php';
 
     function showResult(data) {
         resultSec.hidden = false;
+        thumbPreview.hidden = true;   // alte Thumbnails von Vorgänger-Exports zurücksetzen
+        thumbImg.src = '';
 
         // Metadaten (alle via textContent — kein innerHTML)
         document.getElementById('result-filename-sub').textContent = data.filename || '';
@@ -736,7 +824,163 @@ require_once 'includes/header.php';
         dlBtn.href   = data.url   || '#';
         dlBtn.download = data.filename || 'export.mp4';
 
+        // Für Thumbnail/Re-Export merken: Merge-Output liegt in storage/exports/.
+        // api/export.php verlangt jedoch eine Upload-Datei aus storage/uploads/videos/.
+        // Daher: Thumbnail/Re-Export nutzen den merged Filename — falls api/export.php
+        // ihn nicht akzeptiert, kommt eine sprechende Fehlermeldung über die Error-Box.
+        lastMergedFile = data.filename || null;
+
+        // Re-Export-Preset auf Default setzen (1080p), Thumbnail-Button aktiv
+        const reBtns = document.querySelectorAll('input[name="re-preset"]');
+        reBtns.forEach(function (r) { r.checked = (r.value === '1080p'); });
+
+        btnThumb.disabled    = !lastMergedFile;
+        btnReexport.disabled = !lastMergedFile;
+
         resultSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // ── Thumbnail (Phase 4 — TODO #31) ────────────────────────────────────
+
+    async function startThumbnail() {
+        if (!lastMergedFile) {
+            Toast.warning('Kein Export vorhanden — bitte zuerst Clips zusammenfügen.');
+            return;
+        }
+        hideError();
+        btnThumb.disabled    = true;
+        const orig           = btnThumb.textContent;
+        btnThumb.textContent = '⏳ Thumbnail…';
+
+        let httpStatus = 0;
+        try {
+            const resp = await fetch('api/export.php', {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:    JSON.stringify({
+                    action:   'thumbnail',
+                    filename: lastMergedFile,
+                    offset:   '00:00:01',
+                }),
+            });
+            httpStatus = resp.status;
+            const data = await resp.json().catch(function () {
+                return { success: false, error: 'Ungültige Server-Antwort.' };
+            });
+
+            if (data.success && data.data && data.data.url) {
+                // KEIN innerHTML — direkter Property-Set
+                thumbImg.src = data.data.url;
+                thumbPreview.hidden = false;
+                Toast.success('Thumbnail erstellt.');
+            } else {
+                handleApiError(httpStatus, data.error);
+            }
+        } catch (_) {
+            handleApiError(0, 'Netzwerkfehler beim Thumbnail-Erstellen.');
+        }
+
+        btnThumb.disabled    = false;
+        btnThumb.textContent = orig;
+    }
+
+    // ── Re-Export (Phase 4 — TODO #32) ────────────────────────────────────
+
+    async function startReexport() {
+        if (!lastMergedFile) {
+            Toast.warning('Kein Export vorhanden — bitte zuerst Clips zusammenfügen.');
+            return;
+        }
+        const newPreset = (document.querySelector('input[name="re-preset"]:checked') || {}).value || '1080p';
+        if (newPreset !== '720p' && newPreset !== '1080p') {
+            Toast.error('Ungültiges Preset.');
+            return;
+        }
+
+        hideError();
+        btnReexport.disabled = true;
+        const orig           = btnReexport.textContent;
+        btnReexport.textContent = '⏳ Konvertiere…';
+
+        progressSec.hidden = false;
+        if (indeterminate) indeterminate.stop();
+        indeterminate = csfIndeterminate(progressFill, progressStatus, 'Konvertiere ' + newPreset + '…');
+        progressPct.textContent = '';
+
+        let httpStatus = 0;
+        try {
+            const resp = await fetch('api/export.php', {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:    JSON.stringify({
+                    action:   'convert',
+                    filename: lastMergedFile,
+                    preset:   newPreset,
+                }),
+            });
+            httpStatus = resp.status;
+            const data = await resp.json().catch(function () {
+                return { success: false, error: 'Ungültige Server-Antwort.' };
+            });
+
+            if (indeterminate) {
+                indeterminate.stop(100, data.success ? 'Fertig.' : 'Fehlgeschlagen.');
+                indeterminate = null;
+            }
+            progressPct.textContent = '100%';
+            setTimeout(function () { progressSec.hidden = true; }, 400);
+
+            if (data.success && data.data && data.data.url) {
+                // Download-Button auf neue Datei updaten
+                const dlBtn = document.getElementById('download-btn');
+                dlBtn.href  = data.data.url;
+                dlBtn.download = data.data.filename || 'export.mp4';
+                document.getElementById('result-filename-sub').textContent = data.data.filename || '';
+                document.getElementById('result-preset').textContent       = (data.data.preset || newPreset).toUpperCase();
+                document.getElementById('result-size').textContent         = fmtSize(data.data.size_bytes || 0);
+                lastMergedFile = data.data.filename || lastMergedFile;
+                Toast.success('Erneuter Export erfolgreich.');
+            } else {
+                handleApiError(httpStatus, data.error);
+            }
+        } catch (_) {
+            if (indeterminate) { indeterminate.stop(0, 'Fehlgeschlagen.'); indeterminate = null; }
+            progressSec.hidden = true;
+            handleApiError(0, 'Netzwerkfehler beim Re-Export.');
+        }
+
+        btnReexport.disabled = false;
+        btnReexport.textContent = orig;
+    }
+
+    // ── Fehler-Anzeige (Phase 4 — TODO #34) ───────────────────────────────
+
+    function handleApiError(httpStatus, rawError) {
+        const mapped = (typeof csfMapError === 'function')
+            ? csfMapError(httpStatus, rawError)
+            : { message: rawError || 'Unbekannter Fehler.', details: '' };
+
+        // Toast (kurze Bestätigung)
+        Toast.error(mapped.message);
+
+        // Persistente Fehlerbox (textContent — kein innerHTML)
+        errorTitle.textContent = mapped.message;
+        if (mapped.details && mapped.details !== mapped.message) {
+            errorDetail.textContent = mapped.details;
+            errorDetail.hidden = false;
+        } else {
+            errorDetail.textContent = '';
+            errorDetail.hidden = true;
+        }
+        errorBox.hidden = false;
+        errorBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function hideError() {
+        errorBox.hidden = true;
+        errorTitle.textContent = '';
+        errorDetail.textContent = '';
+        errorDetail.hidden = true;
     }
 
     // ── Hilfsfunktionen ───────────────────────────────────────────────────
@@ -784,9 +1028,18 @@ require_once 'includes/header.php';
     // Merge-Button
     btnMerge.addEventListener('click', startMerge);
 
+    // Thumbnail / Re-Export / Error-Close
+    btnThumb?.addEventListener('click', startThumbnail);
+    btnReexport?.addEventListener('click', startReexport);
+    errorClose?.addEventListener('click', hideError);
+
     // Neuer Export
     btnNewExp.addEventListener('click', function () {
         resultSec.hidden = true;
+        thumbPreview.hidden = true;
+        thumbImg.src = '';
+        hideError();
+        lastMergedFile = null;
         clips = [];
         renderClips();
         updateMergeBtn();

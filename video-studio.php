@@ -5,7 +5,7 @@ require_once 'includes/guidance.php';
 $pageTitle       = 'Video Studio';
 $defaultTemplate = 'cinematic_scene';
 $defaultMode     = 'text';
-$extraJs   = ['editor.js', 'upload.js'];
+$extraJs   = ['editor.js', 'upload.js', 'progress.js'];
 require_once 'includes/header.php';
 ?>
 
@@ -238,6 +238,98 @@ require_once 'includes/header.php';
         </div><!-- .studio-col-result -->
 
     </div><!-- .studio-grid -->
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         MP4-EXPORT-BEREICH (Phase 4 — TODO #32 + #33 + #34)
+         Eigene Card unterhalb des Prompt-Builders: Video-Datei hochladen,
+         Preset wählen, als MP4 exportieren. Optional Thumbnail erzeugen.
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <div class="card mb-4" style="margin-top:24px;">
+        <div class="card-header">
+            <span class="card-title">MP4-Export · Konvertieren</span>
+        </div>
+        <div class="card-body">
+            <p class="text-muted text-sm" style="margin-bottom:14px;">
+                Lade eine bestehende Video-Datei hoch und exportiere sie als MP4 in 720p oder 1080p.
+                Ideal um Aufnahmen zu vereinheitlichen, bevor sie in den Multi-Scene-Export gehen.
+            </p>
+
+            <!-- Upload -->
+            <div id="vs-export-dropzone" class="dropzone" style="margin-bottom:14px;">
+                <p class="dropzone__label">Video hierher ziehen oder klicken</p>
+                <p class="text-muted text-sm">MP4 · WEBM · MOV — max. 500 MB</p>
+                <input type="file" id="vs-export-input"
+                       accept="video/mp4,video/webm,video/quicktime"
+                       hidden>
+            </div>
+
+            <!-- Datei-Vorschau (nach Upload) -->
+            <div id="vs-export-preview" class="upload-preview" hidden>
+                <div class="upload-meta">
+                    <span class="upload-filename text-sm font-semibold" id="vs-export-name"></span>
+                    <span class="upload-filesize text-sm text-muted" id="vs-export-size"></span>
+                </div>
+                <button id="vs-export-remove" class="btn btn-secondary btn-sm" type="button">Entfernen</button>
+            </div>
+
+            <!-- Preset + Aktionen -->
+            <div class="csf-export-group" id="vs-export-group" hidden>
+                <p class="csf-export-group__title">Export-Qualität</p>
+                <div class="csf-export-presets">
+                    <label>
+                        <input type="radio" name="vs-preset" value="720p">
+                        <span>720p · HD</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="vs-preset" value="1080p" checked>
+                        <span>1080p · Full HD</span>
+                    </label>
+                </div>
+                <div class="csf-action-row">
+                    <button id="vs-btn-convert"   class="btn btn-primary"   type="button" disabled>
+                        ▶ Als MP4 exportieren
+                    </button>
+                    <button id="vs-btn-thumbnail" class="btn btn-secondary" type="button" disabled>
+                        🖼 Thumbnail
+                    </button>
+                </div>
+            </div>
+
+            <!-- Progress-Bar (Phase 4 — TODO #33) -->
+            <div id="vs-progress" class="csf-progress" hidden style="margin-top:16px;">
+                <div class="csf-progress__head">
+                    <span class="csf-progress__label" id="vs-progress-status">Rendering…</span>
+                    <span class="csf-progress__percent" id="vs-progress-percent">—</span>
+                </div>
+                <div class="csf-progress__bar">
+                    <div class="csf-progress__fill" id="vs-progress-fill"></div>
+                </div>
+            </div>
+
+            <!-- Fehlerbox (Phase 4 — TODO #34) -->
+            <div id="vs-error-box" class="csf-error-box" hidden style="margin-top:16px;">
+                <span class="csf-error-box__icon" aria-hidden="true">⚠</span>
+                <div class="csf-error-box__body">
+                    <p class="csf-error-box__title" id="vs-error-title">Es ist ein Fehler aufgetreten.</p>
+                    <p class="csf-error-box__detail" id="vs-error-detail" hidden></p>
+                </div>
+                <button type="button" class="csf-error-box__close" id="vs-error-close" aria-label="Fehler schließen">✕</button>
+            </div>
+
+            <!-- Result -->
+            <div id="vs-result" hidden style="margin-top:16px; padding:16px; background:var(--bg-elevated); border-left:3px solid #48c774; border-radius:var(--radius);">
+                <p class="text-sm" style="margin:0 0 8px; color:#48c774; font-weight:600;">✓ Export erfolgreich</p>
+                <p class="text-sm text-muted" id="vs-result-meta" style="margin:0 0 12px;"></p>
+                <a id="vs-download-btn" href="#" download class="btn btn-primary">⬇ MP4 herunterladen</a>
+            </div>
+
+            <!-- Thumbnail-Vorschau -->
+            <div id="vs-thumb-preview" class="csf-thumb-preview" hidden>
+                <p class="csf-thumb-preview__label">Thumbnail (00:00:01)</p>
+                <img id="vs-thumb-img" src="" alt="Thumbnail des Videos">
+            </div>
+        </div>
+    </div>
 
 </div><!-- .studio-page -->
 
@@ -493,6 +585,269 @@ require_once 'includes/header.php';
     promptInput?.addEventListener('input', () => {
         updateWarnings(promptInput.value, templateSel?.value ?? '', optMode?.value ?? '');
     });
+
+    // ════════════════════════════════════════════════════════════════════════
+    //  Phase 4 — TODO #32/#33/#34: MP4-Export Card
+    //
+    //  Hinweis V1: api/upload.php + api/export.php laufen synchron.
+    //  Echtes Polling über api/progress.php ist daher (noch) nicht aktiv —
+    //  wir zeigen während des fetch() eine indeterminate-Bar via csfIndeterminate().
+    //  Das Modul progress.js ist trotzdem komplett und auf Async-Worker
+    //  vorbereitet (siehe csfTrackJob).
+    // ════════════════════════════════════════════════════════════════════════
+
+    const vsDropzone   = document.getElementById('vs-export-dropzone');
+    const vsInput      = document.getElementById('vs-export-input');
+    const vsPreview    = document.getElementById('vs-export-preview');
+    const vsName       = document.getElementById('vs-export-name');
+    const vsSize       = document.getElementById('vs-export-size');
+    const vsRemove     = document.getElementById('vs-export-remove');
+    const vsGroup      = document.getElementById('vs-export-group');
+    const vsBtnConvert = document.getElementById('vs-btn-convert');
+    const vsBtnThumb   = document.getElementById('vs-btn-thumbnail');
+    const vsProgress   = document.getElementById('vs-progress');
+    const vsProgFill   = document.getElementById('vs-progress-fill');
+    const vsProgStatus = document.getElementById('vs-progress-status');
+    const vsProgPct    = document.getElementById('vs-progress-percent');
+    const vsErrorBox   = document.getElementById('vs-error-box');
+    const vsErrorTitle = document.getElementById('vs-error-title');
+    const vsErrorDet   = document.getElementById('vs-error-detail');
+    const vsErrorClose = document.getElementById('vs-error-close');
+    const vsResult     = document.getElementById('vs-result');
+    const vsResultMeta = document.getElementById('vs-result-meta');
+    const vsDownload   = document.getElementById('vs-download-btn');
+    const vsThumbPrev  = document.getElementById('vs-thumb-preview');
+    const vsThumbImg   = document.getElementById('vs-thumb-img');
+
+    let vsUploadedFile = null;   // server-seitiger Filename (32 hex + ext)
+    let vsBusy         = false;
+    let vsIndet        = null;
+
+    function vsHideError() {
+        vsErrorBox.hidden = true;
+        vsErrorTitle.textContent = '';
+        vsErrorDet.textContent = '';
+        vsErrorDet.hidden = true;
+    }
+    function vsShowError(httpStatus, rawError) {
+        const mapped = (typeof csfMapError === 'function')
+            ? csfMapError(httpStatus, rawError)
+            : { message: rawError || 'Unbekannter Fehler.', details: '' };
+        Toast.error(mapped.message);
+        vsErrorTitle.textContent = mapped.message;
+        if (mapped.details && mapped.details !== mapped.message) {
+            vsErrorDet.textContent = mapped.details;
+            vsErrorDet.hidden = false;
+        } else {
+            vsErrorDet.textContent = '';
+            vsErrorDet.hidden = true;
+        }
+        vsErrorBox.hidden = false;
+    }
+
+    function vsFmtSize(bytes) {
+        if (!bytes || bytes <= 0) return '—';
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+        return (bytes / 1024 / 1024).toFixed(1) + ' MB';
+    }
+
+    function vsResetState() {
+        vsUploadedFile = null;
+        vsPreview.hidden = true;
+        vsGroup.hidden   = true;
+        vsResult.hidden  = true;
+        vsThumbPrev.hidden = true;
+        vsThumbImg.src = '';
+        vsBtnConvert.disabled = true;
+        vsBtnThumb.disabled   = true;
+        vsName.textContent = '';
+        vsSize.textContent = '';
+        if (vsInput) vsInput.value = '';
+    }
+
+    async function vsUpload(file) {
+        if (vsBusy) return;
+        if (!file || !file.type || !file.type.startsWith('video/')) {
+            Toast.warning('Bitte eine Video-Datei wählen.');
+            return;
+        }
+        // Frontend-Limit (Backend prüft erneut)
+        if (file.size > 500 * 1024 * 1024) {
+            Toast.warning('Datei größer als 500 MB — bitte vorher verkleinern.');
+            return;
+        }
+
+        vsHideError();
+        vsBusy = true;
+        vsBtnConvert.disabled = true;
+        vsBtnThumb.disabled   = true;
+        vsName.textContent = file.name;
+        vsSize.textContent = '⏳ Upload läuft…';
+        vsPreview.hidden = false;
+        vsGroup.hidden   = true;
+
+        const fd = new FormData();
+        fd.append('file', file);
+
+        try {
+            const resp = await fetch('api/upload.php', { method: 'POST', body: fd });
+            const data = await resp.json().catch(() => ({ success: false, error: 'Ungültige Server-Antwort.' }));
+
+            if (data.success && data.type === 'video' && data.filename) {
+                vsUploadedFile = data.filename;
+                vsSize.textContent = vsFmtSize(file.size);
+                vsGroup.hidden   = false;
+                vsBtnConvert.disabled = false;
+                vsBtnThumb.disabled   = false;
+                Toast.success('Video bereit für den Export.');
+            } else {
+                vsResetState();
+                vsShowError(resp.status, data.error || 'Upload fehlgeschlagen.');
+            }
+        } catch (_) {
+            vsResetState();
+            vsShowError(0, 'Netzwerkfehler beim Upload.');
+        }
+        vsBusy = false;
+    }
+
+    async function vsConvert() {
+        if (!vsUploadedFile || vsBusy) return;
+        const preset = (document.querySelector('input[name="vs-preset"]:checked') || {}).value || '1080p';
+        if (preset !== '720p' && preset !== '1080p') {
+            Toast.error('Ungültiges Preset.');
+            return;
+        }
+
+        vsHideError();
+        vsBusy = true;
+        vsBtnConvert.disabled = true;
+        vsBtnThumb.disabled   = true;
+        const orig = vsBtnConvert.textContent;
+        vsBtnConvert.textContent = '⏳ Konvertiere…';
+
+        vsResult.hidden = true;
+        vsProgress.hidden = false;
+        if (vsIndet) vsIndet.stop();
+        vsIndet = csfIndeterminate(vsProgFill, vsProgStatus, 'Konvertiere ' + preset + '…');
+        vsProgPct.textContent = '';
+
+        let httpStatus = 0;
+        try {
+            const resp = await fetch('api/export.php', {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:    JSON.stringify({
+                    action:   'convert',
+                    filename: vsUploadedFile,
+                    preset:   preset,
+                }),
+            });
+            httpStatus = resp.status;
+            const data = await resp.json().catch(() => ({ success: false, error: 'Ungültige Server-Antwort.' }));
+
+            if (vsIndet) {
+                vsIndet.stop(100, data.success ? 'Fertig.' : 'Fehlgeschlagen.');
+                vsIndet = null;
+            }
+            vsProgPct.textContent = '100%';
+            setTimeout(() => { vsProgress.hidden = true; }, 400);
+
+            if (data.success && data.data && data.data.url) {
+                vsDownload.href     = data.data.url;
+                vsDownload.download = data.data.filename || 'export.mp4';
+                vsResultMeta.textContent =
+                    (data.data.filename || '') + ' · ' +
+                    (data.data.preset || preset).toUpperCase() + ' · ' +
+                    vsFmtSize(data.data.size_bytes || 0);
+                vsResult.hidden = false;
+                Toast.success('Export erfolgreich!');
+            } else {
+                vsShowError(httpStatus, data.error);
+            }
+        } catch (_) {
+            if (vsIndet) { vsIndet.stop(0, 'Fehlgeschlagen.'); vsIndet = null; }
+            vsProgress.hidden = true;
+            vsShowError(0, 'Netzwerkfehler beim Export.');
+        }
+
+        vsBtnConvert.textContent = orig;
+        vsBtnConvert.disabled = false;
+        vsBtnThumb.disabled   = false;
+        vsBusy = false;
+    }
+
+    async function vsThumbnail() {
+        if (!vsUploadedFile || vsBusy) return;
+
+        vsHideError();
+        vsBusy = true;
+        vsBtnThumb.disabled = true;
+        vsBtnConvert.disabled = true;
+        const orig = vsBtnThumb.textContent;
+        vsBtnThumb.textContent = '⏳ Thumbnail…';
+
+        let httpStatus = 0;
+        try {
+            const resp = await fetch('api/export.php', {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:    JSON.stringify({
+                    action:   'thumbnail',
+                    filename: vsUploadedFile,
+                    offset:   '00:00:01',
+                }),
+            });
+            httpStatus = resp.status;
+            const data = await resp.json().catch(() => ({ success: false, error: 'Ungültige Server-Antwort.' }));
+
+            if (data.success && data.data && data.data.url) {
+                vsThumbImg.src = data.data.url;
+                vsThumbPrev.hidden = false;
+                Toast.success('Thumbnail erstellt.');
+            } else {
+                vsShowError(httpStatus, data.error);
+            }
+        } catch (_) {
+            vsShowError(0, 'Netzwerkfehler beim Thumbnail.');
+        }
+
+        vsBtnThumb.textContent = orig;
+        vsBtnThumb.disabled = false;
+        vsBtnConvert.disabled = false;
+        vsBusy = false;
+    }
+
+    // Event-Listener
+    vsDropzone?.addEventListener('click', (e) => {
+        if (e.target === vsInput) return;
+        vsInput?.click();
+    });
+    ['dragenter', 'dragover'].forEach(ev => {
+        vsDropzone?.addEventListener(ev, (e) => {
+            e.preventDefault();
+            vsDropzone.classList.add('dropzone--active');
+        });
+    });
+    ['dragleave', 'drop'].forEach(ev => {
+        vsDropzone?.addEventListener(ev, () => vsDropzone.classList.remove('dropzone--active'));
+    });
+    vsDropzone?.addEventListener('drop', (e) => {
+        e.preventDefault();
+        const f = e.dataTransfer?.files?.[0];
+        if (f) vsUpload(f);
+    });
+    vsInput?.addEventListener('change', () => {
+        const f = vsInput.files?.[0];
+        if (f) vsUpload(f);
+    });
+    vsRemove?.addEventListener('click', () => {
+        vsResetState();
+        vsHideError();
+    });
+    vsBtnConvert?.addEventListener('click', vsConvert);
+    vsBtnThumb?.addEventListener('click', vsThumbnail);
+    vsErrorClose?.addEventListener('click', vsHideError);
 
 })();
 </script>

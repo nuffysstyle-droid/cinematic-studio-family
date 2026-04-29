@@ -7,6 +7,57 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## [Unreleased]
 
+### Hinzugefügt (Phase 4 — TODO #30 Verifikation + #31–#34 Completion) — 2026-04-29
+- TODO #30 verifiziert: api/progress.php entspricht der Spec vollständig
+  (GET+POST, job_id-Validierung [a-zA-Z0-9_-]{1,64}, LOCK_SH-Read,
+  Progress-Mapping done/failed=100, pending=0, running=50, keine internen Pfade
+  in der Response). Keine Änderung am Endpunkt nötig.
+- TODO #31 — Thumbnail-UI in merge-clips.php
+  - Button "🖼 Thumbnail generieren" im Result-Bereich (sichtbar nach erfolgreichem Merge)
+  - Klick → POST api/export.php { action: thumbnail, filename: <merged>, offset: '00:00:01' }
+  - Vorschau via <img>-Tag mit direkter src-Property (kein innerHTML)
+  - api/export.php: export_resolve_input() erweitert um storage/exports/ als
+    zulässige Quelle (EXPORT_OUTPUT_PATTERN /^[a-zA-Z0-9_-]+\.(mp4|webm|mov)$/i),
+    damit Thumbnail/Re-Export auch auf Merge-Output funktioniert
+- TODO #32 — Export-Button mit Preset
+  - video-studio.php: Neue Card "MP4-Export · Konvertieren" mit File-Upload
+    (DropZone), Preset-Radios (720p/1080p), "Als MP4 exportieren"-Button,
+    Download-Link nach Erfolg, Thumbnail-Button (zusätzlich)
+  - merge-clips.php: "Erneut exportieren mit anderem Preset"-Block im Result-Bereich
+    (.csf-export-group), 720p/1080p-Radios, separater Re-Export-Button
+  - Frontend + Backend validieren Preset (nur 720p/1080p) — Backend-Whitelist
+    EXPORT_VALID_PRESETS unverändert
+- TODO #33 — Progress-Bar mit Polling
+  - Neues Modul assets/js/progress.js mit:
+    - csfTrackJob(jobId, callbacks) — Polling alle 2 s gegen api/progress.php,
+      stoppt bei status='done'|'failed', Sicherheits-Stop nach 120 Ticks (4 Min)
+    - csfIndeterminate(fillEl, textEl, label) — pendelnde Bar zwischen 10–95 %
+      während synchroner fetch()-Calls (Animation alle 250 ms)
+    - csfStatusLabel(status) — Default-Mapping (pending/running/done/failed)
+    - csfMapError(httpStatus, rawError) — Mapping API-Fehler → User-Text
+  - Eingebunden in merge-clips.php (während Merge + Re-Export) und
+    video-studio.php (während Convert)
+  - CSS-Block .csf-progress in app.css: Outer-Bar dunkel (--bg-elevated),
+    Fill als Akzent-Blau-Verlauf, transition: width 200ms ease, Border-Radius 999px
+  - V1-Limit: api/merge-clips.php + api/export.php laufen synchron — daher
+    aktuell kein echtes Polling aktiv. Indeterminate-Bar überbrückt den fetch().
+    Modul ist bereit für künftigen Async-Worker (siehe Code-Kommentar).
+- TODO #34 — Error Handling sichtbar machen (umgewidmet von "Teilen-Funktion")
+  - Wiederverwendbare Fehlerbox .csf-error-box (CSS in app.css):
+    rote Akzentlinie links, ⚠-Icon, Title + optionaler Detail-Text + Schließen-Button
+  - Eingebunden in merge-clips.php und video-studio.php (Result-Bereich)
+  - Mapping in csfMapError() (progress.js):
+    - HTTP 503 / "ffmpeg not available"  → "Video-Verarbeitung ist gerade nicht verfügbar."
+    - "different codecs" / "concat failed" → "Clips haben unterschiedliche Codecs/Auflösungen…"
+    - "format not supported" / "ungültiges format" → "Format nicht unterstützt — verwende MP4, WebM oder MOV."
+    - Sonst → "Video konnte nicht verarbeitet werden." + Detail-Text
+  - Toast bleibt zusätzlich für die kurze Bestätigung; Fehlerbox ist die
+    persistente Anzeige (textContent — kein innerHTML)
+- Qualität:
+  - Keine innerHTML-Verwendung für User-Daten — überall textContent + DOM-API
+  - Mobile: Buttons min. 44 px Touch-Target, Stack auf <600 px (.csf-action-row)
+  - Bestehende Flows in merge-clips.php / video-studio.php unverändert lauffähig
+
 ### Sicherheit (Phase 5 — TODO #37) — 2026-04-29
 - TODO #37: .htaccess-Schutz für storage/, data/, includes/
   - Apache 2.4 Syntax (Require all denied/granted) — schützt lokales Apache ohne Docker

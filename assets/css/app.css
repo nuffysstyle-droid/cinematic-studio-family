@@ -770,3 +770,199 @@ select {
         max-width: 100%;
     }
 }
+
+
+/* ============================================================
+   14) PROGRESS BAR (Phase 4 — TODO #33)
+   ============================================================ */
+.csf-progress {
+    background: var(--bg-panel);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    margin-bottom: 20px;
+}
+.csf-progress__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+.csf-progress__label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+.csf-progress__percent {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+.csf-progress__bar {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: 999px;
+    height: 10px;
+    overflow: hidden;
+    position: relative;
+}
+.csf-progress__fill {
+    background: linear-gradient(90deg, var(--accent-blue), #6cb3ff);
+    height: 100%;
+    width: 0%;
+    border-radius: 999px;
+    transition: width 200ms ease;
+}
+.csf-progress--error .csf-progress__fill {
+    background: linear-gradient(90deg, #e53e3e, #ff6b6b);
+}
+
+
+/* ============================================================
+   15) ERROR BOX (Phase 4 — TODO #34)
+   ============================================================ */
+.csf-error-box {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    background: rgba(229, 62, 62, 0.06);
+    border: 1px solid rgba(229, 62, 62, 0.25);
+    border-left: 3px solid #e53e3e;
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin-bottom: 20px;
+}
+.csf-error-box__icon {
+    font-size: 1.2rem;
+    line-height: 1.2;
+    flex-shrink: 0;
+    color: #e53e3e;
+}
+.csf-error-box__body {
+    flex: 1;
+    min-width: 0;
+}
+.csf-error-box__title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 4px;
+    line-height: 1.35;
+}
+.csf-error-box__detail {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.5;
+    word-break: break-word;
+}
+.csf-error-box__close {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    line-height: 1;
+    flex-shrink: 0;
+    transition: color 0.15s, background 0.15s;
+}
+.csf-error-box__close:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+
+/* ============================================================
+   16) THUMBNAIL PREVIEW (Phase 4 — TODO #31)
+   ============================================================ */
+.csf-thumb-preview {
+    margin-top: 16px;
+    padding: 12px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius);
+    text-align: center;
+}
+.csf-thumb-preview img {
+    max-width: 100%;
+    max-height: 240px;
+    border-radius: var(--radius-sm);
+    display: block;
+    margin: 0 auto;
+}
+.csf-thumb-preview__label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin: 0 0 8px;
+}
+
+
+/* ============================================================
+   17) EXPORT-BUTTON-GROUP (Phase 4 — TODO #32)
+   ============================================================ */
+.csf-export-group {
+    background: var(--bg-panel);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 18px;
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+.csf-export-group__title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin: 0;
+}
+.csf-export-presets {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.csf-export-presets label {
+    flex: 1;
+    min-width: 120px;
+    cursor: pointer;
+}
+.csf-export-presets input[type="radio"] { display: none; }
+.csf-export-presets input[type="radio"] + span {
+    display: block;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    background: var(--bg-elevated);
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+.csf-export-presets input[type="radio"]:checked + span {
+    border-color: var(--accent-blue);
+    background: var(--accent-blue-glow);
+    color: var(--accent-blue);
+}
+.csf-action-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.csf-action-row > .btn {
+    min-height: 44px;        /* Touch-Target */
+    flex: 1;
+    min-width: 160px;
+}
+@media (max-width: 600px) {
+    .csf-action-row > .btn { width: 100%; flex-basis: 100%; }
+    .csf-export-presets label { flex-basis: calc(50% - 5px); min-width: 0; }
+}

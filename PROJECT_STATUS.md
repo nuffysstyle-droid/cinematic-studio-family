@@ -1,10 +1,10 @@
 # PROJECT_STATUS.md — Cinematic Studio Family
 
 ## Aktueller Status
-**Phase:** Phase 5 — In Arbeit (parallel zu Phase 4)  
+**Phase:** Phase 4 abgeschlossen, Phase 5 in Arbeit  
 **Stand:** 2026-04-29  
 **Version:** 0.0.1  
-**Git:** Phase 4 läuft (#27–#30 ✅), Phase 5 #37 ✅
+**Git:** Phase 4 ✅ (#27–#34), Phase 5 #37 ✅
 
 ---
 
@@ -25,7 +25,7 @@ Cinematic Studio Family ist eine Anwendung zur professionellen Erstellung und Ve
 | Phase 1 — Fundament  | ✅ Fertig       | 14 Seiten-Grundgerüste, includes/, api/, assets/                          |
 | Phase 2 — Kern       | ✅ Fertig       | Prompt Engine, Studios, Elements, Guidance, Dashboard, Projektverwaltung  |
 | Phase 3 — TikTok+    | ✅ Fertig 🧊    | TikTok Studio, Animation, Sticker, Trailer, Showroom, Academy             |
-| Phase 4 — Export     | 🟡 In Arbeit    | FFmpeg-Service ✅, Clip-Merge ✅, Export-API ✅, Polling ✅, Thumbnails      |
+| Phase 4 — Export     | ✅ Fertig       | FFmpeg ✅, Clip-Merge ✅, Export-API ✅, Polling ✅, Thumbnail-UI ✅, Progress-Bar ✅, Error-Box ✅ |
 | Phase 5 — Release    | 🟡 In Arbeit    | Security ✅ (#37 .htaccess), Settings, Render Deployment, Tests           |
 
 ---
@@ -100,16 +100,21 @@ Cinematic Studio Family ist eine Anwendung zur professionellen Erstellung und Ve
 
 ---
 
-## Nächste Schritte — Phase 4
+## Nächste Schritte — Phase 5
 
 1. ~~**TODO #27** — `includes/functions.php` — FFmpeg-Service~~ ✅
 2. ~~**TODO #28** — Multi-Scene Clip-Merge~~ ✅
-3. **TODO #29** — `api/export.php` — Export-Endpunkt
-4. **TODO #30** — `api/progress.php` — Export-Fortschritt (SSE)
-5. **TODO #31** — `api/thumbnail.php` — Thumbnail-Generierung
-6. **TODO #32** — Export-Voreinstellungen (720p / 1080p / 4K)
-7. **TODO #33** — Fortschrittsanzeige im UI
-8. **TODO #34** — Teilen-Funktion (Download, WhatsApp, YouTube)
+3. ~~**TODO #29** — `api/export.php` — Export-Endpunkt~~ ✅
+4. ~~**TODO #30** — `api/progress.php` — Export-Polling~~ ✅
+5. ~~**TODO #31** — Thumbnail-UI in merge-clips.php~~ ✅
+6. ~~**TODO #32** — Export-Button mit Preset (720p / 1080p)~~ ✅
+7. ~~**TODO #33** — Fortschrittsanzeige im UI (assets/js/progress.js)~~ ✅
+8. ~~**TODO #34** — Error Handling sichtbar machen (Fehlerbox)~~ ✅
+9. **TODO #35** — `settings.php` UI ⬜
+10. **TODO #36** — Performance-Optimierung ⬜
+11. **TODO #38** — Render Deployment ⬜
+12. **TODO #39** — E2E Tests (Playwright) ⬜
+13. **TODO #40** — Installer / Release Notes ⬜
 
 ---
 

@@ -54,8 +54,18 @@ const EXPORT_ACTIONS = [
 /** Gültige Export-Presets für action=convert */
 const EXPORT_VALID_PRESETS = ['720p', '1080p'];
 
-/** Erlaubtes Dateinamen-Muster (aus api/upload.php: bin2hex(random_bytes(16)).ext) */
+/** Erlaubtes Dateinamen-Muster für Uploads (aus api/upload.php: bin2hex(random_bytes(16)).ext) */
 const EXPORT_FILE_PATTERN = '/^[a-f0-9]{32}\.(mp4|webm|mov)$/i';
+
+/** Erlaubtes Dateinamen-Muster für Merge-/Export-Outputs (aus api/merge-clips.php + diese API)
+ *  Format-Beispiele:
+ *    abcd1234ef561234_1080p.mp4
+ *    urlaub_2026_abcd1234ef561234_1080p.mp4
+ *    abcd_1080p_abcd1234ef561234.mp4         (eigener Convert-Output)
+ *    abcd_thumb_abcd1234ef561234.jpg          (Thumbnail-Output, hier irrelevant)
+ *  Strikt: nur [a-zA-Z0-9_-], endet auf .mp4|.webm|.mov, max. 200 Zeichen.
+ */
+const EXPORT_OUTPUT_PATTERN = '/^[a-zA-Z0-9_\-]{1,200}\.(mp4|webm|mov)$/i';
 
 /** Maximale Jobs in export-jobs.json */
 const EXPORT_JOBS_MAX = 500;
@@ -374,14 +384,15 @@ if ($action === 'info') {
 /**
  * Löst einen Dateinamen oder relativen URL zu einem validierten absoluten Pfad auf.
  *
- * Akzeptiert:
- *   - Reiner Dateiname:  "abc123...def.mp4"
- *   - Relativer URL:     "/storage/uploads/videos/abc123...def.mp4"
- *   - URL mit BASE_URL:  "http://localhost/storage/uploads/videos/abc123...def.mp4"
+ * Akzeptiert zwei Quellen (in dieser Reihenfolge):
+ *   1. Upload-Datei in storage/uploads/videos/  (Pattern: 32 Hex + .mp4|.webm|.mov)
+ *   2. Merge-/Export-Output in storage/exports/ (Pattern: [a-zA-Z0-9_-]+ + .mp4|.webm|.mov)
+ *
+ * Re-Export und Thumbnail können dadurch auf bereits gemergte Clips angewendet werden.
  *
  * Gibt null zurück wenn:
- *   - Dateiname nicht dem Upload-Muster entspricht
- *   - Datei nicht in storage/uploads/videos/ liegt
+ *   - Dateiname keinem erlaubten Muster entspricht
+ *   - Datei in keinem der erlaubten Verzeichnisse liegt
  *   - Pfad-Validierung fehlschlägt
  *   - Datei nicht existiert
  */
@@ -390,30 +401,31 @@ function export_resolve_input(string $filenameOrUrl): ?string
     // Basename extrahieren (entfernt jeden Pfadanteil)
     $basename = basename($filenameOrUrl);
 
-    // Muss Upload-API-Muster entsprechen: 32 Hex-Zeichen + erlaubte Endung
-    if (!preg_match(EXPORT_FILE_PATTERN, $basename)) {
-        return null;
+    // Quelle 1: Upload-Verzeichnis
+    if (preg_match(EXPORT_FILE_PATTERN, $basename)) {
+        $videoDir = STORAGE_PATH . 'uploads/videos';
+        $dirReal  = realpath($videoDir);
+        if ($dirReal !== false && is_dir($dirReal)) {
+            $absPath = $dirReal . DIRECTORY_SEPARATOR . $basename;
+            if (csf_validate_path($absPath, mustExist: true) && file_exists($absPath)) {
+                return $absPath;
+            }
+        }
     }
 
-    $videoDir = STORAGE_PATH . 'uploads/videos';
-    $dirReal  = realpath($videoDir);
-
-    if ($dirReal === false || !is_dir($dirReal)) {
-        return null;
+    // Quelle 2: Export-Verzeichnis (Merge-Output, bereits konvertierte Dateien)
+    if (preg_match(EXPORT_OUTPUT_PATTERN, $basename)) {
+        $exportsDir = STORAGE_PATH . 'exports';
+        $dirReal    = realpath($exportsDir);
+        if ($dirReal !== false && is_dir($dirReal)) {
+            $absPath = $dirReal . DIRECTORY_SEPARATOR . $basename;
+            if (csf_validate_path($absPath, mustExist: true) && file_exists($absPath)) {
+                return $absPath;
+            }
+        }
     }
 
-    $absPath = $dirReal . DIRECTORY_SEPARATOR . $basename;
-
-    // Pfad-Validierung via functions.php (realpath + CSF_STORAGE_ROOT)
-    if (!csf_validate_path($absPath, mustExist: true)) {
-        return null;
-    }
-
-    if (!file_exists($absPath)) {
-        return null;
-    }
-
-    return $absPath;
+    return null;
 }
 
 /**
