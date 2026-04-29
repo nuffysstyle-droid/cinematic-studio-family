@@ -110,12 +110,19 @@ function checkFfmpegAvailable(): array {
     $result = csf_ffmpeg_run(['-version'], timeout: 10);
 
     if (!$result['success']) {
+        $errMsg = 'FFmpeg nicht gefunden oder nicht ausführbar: ' . trim($result['stderr']);
+        // Debug-Log für Render-Deploy-Diagnose. Nur im Fehlerfall, sonst wäre
+        // die Datei ein Spam-Magnet. LOCK_EX = atomares Append.
+        csf_ffmpeg_debug_log($errMsg, [
+            'bin'      => CSF_FFMPEG_BIN,
+            'env_path' => getenv('PATH') ?: '(unset)',
+        ]);
         return [
             'success'   => false,
             'available' => false,
             'version'   => '',
             'bin'       => CSF_FFMPEG_BIN,
-            'error'     => 'FFmpeg nicht gefunden oder nicht ausführbar: ' . trim($result['stderr']),
+            'error'     => $errMsg,
         ];
     }
 
@@ -686,4 +693,42 @@ function csf_eval_fps(string $fraction): float {
     [$num, $den] = explode('/', $fraction, 2);
     $den = (int)$den;
     return $den > 0 ? round((int)$num / $den, 3) : 0.0;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Schreibt eine FFmpeg-Fehlerzeile in data/ffmpeg-debug.log.
+ *
+ * Wird ausschließlich bei FFmpeg-Fehlern aufgerufen (siehe checkFfmpegAvailable).
+ * Format: [ISO-Datum] message | key=value key=value …
+ *
+ * Ausfälle beim Logging werden bewusst geschluckt — der Aufrufer darf nicht
+ * blockieren, nur weil das Log-Verzeichnis (noch) nicht beschreibbar ist.
+ *
+ * @internal
+ * @param string               $message Kurze Beschreibung
+ * @param array<string,string> $context Zusatz-Felder (bin, env_path, …)
+ * @return void
+ */
+function csf_ffmpeg_debug_log(string $message, array $context = []): void {
+    $logDir  = __DIR__ . '/../data';
+    $logFile = $logDir . '/ffmpeg-debug.log';
+
+    if (!is_dir($logDir)) {
+        // Bei symlinked data/ (Render-Disk) sollte der Ordner existieren.
+        // Fallback: Versuche anzulegen, ohne Hard-Fail.
+        @mkdir($logDir, 0755, true);
+    }
+    if (!is_dir($logDir) || !is_writable($logDir)) {
+        return; // Stillschweigend abbrechen — kein Hard-Fail im Hot Path
+    }
+
+    $line = '[' . date('c') . '] ' . $message;
+    foreach ($context as $k => $v) {
+        $line .= ' | ' . $k . '=' . str_replace(["\r", "\n"], ' ', (string)$v);
+    }
+    $line .= "\n";
+
+    @file_put_contents($logFile, $line, FILE_APPEND | LOCK_EX);
 }

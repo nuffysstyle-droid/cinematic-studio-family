@@ -7,6 +7,41 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## [Unreleased]
 
+### Hinzugefügt (Phase 5 — TODO #38 Render Deployment Setup) — 2026-04-29
+- **render.yaml** finalisiert
+  - Persistent Disk aktiviert: `csf-storage`, 1 GB, Mount `/var/www/html/render-data`
+  - envVars: `FFMPEG_PATH`, `FFPROBE_PATH`, `FFMPEG_TIMEOUT=300`,
+    `PHP_SESSION_NAME=csf_session`, `PERSIST_ROOT=/var/www/html/render-data`
+  - `healthCheckPath: /index.php` beibehalten, `autoDeploy: true`, Branch `master`
+- **Dockerfile** auf dynamischen PORT umgestellt
+  - `Listen ${APACHE_PORT}` in ports.conf statt fester `Listen 80`
+  - Neuer Entrypoint `docker/entrypoint.sh` (`set -e`, `chmod +x`)
+  - `EXPOSE 10000` (dokumentarisch — Port kommt aus `$PORT`)
+  - ENV `PERSIST_ROOT=/var/www/html/render-data`
+- **docker/entrypoint.sh** (NEU)
+  - `APACHE_PORT=${PORT:-80}` wird exportiert
+  - Persistent-Disk-Setup: `mkdir -p` aller Standard-Ordner, dann Symlinks
+    `/var/www/html/storage` → `render-data/storage` und
+    `/var/www/html/data`    → `render-data/data`
+  - Kein Daten-Verlust bei Restart (Symlink-Check vor `rm -rf`)
+  - Fallback auf lokales `storage/` wenn keine Disk gemountet
+- **docker/apache.conf** auf `<VirtualHost *:${APACHE_PORT}>` umgestellt,
+  zusätzlicher `Require all denied`-Block für `/var/www/html/render-data`
+- **api/health.php** (NEU) — Smoketest-Endpoint für Post-Deploy-Verifikation
+  - Liefert `{ ok, php, ffmpeg: { available, version }, storage_writable }`
+  - Status 503 bei FFmpeg- oder Storage-Fehler, sonst 200
+  - Nicht der Render-Healthcheck (das bleibt `/index.php`) — bewusst getrennt
+- **includes/functions.php** — FFmpeg Debug-Logging
+  - `csf_ffmpeg_debug_log()` schreibt nur im Fehlerfall in
+    `data/ffmpeg-debug.log` (LOCK_EX, atomares Append, Fehler werden
+    geschluckt damit Hot Path nicht blockiert)
+  - Aufruf eingebaut in `checkFfmpegAvailable()` bei nicht-verfügbarer Binary
+- **README_DEPLOY.md** (NEU) — vollständige Deploy-Anleitung
+  - Voraussetzungen, 5-Schritte-Deploy, ENV-Tabelle, Live-Test-Checkliste,
+    Stolpersteine + Lösungen, Persistent-Disk-Hinweise, Custom Domain
+- **Anmerkung:** Der eigentliche Live-Deploy-Klick liegt beim User
+  (Render-Account + GitHub-App). TODO #38 daher 🟡 bis Live-Test grün ist.
+
 ### Hinzugefügt (Phase 4 — TODO #30 Verifikation + #31–#34 Completion) — 2026-04-29
 - TODO #30 verifiziert: api/progress.php entspricht der Spec vollständig
   (GET+POST, job_id-Validierung [a-zA-Z0-9_-]{1,64}, LOCK_SH-Read,

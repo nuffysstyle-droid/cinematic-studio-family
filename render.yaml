@@ -4,18 +4,21 @@
 # Entscheidung Phase 4: Docker-Deployment auf Render
 # Dokumentation: https://render.com/docs/render-yaml-reference
 #
-# Deploy: Render erkennt diese Datei automatisch bei Git-Push.
+# Deploy: Render erkennt diese Datei automatisch bei Git-Push (Branch: master).
+# Anleitung für den User: README_DEPLOY.md.
 
 services:
   - type: web
     name: cinematic-studio-family
     env: docker
     dockerfilePath: ./Dockerfile
-    plan: starter              # Starter = $7/mo — kein Sleep, 512MB RAM
-    autoDeploy: true           # Automatischer Deploy bei Push auf main-Branch
+    plan: starter              # Starter = $7/mo — 512MB RAM, kein Sleep, Disks erlaubt
+    autoDeploy: true           # Automatischer Deploy bei Push auf master-Branch
     branch: master
 
     # ── Umgebungsvariablen ──────────────────────────────────────────────────
+    # PORT wird automatisch von Render injiziert (typisch 10000).
+    # Der Entrypoint (docker/entrypoint.sh) übernimmt $PORT als APACHE_PORT.
     envVars:
       - key: FFMPEG_PATH
         value: /usr/bin/ffmpeg
@@ -29,14 +32,23 @@ services:
       - key: PHP_SESSION_NAME
         value: csf_session
 
+      - key: PERSIST_ROOT
+        value: /var/www/html/render-data
+
     # ── Persistenter Speicher (Render Disk) ─────────────────────────────────
-    # WICHTIG: Free Plan hat KEINEN persistenten Speicher.
-    # Bei Upgrade auf Starter/Standard: Disk aktivieren.
+    # Die Disk wird unter /var/www/html/render-data gemountet. Der Entrypoint
+    # legt die Standard-Ordnerstruktur an und biegt /var/www/html/storage und
+    # /var/www/html/data via Symlink auf die Disk um.
     #
-    # disk:
-    #   name: csf-storage
-    #   mountPath: /var/www/html/storage
-    #   sizeGB: 10              # 10 GB — bei Bedarf erhöhen
+    # Disks sind an genau EINEN Service gebunden (kein Sharing).
+    # Bei Bedarf via Render-Dashboard auf 5GB / 10GB / mehr upgraden.
+    disk:
+      name: csf-storage
+      mountPath: /var/www/html/render-data
+      sizeGB: 1                # Starter — bei Bedarf vergrößern (Live-Resize möglich)
 
     # ── Health Check ────────────────────────────────────────────────────────
+    # Render pingt diesen Pfad regelmäßig — antwortet er nicht mit 2xx,
+    # gilt der Deploy als gescheitert. Smoketest läuft separat über
+    # /api/health.php (mit FFmpeg-Status).
     healthCheckPath: /index.php

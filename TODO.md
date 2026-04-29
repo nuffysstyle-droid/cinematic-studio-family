@@ -83,7 +83,7 @@
 |35 | settings.php — App-Einstellungen UI          | ⬜     | P2        |
 |36 | Performance-Optimierung                      | ⬜     | P2        |
 |37 | storage/ + data/ gegen Web-Zugriff absichern | ✅     | P1        |
-|38 | Render Deployment konfigurieren              | ⬜     | P1        |
+|38 | Render Deployment konfigurieren              | 🟡     | P1        |
 |39 | E2E Tests (Playwright)                       | ⬜     | P3        |
 |40 | Installer / Release Notes                    | ⬜     | P3        |
 
@@ -105,3 +105,7 @@
 - FFmpeg erst in Phase 4 — wird gebraucht wenn Multi-Scene + Clip-Merge gebaut wird
 - V1 Fokus: Prompt Engine → API-Key → Image Studio → Video Studio → Element Library → Guidance
 - Phase 3 Freeze: 2026-04-28 — alle 26 TODOs committed, Working Tree clean
+- TODO #38 Setup-Teil ✅ (render.yaml + Dockerfile + entrypoint.sh + apache.conf
+  + api/health.php + README_DEPLOY.md). Status 🟡 weil der eigentliche Klick
+  „Deploy on Render" nur durch den User mit eigenem Render-Account erfolgen kann.
+  Sobald Live-Test (siehe README_DEPLOY.md §4) grün ist → ✅.

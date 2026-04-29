@@ -4,7 +4,7 @@
 **Phase:** Phase 4 abgeschlossen, Phase 5 in Arbeit  
 **Stand:** 2026-04-29  
 **Version:** 0.0.1  
-**Git:** Phase 4 ✅ (#27–#34), Phase 5 #37 ✅
+**Git:** Phase 4 ✅ (#27–#34), Phase 5 #37 ✅, #38 Setup ✅ (Live-Deploy pending User)
 
 ---
 
@@ -26,7 +26,7 @@ Cinematic Studio Family ist eine Anwendung zur professionellen Erstellung und Ve
 | Phase 2 — Kern       | ✅ Fertig       | Prompt Engine, Studios, Elements, Guidance, Dashboard, Projektverwaltung  |
 | Phase 3 — TikTok+    | ✅ Fertig 🧊    | TikTok Studio, Animation, Sticker, Trailer, Showroom, Academy             |
 | Phase 4 — Export     | ✅ Fertig       | FFmpeg ✅, Clip-Merge ✅, Export-API ✅, Polling ✅, Thumbnail-UI ✅, Progress-Bar ✅, Error-Box ✅ |
-| Phase 5 — Release    | 🟡 In Arbeit    | Security ✅ (#37 .htaccess), Settings, Render Deployment, Tests           |
+| Phase 5 — Release    | 🟡 In Arbeit    | Security ✅ (#37), Render Deployment Setup ✅ (#38, Live-Klick beim User), Settings, Tests |
 
 ---
 
