@@ -1,9 +1,9 @@
 <?php
+header("Content-Type: application/json");
 
-$url = "https://cinematic-studio-family.onrender.com/api/process.php";
-
-$response = file_get_contents($url);
-
-echo "<pre>";
-echo $response;
-echo "</pre>";
+echo json_encode([
+    "status" => "ok",
+    "message" => "Analyze API ist erreichbar",
+    "method" => $_SERVER["REQUEST_METHOD"],
+    "time" => date("Y-m-d H:i:s")
+], JSON_PRETTY_PRINT);
