@@ -1,13 +1,4 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
-
-if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
-    http_response_code(200);
-    exit;
-}
-
 header("Content-Type: application/json");
 
 $storageRoot = __DIR__ . "/../storage";
@@ -104,7 +95,25 @@ if ($duration <= 0) {
     exit;
 }
 
-$slotCount = 10;
+/*
+|--------------------------------------------------------------------------
+| Intelligente Slot-Logik
+|--------------------------------------------------------------------------
+| Kurze Videos bekommen weniger Slots, lange Videos mehr.
+| Dadurch entstehen keine unsinnigen 0,3-Sekunden-Slots bei sehr kurzen Videos.
+*/
+if ($duration <= 6) {
+    $slotCount = 3;
+} elseif ($duration <= 15) {
+    $slotCount = 5;
+} elseif ($duration <= 30) {
+    $slotCount = 8;
+} elseif ($duration <= 60) {
+    $slotCount = 10;
+} else {
+    $slotCount = 12;
+}
+
 $slotLength = $duration / $slotCount;
 $slots = [];
 
@@ -129,6 +138,7 @@ for ($i = 0; $i < $slotCount; $i++) {
         "slot" => $i + 1,
         "start_seconds" => round($start, 2),
         "end_seconds" => round($end, 2),
+        "duration_seconds" => round($end - $start, 2),
         "thumbnail" => "/storage/thumbnails/" . $jobId . "/" . $thumbFile,
         "replace_allowed" => true,
         "text_allowed" => true
@@ -145,5 +155,6 @@ echo json_encode([
         "height" => $height
     ],
     "slot_count" => $slotCount,
+    "slot_logic" => "auto_by_duration",
     "slots" => $slots
 ], JSON_PRETTY_PRINT);
