@@ -34,7 +34,7 @@ RUN { \
     } > /usr/local/etc/php/conf.d/csf.ini
 
 # ── Apache-Konfiguration ──────────────────────────────────────────────────────
-RUN a2enmod rewrite
+RUN a2enmod rewrite headers
 
 COPY docker/apache.conf /etc/apache2/sites-available/000-default.conf
 
