@@ -17,13 +17,18 @@
 
 | Schicht | Wahl | Begründung |
 |---------|------|-----------|
-| Backend | **PHP 8.2** + Apache (Docker auf Render.com) | Keine Build-Pipeline, sofort deploybar |
-| Frontend | **Vanilla JS** (IIFE-Pattern) | Kein Framework-Lock-in, kein Bundle |
+| Backend (API) | **PHP 8.2** + Apache (Docker auf Render.com) | FFmpeg via apt-get, Persistent Disk |
+| Frontend (HTML) | **IONOS Webspace** + Vanilla JS | Eigene Domain, persistent, kein Cold-Start |
+| CORS | **Apache-Layer** (Source of Truth) | KEIN PHP-Header — sonst doppelte Origin-Header |
 | Architektur | **Flat** (kein MVC-Framework) | Verständlichkeit > Skalierung in V1 |
-| Video-Engine | **FFmpeg nativ**, serverseitig | Volle Kontrolle, kein WASM-Overhead |
+| Video-Engine | **FFmpeg + ffprobe** nativ, serverseitig | Volle Kontrolle, kein WASM-Overhead |
 | Storage | **JSON-Files** mit `LOCK_EX` / `LOCK_SH` | Kein DB-Setup nötig in V1 |
 | API-Key | Nur in `$_SESSION` | Nie persistiert, nie geloggt |
-| Deployment | **Render.com** + Docker | One-Click-Deploy, FFmpeg via apt-get |
+
+### Aktiver Frontend/Backend-Split (Phase 2)
+- **Frontend:** `scene-editor-test.html` (lokal im Repo-Root, deployed auf IONOS)
+- **Backend:** `https://cinematic-studio-family.onrender.com/api/*`
+- **Storage:** Render Persistent Disk → `storage/uploads/videos/`, `storage/thumbnails/`, `storage/jobs/`
 
 ---
 
@@ -64,11 +69,13 @@
 
 | Feld | Wert |
 |------|------|
-| **Phase** | Phase 4 abgeschlossen, Phase 5 Setup läuft |
-| **Letztes TODO** | #37 Security `.htaccess` + #30–34 Phase 4 Completion |
-| **Letzter Commit** | `5c3a5b2` feat: #30-34 Phase 4 Completion |
-| **Nächstes TODO** | #38 Render Deployment Setup |
-| **Working Tree** | Clean (außer `.claude/`-Harness-Files) |
+| **Aktive Phase** | **Scene Replacement Editor (Phase 2)** — User-Numbering |
+| **Render Backend** | Live · `/api/health.php` ✅ · `/api/analyze.php` ✅ · FFmpeg+ffprobe laufen |
+| **IONOS Frontend** | `scene-editor-test.html` deployed, ruft Render-API auf |
+| **Phase 2 Backend** | `replace-slot.php` ✅ · `get-job.php` ✅ · `meta.json` Schema definiert |
+| **Phase 2 Frontend** | Slot-Speichern + DOM-API-Refactor ✅ (lokal — IONOS-Push offen) |
+| **Storage-Struktur** | `storage/jobs/{job_id}/meta.json` + `storage/jobs/{job_id}/replacements/` |
+| **V1 Multi-Page (Phase 0–5)** | Pausiert — Phase 4 ✅, #38 Setup ✅ (Live-Klick beim User) |
 
 ---
 
@@ -95,6 +102,7 @@
 | Phase 3 — TikTok+ | 🧊 | TikTok Studio, Animation, Sticker, Trailer, Showroom, Academy |
 | Phase 4 — Export | ✅ | FFmpeg-Service, Clip-Merge, Export-API, Polling, Progress-UI, Error-Box |
 | Phase 5 — Release | 🟡 | Security ✅, Render-Deploy 🟡, Settings, Tests |
+| Scene Editor (User „Phase 2") | 🟡 | Render+IONOS live, analyze ✅, **replace-slot ✅**, **get-job ✅**, meta.json ✅, UI ✅ (Push-IONOS pending) |
 
 ---
 

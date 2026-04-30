@@ -145,6 +145,56 @@ for ($i = 0; $i < $slotCount; $i++) {
     ];
 }
 
+/*
+|--------------------------------------------------------------------------
+| Phase 2: meta.json + jobs/{job_id}/ vorbereiten (Scene Replacement Editor)
+|--------------------------------------------------------------------------
+| Wir lassen die bestehenden Pfade (uploads/videos/{job_id}, thumbnails/{job_id})
+| bewusst unverändert. Phase 2 fügt nur einen separaten jobs/{job_id}/-Ordner
+| hinzu, der den Replacement-Status (meta.json) und die Ersatz-Dateien hält.
+*/
+$jobsRoot   = $storageRoot . "/jobs";
+$jobDir     = $jobsRoot . "/" . $jobId;
+$replaceDir = $jobDir . "/replacements";
+
+if (!is_dir($jobsRoot))   @mkdir($jobsRoot,   0775, true);
+if (!is_dir($jobDir))     @mkdir($jobDir,     0775, true);
+if (!is_dir($replaceDir)) @mkdir($replaceDir, 0775, true);
+
+$slotsForMeta = [];
+foreach ($slots as $s) {
+    $slotsForMeta[] = $s + [
+        "replaced"         => false,
+        "replacement_file" => null,
+        "replacement_type" => null,
+        "text"             => null,
+        "updated_at"       => null,
+    ];
+}
+
+$meta = [
+    "job_id"     => $jobId,
+    "created_at" => date("c"),
+    "video"      => [
+        "original_name"    => $file["name"],
+        "duration_seconds" => round($duration, 2),
+        "width"            => $width,
+        "height"           => $height,
+    ],
+    "slot_count" => $slotCount,
+    "slots"      => $slotsForMeta,
+];
+
+$metaPath = $jobDir . "/meta.json";
+$metaJson = json_encode(
+    $meta,
+    JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
+);
+
+if ($metaJson !== false) {
+    @file_put_contents($metaPath, $metaJson, LOCK_EX);
+}
+
 echo json_encode([
     "status" => "ok",
     "job_id" => $jobId,

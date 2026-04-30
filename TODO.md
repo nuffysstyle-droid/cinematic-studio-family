@@ -89,6 +89,22 @@
 
 ---
 
+## SCENE REPLACEMENT EDITOR — User-Phase 2 (parallel zur V1-Roadmap)
+
+| #   | Aufgabe                                          | Status | Priorität |
+|-----|--------------------------------------------------|--------|-----------|
+| S1  | api/analyze.php — Slots + Thumbnails             | ✅     | P1        |
+| S2  | api/replace-slot.php — Slot-Ersatz speichern     | ✅     | P1        |
+| S3  | api/get-job.php — Job-Status lesen               | ✅     | P1        |
+| S4  | meta.json Schema + Backwards-Compat              | ✅     | P1        |
+| S5  | scene-editor-test.html Replace-UI + DOM-Refactor | ✅     | P1        |
+| S6  | scene-editor-test.html → IONOS pushen            | 🟡     | P1 (User) |
+| S7  | Live-Test: Slot ersetzen + meta.json verifizieren | ⬜     | P1        |
+| S8  | get-job.php Frontend-Restore (nach Reload)        | ⬜     | P2        |
+| S9  | Phase 3: Slot-Cuts → finales Video rendern        | ⬜     | später    |
+
+---
+
 ## Offene Technische Schulden (vor Phase 5 beheben)
 
 | Punkt                                                        | Priorität |

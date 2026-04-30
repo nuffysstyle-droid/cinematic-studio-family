@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinematic Studio Family – Scene Editor Test</title>
+  <style>
+    :root { --bg:#080812; --card:#121222; --card2:#18182b; --text:#f5f5ff; --muted:#a7a7c7; --accent:#f5c542; --danger:#ff5c7a; --ok:#4ade80; --border:rgba(255,255,255,.12); }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:Arial, Helvetica, sans-serif; background:radial-gradient(circle at top,#1d1b42 0%,var(--bg) 45%,#050509 100%); color:var(--text); min-height:100vh; }
+    .wrap { width:min(1180px, calc(100% - 32px)); margin:0 auto; padding:38px 0 60px; }
+    .hero { border:1px solid var(--border); background:linear-gradient(145deg,rgba(255,255,255,.08),rgba(255,255,255,.02)); border-radius:24px; padding:28px; box-shadow:0 24px 80px rgba(0,0,0,.35); }
+    h1 { margin:0 0 10px; font-size:clamp(28px,5vw,52px); line-height:1.02; letter-spacing:-1px; }
+    .sub { color:var(--muted); font-size:18px; max-width:760px; line-height:1.5; }
+    .panel { margin-top:22px; background:rgba(0,0,0,.24); border:1px solid var(--border); border-radius:18px; padding:18px; }
+    .row { display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
+    input[type=file] { width:min(100%,480px); padding:14px; border-radius:14px; border:1px solid var(--border); background:var(--card); color:var(--text); }
+    button { border:0; border-radius:14px; padding:14px 18px; font-weight:800; cursor:pointer; background:var(--accent); color:#171000; transition:transform .15s ease,opacity .15s ease; }
+    button:hover { transform:translateY(-1px); }
+    button:disabled { opacity:.45; cursor:not-allowed; transform:none; }
+    .status { margin-top:14px; color:var(--muted); white-space:pre-wrap; font-size:14px; }
+    .status.ok { color:var(--ok); }
+    .status.err { color:var(--danger); }
+    .meta { display:none; margin-top:22px; grid-template-columns:repeat(4,1fr); gap:12px; }
+    .meta div { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:14px; }
+    .meta strong { display:block; font-size:13px; color:var(--muted); margin-bottom:6px; }
+    .slots { margin-top:24px; display:grid; grid-template-columns:repeat(5,1fr); gap:14px; }
+    .slot { background:linear-gradient(160deg,var(--card),var(--card2)); border:1px solid var(--border); border-radius:18px; overflow:hidden; box-shadow:0 14px 40px rgba(0,0,0,.22); transition:border-color .2s ease, box-shadow .2s ease; }
+    .slot.is-replaced { border-color:var(--ok); box-shadow:0 0 0 1px var(--ok), 0 14px 40px rgba(0,0,0,.22); }
+    .thumb { position:relative; aspect-ratio:9/16; background:#05050a; display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:13px; overflow:hidden; }
+    .thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+    .badge { display:none; position:absolute; top:8px; left:8px; font-size:11px; font-weight:800; color:#0a2b14; background:var(--ok); padding:3px 8px; border-radius:999px; letter-spacing:.3px; box-shadow:0 4px 12px rgba(0,0,0,.4); }
+    .slot.is-replaced .badge { display:inline-block; }
+    .slot-body { padding:12px; }
+    .slot-title { font-weight:800; margin-bottom:6px; }
+    .time { color:var(--muted); font-size:13px; margin-bottom:10px; }
+    .field { width:100%; margin-top:8px; padding:10px; border-radius:10px; border:1px solid var(--border); background:rgba(0,0,0,.25); color:var(--text); outline:none; font-family:inherit; }
+    .replace { margin-top:8px; width:100%; font-size:12px; color:var(--muted); }
+    .save-btn { margin-top:10px; width:100%; min-height:44px; padding:10px 14px; font-size:13px; font-weight:800; border-radius:10px; background:var(--accent); color:#171000; border:0; cursor:pointer; transition:transform .15s ease, opacity .15s ease; }
+    .save-btn:hover:not(:disabled) { transform:translateY(-1px); }
+    .save-btn:disabled { opacity:.45; cursor:not-allowed; transform:none; }
+    .slot-status { margin-top:8px; font-size:12px; color:var(--muted); min-height:1.2em; word-break:break-word; }
+    .slot-status.ok { color:var(--ok); }
+    .slot-status.err { color:var(--danger); }
+    .note { margin-top:22px; color:var(--muted); font-size:14px; line-height:1.5; }
+    @media (max-width:980px) { .slots{grid-template-columns:repeat(3,1fr);} .meta{grid-template-columns:repeat(2,1fr);} }
+    @media (max-width:620px) { .slots{grid-template-columns:repeat(2,1fr);} .meta{grid-template-columns:1fr;} .hero{padding:20px;} }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <h1>Scene Replacement Editor</h1>
+      <p class="sub">Lade ein Referenzvideo hoch. Das Backend analysiert es, erzeugt Szenen-Slots und zeigt dir Thumbnails. Danach kannst du pro Slot später Bild/Video/Text ersetzen.</p>
+      <div class="panel">
+        <div class="row">
+          <input id="videoInput" type="file" accept="video/mp4,video/webm,video/quicktime,video/x-matroska">
+          <button id="analyzeBtn">Video analysieren</button>
+        </div>
+        <div id="status" class="status">Bereit. Wähle ein kurzes MP4-Testvideo.</div>
+      </div>
+      <div id="meta" class="meta">
+        <div><strong>Job ID</strong><span id="jobId">-</span></div>
+        <div><strong>Dauer</strong><span id="duration">-</span></div>
+        <div><strong>Auflösung</strong><span id="resolution">-</span></div>
+        <div><strong>Slots</strong><span id="slotCount">-</span></div>
+      </div>
+      <div id="slots" class="slots"></div>
+      <p class="note">Wichtig: Diese Datei ist der erste Editor-Test. Sie rendert noch kein neues Video. Der nächste Backend-Schritt ist: Slot ersetzen → neue Clips bauen → Export-MP4 erzeugen.</p>
+    </section>
+  </main>
+  <script>
+    "use strict";
+
+    // ── Konfiguration ─────────────────────────────────────────────────────────
+    const BASE_URL    = "https://cinematic-studio-family.onrender.com";
+    const ANALYZE_API = BASE_URL + "/api/analyze.php";
+    const REPLACE_API = BASE_URL + "/api/replace-slot.php";
+
+    const MAX_IMG_BYTES = 10  * 1024 * 1024; // 10 MB  (passend zu api/upload.php)
+    const MAX_VID_BYTES = 100 * 1024 * 1024; // 100 MB
+    const MAX_TEXT_LEN  = 500;
+
+    // ── DOM-Refs ──────────────────────────────────────────────────────────────
+    const videoInput    = document.getElementById("videoInput");
+    const analyzeBtn    = document.getElementById("analyzeBtn");
+    const statusBox     = document.getElementById("status");
+    const metaBox       = document.getElementById("meta");
+    const slotsBox      = document.getElementById("slots");
+    const jobIdEl       = document.getElementById("jobId");
+    const durationEl    = document.getElementById("duration");
+    const resolutionEl  = document.getElementById("resolution");
+    const slotCountEl   = document.getElementById("slotCount");
+
+    // ── Helfer ────────────────────────────────────────────────────────────────
+    function setStatus(text, type) {
+      statusBox.className = "status" + (type ? " " + type : "");
+      statusBox.textContent = text;
+    }
+
+    function formatSeconds(value) {
+      return Number(value).toFixed(2) + "s";
+    }
+
+    function clearChildren(el) {
+      while (el.firstChild) el.removeChild(el.firstChild);
+    }
+
+    function setSlotStatus(el, text, type) {
+      el.textContent = text;
+      el.classList.remove("ok", "err");
+      if (type) el.classList.add(type);
+    }
+
+    // ── Slot-Karte erzeugen (DOM-API only, kein innerHTML für API-Daten) ─────
+    function createSlotCard(jobId, slot) {
+      const card = document.createElement("div");
+      card.className = "slot";
+      card.dataset.jobId = jobId;
+      card.dataset.slotNumber = String(slot.slot);
+      if (slot.replaced) card.classList.add("is-replaced");
+
+      // Thumbnail-Container + Badge
+      const thumb = document.createElement("div");
+      thumb.className = "thumb";
+
+      const img = document.createElement("img");
+      img.src = BASE_URL + slot.thumbnail;
+      img.alt = "Slot " + slot.slot;
+      thumb.appendChild(img);
+
+      const badge = document.createElement("span");
+      badge.className = "badge";
+      badge.textContent = "✓ ersetzt";
+      thumb.appendChild(badge);
+
+      card.appendChild(thumb);
+
+      // Body
+      const body = document.createElement("div");
+      body.className = "slot-body";
+
+      const title = document.createElement("div");
+      title.className = "slot-title";
+      title.textContent = "Slot " + slot.slot;
+      body.appendChild(title);
+
+      const time = document.createElement("div");
+      time.className = "time";
+      time.textContent = formatSeconds(slot.start_seconds) + " – " + formatSeconds(slot.end_seconds);
+      body.appendChild(time);
+
+      const textField = document.createElement("input");
+      textField.type = "text";
+      textField.className = "field";
+      textField.placeholder = "Text für diese Szene...";
+      textField.maxLength = MAX_TEXT_LEN;
+      if (slot.text) textField.value = String(slot.text);
+      body.appendChild(textField);
+
+      const fileInput = document.createElement("input");
+      fileInput.type = "file";
+      fileInput.className = "replace";
+      fileInput.accept = "image/*,video/*";
+      body.appendChild(fileInput);
+
+      const saveBtn = document.createElement("button");
+      saveBtn.type = "button";
+      saveBtn.className = "save-btn";
+      saveBtn.textContent = "Slot speichern";
+      body.appendChild(saveBtn);
+
+      const slotStatus = document.createElement("div");
+      slotStatus.className = "slot-status";
+      if (slot.replaced && slot.replacement_file) {
+        const parts = String(slot.replacement_file).split("/");
+        slotStatus.textContent = "Aktuelle Datei: " + parts[parts.length - 1];
+      }
+      body.appendChild(slotStatus);
+
+      card.appendChild(body);
+
+      saveBtn.addEventListener("click", function () {
+        saveSlot({ card, fileInput, textField, slotStatus, saveBtn });
+      });
+
+      return card;
+    }
+
+    function renderSlots(data) {
+      clearChildren(slotsBox);
+      data.slots.forEach(function (slot) {
+        slotsBox.appendChild(createSlotCard(data.job_id, slot));
+      });
+    }
+
+    // ── Slot speichern (Phase 2) ──────────────────────────────────────────────
+    async function saveSlot(refs) {
+      const card        = refs.card;
+      const fileInput   = refs.fileInput;
+      const textField   = refs.textField;
+      const slotStatus  = refs.slotStatus;
+      const saveBtn     = refs.saveBtn;
+
+      const file = fileInput.files[0] || null;
+      const text = textField.value.trim();
+
+      if (!file && !text) {
+        setSlotStatus(slotStatus, "Bitte Datei oder Text angeben.", "err");
+        return;
+      }
+
+      if (text.length > MAX_TEXT_LEN) {
+        setSlotStatus(slotStatus, "Text zu lang (max. " + MAX_TEXT_LEN + " Zeichen).", "err");
+        return;
+      }
+
+      if (file) {
+        const isImage = file.type.indexOf("image/") === 0;
+        const isVideo = file.type.indexOf("video/") === 0;
+        if (!isImage && !isVideo) {
+          setSlotStatus(slotStatus, "Nur Bild oder Video erlaubt.", "err");
+          return;
+        }
+        const maxBytes = isImage ? MAX_IMG_BYTES : MAX_VID_BYTES;
+        if (file.size > maxBytes) {
+          const limitMb = Math.round(maxBytes / 1024 / 1024);
+          setSlotStatus(slotStatus, "Datei zu groß. Limit: " + limitMb + " MB.", "err");
+          return;
+        }
+      }
+
+      saveBtn.disabled = true;
+      setSlotStatus(slotStatus, "Speichere…");
+
+      try {
+        const formData = new FormData();
+        formData.append("job_id", card.dataset.jobId);
+        formData.append("slot_number", card.dataset.slotNumber);
+        formData.append("text", text);
+        if (file) formData.append("replacement_file", file);
+
+        const response = await fetch(REPLACE_API, { method: "POST", body: formData });
+        const responseText = await response.text();
+
+        let data;
+        try {
+          data = JSON.parse(responseText);
+        } catch (e) {
+          throw new Error("Antwort war kein JSON:\n" + responseText);
+        }
+
+        if (!response.ok || data.status !== "ok") {
+          throw new Error(data.message || "Speichern fehlgeschlagen");
+        }
+
+        card.classList.add("is-replaced");
+
+        let infoText = "Gespeichert";
+        if (data.replacement_file) {
+          const parts = String(data.replacement_file).split("/");
+          infoText += " · " + parts[parts.length - 1];
+        }
+        setSlotStatus(slotStatus, infoText, "ok");
+
+        // File-Input leeren — gleicher File kann ggf. erneut gewählt werden
+        fileInput.value = "";
+      } catch (err) {
+        setSlotStatus(slotStatus, "Fehler: " + (err && err.message ? err.message : err), "err");
+      } finally {
+        saveBtn.disabled = false;
+      }
+    }
+
+    // ── Video analysieren (Phase 1, unverändert in der Logik) ─────────────────
+    analyzeBtn.addEventListener("click", async function () {
+      const file = videoInput.files[0];
+      if (!file) {
+        setStatus("Bitte zuerst ein Video auswählen.", "err");
+        return;
+      }
+      analyzeBtn.disabled = true;
+      clearChildren(slotsBox);
+      metaBox.style.display = "none";
+      setStatus("Upload läuft... Render kann beim Free Plan kurz aufwachen. Bitte warten.");
+      try {
+        const formData = new FormData();
+        formData.append("video", file);
+        const response = await fetch(ANALYZE_API, { method: "POST", body: formData });
+        const text = await response.text();
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch (e) {
+          throw new Error("Antwort war kein JSON:\n" + text);
+        }
+        if (!response.ok || data.status !== "ok") {
+          throw new Error(data.message || "Analyse fehlgeschlagen");
+        }
+        jobIdEl.textContent      = data.job_id;
+        durationEl.textContent   = data.video.duration_seconds + "s";
+        resolutionEl.textContent = data.video.width + " × " + data.video.height;
+        slotCountEl.textContent  = String(data.slot_count);
+        metaBox.style.display = "grid";
+        renderSlots(data);
+        setStatus("Analyse erfolgreich. Slots wurden erzeugt.", "ok");
+      } catch (err) {
+        setStatus("Fehler:\n" + (err && err.message ? err.message : err), "err");
+      } finally {
+        analyzeBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

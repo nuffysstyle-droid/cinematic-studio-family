@@ -7,6 +7,63 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## [Unreleased]
 
+### Hinzugefügt (Scene Replacement Editor — User-Phase 2) — 2026-05-01
+- **Backend-Architektur:** Render hostet die API (`/api/*`), IONOS hostet das
+  Frontend (`scene-editor-test.html`). CORS läuft über Apache auf Render —
+  KEIN PHP-CORS-Header (sonst doppelte `Access-Control-Allow-Origin`).
+- **api/analyze.php** minimal erweitert: nach Slot-Generierung wird zusätzlich
+  `storage/jobs/{job_id}/meta.json` mit `LOCK_EX` geschrieben. JSON-Response
+  unverändert — Phase-1-Frontends bleiben kompatibel. Replace-Felder pro Slot
+  initialisiert (`replaced=false`, `replacement_file=null`, `replacement_type=null`,
+  `text=null`, `updated_at=null`).
+- **api/replace-slot.php** (NEU) — Slot-Ersatz-Endpoint
+  - POST + multipart/form-data: `job_id`, `slot_number`, `replacement_file`, `text` (optional)
+  - Strict Validierung: `job_id` Regex `/^job_\d{8}_\d{6}_[a-f0-9]{8}$/`,
+    `slot_number` 1–12, `text` ≤ 500 Zeichen, mindestens File ODER Text required
+  - finfo MIME-Check (image/jpeg|png|webp, video/mp4|webm|quicktime)
+  - Größenlimits passend zu `api/upload.php`: 10 MB Bild / 100 MB Video
+  - `move_uploaded_file()`, kein Original-Name (Random-Hash + Extension via MIME-Map)
+  - `storage/jobs/{job_id}/replacements/slot_NN_<rand>.{ext}`
+  - meta.json Read-Modify-Write mit `LOCK_EX`, atomares `ftruncate`+`rewind`+`fwrite`
+  - Backwards-Compat: legt meta.json minimal an, falls noch nicht vorhanden (alte Jobs)
+  - Cleanup bei Fehler: hochgeladene Datei wird wieder entfernt wenn meta-Write scheitert
+  - Defense in depth: realpath-Check unter `storage/jobs/`-Root (Traversal-Schutz)
+  - **Kein PHP-CORS-Header** — Apache regelt Origin
+- **api/get-job.php** (NEU) — Job-Status lesen
+  - GET, `job_id` required, gleiche Regex-Validierung
+  - `LOCK_SH` für konsistentes Lesen während paralleler Writes
+  - Response: `{ status: "ok", job: { ...meta.json } }` oder Fehler
+  - 404 wenn Job/meta.json fehlt, 400 bei ungültiger ID, 500 bei Lock/Read-Fehler
+  - `Cache-Control: no-store` (Frontend soll immer aktuelle Daten sehen)
+  - Realpath-Check unter `storage/jobs/`-Root
+- **storage/jobs/.htaccess** (NEU) — Apache 2.4
+  - `Require all granted` für Replacement-Dateien (Frontend-Vorschau)
+  - `<FilesMatch "\.(php|phtml|phar)$">` denied — kein PHP-Exec
+  - `<FilesMatch "^meta\.json$">` denied — Job-Metadaten nur via api/get-job.php
+  - `Options -Indexes -ExecCGI`
+- **storage/jobs/.gitkeep** (NEU)
+- **scene-editor-test.html** (lokal im Repo-Root) erweitert:
+  - **`renderSlots()` refactored** — kein `innerHTML` mehr für API-Daten,
+    komplette DOM-API (`createElement` + `textContent`) plus
+    `data-job-id` + `data-slot-number` Attribute auf jeder Slot-Karte
+  - Pro Slot: bestehendes Text-Feld + File-Input + neuer Speichern-Button (44 px Touch-Target)
+  - Replaced-Badge (✓ ersetzt) auf dem Thumbnail, sichtbar wenn `slot.replaced === true`
+  - `is-replaced`-Klasse triggert grünen Border + Glow auf der Karte
+  - Slot-Status-Zeile: feedback in 3 Stufen (default / `ok` / `err`)
+  - Client-Side-Validierung mit denselben Limits wie Backend (10 MB / 100 MB / 500 Zeichen,
+    nur image/* oder video/*)
+  - File-Input wird nach erfolgreichem Speichern geleert — gleicher File kann erneut gewählt werden
+  - `clearChildren()` ersetzt `slotsBox.innerHTML = ""` an allen Stellen
+  - Strict-Mode aktiviert (`"use strict"`)
+  - **Kein finaler Video-Export** — Phase 2 ist absichtlich nur „ersetzen + speichern + UI anzeigen"
+- **meta.json Schema** (definiert in analyze.php + replace-slot.php):
+  ```
+  { job_id, created_at, video: { original_name, duration_seconds, width, height },
+    slot_count, slots: [ { slot, start_seconds, end_seconds, duration_seconds,
+                           thumbnail, replace_allowed, text_allowed,
+                           replaced, replacement_file, replacement_type, text, updated_at } ] }
+  ```
+
 ### Hinzugefügt (Phase 5 — TODO #38 Render Deployment Setup) — 2026-04-29
 - **render.yaml** finalisiert
   - Persistent Disk aktiviert: `csf-storage`, 1 GB, Mount `/var/www/html/render-data`

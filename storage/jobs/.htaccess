@@ -1,0 +1,16 @@
+# Cinematic Studio Family — Phase 2 (Scene Replacement Editor)
+# storage/jobs/ — Replacement-Bilder/Videos sind direkt lesbar, damit das
+# Frontend Vorschauen anzeigen kann. meta.json bleibt verborgen — die
+# kompletten Job-Daten dürfen nur via api/get-job.php gelesen werden.
+# PHP-Execution ist generell unterbunden.
+
+Require all granted
+Options -Indexes -ExecCGI
+
+<FilesMatch "\.(php|phtml|phar)$">
+    Require all denied
+</FilesMatch>
+
+<FilesMatch "^meta\.json$">
+    Require all denied
+</FilesMatch>
