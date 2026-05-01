@@ -160,6 +160,28 @@
       if (type) el.classList.add(type);
     }
 
+    // ── Debug-Logging + Netzwerk-Fehler-Helfer ────────────────────────────────
+    // dbg(): einheitlicher [csf]-Prefix in DevTools-Console — null Effekt im UI.
+    // networkErrorMessage(): erkennt fetch-TypeError (DNS/CORS/Verbindung weg)
+    // und liefert eine handlungsorientierte Meldung statt nur "Failed to fetch".
+    function dbg(label, data) {
+      try {
+        if (data === undefined) console.log("[csf] " + label);
+        else console.log("[csf] " + label, data);
+      } catch (_) { /* ignore */ }
+    }
+    function networkErrorMessage(err, endpoint) {
+      const msg = err && err.message ? err.message : String(err);
+      const isNetwork = err && (err.name === "TypeError"
+        || /failed to fetch|networkerror|load failed/i.test(msg));
+      if (isNetwork) {
+        return "Backend nicht erreichbar (" + endpoint + ").\n"
+             + "Mögliche Ursachen: Render schläft, DNS-Hiccup, Verbindung weg.\n"
+             + "Bitte 20–30 Sekunden warten und erneut versuchen.";
+      }
+      return msg;
+    }
+
     // ── Slot-Karte erzeugen (DOM-API only, kein innerHTML für API-Daten) ─────
     function createSlotCard(jobId, slot) {
       const card = document.createElement("div");
@@ -331,6 +353,7 @@
       clearChildren(slotsBox);
       metaBox.style.display = "none";
       setStatus("Upload läuft... Render kann beim Free Plan kurz aufwachen. Bitte warten.");
+      dbg("analyze: POST", { endpoint: ANALYZE_API, name: file.name, size: file.size });
       try {
         const formData = new FormData();
         formData.append("video", file);
@@ -359,8 +382,10 @@
         finalSection.hidden = false;
         resetBtn.hidden     = false;
         setStatus("Analyse erfolgreich. Slots wurden erzeugt.", "ok");
+        dbg("analyze: ok", { job_id: data.job_id, slots: data.slot_count });
       } catch (err) {
-        setStatus("Fehler:\n" + (err && err.message ? err.message : err), "err");
+        dbg("analyze: error", err);
+        setStatus("Fehler:\n" + networkErrorMessage(err, ANALYZE_API), "err");
       } finally {
         analyzeBtn.disabled = false;
       }
@@ -440,6 +465,7 @@
         return;
       }
       setStatus("Job " + jobId + " wird geladen…");
+      dbg("restoreJob: GET", { endpoint: GETJOB_API, job_id: jobId });
       try {
         const url = GETJOB_API + "?job_id=" + encodeURIComponent(jobId);
         const response = await fetch(url, { method: "GET" });
@@ -481,9 +507,11 @@
         hideRenderState();
         showRestoredHint(jobId);
         setStatus("Job wiederhergestellt.", "ok");
+        dbg("restoreJob: ok", { slots: (job.slots || []).length });
       } catch (err) {
-        setStatus("Job-Restore fehlgeschlagen: "
-          + (err && err.message ? err.message : err), "err");
+        dbg("restoreJob: error", err);
+        setStatus("Job-Restore fehlgeschlagen:\n"
+          + networkErrorMessage(err, GETJOB_API), "err");
       }
     }
 
@@ -519,6 +547,16 @@
         + "je nach Videolänge und Replacements. Bitte Tab offen lassen.";
       renderStatus.hidden = false;
 
+      // Cold-Start-Hinweis nach 8 s nachschieben — Render-Free schläft nach 15 min ein
+      const coldStartTimer = setTimeout(function () {
+        if (!renderStatus.hidden) {
+          renderStatus.textContent += "\nWeniger als 30 s und kein Fortschritt? "
+            + "Render Free wacht beim Cold-Start ~30 s auf.";
+        }
+      }, 8000);
+
+      dbg("render: POST", { endpoint: RENDER_API, job_id: jobId });
+
       try {
         const formData = new FormData();
         formData.append("job_id", jobId);
@@ -550,17 +588,20 @@
         renderResMeta.textContent = parts.join(" · ");
 
         renderResult.hidden = false;
+        dbg("render: ok", { filename: data.filename, size: data.size_bytes });
       } catch (err) {
         renderStatus.hidden = true;
-        showRenderError("Render fehlgeschlagen",
-          err && err.message ? err.message : String(err));
+        dbg("render: error", err);
+        showRenderError("Render fehlgeschlagen", networkErrorMessage(err, RENDER_API));
       } finally {
+        clearTimeout(coldStartTimer);
         renderBtn.disabled = false;
       }
     });
 
     // ── Boot — beim Laden Job aus URL-Hash oder localStorage wiederherstellen
     (function boot() {
+      dbg("boot: start", { ua: navigator.userAgent, base: BASE_URL });
       const fromHash    = readJobIdFromHash();
       const fromStorage = loadJobFromStorage();
       const jobId = (fromHash && isValidJobId(fromHash))
@@ -568,7 +609,10 @@
         : (isValidJobId(fromStorage) ? fromStorage : null);
 
       if (jobId) {
+        dbg("boot: trying restore", jobId);
         restoreJob(jobId);
+      } else {
+        dbg("boot: no stored job, idle");
       }
     })();
   </script>
