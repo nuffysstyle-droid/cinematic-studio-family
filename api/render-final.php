@@ -36,6 +36,51 @@ header('Content-Type: application/json');
 // Render kann lange dauern — PHP nicht zwischendurch killen.
 @set_time_limit(0);
 
+// ── Diagnose-Log + Shutdown-Handler (minimal) ───────────────────────────────
+// Render killt bei langlaufenden Requests gelegentlich die Connection bevor
+// PHP eine HTTP-Antwort liefert. Ein zusätzliches Log auf der Persistent Disk
+// erlaubt post-mortem-Diagnose; ein Shutdown-Handler wandelt Fatal Errors in
+// eine JSON-Antwort statt eines HTML-500-Fragmente.
+$_csfStorageRoot = realpath(__DIR__ . '/../storage');
+define('RENDER_LOG_PATH', $_csfStorageRoot ? $_csfStorageRoot . '/temp/render.log' : '');
+
+function render_log(string $msg): void
+{
+    if (RENDER_LOG_PATH === '') return;
+    @file_put_contents(
+        RENDER_LOG_PATH,
+        '[' . date('c') . '] ' . $msg . "\n",
+        FILE_APPEND | LOCK_EX
+    );
+}
+
+register_shutdown_function(function () {
+    $err = error_get_last();
+    if ($err === null) return;
+    $fatalTypes = [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR, E_USER_ERROR];
+    if (!in_array((int)($err['type'] ?? 0), $fatalTypes, true)) return;
+
+    if (!headers_sent()) {
+        http_response_code(500);
+        header('Content-Type: application/json');
+    }
+    $msg = (string)($err['message'] ?? 'unknown fatal');
+    $loc = basename((string)($err['file'] ?? '')) . ':' . (int)($err['line'] ?? 0);
+
+    echo json_encode([
+        'status'  => 'error',
+        'message' => 'Render-Prozess abgebrochen (PHP Fatal): ' . $msg,
+        'fatal'   => [
+            'type'     => (int)($err['type'] ?? 0),
+            'location' => $loc,
+        ],
+    ], JSON_UNESCAPED_SLASHES);
+
+    render_log('FATAL @' . $loc . ' :: ' . $msg);
+});
+
+render_log('--- START render-final.php (PID ' . getmypid() . ') ---');
+
 // ── Konstanten (MVP-Spec) ───────────────────────────────────────────────────
 const RENDER_OUT_W      = 1920;
 const RENDER_OUT_H      = 1080;
@@ -49,6 +94,7 @@ const RENDER_STDERR_TAIL = 800;  // Bytes vom stderr-Ende im Fehlerfall
 // ── Fehler-Helfer ───────────────────────────────────────────────────────────
 function render_fail(int $code, string $msg, array $extra = []): void
 {
+    render_log('FAIL ' . $code . ': ' . $msg);
     http_response_code($code);
     $resp = ['status' => 'error', 'message' => $msg] + $extra;
     echo json_encode($resp, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
@@ -155,11 +201,13 @@ $resolveReplacement = function (string $url) use ($storageRoot): ?string {
 // ── Slot-Clips erzeugen ─────────────────────────────────────────────────────
 $clipPaths = [];
 $debug     = [];
+render_log('job=' . $jobId . ' slots=' . $slotCount . ' — start slot encoding loop');
 
 foreach ($slots as $idx => $slot) {
     $slotNum = (int)($slot['slot'] ?? ($idx + 1));
     $slotPad = str_pad((string)$slotNum, 2, '0', STR_PAD_LEFT);
     $clipOut = $clipsDir . '/slot_' . $slotPad . '.mp4';
+    render_log('job=' . $jobId . ' slot=' . $slotNum . ' — encode start');
 
     $start    = (float)($slot['start_seconds'] ?? 0);
     $end      = (float)($slot['end_seconds']   ?? 0);
@@ -239,7 +287,17 @@ foreach ($slots as $idx => $slot) {
         ];
     }
 
+    render_log("Slot {$slotNum} encode start (source={$source}, dur=" . round($duration, 2) . 's)');
+
     $result = csf_ffmpeg_run($args, RENDER_SLOT_TO);
+
+    // Race-Override (analog zu checkFfmpegAvailable): Render Free liefert
+    // exit_code=-1 obwohl FFmpeg erfolgreich war. Wenn nichts getimeoutet
+    // ist UND der Output existiert + nicht leer ist → Erfolg akzeptieren.
+    $clipSize = is_file($clipOut) ? (int)@filesize($clipOut) : 0;
+    if (empty($result['success']) && empty($result['timed_out']) && $clipSize > 0) {
+        $result['success'] = true;
+    }
 
     $debug[] = [
         'slot'       => $slotNum,
@@ -249,18 +307,23 @@ foreach ($slots as $idx => $slot) {
         'success'    => (bool)$result['success'],
         'exit_code'  => (int)$result['exit_code'],
         'timed_out'  => (bool)$result['timed_out'],
+        'clip_bytes' => $clipSize,
     ];
 
-    if (!$result['success'] || !is_file($clipOut)) {
+    if (!$result['success'] || $clipSize <= 0) {
+        render_log("Slot {$slotNum} encode FAIL exit={$result['exit_code']} bytes={$clipSize}");
         render_fail(500, "FFmpeg-Fehler bei Slot {$slotNum}.", [
             'slot'      => $slotNum,
             'source'    => $source,
             'stderr'    => substr(trim((string)$result['stderr']), -RENDER_STDERR_TAIL),
             'timed_out' => (bool)$result['timed_out'],
+            'exit_code' => (int)$result['exit_code'],
+            'clip_bytes' => $clipSize,
             'debug'     => $debug,
         ]);
     }
 
+    render_log("Slot {$slotNum} encode OK ({$clipSize} bytes)");
     $clipPaths[] = $clipOut;
 }
 
@@ -292,17 +355,29 @@ $concatArgs = [
     $finalPath,
 ];
 
+render_log('Concat start (' . count($clipPaths) . ' clips → ' . basename($finalPath) . ')');
+
 $concatResult = csf_ffmpeg_run($concatArgs, RENDER_CONCAT_TO);
 @unlink($concatList);
 
-if (!$concatResult['success'] || !is_file($finalPath)) {
+// Race-Override analog zum Slot-Encode.
+$finalSizeProbe = is_file($finalPath) ? (int)@filesize($finalPath) : 0;
+if (empty($concatResult['success']) && empty($concatResult['timed_out']) && $finalSizeProbe > 0) {
+    $concatResult['success'] = true;
+}
+
+if (!$concatResult['success'] || $finalSizeProbe <= 0) {
+    render_log("Concat FAIL exit={$concatResult['exit_code']} bytes={$finalSizeProbe}");
     render_fail(500, 'Concat fehlgeschlagen.', [
         'stderr'    => substr(trim((string)$concatResult['stderr']), -RENDER_STDERR_TAIL),
         'timed_out' => (bool)$concatResult['timed_out'],
         'exit_code' => (int)$concatResult['exit_code'],
+        'final_bytes' => $finalSizeProbe,
         'debug'     => $debug,
     ]);
 }
+
+render_log("Concat OK ({$finalSizeProbe} bytes)");
 
 // ── Cleanup Slot-Clips (nur bei Erfolg) ─────────────────────────────────────
 foreach ($clipPaths as $cp) {
@@ -354,6 +429,8 @@ if ($fpWrite !== false) {
 // meta-Update ist best effort — bricht das Rendering nicht.
 
 // ── Erfolgsantwort ──────────────────────────────────────────────────────────
+render_log("DONE {$finalName} ({$finalSize} bytes, {$slotCount} slots)");
+
 echo json_encode([
     'status'           => 'ok',
     'job_id'           => $jobId,
