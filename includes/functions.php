@@ -130,11 +130,18 @@ function checkFfmpegAvailable(): array {
             'env_path' => getenv('PATH') ?: '(unset)',
         ]);
         return [
-            'success'   => false,
-            'available' => false,
-            'version'   => '',
-            'bin'       => CSF_FFMPEG_BIN,
-            'error'     => $errMsg,
+            'success'        => false,
+            'available'      => false,
+            'version'        => '',
+            'bin'            => CSF_FFMPEG_BIN,
+            'error'          => $errMsg,
+            // Diagnose-Felder durchreichen — sonst nicht herauszufinden, warum
+            // success=false trotz vorhandener und ausführbarer Binary.
+            'exit_code'      => (int)($result['exit_code'] ?? -1),
+            'timed_out'      => (bool)($result['timed_out'] ?? false),
+            'stdout_preview' => substr((string)($result['stdout'] ?? ''), 0, 200),
+            'stderr_preview' => substr((string)($result['stderr'] ?? ''), 0, 400),
+            'command'        => CSF_FFMPEG_BIN . ' -version',
         ];
     }
 

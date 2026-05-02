@@ -42,10 +42,15 @@ try {
         // Diagnose-Modus: konkreten Fehler + Binary-Pfad ausgeben.
         // /usr/bin/ffmpeg ist ein bekannter Standard-Pfad und kein Security-Leak;
         // ohne diese Info ist Render-Debugging nicht möglich.
-        $response['ffmpeg']['error']      = (string)($ff['error'] ?? 'unavailable');
-        $response['ffmpeg']['bin']        = (string)($ff['bin']   ?? '');
-        $response['ffmpeg']['bin_exists'] = isset($ff['bin']) && file_exists($ff['bin']);
-        $response['ffmpeg']['bin_exec']   = isset($ff['bin']) && is_executable($ff['bin']);
+        $response['ffmpeg']['error']          = (string)($ff['error'] ?? 'unavailable');
+        $response['ffmpeg']['bin']            = (string)($ff['bin']   ?? '');
+        $response['ffmpeg']['bin_exists']     = isset($ff['bin']) && file_exists($ff['bin']);
+        $response['ffmpeg']['bin_exec']       = isset($ff['bin']) && is_executable($ff['bin']);
+        $response['ffmpeg']['exit_code']      = (int)($ff['exit_code'] ?? -1);
+        $response['ffmpeg']['timed_out']      = (bool)($ff['timed_out'] ?? false);
+        $response['ffmpeg']['stdout_preview'] = (string)($ff['stdout_preview'] ?? '');
+        $response['ffmpeg']['stderr_preview'] = (string)($ff['stderr_preview'] ?? '');
+        $response['ffmpeg']['command']        = (string)($ff['command'] ?? '');
         $response['ok'] = false;
     }
 } catch (Throwable $e) {
