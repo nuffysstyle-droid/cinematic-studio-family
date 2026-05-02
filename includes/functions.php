@@ -33,11 +33,20 @@ declare(strict_types=1);
 
 // ── Konfiguration ─────────────────────────────────────────────────────────────
 
-/** FFmpeg-Binary (via Umgebungsvariable FFMPEG_PATH oder Systemstandard) */
-define('CSF_FFMPEG_BIN',    getenv('FFMPEG_PATH')    ?: 'ffmpeg');
+/**
+ * FFmpeg-Binary (via Umgebungsvariable FFMPEG_PATH oder Systemstandard).
+ *
+ * Reihenfolge:
+ *   1. ENV FFMPEG_PATH wenn gesetzt
+ *   2. /usr/bin/ffmpeg wenn ausführbar (Render/Debian-Standard) — vermeidet
+ *      $PATH-Lookups, die unter PHP-FPM/Apache mit reduziertem PATH scheitern
+ *      können und intermittierend "FFmpeg nicht verfügbar" auslösen
+ *   3. 'ffmpeg' (PATH-Lookup) als finaler Fallback für lokale Dev-Umgebungen
+ */
+define('CSF_FFMPEG_BIN',    getenv('FFMPEG_PATH')    ?: (is_executable('/usr/bin/ffmpeg')  ? '/usr/bin/ffmpeg'  : 'ffmpeg'));
 
-/** FFprobe-Binary (via Umgebungsvariable FFPROBE_PATH oder Systemstandard) */
-define('CSF_FFPROBE_BIN',   getenv('FFPROBE_PATH')   ?: 'ffprobe');
+/** FFprobe-Binary — gleiches Fallback-Schema wie CSF_FFMPEG_BIN. */
+define('CSF_FFPROBE_BIN',   getenv('FFPROBE_PATH')   ?: (is_executable('/usr/bin/ffprobe') ? '/usr/bin/ffprobe' : 'ffprobe'));
 
 /** Maximale Ausführungszeit eines FFmpeg-Jobs in Sekunden */
 define('CSF_FFMPEG_TIMEOUT', (int)(getenv('FFMPEG_TIMEOUT') ?: 300));
@@ -107,7 +116,10 @@ const CSF_EXPORT_PRESETS = [
  *   echo 'FFmpeg ' . $r['version'];
  */
 function checkFfmpegAvailable(): array {
-    $result = csf_ffmpeg_run(['-version'], timeout: 10);
+    // Timeout 30 s statt 10 s — Render Free hat shared CPU + Cold-Start,
+    // ein simples `ffmpeg -version` kann beim ersten Aufruf nach Idle
+    // länger als 10 s brauchen.
+    $result = csf_ffmpeg_run(['-version'], timeout: 30);
 
     if (!$result['success']) {
         $errMsg = 'FFmpeg nicht gefunden oder nicht ausführbar: ' . trim($result['stderr']);

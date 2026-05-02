@@ -39,8 +39,13 @@ try {
     $response['ffmpeg']['available'] = (bool)($ff['available'] ?? false);
     $response['ffmpeg']['version']   = (string)($ff['version']   ?? '');
     if (!$response['ffmpeg']['available']) {
-        // Knapp halten, keine Pfade leaken
-        $response['ffmpeg']['error'] = 'unavailable';
+        // Diagnose-Modus: konkreten Fehler + Binary-Pfad ausgeben.
+        // /usr/bin/ffmpeg ist ein bekannter Standard-Pfad und kein Security-Leak;
+        // ohne diese Info ist Render-Debugging nicht möglich.
+        $response['ffmpeg']['error']      = (string)($ff['error'] ?? 'unavailable');
+        $response['ffmpeg']['bin']        = (string)($ff['bin']   ?? '');
+        $response['ffmpeg']['bin_exists'] = isset($ff['bin']) && file_exists($ff['bin']);
+        $response['ffmpeg']['bin_exec']   = isset($ff['bin']) && is_executable($ff['bin']);
         $response['ok'] = false;
     }
 } catch (Throwable $e) {
