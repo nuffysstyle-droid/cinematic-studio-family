@@ -121,6 +121,20 @@ function checkFfmpegAvailable(): array {
     // länger als 10 s brauchen.
     $result = csf_ffmpeg_run(['-version'], timeout: 30);
 
+    // Override für Render Free: proc_get_status liefert dort öfters
+    // exit_code=-1 obwohl der Prozess erfolgreich durchgelaufen ist
+    // (Race-Condition — Prozess ist weg bevor PHP den finalen Status
+    // abholen kann). Wenn nichts getimeoutet ist UND die Versionszeile
+    // in stdout oder stderr auftaucht, ist FFmpeg eindeutig verfügbar.
+    $haystack = (string)($result['stdout'] ?? '')
+              . "\n"
+              . (string)($result['stderr'] ?? '');
+    if (empty($result['success'])
+        && empty($result['timed_out'])
+        && stripos($haystack, 'ffmpeg version') !== false) {
+        $result['success'] = true;
+    }
+
     if (!$result['success']) {
         $errMsg = 'FFmpeg nicht gefunden oder nicht ausführbar: ' . trim($result['stderr']);
         // Debug-Log für Render-Deploy-Diagnose. Nur im Fehlerfall, sonst wäre
