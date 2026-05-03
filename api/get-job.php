@@ -114,6 +114,23 @@ if (!is_array($meta)) {
     exit;
 }
 
+// Best-effort-Fallback: render-final.php schreibt final_video in meta.json — aber
+// PHP-FPM kann den Prozess per SIGTERM beenden bevor der Write erreicht wird
+// (ignore_user_abort schützt nur gegen Browser-Disconnect, nicht gegen SIGTERM).
+// Die .mp4-Datei liegt dann bereits auf Disk, meta.json weiß es nur nicht.
+// → Falls final_video fehlt: glob() auf storage/exports/{job_id}_final_*.mp4.
+if (!isset($meta['final_video'])) {
+    $exportsDir = $storageRoot . '/exports';
+    $candidates = glob($exportsDir . '/' . $jobId . '_final_*.mp4') ?: [];
+    if (!empty($candidates)) {
+        usort($candidates, fn($a, $b) => (int)@filemtime($b) <=> (int)@filemtime($a));
+        $found = $candidates[0];
+        $meta['final_video']      = '/storage/exports/' . basename($found);
+        $meta['final_filename']   = basename($found);
+        $meta['final_size_bytes'] = (int)@filesize($found);
+    }
+}
+
 echo json_encode([
     "status" => "ok",
     "job"    => $meta,
