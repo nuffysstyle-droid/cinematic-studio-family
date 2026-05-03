@@ -193,17 +193,18 @@
     // Render Free schläft nach 15 min ein. Der erste Request wirft TypeError.
     // fetchWithRetry wartet COLD_MS und versucht es automatisch erneut.
     // onRetry() → UI-Callback während der Wartezeit (optional).
-    const COLD_MS = 28000;
+    const COLD_MS      = 35000; // 35s Wartezeit pro Retry
+    const COLD_RETRIES = 2;    // max 2 Retries = 3 Versuche gesamt (~70s max)
     async function fetchWithRetry(url, options, onRetry) {
-      for (var attempt = 0; attempt < 2; attempt++) {
+      for (var attempt = 0; attempt <= COLD_RETRIES; attempt++) {
         try {
           return await fetch(url, options);
         } catch (err) {
           var isNet = err instanceof TypeError
             || /failed to fetch|networkerror|load failed/i.test(
                 err && err.message ? err.message : "");
-          if (isNet && attempt === 0) {
-            if (onRetry) onRetry();
+          if (isNet && attempt < COLD_RETRIES) {
+            if (onRetry) onRetry(attempt + 1);
             await new Promise(function (res) { setTimeout(res, COLD_MS); });
             continue;
           }
@@ -343,7 +344,7 @@
         const response = await fetchWithRetry(
           REPLACE_API,
           { method: "POST", body: formData },
-          function () { setSlotStatus(slotStatus, "Render schläft — warte ~28s und versuche erneut…"); }
+          function (n) { setSlotStatus(slotStatus, "Render schläft — Versuch " + n + " in 35s…"); }
         );
         const responseText = await response.text();
 
@@ -394,7 +395,7 @@
         const response = await fetchWithRetry(
           ANALYZE_API,
           { method: "POST", body: formData },
-          function () { setStatus("Render schläft (Cold Start) — warte ~28s und starte Analyse erneut…"); }
+          function (n) { setStatus("Render schläft (Cold Start) — Versuch " + n + " in 35s…"); }
         );
         const text = await response.text();
         let data;
@@ -510,7 +511,7 @@
       try {
         const url = GETJOB_API + "?job_id=" + encodeURIComponent(jobId);
         const response = await fetchWithRetry(url, { method: "GET" },
-          function () { setStatus("Render schläft (Cold Start) — warte ~28s…"); }
+          function (n) { setStatus("Render schläft (Cold Start) — Versuch " + n + " in 35s…"); }
         );
         const text = await response.text();
         let data;
@@ -607,7 +608,7 @@
         const response = await fetchWithRetry(
           RENDER_API,
           { method: "POST", body: formData },
-          function () { renderStatus.textContent = "Render schläft (Cold Start) — warte ~28s und startet erneut…"; }
+          function (n) { renderStatus.textContent = "Render schläft (Cold Start) — Versuch " + n + " in 35s…"; }
         );
         const text = await response.text();
         let data;
@@ -674,7 +675,7 @@
       try {
         const url = GETJOB_API + "?job_id=" + encodeURIComponent(jobId);
         const response = await fetchWithRetry(url, { method: "GET" },
-          function () { checkStatusBtn.textContent = "Warte auf Cold Start (~28s)…"; }
+          function (n) { checkStatusBtn.textContent = "Cold Start — Versuch " + n + " in 35s…"; }
         );
         const text = await response.text();
         let data;
