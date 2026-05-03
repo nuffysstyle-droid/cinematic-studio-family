@@ -577,6 +577,83 @@
       setStatus("Bereit. Wähle ein neues Video.", "");
     });
 
+    // ── Download-Ergebnis anzeigen (gemeinsamer Helfer) ─────────────────────
+    function showFinalResult(data) {
+      var url    = data.download_url || data.final_video || "";
+      var fname  = data.filename || data.final_filename || "final.mp4";
+      var size   = data.size_bytes || data.final_size_bytes || 0;
+      var sizeMb = size > 0 ? (size / 1024 / 1024).toFixed(1) + " MB" : "";
+      var absUrl = url.indexOf("http") === 0 ? url : (BASE_URL + url);
+      renderDownload.href     = absUrl;
+      renderDownload.download = fname;
+      var parts = [fname];
+      if (data.duration_seconds) parts.push(Number(data.duration_seconds).toFixed(2) + "s");
+      if (data.slot_count)       parts.push(data.slot_count + " Slots");
+      if (sizeMb)                parts.push(sizeMb);
+      renderResMeta.textContent = parts.join(" · ");
+      renderPreview.src    = absUrl;
+      renderPreview.hidden = false;
+      renderResult.hidden  = false;
+    }
+
+    // ── Re-Analyse + Render (wenn Server-Neustart Dateien gelöscht hat) ──────
+    async function reAnalyzeAndRender(videoFile) {
+      try {
+        renderStatus.textContent = "Server neu gestartet — analysiere Video erneut…";
+        renderStatus.hidden = false;
+        var fd = new FormData();
+        fd.append("video", videoFile);
+        var aResp = await fetchWithRetry(
+          ANALYZE_API, { method: "POST", body: fd },
+          function (n) { renderStatus.textContent = "Analyse: Cold Start — Versuch " + n + " in 35s…"; }
+        );
+        var aText = await aResp.text();
+        var aData;
+        try { aData = JSON.parse(aText); }
+        catch (e) { throw new Error("Analyse-Antwort kein JSON:\n" + aText); }
+        if (!aResp.ok || aData.status !== "ok") {
+          throw new Error(aData.message || "Re-Analyse fehlgeschlagen");
+        }
+        var newJobId = aData.job_id;
+        jobIdEl.textContent = newJobId;
+        saveJobToStorage(newJobId);
+        updateUrlHash(newJobId);
+        renderSlots({ job_id: newJobId, slots: aData.slots || [] });
+        dbg("reAnalyze: ok", { job_id: newJobId });
+
+        renderStatus.textContent = "Analyse fertig. Starte Render (" + aData.slot_count + " Slots)…";
+        var rf = new FormData();
+        rf.append("job_id", newJobId);
+        var rResp = await fetchWithRetry(
+          RENDER_API, { method: "POST", body: rf },
+          function (n) { renderStatus.textContent = "Render: Versuch " + n + " in 35s…"; }
+        );
+        var rText = await rResp.text();
+        var rData;
+        try { rData = JSON.parse(rText); }
+        catch (e) { throw new Error("Render-Antwort kein JSON:\n" + rText); }
+        if (!rResp.ok || rData.status !== "ok") {
+          throw new Error(rData.message || "Render fehlgeschlagen");
+        }
+        renderStatus.hidden = true;
+        showFinalResult(rData);
+        dbg("reAnalyzeAndRender: ok", { filename: rData.filename });
+      } catch (err) {
+        renderStatus.hidden = true;
+        dbg("reAnalyzeAndRender: error", err);
+        var isNet = err instanceof TypeError
+          || /failed to fetch|networkerror|load failed/i.test(err && err.message ? err.message : "");
+        if (isNet) {
+          showRenderError("Verbindung unterbrochen", '"Status prüfen" nach 60s.');
+          checkStatusBtn.hidden = false;
+        } else {
+          showRenderError("Render fehlgeschlagen", err && err.message ? err.message : String(err));
+        }
+      } finally {
+        renderBtn.disabled = false;
+      }
+    }
+
     // ── Final-Render (POST → api/render-final.php) ───────────────────────────
     renderBtn.addEventListener("click", async function () {
       const jobId = jobIdEl.textContent.trim();
@@ -587,68 +664,87 @@
       }
       hideRenderState();
       renderBtn.disabled = true;
-      renderStatus.textContent = "Rendere finales Video … das kann 30–120 Sekunden dauern, "
-        + "je nach Videolänge und Replacements. Bitte Tab offen lassen.";
+      renderStatus.textContent = "Verbinde mit Server…";
       renderStatus.hidden = false;
 
-      // Cold-Start-Hinweis nach 8 s nachschieben — Render-Free schläft nach 15 min ein
-      const coldStartTimer = setTimeout(function () {
-        if (!renderStatus.hidden) {
-          renderStatus.textContent += "\nWeniger als 30 s und kein Fortschritt? "
-            + "Render Free wacht beim Cold-Start ~30 s auf.";
-        }
-      }, 8000);
-
-      dbg("render: POST", { endpoint: RENDER_API, job_id: jobId });
-
       try {
-        const formData = new FormData();
-        formData.append("job_id", jobId);
-
-        const response = await fetchWithRetry(
-          RENDER_API,
-          { method: "POST", body: formData },
-          function (n) { renderStatus.textContent = "Render schläft (Cold Start) — Versuch " + n + " in 35s…"; }
+        // ── Schritt 1: Job-Status prüfen (löst Cold-Start-Wait aus) ─────────
+        dbg("render: pre-check", { job_id: jobId });
+        var preUrl  = GETJOB_API + "?job_id=" + encodeURIComponent(jobId);
+        var preResp = await fetchWithRetry(preUrl, { method: "GET" },
+          function (n) {
+            renderStatus.textContent = "Server wacht auf (Cold Start) — Versuch " + n + " in 35s…";
+          }
         );
-        const text = await response.text();
-        let data;
+        var preText = await preResp.text();
+        var preData;
+        try { preData = JSON.parse(preText); }
+        catch (e) { throw new Error("Server-Antwort kein JSON:\n" + preText); }
+
+        // ── Schritt 2a: Bereits gerendert? → sofort Download zeigen ─────────
+        if (preResp.ok && preData.status === "ok" && preData.job && preData.job.final_video) {
+          dbg("render: already done", preData.job.final_video);
+          renderStatus.hidden = true;
+          showFinalResult(preData.job);
+          return;
+        }
+
+        // ── Schritt 2b: Job nicht auf Server → Re-Analyse ───────────────────
+        // (Render Free löscht beim Neustart alle Dateien — kein Persistent Disk)
+        if (preResp.status === 404 || !preResp.ok || preData.status !== "ok") {
+          var videoFile = videoInput.files[0];
+          if (!videoFile) {
+            clearJobStorage();
+            updateUrlHash(null);
+            renderStatus.hidden = true;
+            showRenderError(
+              "Server neu gestartet — bitte Video erneut hochladen",
+              "Render Free löscht alle Dateien beim Neustart. "
+              + "Wähle das Video oben erneut aus und klicke 'Video analysieren'."
+            );
+            finalSection.hidden = true;
+            resetBtn.hidden     = true;
+            clearChildren(slotsBox);
+            metaBox.style.display = "none";
+            return;
+          }
+          // Video noch im Browser → automatisch re-analysieren + rendern
+          await reAnalyzeAndRender(videoFile);
+          return;
+        }
+
+        // ── Schritt 3: Job vorhanden → Render starten ────────────────────────
+        renderStatus.textContent = "Rendere … 30–120 Sekunden. Bitte Tab offen lassen.";
+        dbg("render: POST", { endpoint: RENDER_API, job_id: jobId });
+        var formData = new FormData();
+        formData.append("job_id", jobId);
+        var response = await fetchWithRetry(
+          RENDER_API, { method: "POST", body: formData },
+          function (n) { renderStatus.textContent = "Render: Cold Start — Versuch " + n + " in 35s…"; }
+        );
+        var text = await response.text();
+        var data;
         try { data = JSON.parse(text); }
         catch (e) { throw new Error("Antwort war kein JSON:\n" + text); }
 
         if (!response.ok || data.status !== "ok") {
           throw new Error(data.message || "Render fehlgeschlagen");
         }
-
         renderStatus.hidden = true;
-
-        const url   = data.download_url || "";
-        const fname = data.filename     || "final.mp4";
-        const size  = data.size_bytes   || 0;
-        const sizeMb = size > 0 ? (size / 1024 / 1024).toFixed(1) + " MB" : "—";
-
-        renderDownload.href     = (url.indexOf("http") === 0) ? url : (BASE_URL + url);
-        renderDownload.download = fname;
-
-        const parts = [fname];
-        if (data.duration_seconds) parts.push(Number(data.duration_seconds).toFixed(2) + "s");
-        if (data.slot_count)       parts.push(data.slot_count + " Slots");
-        parts.push(sizeMb);
-        renderResMeta.textContent = parts.join(" · ");
-
-        renderResult.hidden = false;
+        showFinalResult(data);
         dbg("render: ok", { filename: data.filename, size: data.size_bytes });
+
       } catch (err) {
         renderStatus.hidden = true;
         dbg("render: error", err);
-        const isNetErr = err && (err.name === "TypeError"
+        var isNetErr = err && (err.name === "TypeError"
           || /failed to fetch|networkerror|load failed/i.test(
               err.message ? err.message : String(err)));
         if (isNetErr) {
           showRenderError(
             "Verbindung unterbrochen — Render kann noch laufen",
-            "Der Render-Prozess läuft möglicherweise noch im Hintergrund (Render Free "
-            + "schließt lange HTTP-Verbindungen). Warte 60–120 Sekunden, dann klicke "
-            + '"Status prüfen".'
+            "Der Render-Prozess läuft möglicherweise noch im Hintergrund. "
+            + "Warte 60–120 Sekunden, dann klicke " + '"Status prüfen".'
           );
           checkStatusBtn.hidden = false;
         } else {
@@ -656,7 +752,6 @@
             err && err.message ? err.message : String(err));
         }
       } finally {
-        clearTimeout(coldStartTimer);
         renderBtn.disabled = false;
       }
     });

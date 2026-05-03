@@ -133,7 +133,7 @@ $exportsDir = $storageRoot . '/exports';
 $tempDir    = $storageRoot . '/temp';
 
 if (!is_file($metaPath)) {
-    render_fail(404, 'Job nicht gefunden — meta.json fehlt.');
+    render_fail(404, 'Job nicht gefunden — meta.json fehlt.', ['error_code' => 'job_not_found']);
 }
 
 // ── meta.json lesen (LOCK_SH) ───────────────────────────────────────────────
