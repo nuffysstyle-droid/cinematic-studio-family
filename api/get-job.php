@@ -56,7 +56,33 @@ if ($storageRoot === false) {
 
 $metaPath = $storageRoot . "/jobs/" . $jobId . "/meta.json";
 
+// ── Export-Fallback-Helfer ────────────────────────────────────────────────────
+// PHP-FPM SIGTERM kann render-final.php beenden bevor meta.json geschrieben wird.
+// Die .mp4 liegt aber bereits in storage/exports/. Beide Helfer werden weiter
+// unten bei fehlendem UND beschädigtem meta.json verwendet.
+$findExportFile = function () use ($storageRoot, $jobId): ?string {
+    $candidates = glob($storageRoot . '/exports/' . $jobId . '_final_*.mp4') ?: [];
+    if (empty($candidates)) return null;
+    usort($candidates, fn($a, $b) => (int)@filemtime($b) <=> (int)@filemtime($a));
+    return $candidates[0];
+};
+$exportJobResponse = function (string $found) use ($jobId): void {
+    echo json_encode([
+        "status" => "ok",
+        "job"    => [
+            "job_id"           => $jobId,
+            "final_video"      => "/storage/exports/" . basename($found),
+            "final_filename"   => basename($found),
+            "final_size_bytes" => (int)@filesize($found),
+            "status"           => "done",
+        ],
+    ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+};
+
+// ── meta.json fehlt → Export-Datei als Fallback ───────────────────────────────
 if (!is_file($metaPath)) {
+    $found = $findExportFile();
+    if ($found !== null) { $exportJobResponse($found); exit; }
     http_response_code(404);
     echo json_encode([
         "status"  => "error",
@@ -105,7 +131,10 @@ fclose($fp);
 
 $meta = $content !== false ? json_decode($content, true) : null;
 
+// ── meta.json leer/beschädigt → Export-Datei als Fallback ────────────────────
 if (!is_array($meta)) {
+    $found = $findExportFile();
+    if ($found !== null) { $exportJobResponse($found); exit; }
     http_response_code(500);
     echo json_encode([
         "status"  => "error",
