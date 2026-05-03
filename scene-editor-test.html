@@ -62,6 +62,9 @@
     .render-result__download:hover { filter:brightness(.95); }
     .render-error { margin-top:14px; padding:14px; background:rgba(255,92,122,.08); border-left:3px solid var(--danger); border-radius:8px; color:var(--text); font-size:13px; line-height:1.4; }
     .render-error strong { color:var(--danger); display:block; margin-bottom:4px; }
+    .check-btn { background:transparent; color:var(--accent); border:1px solid var(--accent); border-radius:14px; padding:12px 18px; font-weight:800; cursor:pointer; min-height:44px; font-size:14px; margin-top:10px; }
+    .check-btn:hover:not(:disabled) { background:rgba(245,197,66,.1); }
+    .check-btn:disabled { opacity:.45; cursor:not-allowed; }
     @media (max-width:980px) { .slots{grid-template-columns:repeat(3,1fr);} .meta{grid-template-columns:repeat(2,1fr);} }
     @media (max-width:620px) { .slots{grid-template-columns:repeat(2,1fr);} .meta{grid-template-columns:1fr;} .hero{padding:20px;} }
   </style>
@@ -95,10 +98,12 @@
         <button id="renderBtn" class="render-btn" type="button">🎬 Finales Video erstellen</button>
         <div id="renderStatus" class="render-status" hidden></div>
         <div id="renderError" class="render-error" hidden></div>
+        <button id="checkStatusBtn" class="check-btn" type="button" hidden>🔍 Status prüfen</button>
         <div id="renderResult" class="render-result" hidden>
           <span class="render-result__label">✓ Render abgeschlossen</span>
           <span id="renderResultMeta" class="render-result__meta"></span>
           <a id="renderDownload" class="render-result__download" download>⬇ MP4 herunterladen</a>
+          <video id="renderPreview" controls hidden style="width:100%;max-height:300px;border-radius:10px;margin-top:12px;"></video>
         </div>
       </section>
 
@@ -137,8 +142,10 @@
     const renderStatus  = document.getElementById("renderStatus");
     const renderError   = document.getElementById("renderError");
     const renderResult  = document.getElementById("renderResult");
-    const renderResMeta = document.getElementById("renderResultMeta");
+    const renderResMeta  = document.getElementById("renderResultMeta");
     const renderDownload = document.getElementById("renderDownload");
+    const checkStatusBtn = document.getElementById("checkStatusBtn");
+    const renderPreview  = document.getElementById("renderPreview");
 
     // ── Helfer ────────────────────────────────────────────────────────────────
     function setStatus(text, type) {
@@ -443,6 +450,9 @@
       renderResult.hidden = true;
       renderResMeta.textContent = "";
       renderDownload.removeAttribute("href");
+      checkStatusBtn.hidden = true;
+      renderPreview.hidden = true;
+      renderPreview.removeAttribute("src");
     }
     function showRenderError(title, detail) {
       while (renderError.firstChild) renderError.removeChild(renderError.firstChild);
@@ -592,10 +602,82 @@
       } catch (err) {
         renderStatus.hidden = true;
         dbg("render: error", err);
-        showRenderError("Render fehlgeschlagen", networkErrorMessage(err, RENDER_API));
+        const isNetErr = err && (err.name === "TypeError"
+          || /failed to fetch|networkerror|load failed/i.test(
+              err.message ? err.message : String(err)));
+        if (isNetErr) {
+          showRenderError(
+            "Verbindung unterbrochen — Render kann noch laufen",
+            "Der Render-Prozess läuft möglicherweise noch im Hintergrund (Render Free "
+            + "schließt lange HTTP-Verbindungen). Warte 60–120 Sekunden, dann klicke "
+            + "„Status prüfen"."
+          );
+          checkStatusBtn.hidden = false;
+        } else {
+          showRenderError("Render fehlgeschlagen",
+            err && err.message ? err.message : String(err));
+        }
       } finally {
         clearTimeout(coldStartTimer);
         renderBtn.disabled = false;
+      }
+    });
+
+    // ── Status prüfen (nach Verbindungsabbruch beim Render) ──────────────────
+    checkStatusBtn.addEventListener("click", async function () {
+      const jobId = jobIdEl.textContent.trim();
+      if (!isValidJobId(jobId)) {
+        showRenderError("Kein aktiver Job",
+          "Bitte zuerst ein Video analysieren oder einen Job wiederherstellen.");
+        return;
+      }
+      checkStatusBtn.disabled = true;
+      checkStatusBtn.textContent = "Prüfe …";
+      dbg("checkStatus: GET", { endpoint: GETJOB_API, job_id: jobId });
+      try {
+        const url = GETJOB_API + "?job_id=" + encodeURIComponent(jobId);
+        const response = await fetch(url, { method: "GET" });
+        const text = await response.text();
+        let data;
+        try { data = JSON.parse(text); }
+        catch (e) { throw new Error("Antwort war kein JSON:\n" + text); }
+        if (!response.ok || data.status !== "ok" || !data.job) {
+          throw new Error(data.message || "Status konnte nicht geladen werden.");
+        }
+        const job      = data.job;
+        const finalUrl = job.final_video || job.final_video_url || job.result_url || null;
+        if (finalUrl) {
+          const absUrl = finalUrl.indexOf("http") === 0 ? finalUrl : (BASE_URL + finalUrl);
+          const fname  = job.final_filename || "final.mp4";
+          const size   = job.final_size_bytes || 0;
+          const sizeMb = size > 0 ? (size / 1024 / 1024).toFixed(1) + " MB" : "—";
+          renderDownload.href     = absUrl;
+          renderDownload.download = fname;
+          const parts = [fname];
+          if (sizeMb !== "—") parts.push(sizeMb);
+          renderResMeta.textContent = parts.join(" · ");
+          renderPreview.src    = absUrl;
+          renderPreview.hidden = false;
+          renderResult.hidden  = false;
+          renderError.hidden   = true;
+          checkStatusBtn.hidden = true;
+          dbg("checkStatus: final_video found", finalUrl);
+        } else {
+          showRenderError(
+            "Render noch nicht fertig",
+            "Noch kein fertiges Video gefunden. Bitte in 30 Sekunden erneut prüfen."
+          );
+          checkStatusBtn.hidden = false;
+          dbg("checkStatus: no final_video yet", job);
+        }
+      } catch (err) {
+        dbg("checkStatus: error", err);
+        showRenderError("Status-Prüfung fehlgeschlagen",
+          networkErrorMessage(err, GETJOB_API));
+        checkStatusBtn.hidden = false;
+      } finally {
+        checkStatusBtn.disabled = false;
+        checkStatusBtn.textContent = "🔍 Status prüfen";
       }
     });
 

@@ -35,6 +35,7 @@ header('Content-Type: application/json');
 
 // Render kann lange dauern — PHP nicht zwischendurch killen.
 @set_time_limit(0);
+ignore_user_abort(true); // Render weiter, auch wenn HTTP-Connection tot ist (Render Free Timeout)
 
 // ── Diagnose-Log + Shutdown-Handler (minimal) ───────────────────────────────
 // Render killt bei langlaufenden Requests gelegentlich die Connection bevor
