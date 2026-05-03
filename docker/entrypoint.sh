@@ -42,6 +42,7 @@ if [ -d "${PERSIST_ROOT}" ]; then
         "${PERSIST_ROOT}/storage/thumbnails" \
         "${PERSIST_ROOT}/storage/temp" \
         "${PERSIST_ROOT}/storage/elements" \
+        "${PERSIST_ROOT}/storage/jobs" \
         "${PERSIST_ROOT}/data/projects"
 
     # Existierende lokale Ordner durch Symlinks ersetzen.

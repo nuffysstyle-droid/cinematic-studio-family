@@ -3,7 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Cinematic Studio Family – Scene Editor Test</title>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Cinematic Studio Family – Scene Editor Test v2.5</title>
   <style>
     :root { --bg:#080812; --card:#121222; --card2:#18182b; --text:#f5f5ff; --muted:#a7a7c7; --accent:#f5c542; --danger:#ff5c7a; --ok:#4ade80; --border:rgba(255,255,255,.12); }
     * { box-sizing:border-box; }
@@ -762,6 +765,18 @@
               dbg("render: safety-net catch → reAnalyzeAndRender");
               hideRenderState();
               await reAnalyzeAndRender(vfFallback);
+              return;
+            } else {
+              // Kein Video im Browser (z.B. nach Seiten-Reload) + Server-Dateien weg
+              dbg("render: safety-net → no video in memory, request re-upload");
+              clearJobStorage();
+              updateUrlHash(null);
+              showRenderError(
+                "Server neu gestartet — bitte Video neu auswählen",
+                "Render Free löscht alle Dateien beim Neustart. "
+                + "Wähle dein Video oben im Datei-Feld erneut aus "
+                + "und klicke dann 'Video analysieren'."
+              );
               return;
             }
           }

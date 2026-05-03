@@ -58,6 +58,7 @@ RUN mkdir -p \
         storage/thumbnails \
         storage/temp \
         storage/elements \
+        storage/jobs \
         data/projects \
     && chown -R www-data:www-data storage data \
     && chmod -R 755 storage data

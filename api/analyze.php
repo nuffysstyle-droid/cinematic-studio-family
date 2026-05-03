@@ -157,9 +157,18 @@ $jobsRoot   = $storageRoot . "/jobs";
 $jobDir     = $jobsRoot . "/" . $jobId;
 $replaceDir = $jobDir . "/replacements";
 
-if (!is_dir($jobsRoot))   @mkdir($jobsRoot,   0775, true);
-if (!is_dir($jobDir))     @mkdir($jobDir,     0775, true);
-if (!is_dir($replaceDir)) @mkdir($replaceDir, 0775, true);
+if (!is_dir($jobsRoot)   && !mkdir($jobsRoot,   0775, true) && !is_dir($jobsRoot)) {
+    echo json_encode(["status"=>"error","message"=>"storage/jobs konnte nicht erstellt werden."], JSON_PRETTY_PRINT);
+    exit;
+}
+if (!is_dir($jobDir)     && !mkdir($jobDir,     0775, true) && !is_dir($jobDir)) {
+    echo json_encode(["status"=>"error","message"=>"Job-Verzeichnis konnte nicht erstellt werden."], JSON_PRETTY_PRINT);
+    exit;
+}
+if (!is_dir($replaceDir) && !mkdir($replaceDir, 0775, true) && !is_dir($replaceDir)) {
+    echo json_encode(["status"=>"error","message"=>"Replacements-Verzeichnis konnte nicht erstellt werden."], JSON_PRETTY_PRINT);
+    exit;
+}
 
 $slotsForMeta = [];
 foreach ($slots as $s) {
@@ -192,7 +201,14 @@ $metaJson = json_encode(
 );
 
 if ($metaJson !== false) {
-    @file_put_contents($metaPath, $metaJson, LOCK_EX);
+    $written = file_put_contents($metaPath, $metaJson, LOCK_EX);
+    if ($written === false) {
+        echo json_encode([
+            "status"  => "error",
+            "message" => "meta.json konnte nicht geschrieben werden — Storage-Fehler.",
+        ], JSON_PRETTY_PRINT);
+        exit;
+    }
 }
 
 echo json_encode([
