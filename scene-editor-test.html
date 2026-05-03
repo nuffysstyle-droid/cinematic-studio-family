@@ -748,6 +748,23 @@
           );
           checkStatusBtn.hidden = false;
         } else {
+          // Safety-Net: render-final.php meldet "fehlt" obwohl pre-check OK war
+          // → Render Free hat Container genau zwischen pre-check und render-call neu gestartet
+          // Erkennt: "meta.json fehlt", "Originalvideo nicht gefunden", "Job nicht gefunden"
+          var missingFiles = err && err.message && (
+            err.message.indexOf("meta.json") !== -1 ||
+            err.message.indexOf("Originalvideo") !== -1 ||
+            (err.message.indexOf("nicht gefunden") !== -1 && err.message.indexOf("Job") !== -1)
+          );
+          if (missingFiles) {
+            var vfFallback = videoInput && videoInput.files && videoInput.files[0];
+            if (vfFallback) {
+              dbg("render: safety-net catch → reAnalyzeAndRender");
+              hideRenderState();
+              await reAnalyzeAndRender(vfFallback);
+              return;
+            }
+          }
           showRenderError("Render fehlgeschlagen",
             err && err.message ? err.message : String(err));
         }
