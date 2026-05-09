@@ -132,6 +132,20 @@
     @media(max-width:1100px){.hub-grid{grid-template-columns:repeat(3,1fr);}}
     @media(max-width:760px){.hub-grid{grid-template-columns:repeat(2,1fr);}}
     @media(max-width:480px){.hub-grid{grid-template-columns:1fr;}}
+
+    /* ── Mobile Polish ───────────────────────────────────────────────── */
+    @media(max-width:640px){
+      /* Fix 1: Nav overflow stoppen */
+      .nav{padding:12px 16px;gap:8px;}
+      .nav-logo{font-size:11px;letter-spacing:1.5px;min-width:0;flex-shrink:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+      .nav-logo span{display:none;}
+      .nav-btn-ghost{display:none;}
+      .wallet-pill{display:none;}
+      /* Fix 2: Hero CTA full-width + weniger top-padding */
+      .hero{padding:80px 0 48px;}
+      .hero-cta{flex-direction:column;align-items:stretch;}
+      .btn-gold,.btn-ghost{width:100%;justify-content:center;}
+    }
   </style>
 </head>
 <body>
