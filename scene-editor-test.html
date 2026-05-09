@@ -146,6 +146,24 @@
       .hero-cta{flex-direction:column;align-items:stretch;}
       .btn-gold,.btn-ghost{width:100%;justify-content:center;}
     }
+
+    /* ── Mobile Navigation Menu ──────────────────────────────────────── */
+    .mob-burger{display:none;flex-direction:column;justify-content:center;gap:5px;width:40px;height:40px;padding:8px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:10px;cursor:pointer;flex-shrink:0;}
+    .mob-burger span{display:block;height:2px;border-radius:2px;background:var(--text);transition:transform .22s,opacity .22s;}
+    .mob-burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+    .mob-burger.open span:nth-child(2){opacity:0;}
+    .mob-burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+    .mob-menu{position:fixed;left:0;right:0;z-index:99;background:rgba(6,6,15,.97);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);box-shadow:0 24px 60px rgba(0,0,0,.6),0 0 50px rgba(59,130,246,.07);max-height:0;overflow:hidden;opacity:0;pointer-events:none;transition:max-height .3s cubic-bezier(.4,0,.2,1),opacity .22s;display:none;}
+    .mob-menu.open{max-height:560px;opacity:1;pointer-events:auto;}
+    .mob-link{display:block;padding:14px 24px;color:var(--muted);text-decoration:none;font-size:15px;font-weight:700;border-left:3px solid transparent;transition:color .15s,border-color .15s,background .15s;}
+    .mob-link:active{background:rgba(255,255,255,.06);}
+    .mob-link.active{color:var(--accent);border-left-color:var(--accent);}
+    .mob-sep{height:1px;background:var(--border);margin:10px 20px;}
+    .mob-cta{display:block;margin:12px 20px 8px;padding:15px;background:var(--gold);color:#1a0e00;text-decoration:none;font-size:15px;font-weight:900;border-radius:13px;text-align:center;}
+    @media(max-width:900px){
+      .mob-burger{display:flex;}
+      .mob-menu{display:block;}
+    }
   </style>
 </head>
 <body>
@@ -169,7 +187,25 @@
       <a href="studio-demo.php" class="nav-btn-gold">Studio starten</a>
       <a href="crystals.php" class="wallet-pill">💎 500</a>
     </div>
+    <button class="mob-burger" id="mobBurger" aria-label="Menü öffnen" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mob-menu" id="mobMenu" role="navigation" aria-label="Mobile Navigation">
+    <a href="scene-editor-test.html" class="mob-link active">🏠 Home</a>
+    <a href="studio-demo.php" class="mob-link">🎬 Studio</a>
+    <a href="prompt-generator.php" class="mob-link">✍️ Prompts</a>
+    <a href="shop.php" class="mob-link">🛍️ Shop</a>
+    <a href="portfolio.php" class="mob-link">🎞️ Portfolio</a>
+    <a href="availability.php" class="mob-link">📅 Verfügbarkeit</a>
+    <a href="academy.php" class="mob-link">🎓 Academy</a>
+    <a href="crystals.php" class="mob-link">💎 Kristalle</a>
+    <a href="contact.php" class="mob-link">✉️ Kontakt</a>
+    <div class="mob-sep"></div>
+    <a href="studio-demo.php" class="mob-cta">🎬 Studio starten</a>
+  </div>
 
   <!-- HERO -->
   <section class="hero" id="home">
@@ -318,5 +354,51 @@
     </div>
   </footer>
 
+
+  <script>
+    (function(){
+      var burger = document.getElementById('mobBurger');
+      var menu   = document.getElementById('mobMenu');
+      if(!burger || !menu) return;
+      // Set menu top to match nav height
+      function setTop(){ menu.style.top = document.querySelector('.nav').offsetHeight + 'px'; }
+      setTop();
+      window.addEventListener('resize', setTop);
+      // Toggle
+      burger.addEventListener('click', function(e){
+        e.stopPropagation();
+        var open = menu.classList.toggle('open');
+        burger.classList.toggle('open', open);
+        burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+        burger.setAttribute('aria-label', open ? 'Menü schließen' : 'Menü öffnen');
+      });
+      // Close on link click
+      menu.querySelectorAll('.mob-link, .mob-cta').forEach(function(l){
+        l.addEventListener('click', function(){
+          menu.classList.remove('open');
+          burger.classList.remove('open');
+          burger.setAttribute('aria-expanded', 'false');
+          burger.setAttribute('aria-label', 'Menü öffnen');
+        });
+      });
+      // Close on outside click
+      document.addEventListener('click', function(e){
+        if(!burger.contains(e.target) && !menu.contains(e.target)){
+          menu.classList.remove('open');
+          burger.classList.remove('open');
+          burger.setAttribute('aria-expanded', 'false');
+          burger.setAttribute('aria-label', 'Menü öffnen');
+        }
+      });
+      // Close on ESC
+      document.addEventListener('keydown', function(e){
+        if(e.key === 'Escape'){
+          menu.classList.remove('open');
+          burger.classList.remove('open');
+          burger.setAttribute('aria-expanded', 'false');
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
