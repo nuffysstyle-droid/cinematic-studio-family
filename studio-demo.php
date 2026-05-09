@@ -97,6 +97,9 @@
     .footer{border-top:1px solid var(--border);padding:32px 0;margin-top:60px;}
     .footer-inner{width:min(1160px,calc(100% - 48px));margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
     .footer-logo{font-size:13px;font-weight:900;letter-spacing:2px;background:var(--gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .footer-nav{display:flex;gap:18px;flex-wrap:wrap;}
+    .footer-nav a{color:var(--muted);text-decoration:none;font-size:12px;font-weight:600;transition:color .15s;}
+    .footer-nav a:hover{color:var(--text);}
     .footer-copy{font-size:12px;color:var(--muted2);}
     @media(max-width:900px){.slots{grid-template-columns:repeat(3,1fr);}.meta{grid-template-columns:repeat(2,1fr);}}
     @media(max-width:560px){.slots{grid-template-columns:repeat(2,1fr);}.meta{grid-template-columns:1fr;}}
@@ -178,7 +181,14 @@
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-logo">Cinematic Vision Studio</div>
-      <div class="footer-copy">© 2025 · Demo-Version · <a href="scene-editor-test.html" style="color:var(--accent);text-decoration:none;">Startseite</a></div>
+      <nav class="footer-nav">
+        <a href="studio-demo.php">Studio</a>
+        <a href="shop.php">Shop</a>
+        <a href="portfolio.php">Portfolio</a>
+        <a href="crystals.php">Kristalle</a>
+        <a href="contact.php">Kontakt</a>
+      </nav>
+      <div class="footer-copy">© 2025 · Premium KI-Filmproduktion</div>
     </div>
   </footer>
 
