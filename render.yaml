@@ -14,7 +14,7 @@ services:
     dockerfilePath: ./Dockerfile
     plan: starter              # Starter = $7/mo — 512MB RAM, kein Sleep, Disks erlaubt
     autoDeploy: true           # Automatischer Deploy bei Push auf master-Branch
-    branch: master
+    branch: main
 
     # ── Umgebungsvariablen ──────────────────────────────────────────────────
     # PORT wird automatisch von Render injiziert (typisch 10000).
