@@ -4,866 +4,303 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-  <title>Cinematic Studio Family – Scene Editor Test v2.5</title>
+  <title>Cinematic Vision Studio – Premium KI-Filmstudio</title>
   <style>
-    :root { --bg:#080812; --card:#121222; --card2:#18182b; --text:#f5f5ff; --muted:#a7a7c7; --accent:#f5c542; --danger:#ff5c7a; --ok:#4ade80; --border:rgba(255,255,255,.12); }
-    * { box-sizing:border-box; }
-    body { margin:0; font-family:Arial, Helvetica, sans-serif; background:radial-gradient(circle at top,#1d1b42 0%,var(--bg) 45%,#050509 100%); color:var(--text); min-height:100vh; }
-    .wrap { width:min(1180px, calc(100% - 32px)); margin:0 auto; padding:38px 0 60px; }
-    .hero { border:1px solid var(--border); background:linear-gradient(145deg,rgba(255,255,255,.08),rgba(255,255,255,.02)); border-radius:24px; padding:28px; box-shadow:0 24px 80px rgba(0,0,0,.35); }
-    h1 { margin:0 0 10px; font-size:clamp(28px,5vw,52px); line-height:1.02; letter-spacing:-1px; }
-    .sub { color:var(--muted); font-size:18px; max-width:760px; line-height:1.5; }
-    .panel { margin-top:22px; background:rgba(0,0,0,.24); border:1px solid var(--border); border-radius:18px; padding:18px; }
-    .row { display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
-    input[type=file] { width:min(100%,480px); padding:14px; border-radius:14px; border:1px solid var(--border); background:var(--card); color:var(--text); }
-    button { border:0; border-radius:14px; padding:14px 18px; font-weight:800; cursor:pointer; background:var(--accent); color:#171000; transition:transform .15s ease,opacity .15s ease; }
-    button:hover { transform:translateY(-1px); }
-    button:disabled { opacity:.45; cursor:not-allowed; transform:none; }
-    .status { margin-top:14px; color:var(--muted); white-space:pre-wrap; font-size:14px; }
-    .status.ok { color:var(--ok); }
-    .status.err { color:var(--danger); }
-    .meta { display:none; margin-top:22px; grid-template-columns:repeat(4,1fr); gap:12px; }
-    .meta div { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:14px; }
-    .meta strong { display:block; font-size:13px; color:var(--muted); margin-bottom:6px; }
-    .slots { margin-top:24px; display:grid; grid-template-columns:repeat(5,1fr); gap:14px; }
-    .slot { background:linear-gradient(160deg,var(--card),var(--card2)); border:1px solid var(--border); border-radius:18px; overflow:hidden; box-shadow:0 14px 40px rgba(0,0,0,.22); transition:border-color .2s ease, box-shadow .2s ease; }
-    .slot.is-replaced { border-color:var(--ok); box-shadow:0 0 0 1px var(--ok), 0 14px 40px rgba(0,0,0,.22); }
-    .thumb { position:relative; aspect-ratio:9/16; background:#05050a; display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:13px; overflow:hidden; }
-    .thumb img { width:100%; height:100%; object-fit:cover; display:block; }
-    .badge { display:none; position:absolute; top:8px; left:8px; font-size:11px; font-weight:800; color:#0a2b14; background:var(--ok); padding:3px 8px; border-radius:999px; letter-spacing:.3px; box-shadow:0 4px 12px rgba(0,0,0,.4); }
-    .slot.is-replaced .badge { display:inline-block; }
-    .slot-body { padding:12px; }
-    .slot-title { font-weight:800; margin-bottom:6px; }
-    .time { color:var(--muted); font-size:13px; margin-bottom:10px; }
-    .field { width:100%; margin-top:8px; padding:10px; border-radius:10px; border:1px solid var(--border); background:rgba(0,0,0,.25); color:var(--text); outline:none; font-family:inherit; }
-    .replace { margin-top:8px; width:100%; font-size:12px; color:var(--muted); }
-    .save-btn { margin-top:10px; width:100%; min-height:44px; padding:10px 14px; font-size:13px; font-weight:800; border-radius:10px; background:var(--accent); color:#171000; border:0; cursor:pointer; transition:transform .15s ease, opacity .15s ease; }
-    .save-btn:hover:not(:disabled) { transform:translateY(-1px); }
-    .save-btn:disabled { opacity:.45; cursor:not-allowed; transform:none; }
-    .slot-status { margin-top:8px; font-size:12px; color:var(--muted); min-height:1.2em; word-break:break-word; }
-    .slot-status.ok { color:var(--ok); }
-    .slot-status.err { color:var(--danger); }
-    .note { margin-top:22px; color:var(--muted); font-size:14px; line-height:1.5; }
-    .reset-btn { background:transparent; color:var(--muted); border:1px solid var(--border); padding:12px 14px; border-radius:14px; font-weight:700; cursor:pointer; min-height:44px; font-size:13px; }
-    .reset-btn:hover { color:var(--text); border-color:rgba(255,255,255,.3); }
-    .restored-hint { margin-top:10px; padding:10px 14px; background:rgba(74,222,128,.08); border:1px solid rgba(74,222,128,.3); border-radius:12px; color:var(--ok); font-size:13px; line-height:1.4; }
-    .final-section { margin-top:32px; padding:22px; background:rgba(245,197,66,.06); border:1px solid rgba(245,197,66,.25); border-radius:18px; }
-    .final-section h2 { margin:0 0 8px; font-size:22px; letter-spacing:-.5px; }
-    .final-section p { margin:0 0 16px; color:var(--muted); font-size:14px; line-height:1.5; }
-    .render-btn { background:var(--accent); color:#171000; border:0; border-radius:14px; padding:14px 22px; font-size:15px; font-weight:800; cursor:pointer; min-height:48px; transition:transform .15s ease, opacity .15s ease; }
-    .render-btn:hover:not(:disabled) { transform:translateY(-1px); }
-    .render-btn:disabled { opacity:.45; cursor:not-allowed; transform:none; }
-    .render-status { margin-top:14px; padding:12px 14px; background:rgba(255,255,255,.04); border:1px solid var(--border); border-radius:12px; color:var(--muted); font-size:13px; line-height:1.5; display:flex; align-items:center; gap:10px; }
-    .render-status::before { content:""; width:14px; height:14px; border:2px solid var(--accent); border-top-color:transparent; border-radius:50%; animation:csf-spin 1s linear infinite; flex-shrink:0; }
-    @keyframes csf-spin { to { transform:rotate(360deg); } }
-    .render-result { margin-top:14px; padding:14px; background:rgba(74,222,128,.08); border:1px solid rgba(74,222,128,.35); border-radius:12px; }
-    .render-result__label { display:block; font-size:12px; color:var(--ok); font-weight:800; margin-bottom:6px; letter-spacing:.4px; }
-    .render-result__meta { display:block; font-size:12px; color:var(--muted); margin-bottom:10px; word-break:break-all; }
-    .render-result__download { display:inline-block; background:var(--ok); color:#0a2b14; text-decoration:none; padding:10px 16px; border-radius:10px; font-weight:800; font-size:13px; min-height:44px; line-height:1.6; }
-    .render-result__download:hover { filter:brightness(.95); }
-    .render-error { margin-top:14px; padding:14px; background:rgba(255,92,122,.08); border-left:3px solid var(--danger); border-radius:8px; color:var(--text); font-size:13px; line-height:1.4; }
-    .render-error strong { color:var(--danger); display:block; margin-bottom:4px; }
-    .check-btn { background:transparent; color:var(--accent); border:1px solid var(--accent); border-radius:14px; padding:12px 18px; font-weight:800; cursor:pointer; min-height:44px; font-size:14px; margin-top:10px; }
-    .check-btn:hover:not(:disabled) { background:rgba(245,197,66,.1); }
-    .check-btn:disabled { opacity:.45; cursor:not-allowed; }
-    @media (max-width:980px) { .slots{grid-template-columns:repeat(3,1fr);} .meta{grid-template-columns:repeat(2,1fr);} }
-    @media (max-width:620px) { .slots{grid-template-columns:repeat(2,1fr);} .meta{grid-template-columns:1fr;} .hero{padding:20px;} }
+    :root {
+      --bg:#06060f; --card:#0f0f1e; --card2:#161628;
+      --text:#f0f0ff; --muted:#8888aa; --muted2:#5a5a7a;
+      --accent:#f5c542; --accent2:#ff8c00; --blue:#3b82f6;
+      --purple:#9333ea; --ok:#4ade80; --danger:#ff5c7a;
+      --border:rgba(255,255,255,.09);
+      --gold:linear-gradient(135deg,#f5c542,#ff8c00);
+      --radius:20px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+
+    /* ── Nav ─────────────────────────────────────────────────────────── */
+    .nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 28px;background:rgba(6,6,15,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+    .nav-logo{font-size:13px;font-weight:900;letter-spacing:2px;background:var(--gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-transform:uppercase;flex-shrink:0;}
+    .nav-logo span{font-size:10px;display:block;letter-spacing:4px;font-weight:400;opacity:.6;margin-top:1px;}
+    .nav-links{display:flex;align-items:center;gap:2px;flex:1;justify-content:center;}
+    .nav-link{color:var(--muted);text-decoration:none;font-size:13px;font-weight:600;padding:7px 10px;border-radius:9px;transition:color .15s,background .15s;white-space:nowrap;}
+    .nav-link:hover{color:var(--text);background:rgba(255,255,255,.06);}
+    .nav-actions{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+    .nav-btn-ghost{color:var(--muted);text-decoration:none;font-size:13px;font-weight:700;padding:8px 13px;border-radius:10px;border:1px solid var(--border);transition:color .15s,border-color .15s;}
+    .nav-btn-ghost:hover{color:var(--text);border-color:rgba(255,255,255,.25);}
+    .nav-btn-gold{background:var(--gold);color:#1a0e00;text-decoration:none;font-size:13px;font-weight:800;padding:9px 16px;border-radius:10px;transition:opacity .15s,transform .15s;white-space:nowrap;}
+    .nav-btn-gold:hover{opacity:.9;transform:translateY(-1px);}
+    .wallet-pill{display:flex;align-items:center;gap:6px;background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.3);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:800;color:var(--accent);cursor:pointer;}
+    @media(max-width:900px){.nav-links{display:none;}}
+
+    /* ── Hero ────────────────────────────────────────────────────────── */
+    .hero{position:relative;overflow:hidden;min-height:80vh;display:flex;align-items:center;padding:110px 0 60px;}
+    .hero::before{content:"";position:absolute;inset:0;background:
+      radial-gradient(ellipse 80% 60% at 30% 40%,rgba(59,130,246,.12) 0%,transparent 60%),
+      radial-gradient(ellipse 60% 80% at 75% 60%,rgba(147,51,234,.09) 0%,transparent 55%),
+      radial-gradient(ellipse 100% 50% at 50% 0%,rgba(245,197,66,.05) 0%,transparent 50%);
+      pointer-events:none;}
+    .hero::after{content:"";position:absolute;inset:0;background-image:
+      radial-gradient(1px 1px at 12% 18%,rgba(255,255,255,.5) 0%,transparent 100%),
+      radial-gradient(1px 1px at 28% 38%,rgba(255,255,255,.4) 0%,transparent 100%),
+      radial-gradient(1px 1px at 55% 12%,rgba(255,255,255,.5) 0%,transparent 100%),
+      radial-gradient(1px 1px at 72% 28%,rgba(255,255,255,.3) 0%,transparent 100%),
+      radial-gradient(1px 1px at 88% 10%,rgba(255,255,255,.5) 0%,transparent 100%),
+      radial-gradient(2px 2px at 45% 82%,rgba(245,197,66,.4) 0%,transparent 100%),
+      radial-gradient(2px 2px at 82% 70%,rgba(59,130,246,.4) 0%,transparent 100%);
+      pointer-events:none;}
+    .hero-inner{position:relative;z-index:2;width:min(1200px,calc(100% - 48px));margin:0 auto;display:grid;grid-template-columns:1fr 420px;gap:60px;align-items:center;}
+    .hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--accent);background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.28);border-radius:999px;padding:6px 14px;margin-bottom:22px;}
+    .hero-h1{font-size:clamp(34px,5vw,62px);font-weight:900;line-height:1.0;letter-spacing:-2px;margin-bottom:6px;}
+    .hero-h1 .g{background:var(--gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .hero-sub{margin-top:16px;font-size:16px;line-height:1.7;color:var(--muted);max-width:480px;}
+    .hero-cta{margin-top:32px;display:flex;gap:12px;flex-wrap:wrap;}
+    .btn-gold{background:var(--gold);color:#1a0e00;border:0;border-radius:13px;padding:15px 26px;font-size:15px;font-weight:900;cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:0 8px 28px rgba(245,197,66,.28);text-decoration:none;display:inline-flex;align-items:center;gap:8px;}
+    .btn-gold:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(245,197,66,.42);}
+    .btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border);border-radius:13px;padding:15px 24px;font-size:15px;font-weight:700;cursor:pointer;transition:border-color .15s,background .15s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;}
+    .btn-ghost:hover{border-color:rgba(255,255,255,.28);background:rgba(255,255,255,.05);}
+    .hero-stats{margin-top:44px;display:flex;gap:30px;flex-wrap:wrap;}
+    .stat-num{font-size:26px;font-weight:900;background:var(--gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .stat-lbl{font-size:12px;color:var(--muted);margin-top:2px;}
+
+    /* ── Camera visual ───────────────────────────────────────────────── */
+    .hero-visual{position:relative;width:100%;height:440px;display:flex;align-items:center;justify-content:center;}
+    .orbit{position:absolute;border-radius:50%;}
+    .o1{width:420px;height:420px;border:1px solid rgba(59,130,246,.2);animation:ospin 20s linear infinite;}
+    .o2{width:320px;height:320px;border:1px solid rgba(245,197,66,.15);animation:ospin 14s linear infinite reverse;}
+    .o3{width:220px;height:220px;border:1px solid rgba(147,51,234,.18);animation:ospin 9s linear infinite;}
+    @keyframes ospin{to{transform:rotate(360deg);}}
+    .o1::before{content:"";position:absolute;top:-4px;left:50%;width:8px;height:8px;border-radius:50%;background:var(--blue);box-shadow:0 0 12px var(--blue);transform:translateX(-50%);}
+    .o2::before{content:"";position:absolute;bottom:-4px;right:20%;width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);}
+    .o3::before{content:"";position:absolute;top:30%;left:-4px;width:5px;height:5px;border-radius:50%;background:var(--purple);box-shadow:0 0 10px var(--purple);}
+    .cam{position:relative;z-index:5;width:154px;height:114px;background:linear-gradient(145deg,#1e1e38,#0d0d1e);border:1px solid rgba(255,255,255,.14);border-radius:18px;box-shadow:0 0 60px rgba(59,130,246,.14),inset 0 1px 0 rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;}
+    .cam::before{content:"";position:absolute;top:10px;right:14px;width:10px;height:10px;border-radius:50%;background:var(--danger);box-shadow:0 0 8px var(--danger);animation:rblink 2s ease-in-out infinite;}
+    @keyframes rblink{0%,100%{opacity:1}50%{opacity:.2}}
+    .lens{width:84px;height:84px;border-radius:50%;background:radial-gradient(circle at 35% 35%,rgba(59,130,246,.4),rgba(6,6,15,.9) 60%,rgba(0,0,0,1) 100%);border:2px solid rgba(59,130,246,.4);box-shadow:0 0 0 6px rgba(59,130,246,.07),0 0 40px rgba(59,130,246,.28);display:flex;align-items:center;justify-content:center;}
+    .lens-in{width:42px;height:42px;border-radius:50%;background:radial-gradient(circle at 40% 40%,rgba(147,51,234,.6),rgba(0,0,0,.9));border:1px solid rgba(147,51,234,.4);box-shadow:0 0 18px rgba(147,51,234,.4);}
+    .lens-in::after{content:"";display:block;width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,.7);position:relative;left:8px;top:8px;box-shadow:0 0 6px rgba(255,255,255,.5);}
+    .trail{position:absolute;border-radius:999px;filter:blur(2px);}
+    .t1{width:130px;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);top:35%;left:52%;animation:tfloat 4s ease-in-out infinite;}
+    .t2{width:90px;height:2px;background:linear-gradient(90deg,transparent,var(--blue),transparent);top:55%;right:54%;animation:tfloat 5s ease-in-out infinite reverse;}
+    .t3{width:70px;height:1px;background:linear-gradient(90deg,transparent,var(--purple),transparent);top:25%;right:48%;animation:tfloat 3.5s ease-in-out infinite;}
+    @keyframes tfloat{0%,100%{opacity:.5;transform:translateX(0)}50%{opacity:1;transform:translateX(10px)}}
+    .p{position:absolute;border-radius:50%;animation:pdrift 6s ease-in-out infinite;}
+    .p1{width:4px;height:4px;background:var(--accent);box-shadow:0 0 8px var(--accent);top:20%;left:65%;}
+    .p2{width:3px;height:3px;background:var(--blue);box-shadow:0 0 6px var(--blue);top:70%;left:30%;animation-delay:2s;}
+    .p3{width:3px;height:3px;background:var(--purple);box-shadow:0 0 6px var(--purple);top:40%;right:25%;animation-delay:1s;}
+    @keyframes pdrift{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+    @media(max-width:1000px){.hero-inner{grid-template-columns:1fr;}.hero-visual{display:none;}}
+
+    /* ── Hub Grid ────────────────────────────────────────────────────── */
+    .hub-section{padding:70px 0 80px;}
+    .wrap{width:min(1200px,calc(100% - 48px));margin:0 auto;}
+    .hub-eyebrow{font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:10px;}
+    .hub-title{font-size:clamp(26px,4vw,38px);font-weight:900;letter-spacing:-1px;margin-bottom:8px;}
+    .hub-title span{background:var(--gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .hub-sub{font-size:15px;color:var(--muted);margin-bottom:40px;line-height:1.6;}
+    .hub-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+    .hub-card{background:rgba(15,15,30,.82);backdrop-filter:blur(18px);border:1px solid var(--border);border-radius:var(--radius);padding:26px 22px 22px;text-decoration:none;display:block;position:relative;overflow:hidden;transition:transform .2s,border-color .2s,box-shadow .2s;color:var(--text);}
+    .hub-card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--hc,linear-gradient(90deg,#3b82f6,#9333ea));}
+    .hub-card:hover{transform:translateY(-5px);border-color:rgba(255,255,255,.2);box-shadow:0 24px 60px rgba(0,0,0,.5),0 0 40px var(--hg,rgba(59,130,246,.1));}
+    .hc-icon{font-size:34px;margin-bottom:14px;display:block;}
+    .hc-title{font-size:16px;font-weight:900;margin-bottom:6px;}
+    .hc-desc{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:16px;}
+    .hc-footer{display:flex;align-items:center;justify-content:space-between;}
+    .hc-status{font-size:10px;font-weight:800;padding:4px 10px;border-radius:999px;border:1px solid;}
+    .s-aktiv{color:var(--ok);background:rgba(74,222,128,.1);border-color:rgba(74,222,128,.3);}
+    .s-demo{color:var(--blue);background:rgba(59,130,246,.1);border-color:rgba(59,130,246,.3);}
+    .s-beta{color:var(--purple);background:rgba(147,51,234,.1);border-color:rgba(147,51,234,.3);}
+    .s-bald{color:var(--accent);background:rgba(245,197,66,.1);border-color:rgba(245,197,66,.3);}
+    .hc-arrow{color:var(--muted2);font-size:16px;transition:color .15s,transform .15s;}
+    .hub-card:hover .hc-arrow{color:var(--accent);transform:translateX(4px);}
+
+    /* ── Footer ──────────────────────────────────────────────────────── */
+    .footer{border-top:1px solid var(--border);padding:36px 0;}
+    .footer-inner{width:min(1200px,calc(100% - 48px));margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+    .footer-logo{font-size:13px;font-weight:900;letter-spacing:2px;background:var(--gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .footer-nav{display:flex;gap:18px;flex-wrap:wrap;}
+    .footer-nav a{color:var(--muted);text-decoration:none;font-size:12px;font-weight:600;transition:color .15s;}
+    .footer-nav a:hover{color:var(--text);}
+    .footer-copy{font-size:12px;color:var(--muted2);}
+
+    /* ── Divider ─────────────────────────────────────────────────────── */
+    hr{border:0;border-top:1px solid var(--border);}
+
+    /* ── Responsive ──────────────────────────────────────────────────── */
+    @media(max-width:1100px){.hub-grid{grid-template-columns:repeat(3,1fr);}}
+    @media(max-width:760px){.hub-grid{grid-template-columns:repeat(2,1fr);}}
+    @media(max-width:480px){.hub-grid{grid-template-columns:1fr;}}
   </style>
 </head>
 <body>
-  <main class="wrap">
-    <section class="hero">
-      <h1>Scene Replacement Editor</h1>
-      <p class="sub">Lade ein Referenzvideo hoch. Das Backend analysiert es, erzeugt Szenen-Slots und zeigt dir Thumbnails. Danach kannst du pro Slot später Bild/Video/Text ersetzen.</p>
-      <div class="panel">
-        <div class="row">
-          <input id="videoInput" type="file" accept="video/mp4,video/webm,video/quicktime,video/x-matroska">
-          <button id="analyzeBtn">Video analysieren</button>
-          <button id="resetBtn" class="reset-btn" type="button" hidden>↻ Job zurücksetzen</button>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-logo">Cinematic Vision Studio<span>Premium KI-Filmstudio</span></div>
+    <div class="nav-links">
+      <a href="scene-editor-test.html" class="nav-link">Home</a>
+      <a href="studio-demo.php" class="nav-link">Studio</a>
+      <a href="shop.php" class="nav-link">Shop</a>
+      <a href="portfolio.php" class="nav-link">Portfolio</a>
+      <a href="availability.php" class="nav-link">Verfügbarkeit</a>
+      <a href="academy.php" class="nav-link">Academy</a>
+      <a href="crystals.php" class="nav-link">Kristalle</a>
+      <a href="contact.php" class="nav-link">Kontakt</a>
+    </div>
+    <div class="nav-actions">
+      <a href="contact.php" class="nav-btn-ghost">Anmelden</a>
+      <a href="studio-demo.php" class="nav-btn-gold">Studio starten</a>
+      <a href="crystals.php" class="wallet-pill">💎 500</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-eyebrow">✦ AI Film Studio Platform</div>
+        <h1 class="hero-h1">
+          <span class="g">CINEMATIC</span><br>
+          VISION STUDIO
+        </h1>
+        <p class="hero-sub">Erstelle KI-Videos, Prompts, Sticker, Animationen und Workflows in einem Premium Studio.</p>
+        <div class="hero-cta">
+          <a href="studio-demo.php" class="btn-gold">🎬 Studio starten</a>
+          <a href="#hub" class="btn-ghost">Module entdecken ↓</a>
         </div>
-        <div id="restoredHint" class="restored-hint" hidden></div>
-        <div id="status" class="status">Bereit. Wähle ein kurzes MP4-Testvideo.</div>
-      </div>
-      <div id="meta" class="meta">
-        <div><strong>Job ID</strong><span id="jobId">-</span></div>
-        <div><strong>Dauer</strong><span id="duration">-</span></div>
-        <div><strong>Auflösung</strong><span id="resolution">-</span></div>
-        <div><strong>Slots</strong><span id="slotCount">-</span></div>
-      </div>
-      <div id="slots" class="slots"></div>
-
-      <!-- ═══ Phase 2 MVP: Finales Video erstellen ═══ -->
-      <section id="finalSection" class="final-section" hidden>
-        <h2>Finales Video erstellen</h2>
-        <p>Alle nicht ersetzten Slots werden aus dem Originalvideo geschnitten. Ersetzte Slots verwenden dein Bild oder Video. Endergebnis: 1080p · MP4 · stumm (Audio kommt in V2).</p>
-        <button id="renderBtn" class="render-btn" type="button">🎬 Finales Video erstellen</button>
-        <div id="renderStatus" class="render-status" hidden></div>
-        <div id="renderError" class="render-error" hidden></div>
-        <button id="checkStatusBtn" class="check-btn" type="button" hidden>🔍 Status prüfen</button>
-        <div id="renderResult" class="render-result" hidden>
-          <span class="render-result__label">✓ Render abgeschlossen</span>
-          <span id="renderResultMeta" class="render-result__meta"></span>
-          <a id="renderDownload" class="render-result__download" download>⬇ MP4 herunterladen</a>
-          <video id="renderPreview" controls hidden style="width:100%;max-height:300px;border-radius:10px;margin-top:12px;"></video>
+        <div class="hero-stats">
+          <div><div class="stat-num">12</div><div class="stat-lbl">Module</div></div>
+          <div><div class="stat-num">4K</div><div class="stat-lbl">Export</div></div>
+          <div><div class="stat-num">💎</div><div class="stat-lbl">Kristall-System</div></div>
         </div>
-      </section>
+      </div>
+      <div class="hero-visual">
+        <div class="orbit o1"></div>
+        <div class="orbit o2"></div>
+        <div class="orbit o3"></div>
+        <div class="trail t1"></div>
+        <div class="trail t2"></div>
+        <div class="trail t3"></div>
+        <div class="p p1"></div><div class="p p2"></div><div class="p p3"></div>
+        <div class="cam"><div class="lens"><div class="lens-in"></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- HUB GRID -->
+  <section class="hub-section" id="hub">
+    <div class="wrap">
+      <div class="hub-eyebrow">Studio-Module</div>
+      <h2 class="hub-title">Dein <span>komplettes Studio</span></h2>
+      <p class="hub-sub">Wähle ein Modul und starte sofort.</p>
+
+      <div class="hub-grid">
+
+        <a href="studio-demo.php" class="hub-card" style="--hc:linear-gradient(90deg,#3b82f6,#9333ea);--hg:rgba(59,130,246,.12)">
+          <span class="hc-icon">🎬</span>
+          <div class="hc-title">Studio Demo</div>
+          <div class="hc-desc">Video analysieren, Szenen ersetzen, finales Ergebnis rendern.</div>
+          <div class="hc-footer"><span class="hc-status s-demo">Demo</span><span class="hc-arrow">→</span></div>
+        </a>
+
+        <a href="prompt-generator.php" class="hub-card" style="--hc:linear-gradient(90deg,#9333ea,#6366f1);--hg:rgba(147,51,234,.12)">
+          <span class="hc-icon">✍️</span>
+          <div class="hc-title">Prompt Generator</div>
+          <div class="hc-desc">Cinematische KI-Prompts für Midjourney, DALL·E, Runway &amp; mehr.</div>
+          <div class="hc-footer"><span class="hc-status s-aktiv">Aktiv</span><span class="hc-arrow">→</span></div>
+        </a>
+
+        <a href="ki-videos.php" class="hub-card" style="--hc:linear-gradient(90deg,#f97316,#f5c542);--hg:rgba(249,115,22,.12)">
+          <span class="hc-icon">🎥</span>
+          <div class="hc-title">KI Videos</div>
+          <div class="hc-desc">Hochwertige KI-Kurzfilme und Clips mit führenden Modellen.</div>
+          <div class="hc-footer"><span class="hc-status s-beta">Beta</span><span class="hc-arrow">→</span></div>
+        </a>
+
+        <a href="tiktok-animation.php" class="hub-card" style="--hc:linear-gradient(90deg,#ec4899,#f97316);--hg:rgba(236,72,153,.12)">
+          <span class="hc-icon">📱</span>
+          <div class="hc-title">TikTok Animation</div>
+          <div class="hc-desc">Animierte Clips optimiert für TikTok-Format und Trends.</div>
+          <div class="hc-footer"><span class="hc-status s-aktiv">Aktiv</span><span class="hc-arrow">→</span></div>
+        </a>
+
+        <a href="tiktok-sticker.php" class="hub-card" style="--hc:linear-gradient(90deg,#06b6d4,#3b82f6);--hg:rgba(6,182,212,.12)">
+          <span class="hc-icon">✨</span>
+          <div class="hc-title">Sticker Studio</div>
+          <div class="hc-desc">Individuelle animierte &amp; statische Sticker-Sets erstellen.</div>
+          <div class="hc-footer"><span class="hc-status s-aktiv">Aktiv</span><span class="hc-arrow">→</span></div>
+        </a>
+
+        <a href="ready-videos.php" class="hub-card" style="--hc:linear-gradient(90deg,#22c55e,#06b6d4);--hg:rgba(34,197,94,.12)">
+          <span class="hc-icon">▶️</span>
+          <div class="hc-title">Ready Videos</div>
+          <div class="hc-desc">Fertige KI-Videoclips — sofort download-bereit und einsatzfähig.</div>
+          <div class="hc-footer"><span class="hc-status s-aktiv">Aktiv</span><span class="hc-arrow">→</span></div>
+        </a>
+
+        <a href="shop.php" class="hub-card" style="--hc:linear-gradient(90deg,#f5c542,#ff8c00);--hg:rgba(245,197,66,.12)">
+          <span class="hc-icon">🛒</span>
+          <div class="hc-title">Shop</div>
+          <div class="hc-desc">Pakete, Abos, Mystery Deals und maßgeschneiderte Services.</div>
+          <div class="hc-footer"><span class="hc-status s-bald">Bald</span><span class="hc-arrow">→</span></div>
+        </a>
+
+        <a href="portfolio.php" class="hub-card" style="--hc:linear-gradient(90deg,#6366f1,#9333ea);--hg:rgba(99,102,241,.12)">
+          <span class="hc-icon">🎞️</span>
+          <div class="hc-title">Portfolio</div>
+          <div class="hc-desc">KI-Videos, Animationen, Sticker &amp; Prompts — alles ansehen.</div>
+          <div class="hc-footer"><span class="hc-status s-bald">Bald</span><span class="hc-arrow">→</span></div>
+        </a>
+
+        <a href="availability.php" class="hub-card" style="--hc:linear-gradient(90deg,#3b82f6,#06b6d4);--hg:rgba(59,130,246,.12)">
+          <span class="hc-icon">📊</span>
+          <div class="hc-title">Verfügbarkeit</div>
+          <div class="hc-desc">Beta-Plätze, Modul-Status und kommende Features im Überblick.</div>
+          <div class="hc-footer"><span class="hc-status s-aktiv">Aktiv</span><span class="hc-arrow">→</span></div>
+        </a>
+
+        <a href="crystals.php" class="hub-card" style="--hc:linear-gradient(90deg,#f5c542,#ff8c00);--hg:rgba(245,197,66,.14)">
+          <span class="hc-icon">💎</span>
+          <div class="hc-title">Kristalle &amp; Pakete</div>
+          <div class="hc-desc">Kristalle kaufen, Verbrauch tracken, Pakete verwalten.</div>
+          <div class="hc-footer"><span class="hc-status s-bald">Bald</span><span class="hc-arrow">→</span></div>
+        </a>
+
+        <a href="academy.php" class="hub-card" style="--hc:linear-gradient(90deg,#10b981,#06b6d4);--hg:rgba(16,185,129,.12)">
+          <span class="hc-icon">🎓</span>
+          <div class="hc-title">Academy</div>
+          <div class="hc-desc">Guides, Tutorials und Kurse für professionelle KI-Filmproduktion.</div>
+          <div class="hc-footer"><span class="hc-status s-aktiv">Aktiv</span><span class="hc-arrow">→</span></div>
+        </a>
+
+        <a href="contact.php" class="hub-card" style="--hc:linear-gradient(90deg,#f43f5e,#ec4899);--hg:rgba(244,63,94,.12)">
+          <span class="hc-icon">🚀</span>
+          <div class="hc-title">Kontakt &amp; Beta</div>
+          <div class="hc-desc">Beta-Zugang sichern, Projekt anfragen oder Workflow bauen lassen.</div>
+          <div class="hc-footer"><span class="hc-status s-aktiv">Aktiv</span><span class="hc-arrow">→</span></div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">Cinematic Vision Studio</div>
+      <nav class="footer-nav">
+        <a href="studio-demo.php">Studio</a>
+        <a href="shop.php">Shop</a>
+        <a href="portfolio.php">Portfolio</a>
+        <a href="crystals.php">Kristalle</a>
+        <a href="contact.php">Kontakt</a>
+      </nav>
+      <div class="footer-copy">© 2025 · Premium KI-Filmproduktion</div>
+    </div>
+  </footer>
 
-      <p class="note">MVP-Hinweis: Audio kommt in V2. Ein Klick auf „Finales Video erstellen" rendert blockierend (Schätzwert: 30–120 Sekunden je nach Anzahl + Länge der Slots).</p>
-    </section>
-  </main>
-  <script>
-    "use strict";
-
-    // ── Konfiguration ─────────────────────────────────────────────────────────
-    const BASE_URL    = "https://cinematic-studio-family.onrender.com";
-    const ANALYZE_API = BASE_URL + "/api/analyze.php";
-    const REPLACE_API = BASE_URL + "/api/replace-slot.php";
-    const GETJOB_API  = BASE_URL + "/api/get-job.php";
-    const RENDER_API  = BASE_URL + "/api/render-final.php";
-    const LS_KEY      = "csf_last_job_id";
-
-    const MAX_IMG_BYTES = 10  * 1024 * 1024; // 10 MB  (passend zu api/upload.php)
-    const MAX_VID_BYTES = 100 * 1024 * 1024; // 100 MB
-    const MAX_TEXT_LEN  = 500;
-
-    // ── DOM-Refs ──────────────────────────────────────────────────────────────
-    const videoInput    = document.getElementById("videoInput");
-    const analyzeBtn    = document.getElementById("analyzeBtn");
-    const resetBtn      = document.getElementById("resetBtn");
-    const restoredHint  = document.getElementById("restoredHint");
-    const statusBox     = document.getElementById("status");
-    const metaBox       = document.getElementById("meta");
-    const slotsBox      = document.getElementById("slots");
-    const jobIdEl       = document.getElementById("jobId");
-    const durationEl    = document.getElementById("duration");
-    const resolutionEl  = document.getElementById("resolution");
-    const slotCountEl   = document.getElementById("slotCount");
-    const finalSection  = document.getElementById("finalSection");
-    const renderBtn     = document.getElementById("renderBtn");
-    const renderStatus  = document.getElementById("renderStatus");
-    const renderError   = document.getElementById("renderError");
-    const renderResult  = document.getElementById("renderResult");
-    const renderResMeta  = document.getElementById("renderResultMeta");
-    const renderDownload = document.getElementById("renderDownload");
-    const checkStatusBtn = document.getElementById("checkStatusBtn");
-    const renderPreview  = document.getElementById("renderPreview");
-
-    // ── Helfer ────────────────────────────────────────────────────────────────
-    function setStatus(text, type) {
-      statusBox.className = "status" + (type ? " " + type : "");
-      statusBox.textContent = text;
-    }
-
-    function formatSeconds(value) {
-      return Number(value).toFixed(2) + "s";
-    }
-
-    function clearChildren(el) {
-      while (el.firstChild) el.removeChild(el.firstChild);
-    }
-
-    function setSlotStatus(el, text, type) {
-      el.textContent = text;
-      el.classList.remove("ok", "err");
-      if (type) el.classList.add(type);
-    }
-
-    // ── Debug-Logging + Netzwerk-Fehler-Helfer ────────────────────────────────
-    // dbg(): einheitlicher [csf]-Prefix in DevTools-Console — null Effekt im UI.
-    // networkErrorMessage(): erkennt fetch-TypeError (DNS/CORS/Verbindung weg)
-    // und liefert eine handlungsorientierte Meldung statt nur "Failed to fetch".
-    function dbg(label, data) {
-      try {
-        if (data === undefined) console.log("[csf] " + label);
-        else console.log("[csf] " + label, data);
-      } catch (_) { /* ignore */ }
-    }
-    function networkErrorMessage(err, endpoint) {
-      const msg = err && err.message ? err.message : String(err);
-      const isNetwork = err && (err.name === "TypeError"
-        || /failed to fetch|networkerror|load failed/i.test(msg));
-      if (isNetwork) {
-        return "Backend nicht erreichbar (" + endpoint + ").\n"
-             + "Mögliche Ursachen: Render schläft, DNS-Hiccup, Verbindung weg.\n"
-             + "Bitte 20–30 Sekunden warten und erneut versuchen.";
-      }
-      return msg;
-    }
-
-    // ── Auto-Retry bei Render Free Cold Start ────────────────────────────────
-    // Render Free schläft nach 15 min ein. Der erste Request wirft TypeError.
-    // fetchWithRetry wartet COLD_MS und versucht es automatisch erneut.
-    // onRetry() → UI-Callback während der Wartezeit (optional).
-    const COLD_MS      = 35000; // 35s Wartezeit pro Retry
-    const COLD_RETRIES = 2;    // max 2 Retries = 3 Versuche gesamt (~70s max)
-    async function fetchWithRetry(url, options, onRetry) {
-      for (var attempt = 0; attempt <= COLD_RETRIES; attempt++) {
-        try {
-          return await fetch(url, options);
-        } catch (err) {
-          var isNet = err instanceof TypeError
-            || /failed to fetch|networkerror|load failed/i.test(
-                err && err.message ? err.message : "");
-          if (isNet && attempt < COLD_RETRIES) {
-            if (onRetry) onRetry(attempt + 1);
-            await new Promise(function (res) { setTimeout(res, COLD_MS); });
-            continue;
-          }
-          throw err;
-        }
-      }
-    }
-
-    // ── Slot-Karte erzeugen (DOM-API only, kein innerHTML für API-Daten) ─────
-    function createSlotCard(jobId, slot) {
-      const card = document.createElement("div");
-      card.className = "slot";
-      card.dataset.jobId = jobId;
-      card.dataset.slotNumber = String(slot.slot);
-      if (slot.replaced) card.classList.add("is-replaced");
-
-      // Thumbnail-Container + Badge
-      const thumb = document.createElement("div");
-      thumb.className = "thumb";
-
-      const img = document.createElement("img");
-      img.src = BASE_URL + slot.thumbnail;
-      img.alt = "Slot " + slot.slot;
-      thumb.appendChild(img);
-
-      const badge = document.createElement("span");
-      badge.className = "badge";
-      badge.textContent = "✓ ersetzt";
-      thumb.appendChild(badge);
-
-      card.appendChild(thumb);
-
-      // Body
-      const body = document.createElement("div");
-      body.className = "slot-body";
-
-      const title = document.createElement("div");
-      title.className = "slot-title";
-      title.textContent = "Slot " + slot.slot;
-      body.appendChild(title);
-
-      const time = document.createElement("div");
-      time.className = "time";
-      time.textContent = formatSeconds(slot.start_seconds) + " – " + formatSeconds(slot.end_seconds);
-      body.appendChild(time);
-
-      const textField = document.createElement("input");
-      textField.type = "text";
-      textField.className = "field";
-      textField.placeholder = "Text für diese Szene...";
-      textField.maxLength = MAX_TEXT_LEN;
-      if (slot.text) textField.value = String(slot.text);
-      body.appendChild(textField);
-
-      const fileInput = document.createElement("input");
-      fileInput.type = "file";
-      fileInput.className = "replace";
-      fileInput.accept = "image/*,video/*";
-      body.appendChild(fileInput);
-
-      const saveBtn = document.createElement("button");
-      saveBtn.type = "button";
-      saveBtn.className = "save-btn";
-      saveBtn.textContent = "Slot speichern";
-      body.appendChild(saveBtn);
-
-      const slotStatus = document.createElement("div");
-      slotStatus.className = "slot-status";
-      if (slot.replaced && slot.replacement_file) {
-        const parts = String(slot.replacement_file).split("/");
-        slotStatus.textContent = "Aktuelle Datei: " + parts[parts.length - 1];
-      }
-      body.appendChild(slotStatus);
-
-      card.appendChild(body);
-
-      saveBtn.addEventListener("click", function () {
-        saveSlot({ card, fileInput, textField, slotStatus, saveBtn });
-      });
-
-      return card;
-    }
-
-    function renderSlots(data) {
-      clearChildren(slotsBox);
-      data.slots.forEach(function (slot) {
-        slotsBox.appendChild(createSlotCard(data.job_id, slot));
-      });
-    }
-
-    // ── Slot speichern (Phase 2) ──────────────────────────────────────────────
-    async function saveSlot(refs) {
-      const card        = refs.card;
-      const fileInput   = refs.fileInput;
-      const textField   = refs.textField;
-      const slotStatus  = refs.slotStatus;
-      const saveBtn     = refs.saveBtn;
-
-      const file = fileInput.files[0] || null;
-      const text = textField.value.trim();
-
-      if (!file && !text) {
-        setSlotStatus(slotStatus, "Bitte Datei oder Text angeben.", "err");
-        return;
-      }
-
-      if (text.length > MAX_TEXT_LEN) {
-        setSlotStatus(slotStatus, "Text zu lang (max. " + MAX_TEXT_LEN + " Zeichen).", "err");
-        return;
-      }
-
-      if (file) {
-        const isImage = file.type.indexOf("image/") === 0;
-        const isVideo = file.type.indexOf("video/") === 0;
-        if (!isImage && !isVideo) {
-          setSlotStatus(slotStatus, "Nur Bild oder Video erlaubt.", "err");
-          return;
-        }
-        const maxBytes = isImage ? MAX_IMG_BYTES : MAX_VID_BYTES;
-        if (file.size > maxBytes) {
-          const limitMb = Math.round(maxBytes / 1024 / 1024);
-          setSlotStatus(slotStatus, "Datei zu groß. Limit: " + limitMb + " MB.", "err");
-          return;
-        }
-      }
-
-      saveBtn.disabled = true;
-      setSlotStatus(slotStatus, "Speichere…");
-
-      try {
-        const formData = new FormData();
-        formData.append("job_id", card.dataset.jobId);
-        formData.append("slot_number", card.dataset.slotNumber);
-        formData.append("text", text);
-        if (file) formData.append("replacement_file", file);
-
-        const response = await fetchWithRetry(
-          REPLACE_API,
-          { method: "POST", body: formData },
-          function (n) { setSlotStatus(slotStatus, "Render schläft — Versuch " + n + " in 35s…"); }
-        );
-        const responseText = await response.text();
-
-        let data;
-        try {
-          data = JSON.parse(responseText);
-        } catch (e) {
-          throw new Error("Antwort war kein JSON:\n" + responseText);
-        }
-
-        if (!response.ok || data.status !== "ok") {
-          throw new Error(data.message || "Speichern fehlgeschlagen");
-        }
-
-        card.classList.add("is-replaced");
-
-        let infoText = "Gespeichert";
-        if (data.replacement_file) {
-          const parts = String(data.replacement_file).split("/");
-          infoText += " · " + parts[parts.length - 1];
-        }
-        setSlotStatus(slotStatus, infoText, "ok");
-
-        // File-Input leeren — gleicher File kann ggf. erneut gewählt werden
-        fileInput.value = "";
-      } catch (err) {
-        setSlotStatus(slotStatus, "Fehler: " + (err && err.message ? err.message : err), "err");
-      } finally {
-        saveBtn.disabled = false;
-      }
-    }
-
-    // ── Video analysieren (Phase 1, unverändert in der Logik) ─────────────────
-    analyzeBtn.addEventListener("click", async function () {
-      const file = videoInput.files[0];
-      if (!file) {
-        setStatus("Bitte zuerst ein Video auswählen.", "err");
-        return;
-      }
-      analyzeBtn.disabled = true;
-      clearChildren(slotsBox);
-      metaBox.style.display = "none";
-      setStatus("Upload läuft... Render kann beim Free Plan kurz aufwachen. Bitte warten.");
-      dbg("analyze: POST", { endpoint: ANALYZE_API, name: file.name, size: file.size });
-      try {
-        const formData = new FormData();
-        formData.append("video", file);
-        const response = await fetchWithRetry(
-          ANALYZE_API,
-          { method: "POST", body: formData },
-          function (n) { setStatus("Render schläft (Cold Start) — Versuch " + n + " in 35s…"); }
-        );
-        const text = await response.text();
-        let data;
-        try {
-          data = JSON.parse(text);
-        } catch (e) {
-          throw new Error("Antwort war kein JSON:\n" + text);
-        }
-        if (!response.ok || data.status !== "ok") {
-          throw new Error(data.message || "Analyse fehlgeschlagen");
-        }
-        jobIdEl.textContent      = data.job_id;
-        durationEl.textContent   = data.video.duration_seconds + "s";
-        resolutionEl.textContent = data.video.width + " × " + data.video.height;
-        slotCountEl.textContent  = String(data.slot_count);
-        metaBox.style.display = "grid";
-        renderSlots(data);
-        // Phase 2 MVP: Job persistieren + Final-Section freigeben
-        saveJobToStorage(data.job_id);
-        updateUrlHash(data.job_id);
-        hideRestoredHint();
-        hideRenderState();
-        finalSection.hidden = false;
-        resetBtn.hidden     = false;
-        setStatus("Analyse erfolgreich. Slots wurden erzeugt.", "ok");
-        dbg("analyze: ok", { job_id: data.job_id, slots: data.slot_count });
-      } catch (err) {
-        dbg("analyze: error", err);
-        setStatus("Fehler:\n" + networkErrorMessage(err, ANALYZE_API), "err");
-      } finally {
-        analyzeBtn.disabled = false;
-      }
-    });
-
-    // ═══ Phase 2 MVP: Reload-Restore + Final-Render ═══════════════════════════
-
-    function isValidJobId(id) {
-      return /^job_\d{8}_\d{6}_[a-f0-9]{8}$/.test(String(id || ""));
-    }
-
-    // ── localStorage-Persistierung ───────────────────────────────────────────
-    function saveJobToStorage(jobId) {
-      try { localStorage.setItem(LS_KEY, String(jobId)); } catch (_) { /* ignore */ }
-    }
-    function loadJobFromStorage() {
-      try { return localStorage.getItem(LS_KEY) || null; } catch (_) { return null; }
-    }
-    function clearJobStorage() {
-      try { localStorage.removeItem(LS_KEY); } catch (_) { /* ignore */ }
-    }
-
-    // ── URL-Hash sync (#job=...) ─────────────────────────────────────────────
-    function updateUrlHash(jobId) {
-      try {
-        if (jobId) {
-          history.replaceState(null, "", "#job=" + encodeURIComponent(jobId));
-        } else {
-          history.replaceState(null, "", location.pathname + location.search);
-        }
-      } catch (_) { /* ignore */ }
-    }
-    function readJobIdFromHash() {
-      const h = (location.hash || "").replace(/^#/, "");
-      const m = h.match(/(?:^|&)job=([^&]+)/);
-      return m ? decodeURIComponent(m[1]) : null;
-    }
-
-    // ── UI-Hilfen ────────────────────────────────────────────────────────────
-    function showRestoredHint(jobId) {
-      restoredHint.textContent = "Wiederhergestellt: " + jobId
-        + " — du kannst weiter Slots ersetzen oder unten ein finales Video erstellen.";
-      restoredHint.hidden = false;
-    }
-    function hideRestoredHint() {
-      restoredHint.hidden = true;
-      restoredHint.textContent = "";
-    }
-
-    function hideRenderState() {
-      renderStatus.hidden = true;
-      renderStatus.textContent = "";
-      renderError.hidden = true;
-      while (renderError.firstChild) renderError.removeChild(renderError.firstChild);
-      renderResult.hidden = true;
-      renderResMeta.textContent = "";
-      renderDownload.removeAttribute("href");
-      checkStatusBtn.hidden = true;
-      renderPreview.hidden = true;
-      renderPreview.removeAttribute("src");
-    }
-    function showRenderError(title, detail) {
-      while (renderError.firstChild) renderError.removeChild(renderError.firstChild);
-      const t = document.createElement("strong");
-      t.textContent = title || "Render fehlgeschlagen";
-      renderError.appendChild(t);
-      if (detail) {
-        const d = document.createElement("span");
-        d.textContent = String(detail);
-        renderError.appendChild(d);
-      }
-      renderError.hidden = false;
-    }
-
-    // ── Job aus get-job.php wiederherstellen ─────────────────────────────────
-    async function restoreJob(jobId) {
-      if (!isValidJobId(jobId)) {
-        clearJobStorage();
-        updateUrlHash(null);
-        return;
-      }
-      setStatus("Job " + jobId + " wird geladen…");
-      dbg("restoreJob: GET", { endpoint: GETJOB_API, job_id: jobId });
-      try {
-        const url = GETJOB_API + "?job_id=" + encodeURIComponent(jobId);
-        const response = await fetchWithRetry(url, { method: "GET" },
-          function (n) { setStatus("Render schläft (Cold Start) — Versuch " + n + " in 35s…"); }
-        );
-        const text = await response.text();
-        let data;
-        try { data = JSON.parse(text); }
-        catch (e) { throw new Error("Antwort war kein JSON:\n" + text); }
-
-        if (response.status === 404) {
-          // Server kennt den Job nicht (z. B. Render-Disk neu) — lokal aufräumen
-          clearJobStorage();
-          updateUrlHash(null);
-          setStatus("Gespeicherter Job nicht mehr verfügbar — bitte ein neues Video analysieren.", "err");
-          return;
-        }
-        if (!response.ok || data.status !== "ok" || !data.job) {
-          throw new Error(data.message || "Job konnte nicht geladen werden.");
-        }
-
-        const job = data.job;
-
-        // Meta-Felder befüllen — meta.json hat dasselbe Schema wie analyze.php
-        jobIdEl.textContent      = job.job_id || "-";
-        durationEl.textContent   = (job.video && job.video.duration_seconds != null
-                                    ? job.video.duration_seconds : "-") + "s";
-        resolutionEl.textContent = ((job.video && job.video.width)  || "-")
-                                  + " × " + ((job.video && job.video.height) || "-");
-        slotCountEl.textContent  = String(job.slot_count
-                                  || (job.slots ? job.slots.length : 0));
-        metaBox.style.display    = "grid";
-
-        // Slots zeichnen — createSlotCard() bringt replaced/text/replacement_file
-        // bereits in den richtigen Zustand (grüner Border, ✓-Badge, gefülltes Textfeld,
-        // "Aktuelle Datei: …"-Status).
-        renderSlots({ job_id: job.job_id, slots: job.slots || [] });
-
-        finalSection.hidden = false;
-        resetBtn.hidden     = false;
-        hideRenderState();
-        showRestoredHint(jobId);
-        setStatus("Job wiederhergestellt.", "ok");
-        dbg("restoreJob: ok", { slots: (job.slots || []).length });
-      } catch (err) {
-        dbg("restoreJob: error", err);
-        setStatus("Job-Restore fehlgeschlagen:\n"
-          + networkErrorMessage(err, GETJOB_API), "err");
-      }
-    }
-
-    // ── Reset ────────────────────────────────────────────────────────────────
-    resetBtn.addEventListener("click", function () {
-      clearJobStorage();
-      updateUrlHash(null);
-      hideRestoredHint();
-      hideRenderState();
-      finalSection.hidden = true;
-      clearChildren(slotsBox);
-      metaBox.style.display = "none";
-      jobIdEl.textContent      = "-";
-      durationEl.textContent   = "-";
-      resolutionEl.textContent = "-";
-      slotCountEl.textContent  = "-";
-      videoInput.value = "";
-      resetBtn.hidden = true;
-      setStatus("Bereit. Wähle ein neues Video.", "");
-    });
-
-    // ── Download-Ergebnis anzeigen (gemeinsamer Helfer) ─────────────────────
-    function showFinalResult(data) {
-      var url    = data.download_url || data.final_video || "";
-      var fname  = data.filename || data.final_filename || "final.mp4";
-      var size   = data.size_bytes || data.final_size_bytes || 0;
-      var sizeMb = size > 0 ? (size / 1024 / 1024).toFixed(1) + " MB" : "";
-      var absUrl = url.indexOf("http") === 0 ? url : (BASE_URL + url);
-      renderDownload.href     = absUrl;
-      renderDownload.download = fname;
-      var parts = [fname];
-      if (data.duration_seconds) parts.push(Number(data.duration_seconds).toFixed(2) + "s");
-      if (data.slot_count)       parts.push(data.slot_count + " Slots");
-      if (sizeMb)                parts.push(sizeMb);
-      renderResMeta.textContent = parts.join(" · ");
-      renderPreview.src    = absUrl;
-      renderPreview.hidden = false;
-      renderResult.hidden  = false;
-    }
-
-    // ── Re-Analyse + Render (wenn Server-Neustart Dateien gelöscht hat) ──────
-    async function reAnalyzeAndRender(videoFile) {
-      try {
-        renderStatus.textContent = "Server neu gestartet — analysiere Video erneut…";
-        renderStatus.hidden = false;
-        var fd = new FormData();
-        fd.append("video", videoFile);
-        var aResp = await fetchWithRetry(
-          ANALYZE_API, { method: "POST", body: fd },
-          function (n) { renderStatus.textContent = "Analyse: Cold Start — Versuch " + n + " in 35s…"; }
-        );
-        var aText = await aResp.text();
-        var aData;
-        try { aData = JSON.parse(aText); }
-        catch (e) { throw new Error("Analyse-Antwort kein JSON:\n" + aText); }
-        if (!aResp.ok || aData.status !== "ok") {
-          throw new Error(aData.message || "Re-Analyse fehlgeschlagen");
-        }
-        var newJobId = aData.job_id;
-        jobIdEl.textContent = newJobId;
-        saveJobToStorage(newJobId);
-        updateUrlHash(newJobId);
-        renderSlots({ job_id: newJobId, slots: aData.slots || [] });
-        dbg("reAnalyze: ok", { job_id: newJobId });
-
-        renderStatus.textContent = "Analyse fertig. Starte Render (" + aData.slot_count + " Slots)…";
-        var rf = new FormData();
-        rf.append("job_id", newJobId);
-        var rResp = await fetchWithRetry(
-          RENDER_API, { method: "POST", body: rf },
-          function (n) { renderStatus.textContent = "Render: Versuch " + n + " in 35s…"; }
-        );
-        var rText = await rResp.text();
-        var rData;
-        try { rData = JSON.parse(rText); }
-        catch (e) { throw new Error("Render-Antwort kein JSON:\n" + rText); }
-        if (!rResp.ok || rData.status !== "ok") {
-          throw new Error(rData.message || "Render fehlgeschlagen");
-        }
-        renderStatus.hidden = true;
-        showFinalResult(rData);
-        dbg("reAnalyzeAndRender: ok", { filename: rData.filename });
-      } catch (err) {
-        renderStatus.hidden = true;
-        dbg("reAnalyzeAndRender: error", err);
-        var isNet = err instanceof TypeError
-          || /failed to fetch|networkerror|load failed/i.test(err && err.message ? err.message : "");
-        if (isNet) {
-          showRenderError("Verbindung unterbrochen", '"Status prüfen" nach 60s.');
-          checkStatusBtn.hidden = false;
-        } else {
-          showRenderError("Render fehlgeschlagen", err && err.message ? err.message : String(err));
-        }
-      } finally {
-        renderBtn.disabled = false;
-      }
-    }
-
-    // ── Final-Render (POST → api/render-final.php) ───────────────────────────
-    renderBtn.addEventListener("click", async function () {
-      const jobId = jobIdEl.textContent.trim();
-      if (!isValidJobId(jobId)) {
-        showRenderError("Kein aktiver Job",
-          "Bitte zuerst ein Video analysieren oder einen Job wiederherstellen.");
-        return;
-      }
-      hideRenderState();
-      renderBtn.disabled = true;
-      renderStatus.textContent = "Verbinde mit Server…";
-      renderStatus.hidden = false;
-
-      try {
-        // ── Schritt 1: Job-Status prüfen (löst Cold-Start-Wait aus) ─────────
-        dbg("render: pre-check", { job_id: jobId });
-        var preUrl  = GETJOB_API + "?job_id=" + encodeURIComponent(jobId);
-        var preResp = await fetchWithRetry(preUrl, { method: "GET" },
-          function (n) {
-            renderStatus.textContent = "Server wacht auf (Cold Start) — Versuch " + n + " in 35s…";
-          }
-        );
-        var preText = await preResp.text();
-        var preData;
-        try { preData = JSON.parse(preText); }
-        catch (e) { throw new Error("Server-Antwort kein JSON:\n" + preText); }
-
-        // ── Schritt 2a: Bereits gerendert? → sofort Download zeigen ─────────
-        if (preResp.ok && preData.status === "ok" && preData.job && preData.job.final_video) {
-          dbg("render: already done", preData.job.final_video);
-          renderStatus.hidden = true;
-          showFinalResult(preData.job);
-          return;
-        }
-
-        // ── Schritt 2b: Job nicht auf Server → Re-Analyse ───────────────────
-        // (Render Free löscht beim Neustart alle Dateien — kein Persistent Disk)
-        if (preResp.status === 404 || !preResp.ok || preData.status !== "ok") {
-          var videoFile = videoInput.files[0];
-          if (!videoFile) {
-            clearJobStorage();
-            updateUrlHash(null);
-            renderStatus.hidden = true;
-            showRenderError(
-              "Server neu gestartet — bitte Video erneut hochladen",
-              "Render Free löscht alle Dateien beim Neustart. "
-              + "Wähle das Video oben erneut aus und klicke 'Video analysieren'."
-            );
-            finalSection.hidden = true;
-            resetBtn.hidden     = true;
-            clearChildren(slotsBox);
-            metaBox.style.display = "none";
-            return;
-          }
-          // Video noch im Browser → automatisch re-analysieren + rendern
-          await reAnalyzeAndRender(videoFile);
-          return;
-        }
-
-        // ── Schritt 3: Job vorhanden → Render starten ────────────────────────
-        renderStatus.textContent = "Rendere … 30–120 Sekunden. Bitte Tab offen lassen.";
-        dbg("render: POST", { endpoint: RENDER_API, job_id: jobId });
-        var formData = new FormData();
-        formData.append("job_id", jobId);
-        var response = await fetchWithRetry(
-          RENDER_API, { method: "POST", body: formData },
-          function (n) { renderStatus.textContent = "Render: Cold Start — Versuch " + n + " in 35s…"; }
-        );
-        var text = await response.text();
-        var data;
-        try { data = JSON.parse(text); }
-        catch (e) { throw new Error("Antwort war kein JSON:\n" + text); }
-
-        if (!response.ok || data.status !== "ok") {
-          throw new Error(data.message || "Render fehlgeschlagen");
-        }
-        renderStatus.hidden = true;
-        showFinalResult(data);
-        dbg("render: ok", { filename: data.filename, size: data.size_bytes });
-
-      } catch (err) {
-        renderStatus.hidden = true;
-        dbg("render: error", err);
-        var isNetErr = err && (err.name === "TypeError"
-          || /failed to fetch|networkerror|load failed/i.test(
-              err.message ? err.message : String(err)));
-        if (isNetErr) {
-          showRenderError(
-            "Verbindung unterbrochen — Render kann noch laufen",
-            "Der Render-Prozess läuft möglicherweise noch im Hintergrund. "
-            + "Warte 60–120 Sekunden, dann klicke " + '"Status prüfen".'
-          );
-          checkStatusBtn.hidden = false;
-        } else {
-          // Safety-Net: render-final.php meldet "fehlt" obwohl pre-check OK war
-          // → Render Free hat Container genau zwischen pre-check und render-call neu gestartet
-          // Erkennt: "meta.json fehlt", "Originalvideo nicht gefunden", "Job nicht gefunden"
-          var missingFiles = err && err.message && (
-            err.message.indexOf("meta.json") !== -1 ||
-            err.message.indexOf("Originalvideo") !== -1 ||
-            (err.message.indexOf("nicht gefunden") !== -1 && err.message.indexOf("Job") !== -1)
-          );
-          if (missingFiles) {
-            var vfFallback = videoInput && videoInput.files && videoInput.files[0];
-            if (vfFallback) {
-              dbg("render: safety-net catch → reAnalyzeAndRender");
-              hideRenderState();
-              await reAnalyzeAndRender(vfFallback);
-              return;
-            } else {
-              // Kein Video im Browser (z.B. nach Seiten-Reload) + Server-Dateien weg
-              dbg("render: safety-net → no video in memory, request re-upload");
-              clearJobStorage();
-              updateUrlHash(null);
-              showRenderError(
-                "Server neu gestartet — bitte Video neu auswählen",
-                "Render Free löscht alle Dateien beim Neustart. "
-                + "Wähle dein Video oben im Datei-Feld erneut aus "
-                + "und klicke dann 'Video analysieren'."
-              );
-              return;
-            }
-          }
-          showRenderError("Render fehlgeschlagen",
-            err && err.message ? err.message : String(err));
-        }
-      } finally {
-        renderBtn.disabled = false;
-      }
-    });
-
-    // ── Status prüfen (nach Verbindungsabbruch beim Render) ──────────────────
-    checkStatusBtn.addEventListener("click", async function () {
-      const jobId = jobIdEl.textContent.trim();
-      if (!isValidJobId(jobId)) {
-        showRenderError("Kein aktiver Job",
-          "Bitte zuerst ein Video analysieren oder einen Job wiederherstellen.");
-        return;
-      }
-      checkStatusBtn.disabled = true;
-      checkStatusBtn.textContent = "Prüfe …";
-      dbg("checkStatus: GET", { endpoint: GETJOB_API, job_id: jobId });
-      try {
-        const url = GETJOB_API + "?job_id=" + encodeURIComponent(jobId);
-        const response = await fetchWithRetry(url, { method: "GET" },
-          function (n) { checkStatusBtn.textContent = "Cold Start — Versuch " + n + " in 35s…"; }
-        );
-        const text = await response.text();
-        let data;
-        try { data = JSON.parse(text); }
-        catch (e) { throw new Error("Antwort war kein JSON:\n" + text); }
-        if (!response.ok || data.status !== "ok" || !data.job) {
-          throw new Error(data.message || "Status konnte nicht geladen werden.");
-        }
-        const job      = data.job;
-        const finalUrl = job.final_video || job.final_video_url || job.result_url || null;
-        if (finalUrl) {
-          const absUrl = finalUrl.indexOf("http") === 0 ? finalUrl : (BASE_URL + finalUrl);
-          const fname  = job.final_filename || "final.mp4";
-          const size   = job.final_size_bytes || 0;
-          const sizeMb = size > 0 ? (size / 1024 / 1024).toFixed(1) + " MB" : "—";
-          renderDownload.href     = absUrl;
-          renderDownload.download = fname;
-          const parts = [fname];
-          if (sizeMb !== "—") parts.push(sizeMb);
-          renderResMeta.textContent = parts.join(" · ");
-          renderPreview.src    = absUrl;
-          renderPreview.hidden = false;
-          renderResult.hidden  = false;
-          renderError.hidden   = true;
-          checkStatusBtn.hidden = true;
-          dbg("checkStatus: final_video found", finalUrl);
-        } else {
-          showRenderError(
-            "Render noch nicht fertig",
-            "Noch kein fertiges Video gefunden. Bitte in 30 Sekunden erneut prüfen."
-          );
-          checkStatusBtn.hidden = false;
-          dbg("checkStatus: no final_video yet", job);
-        }
-      } catch (err) {
-        dbg("checkStatus: error", err);
-        showRenderError("Status-Prüfung fehlgeschlagen",
-          networkErrorMessage(err, GETJOB_API));
-        checkStatusBtn.hidden = false;
-      } finally {
-        checkStatusBtn.disabled = false;
-        checkStatusBtn.textContent = "🔍 Status prüfen";
-      }
-    });
-
-    // ── Boot — beim Laden Job aus URL-Hash oder localStorage wiederherstellen
-    (function boot() {
-      dbg("boot: start", { ua: navigator.userAgent, base: BASE_URL });
-      const fromHash    = readJobIdFromHash();
-      const fromStorage = loadJobFromStorage();
-      const jobId = (fromHash && isValidJobId(fromHash))
-        ? fromHash
-        : (isValidJobId(fromStorage) ? fromStorage : null);
-
-      if (jobId) {
-        dbg("boot: trying restore", jobId);
-        restoreJob(jobId);
-      } else {
-        dbg("boot: no stored job, idle");
-      }
-    })();
-  </script>
 </body>
 </html>
