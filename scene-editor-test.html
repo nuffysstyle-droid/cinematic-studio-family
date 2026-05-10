@@ -136,6 +136,28 @@
     /* ── Divider ─────────────────────────────────────────────────────── */
     hr{border:0;border-top:1px solid var(--border);}
 
+    /* ── Preview Card ────────────────────────────────────────────────── */
+    .preview-card{background:linear-gradient(145deg,#121228,#0a0a1a);border:1px solid rgba(255,255,255,.13);border-radius:20px;padding:20px;width:100%;max-width:380px;box-shadow:0 0 80px rgba(59,130,246,.1),0 40px 80px rgba(0,0,0,.6);animation:cardglow 4s ease-in-out infinite;}
+    @keyframes cardglow{0%,100%{box-shadow:0 0 80px rgba(59,130,246,.1),0 40px 80px rgba(0,0,0,.6);}50%{box-shadow:0 0 100px rgba(59,130,246,.22),0 40px 80px rgba(0,0,0,.6);}}
+    .preview-frame{border-radius:12px;overflow:hidden;aspect-ratio:16/9;position:relative;margin-bottom:14px;background:linear-gradient(135deg,#0a0f2e 0%,#141428 25%,#1a0a2e 50%,#0f1535 75%,#080820 100%);}
+    .preview-frame::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 30% 50%,rgba(59,130,246,.2) 0%,transparent 60%),radial-gradient(ellipse 50% 70% at 75% 25%,rgba(245,197,66,.07) 0%,transparent 55%),radial-gradient(ellipse 40% 50% at 55% 85%,rgba(147,51,234,.14) 0%,transparent 50%);}
+    .preview-frame::after{content:"";position:absolute;bottom:0;left:0;right:0;height:40%;background:linear-gradient(transparent,rgba(0,0,0,.7));}
+    .preview-frame-inner{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:12px;z-index:1;}
+    .preview-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);border-radius:999px;padding:5px 10px;font-size:10px;font-weight:800;color:var(--text);width:fit-content;}
+    .preview-badge::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--danger);box-shadow:0 0 6px var(--danger);animation:rblink 2s ease-in-out infinite;}
+    .preview-meta{font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.45);}
+    .preview-prompt{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:11px 13px;margin-bottom:12px;}
+    .pp-label{display:block;font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--muted2);margin-bottom:5px;}
+    .pp-text{font-size:11px;color:var(--muted);line-height:1.55;font-style:italic;}
+    .preview-footer{display:flex;align-items:center;justify-content:space-between;}
+    .pf-tool{font-size:11px;font-weight:800;color:var(--blue);}
+    .pf-status{font-size:11px;font-weight:800;color:var(--ok);}
+    /* ── Trust Strip ─────────────────────────────────────────────────── */
+    .trust-strip{padding:18px 0;border-bottom:1px solid var(--border);background:rgba(255,255,255,.015);}
+    .trust-inner{width:min(1200px,calc(100% - 48px));margin:0 auto;display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:center;}
+    .trust-label{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted2);white-space:nowrap;}
+    .trust-tools{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center;}
+    .trust-tool{font-size:12px;font-weight:800;color:var(--muted);padding:4px 10px;border:1px solid rgba(255,255,255,.07);border-radius:999px;background:rgba(255,255,255,.03);white-space:nowrap;}
     /* ── Responsive ──────────────────────────────────────────────────── */
     @media(max-width:1100px){.hub-grid{grid-template-columns:repeat(3,1fr);}}
     @media(max-width:760px){.hub-grid{grid-template-columns:repeat(2,1fr);}}
@@ -236,19 +258,42 @@
         </div>
       </div>
       <div class="hero-visual">
-        <div class="orbit o1"></div>
-        <div class="orbit o2"></div>
-        <div class="orbit o3"></div>
-        <div class="trail t1"></div>
-        <div class="trail t2"></div>
-        <div class="trail t3"></div>
-        <div class="p p1"></div><div class="p p2"></div><div class="p p3"></div>
-        <div class="cam"><div class="lens"><div class="lens-in"></div></div></div>
+        <div class="preview-card">
+          <div class="preview-frame">
+            <div class="preview-frame-inner">
+              <div class="preview-badge">Rendering</div>
+              <div class="preview-meta">Noir · Drohne · 4K · 00:34</div>
+            </div>
+          </div>
+          <div class="preview-prompt">
+            <span class="pp-label">Dein Prompt</span>
+            <span class="pp-text">A lone detective walks rain-soaked streets, cinematic drone shot, neon reflections, golden hour...</span>
+          </div>
+          <div class="preview-footer">
+            <span class="pf-tool">Runway ML Gen-3</span>
+            <span class="pf-status">✓ Fertig in 28 Sek.</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
   <hr>
+
+  <!-- TRUST STRIP -->
+  <div class="trust-strip">
+    <div class="trust-inner">
+      <span class="trust-label">Kompatibel mit</span>
+      <div class="trust-tools">
+        <span class="trust-tool">Runway ML</span>
+        <span class="trust-tool">Sora</span>
+        <span class="trust-tool">Kling AI</span>
+        <span class="trust-tool">Midjourney</span>
+        <span class="trust-tool">Pika</span>
+        <span class="trust-tool">DALL·E 3</span>
+      </div>
+    </div>
+  </div>
 
   <!-- HUB GRID -->
   <section class="hub-section" id="hub">
