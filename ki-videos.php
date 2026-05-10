@@ -40,12 +40,20 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
 .page-h1{font-size:clamp(28px,5vw,48px);font-weight:900;letter-spacing:-1.5px;margin-bottom:10px;line-height:1.1;}
 .page-h1 span{background:var(--gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .page-sub{color:var(--muted);font-size:15px;line-height:1.6;max-width:560px;margin-bottom:44px;}
-.coming-card{background:linear-gradient(145deg,rgba(59,130,246,.05),rgba(147,51,234,.03));border:1px solid rgba(59,130,246,.18);border-radius:var(--radius);padding:52px 40px;text-align:center;margin-bottom:28px;}
+.coming-card{background:linear-gradient(145deg,rgba(245,197,66,.04),rgba(255,140,0,.02));border:1px solid rgba(245,197,66,.22);border-radius:var(--radius);padding:52px 40px;text-align:center;margin-bottom:28px;}
+@media(max-width:600px){.coming-card{padding:36px 24px;}}
 .coming-icon{font-size:3.4rem;margin-bottom:18px;display:block;}
 .coming-card h2{font-size:19px;font-weight:900;margin-bottom:10px;}
 .coming-card p{color:var(--muted);font-size:14px;line-height:1.6;max-width:440px;margin:0 auto;}
 .btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border);border-radius:12px;padding:13px 22px;font-size:14px;font-weight:700;cursor:pointer;transition:border-color .15s,background .15s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;}
 .btn-ghost:hover{border-color:rgba(255,255,255,.28);background:rgba(255,255,255,.05);}
+.btn-gold{background:var(--gold);color:#1a0e00;border:0;border-radius:12px;padding:13px 22px;font-size:14px;font-weight:900;cursor:pointer;transition:transform .15s,box-shadow .15s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;box-shadow:0 6px 22px rgba(245,197,66,.22);}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(245,197,66,.36);}
+.btn-row{display:flex;gap:10px;margin-top:28px;flex-wrap:wrap;}
+.video-features{list-style:none;margin:20px auto 0;max-width:400px;text-align:left;display:flex;flex-direction:column;gap:11px;}
+.video-features li{position:relative;padding-left:18px;font-size:13px;color:var(--muted);line-height:1.6;}
+.video-features li strong{color:var(--text);font-weight:700;}
+.video-features li::before{content:"✦";color:var(--accent);font-size:10px;position:absolute;left:0;top:4px;}
 .footer{border-top:1px solid var(--border);padding:36px 0;margin-top:60px;}
 .footer-inner{width:min(960px,calc(100% - 48px));margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
 .footer-logo{font-size:13px;font-weight:900;letter-spacing:2px;background:var(--gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
@@ -91,15 +99,23 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
 </div>
 <div class="page">
   <div class="wrap">
-    <div class="page-eyebrow">🎥 KI Videos</div>
-    <h1 class="page-h1">KI Video<br><span>Produktion</span></h1>
-    <p class="page-sub">Komplette KI-generierte Kurzfilme, Musikvideos und Werbefilme – von der Idee bis zum fertigen Cut.</p>
+    <div class="page-eyebrow">✦ Individuell · Auf Anfrage</div>
+    <h1 class="page-h1">Dein professionelles<br><span>KI-Video.</span></h1>
+    <p class="page-sub">Kurzfilme, Musikvideos und Werbefilme — professionell produziert, KI-gestützt, ohne Filmteam.</p>
     <div class="coming-card">
-      <span class="coming-icon">🎥</span>
-      <h2>Demnächst verfügbar</h2>
-      <p>Dieser Bereich befindet sich im Aufbau. Hier kannst du bald komplette KI-Videos in Auftrag geben, eigene Clips hochladen und Stilvorlagen auswählen.</p>
+      <span class="coming-icon">🎬</span>
+      <h2>Fertige KI-Videos auf Anfrage</h2>
+      <p>Vom Briefing bis zum fertigen Cut — wähle dein Format, wir produzieren. KI-gestützt, professionell, schnell. Was du bekommst:</p>
+      <ul class="video-features">
+        <li><strong>Kurzfilme & Werbefilme</strong> · 15–90 Sek · 1080p MP4</li>
+        <li><strong>Musikvideos</strong> mit eigenem Stil, Moodboard & Farbgrading</li>
+        <li><strong>Szenenwechsel, Voice-Over & Untertitel</strong> inklusive</li>
+      </ul>
     </div>
-    <a href="scene-editor-test.html" class="btn-ghost">← Zurück zum Hub</a>
+    <div class="btn-row">
+      <a href="contact.php" class="btn-gold">Frühzugang anfragen →</a>
+      <a href="studio-demo.php" class="btn-ghost">Studio ausprobieren →</a>
+    </div>
   </div>
 </div>
 <footer class="footer">
