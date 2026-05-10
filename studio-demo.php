@@ -104,6 +104,16 @@
     .check-btn{background:transparent;color:var(--accent);border:1px solid var(--accent);border-radius:11px;padding:11px 16px;font-weight:800;cursor:pointer;min-height:42px;font-size:13px;margin-top:9px;}
     .check-btn:hover:not(:disabled){background:rgba(245,197,66,.07);}
     .check-btn:disabled{opacity:.45;cursor:not-allowed;}
+    /* Steps */
+    .steps{display:flex;align-items:center;margin-bottom:28px;flex-wrap:wrap;gap:4px;}
+    .step{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:var(--muted2);transition:color .2s;}
+    .step-num{width:26px;height:26px;border-radius:50%;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;flex-shrink:0;transition:background .2s,color .2s;}
+    .step.active{color:var(--accent);}
+    .step.active .step-num{background:rgba(245,197,66,.12);}
+    .step.done{color:var(--ok);}
+    .step.done .step-num{background:rgba(74,222,128,.12);}
+    .step-arrow{color:var(--muted2);font-size:13px;padding:0 8px;flex-shrink:0;}
+    @media(max-width:560px){.step-label{display:none;}.step-arrow{padding:0 5px;}}
     /* Back link */
     .back-link{display:inline-flex;align-items:center;gap:8px;color:var(--text);text-decoration:none;font-size:14px;font-weight:700;margin-bottom:28px;padding:13px 22px;border:1px solid var(--border);border-radius:12px;transition:border-color .15s,background .15s;}
     .back-link:hover{border-color:rgba(255,255,255,.28);background:rgba(255,255,255,.05);}
@@ -160,9 +170,17 @@
       <a href="scene-editor-test.html" class="back-link">← Zurück zur Startseite</a>
 
       <div class="demo-header">
-        <div class="demo-eyebrow">Demo aktiv</div>
-        <h1>Scene <span>Replacement Editor</span></h1>
-        <p>Lade ein Referenzvideo hoch — das Backend analysiert es, erzeugt Szenen-Slots und zeigt Thumbnails. Dann kannst du pro Slot Bilder, Videos oder Text ersetzen.</p>
+        <div class="demo-eyebrow">✦ Studio Demo · Live</div>
+        <h1>Ersetze Szenen. <span>KI-gestützt.</span></h1>
+        <p>Lade ein Video hoch, wähle Szenen aus und ersetze sie mit eigenen Bildern, Videos oder Text. Kein Schnitt-Know-how nötig.</p>
+      </div>
+
+      <div class="steps" id="stepBar">
+        <div class="step active" id="step1"><span class="step-num">1</span><span class="step-label">Video hochladen</span></div>
+        <div class="step-arrow">→</div>
+        <div class="step" id="step2"><span class="step-num">2</span><span class="step-label">Szenen bearbeiten</span></div>
+        <div class="step-arrow">→</div>
+        <div class="step" id="step3"><span class="step-num">3</span><span class="step-label">Video erstellen</span></div>
       </div>
 
       <div class="demo-module">
@@ -201,7 +219,7 @@
           </div>
         </section>
 
-        <p class="note">MVP-Hinweis: Audio kommt in V2. Ein Klick auf „Finales Video erstellen" rendert blockierend (Schätzwert: 30–120 Sekunden je nach Slots).</p>
+        <p class="note">Hinweis: Ausgabe ohne Audio (kommt in V2). Render-Dauer ca. 30–120 Sekunden je nach Videolänge.</p>
       </div>
 
     </div>
