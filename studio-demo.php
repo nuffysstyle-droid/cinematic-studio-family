@@ -70,16 +70,21 @@
     .slot-instruction-text strong{color:var(--text);font-weight:800;}
     .slots{margin-top:22px;display:grid;grid-template-columns:repeat(5,1fr);gap:12px;}
     .slot{background:linear-gradient(160deg,var(--card),var(--card2));border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 8px 22px rgba(0,0,0,.22);transition:border-color .2s,box-shadow .2s;}
+    .slot::before{content:"";display:block;height:3px;background:linear-gradient(90deg,rgba(59,130,246,.7),rgba(147,51,234,.6));flex-shrink:0;}
     .slot.is-replaced{border-color:var(--ok);box-shadow:0 0 0 1px var(--ok),0 8px 22px rgba(0,0,0,.22);}
-    .thumb{position:relative;aspect-ratio:9/16;background:#030308;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;overflow:hidden;}
+    .slot.is-replaced::before{background:linear-gradient(90deg,var(--ok),rgba(59,130,246,.8));}
+    .thumb{position:relative;aspect-ratio:16/9;background:#030308;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;overflow:hidden;}
     .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
     .badge{display:none;position:absolute;top:8px;left:8px;font-size:10px;font-weight:800;color:#0a2b14;background:var(--ok);padding:3px 7px;border-radius:999px;box-shadow:0 4px 10px rgba(0,0,0,.4);}
     .slot.is-replaced .badge{display:inline-block;}
     .slot-body{padding:11px;}
     .slot-title{font-weight:800;margin-bottom:5px;font-size:13px;}
-    .time{color:var(--muted);font-size:12px;margin-bottom:9px;}
+    .time{color:var(--blue);font-size:11px;font-weight:700;letter-spacing:.8px;margin-bottom:9px;font-family:'Courier New',monospace;}
     .field{width:100%;margin-top:7px;padding:9px 11px;border-radius:9px;border:1px solid var(--border);background:rgba(0,0,0,.28);color:var(--text);outline:none;font-family:inherit;font-size:12px;}
-    .replace{margin-top:7px;width:100%;font-size:12px;color:var(--muted);}
+    .replace{margin-top:7px;width:100%;font-size:11px;color:var(--muted);background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:7px 10px;cursor:pointer;transition:border-color .15s;}
+    .replace:hover{border-color:rgba(255,255,255,.22);}
+    .replace::-webkit-file-upload-button{background:rgba(255,255,255,.08);border:0;border-radius:6px;color:var(--text);font-size:11px;font-weight:700;padding:4px 8px;cursor:pointer;margin-right:6px;}
+    .replace::file-selector-button{background:rgba(255,255,255,.08);border:0;border-radius:6px;color:var(--text);font-size:11px;font-weight:700;padding:4px 8px;cursor:pointer;margin-right:6px;}
     .save-btn{margin-top:8px;width:100%;min-height:38px;padding:9px 12px;font-size:12px;font-weight:800;border-radius:9px;background:var(--accent);color:#171000;border:0;cursor:pointer;transition:transform .15s,opacity .15s;}
     .save-btn:hover:not(:disabled){transform:translateY(-1px);}
     .save-btn:disabled{opacity:.45;cursor:not-allowed;transform:none;}
@@ -303,6 +308,7 @@
 
     function setStatus(text, type) { statusBox.className = "status" + (type ? " " + type : ""); statusBox.textContent = text; }
     function formatSeconds(value) { return Number(value).toFixed(2) + "s"; }
+    function formatTime(s) { var sec=Number(s); var m=Math.floor(sec/60); var r=Math.floor(sec%60); return (m<10?"0":"")+m+":"+(r<10?"0":"")+r; }
     function clearChildren(el) { while (el.firstChild) el.removeChild(el.firstChild); }
     function setSlotStatus(el, text, type) { el.textContent = text; el.classList.remove("ok","err"); if (type) el.classList.add(type); }
     function dbg(label, data) { try { if (data === undefined) console.log("[csf] " + label); else console.log("[csf] " + label, data); } catch(_){} }
@@ -332,7 +338,7 @@
       card.appendChild(thumb);
       const body = document.createElement("div"); body.className = "slot-body";
       const title = document.createElement("div"); title.className = "slot-title"; title.textContent = "Szene " + slot.slot; body.appendChild(title);
-      const time = document.createElement("div"); time.className = "time"; time.textContent = formatSeconds(slot.start_seconds) + " – " + formatSeconds(slot.end_seconds); body.appendChild(time);
+      const time = document.createElement("div"); time.className = "time"; time.textContent = formatTime(slot.start_seconds) + " → " + formatTime(slot.end_seconds); body.appendChild(time);
       const textField = document.createElement("input"); textField.type = "text"; textField.className = "field"; textField.placeholder = "KI-Inhalt beschreiben..."; textField.maxLength = MAX_TEXT_LEN;
       if (slot.text) textField.value = String(slot.text); body.appendChild(textField);
       const fileInput = document.createElement("input"); fileInput.type = "file"; fileInput.className = "replace"; fileInput.accept = "image/*,video/*"; body.appendChild(fileInput);
