@@ -114,6 +114,21 @@
     .step.done .step-num{background:rgba(74,222,128,.12);}
     .step-arrow{color:var(--muted2);font-size:13px;padding:0 8px;flex-shrink:0;}
     @media(max-width:560px){.step-label{display:none;}.step-arrow{padding:0 5px;}}
+    /* Dropzone */
+    .dropzone{position:relative;border:2px dashed rgba(59,130,246,.28);border-radius:16px;padding:36px 24px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;background:rgba(59,130,246,.03);}
+    .dropzone:hover{border-color:rgba(59,130,246,.6);background:rgba(59,130,246,.06);}
+    .dropzone.drag-over{border-color:var(--blue);background:rgba(59,130,246,.1);box-shadow:0 0 0 4px rgba(59,130,246,.08);}
+    .dropzone .dropzone-input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;font-size:0;}
+    .dropzone-icon{font-size:2.2rem;margin-bottom:10px;display:block;transition:transform .2s;}
+    .dropzone:hover .dropzone-icon{transform:translateY(-3px);}
+    .dropzone-title{font-size:15px;font-weight:800;color:var(--text);margin-bottom:5px;}
+    .dropzone-sub{font-size:12px;color:var(--muted);line-height:1.6;}
+    .dropzone-filename{margin-top:10px;font-size:13px;color:var(--ok);font-weight:700;display:none;}
+    .dropzone-filename.visible{display:block;}
+    .dropzone-actions{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;}
+    .analyze-btn{flex:1;min-height:48px;font-size:14px;font-weight:900;border-radius:13px;background:var(--gold);color:#1a0e00;border:0;cursor:pointer;box-shadow:0 6px 22px rgba(245,197,66,.22);transition:transform .15s,box-shadow .15s,opacity .15s;}
+    .analyze-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 32px rgba(245,197,66,.38);}
+    .analyze-btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none;}
     /* Back link */
     .back-link{display:inline-flex;align-items:center;gap:8px;color:var(--text);text-decoration:none;font-size:14px;font-weight:700;margin-bottom:28px;padding:13px 22px;border:1px solid var(--border);border-radius:12px;transition:border-color .15s,background .15s;}
     .back-link:hover{border-color:rgba(255,255,255,.28);background:rgba(255,255,255,.05);}
@@ -186,13 +201,19 @@
       <div class="demo-module">
 
         <div class="panel">
-          <div class="row">
-            <input id="videoInput" type="file" accept="video/mp4,video/webm,video/quicktime,video/x-matroska">
-            <button id="analyzeBtn">Video analysieren</button>
+          <div class="dropzone" id="dropzone">
+            <input id="videoInput" type="file" accept="video/mp4,video/webm,video/quicktime,video/x-matroska" class="dropzone-input">
+            <span class="dropzone-icon">🎬</span>
+            <div class="dropzone-title">Video hierher ziehen oder auswählen</div>
+            <div class="dropzone-sub">MP4 &nbsp;·&nbsp; WebM &nbsp;·&nbsp; MOV &nbsp;·&nbsp; MKV &nbsp;·&nbsp; max. 200 MB empfohlen</div>
+            <div class="dropzone-filename" id="dropzoneName"></div>
+          </div>
+          <div class="dropzone-actions">
+            <button id="analyzeBtn" class="analyze-btn">▶ Szenen analysieren</button>
             <button id="resetBtn" class="reset-btn" type="button" hidden>↻ Job zurücksetzen</button>
           </div>
           <div id="restoredHint" class="restored-hint" hidden></div>
-          <div id="status" class="status">Bereit. Wähle ein kurzes MP4-Testvideo.</div>
+          <div id="status" class="status">Bereit. Video auswählen oder hierher ziehen.</div>
         </div>
 
         <div id="meta" class="meta">
@@ -495,6 +516,7 @@
       if(jobId) restoreJob(jobId);
     })();
   </script>
+  <script>(function(){var dz=document.getElementById('dropzone'),vi=document.getElementById('videoInput'),dn=document.getElementById('dropzoneName');if(!dz||!vi)return;vi.addEventListener('change',function(){if(vi.files&&vi.files[0]&&dn){dn.textContent='📎 '+vi.files[0].name;dn.classList.add('visible');}});dz.addEventListener('dragover',function(e){e.preventDefault();dz.classList.add('drag-over');});dz.addEventListener('dragleave',function(){dz.classList.remove('drag-over');});dz.addEventListener('drop',function(e){e.preventDefault();dz.classList.remove('drag-over');var files=e.dataTransfer&&e.dataTransfer.files;if(files&&files.length){try{var dt=new DataTransfer();dt.items.add(files[0]);vi.files=dt.files;if(dn){dn.textContent='📎 '+files[0].name;dn.classList.add('visible');}}catch(_){}}});})();</script>
   <script>(function(){var b=document.getElementById('mobBurger'),m=document.getElementById('mobMenu');if(!b||!m)return;function t(){m.style.top=document.querySelector('.nav').offsetHeight+'px';}t();window.addEventListener('resize',t);b.addEventListener('click',function(e){e.stopPropagation();var o=m.classList.toggle('open');b.classList.toggle('open',o);b.setAttribute('aria-expanded',o?'true':'false');b.setAttribute('aria-label',o?'Menü schließen':'Menü öffnen');});m.querySelectorAll('.mob-link,.mob-cta').forEach(function(l){l.addEventListener('click',function(){m.classList.remove('open');b.classList.remove('open');b.setAttribute('aria-expanded','false');b.setAttribute('aria-label','Menü öffnen');});});document.addEventListener('click',function(e){if(!b.contains(e.target)&&!m.contains(e.target)){m.classList.remove('open');b.classList.remove('open');b.setAttribute('aria-expanded','false');}});document.addEventListener('keydown',function(e){if(e.key==='Escape'){m.classList.remove('open');b.classList.remove('open');b.setAttribute('aria-expanded','false');}});})();</script>
 </body>
 </html>
