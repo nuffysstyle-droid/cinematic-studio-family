@@ -49,7 +49,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
 .cc-value{font-size:14px;font-weight:700;color:var(--accent);word-break:break-all;}
 .cc-hint{font-size:12px;color:var(--muted);margin-top:4px;}
 /* Beta card */
-.beta-card{background:linear-gradient(145deg,rgba(147,51,234,.07),rgba(59,130,246,.04));border:1px solid rgba(147,51,234,.22);border-radius:var(--radius);padding:30px;margin-bottom:28px;}
+.beta-card{background:linear-gradient(145deg,rgba(245,197,66,.06),rgba(255,140,0,.03));border:1px solid rgba(245,197,66,.28);border-radius:var(--radius);padding:30px;margin-bottom:28px;}
 .beta-card h2{font-size:16px;font-weight:900;margin-bottom:10px;}
 .beta-card p{color:var(--muted);font-size:13px;line-height:1.6;margin-bottom:16px;}
 .beta-perks{list-style:none;display:flex;flex-direction:column;gap:7px;margin-bottom:22px;}
@@ -105,9 +105,9 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
 </div>
 <div class="page">
   <div class="wrap">
-    <div class="page-eyebrow">✉️ Kontakt & Beta</div>
-    <h1 class="page-h1">Schreib uns<br><span>direkt an</span></h1>
-    <p class="page-sub">Projektanfragen, Kooperationen, Beta-Zugang oder einfach Hallo – wir antworten schnell.</p>
+    <div class="page-eyebrow">✦ Beta · Limitierte Plätze</div>
+    <h1 class="page-h1">Werde Teil der<br><span>ersten Runde.</span></h1>
+    <p class="page-sub">Sichere dir einen der limitierten Beta-Plätze für Cinematic Vision Studio — oder schick uns deine Projektanfrage direkt.</p>
 
     <div class="contact-grid">
       <a href="mailto:nuffysstyle@gmail.com?subject=Studio-Anfrage" class="contact-card">
@@ -119,13 +119,13 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
       <a href="mailto:nuffysstyle@gmail.com?subject=Beta-Zugang Cinematic Studio" class="contact-card">
         <span class="cc-icon">🚀</span>
         <div class="cc-label">Beta-Zugang</div>
-        <div class="cc-value">Early Access</div>
-        <div class="cc-hint">Anfrage per E-Mail für Beta-Slot</div>
+        <div class="cc-value">Beta-Slot sichern →</div>
+        <div class="cc-hint">Limitierte Plätze · Per E-Mail anfragen</div>
       </a>
     </div>
 
     <div class="beta-card">
-      <h2>🔥 Beta-Programm – Jetzt bewerben</h2>
+      <h2>✦ Beta-Programm · Limitierte Plätze</h2>
       <p>Werde einer der ersten Nutzer des Cinematic Vision Studios und erhalte exklusiven Zugang zu allen Features.</p>
       <ul class="beta-perks">
         <li>Kostenlose Kristalle zum Start</li>
