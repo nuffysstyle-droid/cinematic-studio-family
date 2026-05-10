@@ -61,9 +61,13 @@
     .status{margin-top:12px;color:var(--muted);white-space:pre-wrap;font-size:13px;}
     .status.ok{color:var(--ok);}
     .status.err{color:var(--danger);}
-    .meta{display:none;margin-top:18px;grid-template-columns:repeat(4,1fr);gap:10px;}
+    .meta{display:none;margin-top:18px;grid-template-columns:repeat(3,1fr);gap:10px;}
     .meta div{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;padding:13px;}
     .meta strong{display:block;font-size:11px;color:var(--muted);margin-bottom:4px;letter-spacing:.4px;}
+    .meta-hide{display:none!important;}
+    .slot-instruction{margin-top:22px;margin-bottom:4px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+    .slot-instruction-text{font-size:13px;color:var(--muted);line-height:1.5;}
+    .slot-instruction-text strong{color:var(--text);font-weight:800;}
     .slots{margin-top:22px;display:grid;grid-template-columns:repeat(5,1fr);gap:12px;}
     .slot{background:linear-gradient(160deg,var(--card),var(--card2));border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 8px 22px rgba(0,0,0,.22);transition:border-color .2s,box-shadow .2s;}
     .slot.is-replaced{border-color:var(--ok);box-shadow:0 0 0 1px var(--ok),0 8px 22px rgba(0,0,0,.22);}
@@ -217,18 +221,22 @@
         </div>
 
         <div id="meta" class="meta">
-          <div><strong>Job ID</strong><span id="jobId">-</span></div>
-          <div><strong>Dauer</strong><span id="duration">-</span></div>
-          <div><strong>Auflösung</strong><span id="resolution">-</span></div>
-          <div><strong>Slots</strong><span id="slotCount">-</span></div>
+          <div><strong>Videolänge</strong><span id="duration">-</span></div>
+          <div><strong>Qualität</strong><span id="resolution">-</span></div>
+          <div><strong>Szenen erkannt</strong><span id="slotCount">-</span></div>
+          <span id="jobId" hidden></span>
+        </div>
+
+        <div class="slot-instruction" id="slotInstruction" style="display:none">
+          <p class="slot-instruction-text"><strong>Wähle pro Szene</strong> ein Bild, Video oder gib Text ein — dann erstelle dein fertiges KI-Video.</p>
         </div>
 
         <div id="slots" class="slots"></div>
 
         <section id="finalSection" class="final-section" hidden>
-          <h2>Finales Video erstellen</h2>
-          <p>Alle nicht ersetzten Slots werden aus dem Originalvideo geschnitten. Ersetzte Slots verwenden dein Bild oder Video. Endergebnis: 1080p · MP4 · stumm (Audio kommt in V2).</p>
-          <button id="renderBtn" class="render-btn" type="button">🎬 Finales Video erstellen</button>
+          <h2>✨ Dein KI-Video ist fast fertig</h2>
+          <p>Ersetzte Szenen werden zusammengeführt – dein fertiges KI-Video wartet. Nicht ersetzte Szenen bleiben aus dem Original. Ausgabe: 1080p · MP4 · ca. 30–120 Sek. Render-Zeit.</p>
+          <button id="renderBtn" class="render-btn" type="button">🎬 Jetzt rendern · 1080p MP4</button>
           <div id="renderStatus" class="render-status" hidden></div>
           <div id="renderError" class="render-error" hidden></div>
           <button id="checkStatusBtn" class="check-btn" type="button" hidden>🔍 Status prüfen</button>
@@ -378,6 +386,7 @@
         metaBox.style.display = "grid"; renderSlots(data);
         saveJobToStorage(data.job_id); updateUrlHash(data.job_id); hideRestoredHint(); hideRenderState();
         finalSection.hidden = false; resetBtn.hidden = false;
+        var si=document.getElementById("slotInstruction");if(si)si.style.display="flex";
         setStatus("Analyse erfolgreich. Slots wurden erzeugt.","ok");
         dbg("analyze: ok",{job_id:data.job_id,slots:data.slot_count});
       } catch(err) { dbg("analyze: error",err); setStatus("Fehler:\n"+networkErrorMessage(err,ANALYZE_API),"err"); }
@@ -419,6 +428,7 @@
         slotCountEl.textContent=String(job.slot_count||(job.slots?job.slots.length:0));
         metaBox.style.display="grid"; renderSlots({job_id:job.job_id,slots:job.slots||[]});
         finalSection.hidden=false; resetBtn.hidden=false; hideRenderState(); showRestoredHint(jobId);
+        var si=document.getElementById("slotInstruction");if(si)si.style.display="flex";
         setStatus("Job wiederhergestellt.","ok");
       } catch(err) { setStatus("Job-Restore fehlgeschlagen:\n"+networkErrorMessage(err,GETJOB_API),"err"); }
     }
