@@ -117,9 +117,9 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
 
 <div class="page">
   <div class="wrap">
-    <div class="page-eyebrow">✍️ Prompt Generator</div>
-    <h1 class="page-h1">Cinematic<br><span>Prompt Generator</span></h1>
-    <p class="page-sub">Erstelle professionelle KI-Video-Prompts in Sekunden. Wähle Genre, Stil und Details – der Generator baut den perfekten Prompt.</p>
+    <div class="page-eyebrow">✦ Kostenlos · Kein Account</div>
+    <h1 class="page-h1">Bessere KI-Videos.<br><span>In 30 Sekunden.</span></h1>
+    <p class="page-sub">Kein Prompt-Wissen nötig. Wähle Genre, Kamerastil und Atmosphäre — der Generator baut den fertigen Cinematic Prompt für Runway, Sora oder Kling.</p>
 
     <div class="gen-card">
       <h2>Szenen-Parameter</h2>
