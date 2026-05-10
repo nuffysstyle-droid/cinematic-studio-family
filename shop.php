@@ -46,6 +46,14 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
 .coming-card p{color:var(--muted);font-size:14px;line-height:1.6;max-width:440px;margin:0 auto;}
 .btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border);border-radius:12px;padding:13px 22px;font-size:14px;font-weight:700;cursor:pointer;transition:border-color .15s,background .15s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;}
 .btn-ghost:hover{border-color:rgba(255,255,255,.28);background:rgba(255,255,255,.05);}
+.btn-gold{background:var(--gold);color:#1a0e00;border:0;border-radius:12px;padding:13px 22px;font-size:14px;font-weight:900;cursor:pointer;transition:transform .15s,box-shadow .15s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;box-shadow:0 6px 22px rgba(245,197,66,.22);}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(245,197,66,.36);}
+.btn-row{display:flex;gap:10px;margin-top:28px;flex-wrap:wrap;}
+.shop-features{list-style:none;margin:20px auto 0;max-width:400px;text-align:left;display:flex;flex-direction:column;gap:11px;}
+.shop-features li{position:relative;padding-left:18px;font-size:13px;color:var(--muted);line-height:1.6;}
+.shop-features li strong{color:var(--text);font-weight:700;}
+.shop-features li::before{content:"✦";color:var(--accent);font-size:10px;position:absolute;left:0;top:4px;}
+@media(max-width:600px){.coming-card{padding:36px 24px;}}
 .footer{border-top:1px solid var(--border);padding:36px 0;margin-top:60px;}
 .footer-inner{width:min(960px,calc(100% - 48px));margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
 .footer-logo{font-size:13px;font-weight:900;letter-spacing:2px;background:var(--gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
@@ -91,15 +99,23 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
 </div>
 <div class="page">
   <div class="wrap">
-    <div class="page-eyebrow">🛒 Shop</div>
-    <h1 class="page-h1">Studio<br><span>Shop</span></h1>
-    <p class="page-sub">Pakete, Einzelleistungen und digitale Produkte – direkt kaufen, sofort einsetzen.</p>
+    <div class="page-eyebrow">✦ Kristalle · Sofort einlösbar</div>
+    <h1 class="page-h1">Premium Assets.<br><span>Für dein Studio.</span></h1>
+    <p class="page-sub">Prompt-Pakete, KI-Video-Bundles und Preset-Assets — zahlbar mit Kristallen, sofort einsetzbar nach Kauf.</p>
     <div class="coming-card">
       <span class="coming-icon">🛍️</span>
-      <h2>Shop im Aufbau</h2>
-      <p>Hier entstehen bald Pakete für KI-Videos, Prompts, Sticker und mehr. Kristalle als Währung, sofortige Lieferung nach Kauf.</p>
+      <h2>Was im Shop erscheint</h2>
+      <p>Alles zahlbar mit Kristallen — deiner Währung im Cinematic Vision Studio.</p>
+      <ul class="shop-features">
+        <li><strong>Prompt-Pakete</strong> · 10–50 cinematic Prompts · sofort nutzbar</li>
+        <li><strong>KI-Video-Bundles</strong> · fertige Szenen & Stil-Templates</li>
+        <li><strong>Sticker & Preset-Assets</strong> · für TikTok, Reels & Stories</li>
+      </ul>
     </div>
-    <a href="scene-editor-test.html" class="btn-ghost">← Zurück zum Hub</a>
+    <div class="btn-row">
+      <a href="crystals.php" class="btn-gold">💎 Kristalle sichern →</a>
+      <a href="contact.php" class="btn-ghost">Benachrichtigung anfragen →</a>
+    </div>
   </div>
 </div>
 <footer class="footer">
