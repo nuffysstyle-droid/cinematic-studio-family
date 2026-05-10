@@ -40,12 +40,32 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
 .page-h1{font-size:clamp(28px,5vw,48px);font-weight:900;letter-spacing:-1.5px;margin-bottom:10px;line-height:1.1;}
 .page-h1 span{background:var(--gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .page-sub{color:var(--muted);font-size:15px;line-height:1.6;max-width:560px;margin-bottom:44px;}
-.coming-card{background:linear-gradient(145deg,rgba(99,102,241,.05),rgba(147,51,234,.03));border:1px solid rgba(99,102,241,.18);border-radius:var(--radius);padding:52px 40px;text-align:center;margin-bottom:28px;}
-.coming-icon{font-size:3.4rem;margin-bottom:18px;display:block;}
-.coming-card h2{font-size:19px;font-weight:900;margin-bottom:10px;}
-.coming-card p{color:var(--muted);font-size:14px;line-height:1.6;max-width:440px;margin:0 auto;}
+.btn-gold{background:var(--gold);color:#1a0e00;border:0;border-radius:12px;padding:13px 22px;font-size:14px;font-weight:900;cursor:pointer;transition:transform .15s,box-shadow .15s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;box-shadow:0 6px 22px rgba(245,197,66,.22);}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(245,197,66,.36);}
 .btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border);border-radius:12px;padding:13px 22px;font-size:14px;font-weight:700;cursor:pointer;transition:border-color .15s,background .15s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;}
 .btn-ghost:hover{border-color:rgba(255,255,255,.28);background:rgba(255,255,255,.05);}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:32px;}
+.pf-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:8px;}
+@media(max-width:720px){.pf-grid{grid-template-columns:1fr;gap:16px;}}
+.pf-card{background:linear-gradient(145deg,#121228,#0a0a1a);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius);overflow:hidden;transition:transform .22s,box-shadow .22s,border-color .22s;}
+.pf-card:hover{transform:translateY(-5px);border-color:rgba(255,255,255,.2);box-shadow:0 24px 60px rgba(0,0,0,.5);}
+.pf-frame{aspect-ratio:16/9;position:relative;overflow:hidden;}
+.pf-frame.noir{background:linear-gradient(135deg,#07091f 0%,#0d1030 30%,#150822 60%,#060818 100%);}
+.pf-frame.scifi{background:linear-gradient(135deg,#030e1a 0%,#071525 35%,#091f2e 65%,#040c18 100%);}
+.pf-frame.golden{background:linear-gradient(135deg,#1a0a00 0%,#2a1200 30%,#1f1506 60%,#0f0800 100%);}
+.pf-frame.noir::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 60% 70% at 25% 50%,rgba(59,130,246,.26) 0%,transparent 55%),radial-gradient(ellipse 40% 40% at 75% 30%,rgba(147,51,234,.13) 0%,transparent 50%);}
+.pf-frame.scifi::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 30%,rgba(6,182,212,.22) 0%,transparent 55%),radial-gradient(ellipse 30% 50% at 80% 70%,rgba(59,130,246,.15) 0%,transparent 50%);}
+.pf-frame.golden::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 60% 40%,rgba(245,197,66,.22) 0%,transparent 55%),radial-gradient(ellipse 40% 50% at 20% 70%,rgba(255,140,0,.13) 0%,transparent 50%);}
+.pf-frame::after{content:"";position:absolute;bottom:0;left:0;right:0;height:50%;background:linear-gradient(transparent,rgba(0,0,0,.82));}
+.pf-frame-meta{position:absolute;bottom:0;left:0;right:0;padding:11px 13px;z-index:1;display:flex;align-items:flex-end;justify-content:space-between;}
+.pf-tag{font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:4px 9px;color:rgba(255,255,255,.85);}
+.pf-dur{font-size:10px;font-weight:800;color:rgba(255,255,255,.5);letter-spacing:1px;}
+.pf-body{padding:14px 16px 16px;}
+.pf-title{font-size:15px;font-weight:900;margin-bottom:6px;}
+.pf-prompt-text{font-size:11px;color:var(--muted);line-height:1.55;font-style:italic;margin-bottom:12px;}
+.pf-footer{display:flex;align-items:center;justify-content:space-between;}
+.pf-tool-badge{font-size:10px;font-weight:800;color:var(--blue);}
+.pf-res{font-size:10px;font-weight:700;color:var(--muted2);}
 .footer{border-top:1px solid var(--border);padding:36px 0;margin-top:60px;}
 .footer-inner{width:min(960px,calc(100% - 48px));margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
 .footer-logo{font-size:13px;font-weight:900;letter-spacing:2px;background:var(--gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
@@ -91,15 +111,68 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
 </div>
 <div class="page">
   <div class="wrap">
-    <div class="page-eyebrow">🎞️ Portfolio</div>
-    <h1 class="page-h1">Unsere<br><span>Arbeiten</span></h1>
-    <p class="page-sub">Abgeschlossene Projekte und interne Produktionen – von TikTok-Clips bis zu Kurzfilmen.</p>
-    <div class="coming-card">
-      <span class="coming-icon">📽️</span>
-      <h2>Portfolio wird befüllt</h2>
-      <p>Hier erscheinen bald Videogalerien mit Kategoriefilter: KI Videos, TikTok, Sticker, Kurzfilme und mehr. Demo-Version in Vorbereitung.</p>
+    <div class="page-eyebrow">✦ Echte KI-Produktionen</div>
+    <h1 class="page-h1">Was das Studio<br><span>erzeugt.</span></h1>
+    <p class="page-sub">Echte Outputs aus dem Cinematic Vision Studio — Kurzfilme, TikTok-Clips und Musikvideos. Produziert mit Runway, Sora und Kling.</p>
+
+    <div class="pf-grid">
+
+      <div class="pf-card">
+        <div class="pf-frame noir">
+          <div class="pf-frame-meta">
+            <span class="pf-tag">Kurzfilm</span>
+            <span class="pf-dur">00:45</span>
+          </div>
+        </div>
+        <div class="pf-body">
+          <div class="pf-title">Nacht &amp; Neon</div>
+          <div class="pf-prompt-text">"Rain-soaked detective, cinematic drone shot, neon reflections, golden hour grade..."</div>
+          <div class="pf-footer">
+            <span class="pf-tool-badge">Runway ML Gen-3</span>
+            <span class="pf-res">1080p · Noir</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pf-card">
+        <div class="pf-frame scifi">
+          <div class="pf-frame-meta">
+            <span class="pf-tag">Musikvideo</span>
+            <span class="pf-dur">00:28</span>
+          </div>
+        </div>
+        <div class="pf-body">
+          <div class="pf-title">Orbit Protocol</div>
+          <div class="pf-prompt-text">"Spacecraft drifts through nebula, epic score, Imax quality, deep space atmosphere..."</div>
+          <div class="pf-footer">
+            <span class="pf-tool-badge">Kling AI v2</span>
+            <span class="pf-res">4K · Sci-Fi</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pf-card">
+        <div class="pf-frame golden">
+          <div class="pf-frame-meta">
+            <span class="pf-tag">TikTok Clip</span>
+            <span class="pf-dur">00:15</span>
+          </div>
+        </div>
+        <div class="pf-body">
+          <div class="pf-title">Tokyo Dusk</div>
+          <div class="pf-prompt-text">"Time-lapse Tokyo rooftop, golden hour light, cinematic color grade, urban poetry..."</div>
+          <div class="pf-footer">
+            <span class="pf-tool-badge">Pika 2.0</span>
+            <span class="pf-res">9:16 · Urban</span>
+          </div>
+        </div>
+      </div>
+
     </div>
-    <a href="scene-editor-test.html" class="btn-ghost">← Zurück zum Hub</a>
+    <div class="btn-row">
+      <a href="studio-demo.php" class="btn-gold">🎬 Selbst erstellen →</a>
+      <a href="contact.php" class="btn-ghost">Anfrage stellen →</a>
+    </div>
   </div>
 </div>
 <footer class="footer">
