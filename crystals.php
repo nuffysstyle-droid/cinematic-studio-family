@@ -145,7 +145,6 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
       <strong>💎 Beta-Phase:</strong> Kristalle sind ab Launch sofort einsetzbar — für Prompts, KI-Videos, Sticker und Shop-Assets. Jetzt Frühzugang sichern und beim Start direkt loslegen: <a href="contact.php">Frühzugang anfragen →</a>
     </div>
 
-    <a href="scene-editor-test.html" class="btn-ghost">← Zurück zum Hub</a>
   </div>
 </div>
 <footer class="footer">

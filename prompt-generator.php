@@ -212,7 +212,6 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
       </div>
     </div>
 
-    <a href="scene-editor-test.html" class="btn-ghost">← Zurück zum Hub</a>
   </div>
 </div>
 

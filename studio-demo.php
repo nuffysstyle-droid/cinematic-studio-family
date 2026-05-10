@@ -42,7 +42,7 @@
     .wrap{width:min(1160px,calc(100% - 48px));margin:0 auto;position:relative;z-index:1;}
     /* Demo header */
     .demo-header{margin-bottom:32px;}
-    .demo-eyebrow{font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--blue);background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.25);border-radius:999px;padding:6px 14px;display:inline-flex;align-items:center;gap:8px;margin-bottom:14px;}
+    .demo-eyebrow{font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--accent);background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.28);border-radius:999px;padding:6px 14px;display:inline-flex;align-items:center;gap:8px;margin-bottom:14px;}
     .demo-eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok);animation:rblink 2s ease-in-out infinite;}
     @keyframes rblink{0%,100%{opacity:1}50%{opacity:.2}}
     .demo-header h1{font-size:clamp(28px,4vw,48px);font-weight:900;letter-spacing:-1.5px;margin-bottom:8px;}
