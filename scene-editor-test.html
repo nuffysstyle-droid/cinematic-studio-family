@@ -115,6 +115,14 @@
     .s-bald{color:var(--accent);background:rgba(245,197,66,.1);border-color:rgba(245,197,66,.3);}
     .hc-arrow{color:var(--muted2);font-size:16px;transition:color .15s,transform .15s;}
     .hub-card:hover .hc-arrow{color:var(--accent);transform:translateX(4px);}
+    .hub-card.hub-featured{grid-column:span 2;padding:32px 28px 28px;}
+    .hub-card.hub-featured .hc-icon{font-size:42px;}
+    .hub-card.hub-featured .hc-title{font-size:18px;}
+    .hub-card.hub-featured .hc-desc{font-size:13px;}
+    @media(max-width:480px){.hub-card.hub-featured{grid-column:span 1;}}
+    .hub-divider{grid-column:1/-1;display:flex;align-items:center;gap:14px;padding:16px 0 4px;margin-top:4px;}
+    .hub-divider-line{flex:1;height:1px;background:var(--border);}
+    .hub-divider-label{font-size:10px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--muted2);white-space:nowrap;}
 
     /* ── Footer ──────────────────────────────────────────────────────── */
     .footer{border-top:1px solid var(--border);padding:36px 0;}
@@ -251,11 +259,11 @@
 
       <div class="hub-grid">
 
-        <a href="studio-demo.php" class="hub-card" style="--hc:linear-gradient(90deg,#3b82f6,#9333ea);--hg:rgba(59,130,246,.12)">
+        <a href="studio-demo.php" class="hub-card hub-featured" style="--hc:linear-gradient(90deg,#3b82f6,#9333ea);--hg:rgba(59,130,246,.12)">
           <span class="hc-icon">🎬</span>
           <div class="hc-title">Studio Demo</div>
-          <div class="hc-desc">Video analysieren, Szenen ersetzen, finales Ergebnis rendern.</div>
-          <div class="hc-footer"><span class="hc-status s-demo">Demo</span><span class="hc-arrow">→</span></div>
+          <div class="hc-desc">Video analysieren, Szenen ersetzen, finales Ergebnis rendern – jetzt live ausprobieren.</div>
+          <div class="hc-footer"><span class="hc-status s-demo">Jetzt starten</span><span class="hc-arrow">→</span></div>
         </a>
 
         <a href="prompt-generator.php" class="hub-card" style="--hc:linear-gradient(90deg,#9333ea,#6366f1);--hg:rgba(147,51,234,.12)">
@@ -293,6 +301,33 @@
           <div class="hc-footer"><span class="hc-status s-aktiv">Aktiv</span><span class="hc-arrow">→</span></div>
         </a>
 
+        <a href="academy.php" class="hub-card" style="--hc:linear-gradient(90deg,#10b981,#06b6d4);--hg:rgba(16,185,129,.12)">
+          <span class="hc-icon">🎓</span>
+          <div class="hc-title">Academy</div>
+          <div class="hc-desc">Guides, Tutorials und Kurse für professionelle KI-Filmproduktion.</div>
+          <div class="hc-footer"><span class="hc-status s-aktiv">Aktiv</span><span class="hc-arrow">→</span></div>
+        </a>
+
+        <a href="contact.php" class="hub-card" style="--hc:linear-gradient(90deg,#f43f5e,#ec4899);--hg:rgba(244,63,94,.12)">
+          <span class="hc-icon">🚀</span>
+          <div class="hc-title">Kontakt &amp; Beta</div>
+          <div class="hc-desc">Beta-Zugang sichern, Projekt anfragen oder Workflow bauen lassen.</div>
+          <div class="hc-footer"><span class="hc-status s-aktiv">Aktiv</span><span class="hc-arrow">→</span></div>
+        </a>
+
+        <a href="availability.php" class="hub-card" style="--hc:linear-gradient(90deg,#3b82f6,#06b6d4);--hg:rgba(59,130,246,.12)">
+          <span class="hc-icon">📊</span>
+          <div class="hc-title">Verfügbarkeit</div>
+          <div class="hc-desc">Beta-Plätze, Modul-Status und kommende Features im Überblick.</div>
+          <div class="hc-footer"><span class="hc-status s-aktiv">Aktiv</span><span class="hc-arrow">→</span></div>
+        </a>
+
+        <div class="hub-divider">
+          <div class="hub-divider-line"></div>
+          <div class="hub-divider-label">Demnächst</div>
+          <div class="hub-divider-line"></div>
+        </div>
+
         <a href="shop.php" class="hub-card" style="--hc:linear-gradient(90deg,#f5c542,#ff8c00);--hg:rgba(245,197,66,.12)">
           <span class="hc-icon">🛒</span>
           <div class="hc-title">Shop</div>
@@ -307,32 +342,11 @@
           <div class="hc-footer"><span class="hc-status s-bald">Bald</span><span class="hc-arrow">→</span></div>
         </a>
 
-        <a href="availability.php" class="hub-card" style="--hc:linear-gradient(90deg,#3b82f6,#06b6d4);--hg:rgba(59,130,246,.12)">
-          <span class="hc-icon">📊</span>
-          <div class="hc-title">Verfügbarkeit</div>
-          <div class="hc-desc">Beta-Plätze, Modul-Status und kommende Features im Überblick.</div>
-          <div class="hc-footer"><span class="hc-status s-aktiv">Aktiv</span><span class="hc-arrow">→</span></div>
-        </a>
-
         <a href="crystals.php" class="hub-card" style="--hc:linear-gradient(90deg,#f5c542,#ff8c00);--hg:rgba(245,197,66,.14)">
           <span class="hc-icon">💎</span>
           <div class="hc-title">Kristalle &amp; Pakete</div>
           <div class="hc-desc">Kristalle kaufen, Verbrauch tracken, Pakete verwalten.</div>
           <div class="hc-footer"><span class="hc-status s-bald">Bald</span><span class="hc-arrow">→</span></div>
-        </a>
-
-        <a href="academy.php" class="hub-card" style="--hc:linear-gradient(90deg,#10b981,#06b6d4);--hg:rgba(16,185,129,.12)">
-          <span class="hc-icon">🎓</span>
-          <div class="hc-title">Academy</div>
-          <div class="hc-desc">Guides, Tutorials und Kurse für professionelle KI-Filmproduktion.</div>
-          <div class="hc-footer"><span class="hc-status s-aktiv">Aktiv</span><span class="hc-arrow">→</span></div>
-        </a>
-
-        <a href="contact.php" class="hub-card" style="--hc:linear-gradient(90deg,#f43f5e,#ec4899);--hg:rgba(244,63,94,.12)">
-          <span class="hc-icon">🚀</span>
-          <div class="hc-title">Kontakt &amp; Beta</div>
-          <div class="hc-desc">Beta-Zugang sichern, Projekt anfragen oder Workflow bauen lassen.</div>
-          <div class="hc-footer"><span class="hc-status s-aktiv">Aktiv</span><span class="hc-arrow">→</span></div>
         </a>
 
       </div>
