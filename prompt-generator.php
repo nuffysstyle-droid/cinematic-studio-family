@@ -64,6 +64,12 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
 /* Toast */
 .copy-toast{position:fixed;bottom:32px;right:32px;background:rgba(74,222,128,.9);color:#0a2b14;padding:10px 20px;border-radius:10px;font-size:13px;font-weight:800;opacity:0;transition:.3s;pointer-events:none;z-index:200;}
 .copy-toast.show{opacity:1;}
+/* Inline validation error */
+.gen-error{color:var(--danger);font-size:12px;font-weight:700;margin-top:10px;padding:10px 14px;background:rgba(255,92,122,.08);border:1px solid rgba(255,92,122,.22);border-radius:9px;display:none;}
+.gen-error.visible{display:block;}
+/* Studio CTA — hidden until prompt generated */
+.studio-cta{display:none !important;}
+.studio-cta.show{display:inline-flex !important;}
 .footer{border-top:1px solid var(--border);padding:36px 0;margin-top:60px;}
 .footer-inner{width:min(960px,calc(100% - 48px));margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
 .footer-logo{font-size:13px;font-weight:900;letter-spacing:2px;background:var(--gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
@@ -194,13 +200,15 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
         <button class="btn-gold" onclick="generatePrompt()">✦ Prompt generieren</button>
         <button class="btn-ghost" onclick="clearPrompt()">Leeren</button>
       </div>
+      <div class="gen-error" id="genError"></div>
     </div>
 
     <div class="gen-card">
-      <h2>Generierter Prompt</h2>
-      <div class="output-box empty" id="output">Prompt erscheint hier nach der Generierung …</div>
+      <h2>Dein fertiger Prompt</h2>
+      <div class="output-box empty" id="output">Wähle Genre, Kamera &amp; Stil — dein cinematic Prompt erscheint hier.</div>
       <div class="btn-row">
-        <button class="btn-blue" onclick="copyPrompt()">📋 Prompt kopieren</button>
+        <button class="btn-gold" onclick="copyPrompt()" id="copyBtn">📋 Prompt kopieren</button>
+        <a href="studio-demo.php" class="btn-ghost studio-cta" id="studioLink">🎬 Im Studio verwenden →</a>
       </div>
     </div>
 
@@ -226,6 +234,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
 
 <script>
 function generatePrompt(){
+  var ge=document.getElementById('genError');if(ge)ge.classList.remove('visible');
   const genre=document.getElementById('genre').value;
   const cam=document.getElementById('camstyle').value;
   const light=document.getElementById('lighting').value;
@@ -241,15 +250,16 @@ function generatePrompt(){
   if(color) parts.push(color);
   if(quality) parts.push(quality);
   if(extra) parts.push(extra);
-  if(parts.length<2){alert('Bitte mindestens 2 Parameter auswählen.');return;}
+  if(parts.length<2){if(ge){ge.textContent='Bitte mindestens 2 Parameter auswählen.';ge.classList.add('visible');}return;}
   const prompt=parts.join(', ')+', award-winning visual effects, professional post-production';
   const el=document.getElementById('output');
   el.textContent=prompt;
   el.classList.remove('empty');
+  var sl=document.getElementById('studioLink');if(sl)sl.classList.add('show');
 }
 function copyPrompt(){
   const txt=document.getElementById('output').textContent;
-  if(txt.startsWith('Prompt erscheint')) return;
+  if(txt.startsWith('Wähle Genre')) return;
   navigator.clipboard.writeText(txt).then(()=>{
     const t=document.getElementById('toast');
     t.classList.add('show');
@@ -261,8 +271,10 @@ function clearPrompt(){
   document.getElementById('scene').value='';
   document.getElementById('extra').value='';
   const el=document.getElementById('output');
-  el.textContent='Prompt erscheint hier nach der Generierung …';
+  el.textContent='Wähle Genre, Kamera & Stil — dein cinematic Prompt erscheint hier.';
   el.classList.add('empty');
+  var ge=document.getElementById('genError');if(ge)ge.classList.remove('visible');
+  var sl=document.getElementById('studioLink');if(sl)sl.classList.remove('show');
 }
 </script>
 <script>(function(){var b=document.getElementById('mobBurger'),m=document.getElementById('mobMenu');if(!b||!m)return;function t(){m.style.top=document.querySelector('.nav').offsetHeight+'px';}t();window.addEventListener('resize',t);b.addEventListener('click',function(e){e.stopPropagation();var o=m.classList.toggle('open');b.classList.toggle('open',o);b.setAttribute('aria-expanded',o?'true':'false');b.setAttribute('aria-label',o?'Menü schließen':'Menü öffnen');});m.querySelectorAll('.mob-link,.mob-cta').forEach(function(l){l.addEventListener('click',function(){m.classList.remove('open');b.classList.remove('open');b.setAttribute('aria-expanded','false');b.setAttribute('aria-label','Menü öffnen');});});document.addEventListener('click',function(e){if(!b.contains(e.target)&&!m.contains(e.target)){m.classList.remove('open');b.classList.remove('open');b.setAttribute('aria-expanded','false');}});document.addEventListener('keydown',function(e){if(e.key==='Escape'){m.classList.remove('open');b.classList.remove('open');b.setAttribute('aria-expanded','false');}});})();</script>
