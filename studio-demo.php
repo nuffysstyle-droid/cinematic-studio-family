@@ -161,7 +161,7 @@
       <a href="scene-editor-test.html" class="nav-link">Home</a>
       <a href="studio-demo.php" class="nav-link active">Studio</a>
       <a href="prompt-generator.php" class="nav-link">Prompts</a>
-      <a href="shop.php" class="nav-link">Shop</a>
+      <a href="shop.php" class="nav-link">Shop Beta</a>
       <a href="portfolio.php" class="nav-link">Portfolio</a>
       <a href="availability.php" class="nav-link">Verfügbarkeit</a>
       <a href="academy.php" class="nav-link">Academy</a>
@@ -169,7 +169,7 @@
       <a href="contact.php" class="nav-link">Kontakt</a>
     </div>
     <div class="nav-actions">
-      <a href="contact.php" class="nav-btn-ghost">Anmelden</a>
+      <a href="contact.php" class="nav-btn-ghost">Beta-Zugang</a>
       <a href="crystals.php" class="wallet-pill">💎 500</a>
     </div>
     <button class="mob-burger" id="mobBurger" aria-label="Menü öffnen" aria-expanded="false"><span></span><span></span><span></span></button>
@@ -178,7 +178,7 @@
     <a href="scene-editor-test.html" class="mob-link">🏠 Home</a>
     <a href="studio-demo.php" class="mob-link active">🎬 Studio</a>
     <a href="prompt-generator.php" class="mob-link">✍️ Prompts</a>
-    <a href="shop.php" class="mob-link">🛍️ Shop</a>
+    <a href="shop.php" class="mob-link">🛍️ Shop Beta</a>
     <a href="portfolio.php" class="mob-link">🎞️ Portfolio</a>
     <a href="availability.php" class="mob-link">📅 Verfügbarkeit</a>
     <a href="academy.php" class="mob-link">🎓 Academy</a>

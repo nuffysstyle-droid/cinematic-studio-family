@@ -65,7 +65,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
     <a href="scene-editor-test.html" class="nav-link">Home</a>
     <a href="studio-demo.php" class="nav-link">Studio</a>
     <a href="prompt-generator.php" class="nav-link">Prompts</a>
-    <a href="shop.php" class="nav-link">Shop</a>
+    <a href="shop.php" class="nav-link">Shop Beta</a>
     <a href="portfolio.php" class="nav-link">Portfolio</a>
     <a href="availability.php" class="nav-link active">Verfügbarkeit</a>
     <a href="academy.php" class="nav-link">Academy</a>
@@ -73,7 +73,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
     <a href="contact.php" class="nav-link">Kontakt</a>
   </div>
   <div class="nav-actions">
-    <a href="contact.php" class="nav-btn-ghost">Anmelden</a>
+    <a href="contact.php" class="nav-btn-ghost">Beta-Zugang</a>
     <a href="studio-demo.php" class="nav-btn-gold">Studio starten</a>
     <a href="crystals.php" class="wallet-pill">💎 500</a>
   </div>
@@ -83,7 +83,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
   <a href="scene-editor-test.html" class="mob-link">🏠 Home</a>
   <a href="studio-demo.php" class="mob-link">🎬 Studio</a>
   <a href="prompt-generator.php" class="mob-link">✍️ Prompts</a>
-  <a href="shop.php" class="mob-link">🛍️ Shop</a>
+  <a href="shop.php" class="mob-link">🛍️ Shop Beta</a>
   <a href="portfolio.php" class="mob-link">🎞️ Portfolio</a>
   <a href="availability.php" class="mob-link active">📅 Verfügbarkeit</a>
   <a href="academy.php" class="mob-link">🎓 Academy</a>
@@ -103,7 +103,6 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
       <h2>Kalender in Vorbereitung</h2>
       <p>Live-Verfügbarkeitskalender mit Buchungsfunktion folgt demnächst. Für direkte Anfragen jetzt einfach Kontakt aufnehmen.</p>
     </div>
-    <a href="scene-editor-test.html" class="btn-ghost">← Zurück zum Hub</a>
   </div>
 </div>
 <footer class="footer">
