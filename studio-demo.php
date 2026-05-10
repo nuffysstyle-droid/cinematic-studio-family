@@ -90,7 +90,7 @@
     .reset-btn{background:transparent;color:var(--muted);border:1px solid var(--border);padding:11px 14px;border-radius:11px;font-weight:700;cursor:pointer;min-height:42px;font-size:12px;}
     .reset-btn:hover{color:var(--text);border-color:rgba(255,255,255,.28);}
     .restored-hint{margin-top:11px;padding:11px 13px;background:rgba(74,222,128,.06);border:1px solid rgba(74,222,128,.22);border-radius:11px;color:var(--ok);font-size:12px;line-height:1.4;}
-    .final-section{margin-top:26px;padding:22px;background:rgba(245,197,66,.04);border:1px solid rgba(245,197,66,.18);border-radius:14px;}
+    .final-section{margin-top:26px;padding:26px;background:linear-gradient(145deg,rgba(245,197,66,.07),rgba(255,140,0,.03));border:1px solid rgba(245,197,66,.3);border-radius:14px;box-shadow:0 0 50px rgba(245,197,66,.06);}
     .final-section h2{font-size:19px;font-weight:900;margin-bottom:7px;}
     .final-section p{color:var(--muted);font-size:12px;line-height:1.5;margin-bottom:14px;}
     .render-btn{background:var(--accent);color:#171000;border:0;border-radius:12px;padding:13px 22px;font-size:14px;font-weight:800;cursor:pointer;min-height:46px;transition:transform .15s,opacity .15s,box-shadow .15s;}
@@ -217,7 +217,7 @@
             <button id="resetBtn" class="reset-btn" type="button" hidden>↻ Job zurücksetzen</button>
           </div>
           <div id="restoredHint" class="restored-hint" hidden></div>
-          <div id="status" class="status">Bereit. Video auswählen oder hierher ziehen.</div>
+          <div id="status" class="status">Bereit — lade dein Video für die KI-Analyse.</div>
         </div>
 
         <div id="meta" class="meta">
@@ -234,9 +234,9 @@
         <div id="slots" class="slots"></div>
 
         <section id="finalSection" class="final-section" hidden>
-          <h2>✨ Dein KI-Video ist fast fertig</h2>
-          <p>Ersetzte Szenen werden zusammengeführt – dein fertiges KI-Video wartet. Nicht ersetzte Szenen bleiben aus dem Original. Ausgabe: 1080p · MP4 · ca. 30–120 Sek. Render-Zeit.</p>
-          <button id="renderBtn" class="render-btn" type="button">🎬 Jetzt rendern · 1080p MP4</button>
+          <h2>✦ Finaler Render</h2>
+          <p>Alle Szenen konfiguriert — dein KI-Film wird jetzt zusammengeführt. Nicht bearbeitete Szenen bleiben original. Ausgabe: 1080p · MP4.</p>
+          <button id="renderBtn" class="render-btn" type="button">🎬 KI-Video erstellen · 1080p</button>
           <div id="renderStatus" class="render-status" hidden></div>
           <div id="renderError" class="render-error" hidden></div>
           <button id="checkStatusBtn" class="check-btn" type="button" hidden>🔍 Status prüfen</button>
@@ -331,12 +331,12 @@
       const badge = document.createElement("span"); badge.className = "badge"; badge.textContent = "✓ ersetzt"; thumb.appendChild(badge);
       card.appendChild(thumb);
       const body = document.createElement("div"); body.className = "slot-body";
-      const title = document.createElement("div"); title.className = "slot-title"; title.textContent = "Slot " + slot.slot; body.appendChild(title);
+      const title = document.createElement("div"); title.className = "slot-title"; title.textContent = "Szene " + slot.slot; body.appendChild(title);
       const time = document.createElement("div"); time.className = "time"; time.textContent = formatSeconds(slot.start_seconds) + " – " + formatSeconds(slot.end_seconds); body.appendChild(time);
-      const textField = document.createElement("input"); textField.type = "text"; textField.className = "field"; textField.placeholder = "Text für diese Szene..."; textField.maxLength = MAX_TEXT_LEN;
+      const textField = document.createElement("input"); textField.type = "text"; textField.className = "field"; textField.placeholder = "KI-Inhalt beschreiben..."; textField.maxLength = MAX_TEXT_LEN;
       if (slot.text) textField.value = String(slot.text); body.appendChild(textField);
       const fileInput = document.createElement("input"); fileInput.type = "file"; fileInput.className = "replace"; fileInput.accept = "image/*,video/*"; body.appendChild(fileInput);
-      const saveBtn = document.createElement("button"); saveBtn.type = "button"; saveBtn.className = "save-btn"; saveBtn.textContent = "Slot speichern"; body.appendChild(saveBtn);
+      const saveBtn = document.createElement("button"); saveBtn.type = "button"; saveBtn.className = "save-btn"; saveBtn.textContent = "Szene speichern"; body.appendChild(saveBtn);
       const slotStatus = document.createElement("div"); slotStatus.className = "slot-status";
       if (slot.replaced && slot.replacement_file) { const parts = String(slot.replacement_file).split("/"); slotStatus.textContent = "Aktuelle Datei: " + parts[parts.length-1]; }
       body.appendChild(slotStatus); card.appendChild(body);
@@ -364,7 +364,7 @@
         let data; try { data = JSON.parse(responseText); } catch(e){ throw new Error("Antwort war kein JSON:\n"+responseText); }
         if (!response.ok || data.status !== "ok") throw new Error(data.message || "Speichern fehlgeschlagen");
         card.classList.add("is-replaced");
-        let infoText = "Gespeichert"; if (data.replacement_file) { const parts = String(data.replacement_file).split("/"); infoText += " · " + parts[parts.length-1]; }
+        let infoText = "✓ Szene aktiv"; if (data.replacement_file) { const parts = String(data.replacement_file).split("/"); infoText += " · " + parts[parts.length-1]; }
         setSlotStatus(slotStatus,infoText,"ok"); fileInput.value = "";
       } catch(err) { setSlotStatus(slotStatus,"Fehler: "+(err&&err.message?err.message:err),"err"); }
       finally { saveBtn.disabled = false; }
@@ -373,7 +373,7 @@
       const file = videoInput.files[0];
       if (!file) { setStatus("Bitte zuerst ein Video auswählen.","err"); return; }
       analyzeBtn.disabled = true; clearChildren(slotsBox); metaBox.style.display = "none";
-      setStatus("Upload läuft... Render kann beim Free Plan kurz aufwachen. Bitte warten.");
+      setStatus("📤 Upload läuft — KI-Analyse startet sofort…");
       dbg("analyze: POST",{endpoint:ANALYZE_API,name:file.name,size:file.size});
       try {
         const formData = new FormData(); formData.append("video",file);
@@ -387,7 +387,7 @@
         saveJobToStorage(data.job_id); updateUrlHash(data.job_id); hideRestoredHint(); hideRenderState();
         finalSection.hidden = false; resetBtn.hidden = false;
         var si=document.getElementById("slotInstruction");if(si)si.style.display="flex";
-        setStatus("Analyse erfolgreich. Slots wurden erzeugt.","ok");
+        setStatus("✓ Szenen erkannt — wähle Szenen zum Bearbeiten.","ok");
         dbg("analyze: ok",{job_id:data.job_id,slots:data.slot_count});
       } catch(err) { dbg("analyze: error",err); setStatus("Fehler:\n"+networkErrorMessage(err,ANALYZE_API),"err"); }
       finally { analyzeBtn.disabled = false; }
@@ -436,7 +436,7 @@
       clearJobStorage(); updateUrlHash(null); hideRestoredHint(); hideRenderState();
       finalSection.hidden=true; clearChildren(slotsBox); metaBox.style.display="none";
       jobIdEl.textContent="-"; durationEl.textContent="-"; resolutionEl.textContent="-"; slotCountEl.textContent="-";
-      videoInput.value=""; resetBtn.hidden=true; setStatus("Bereit. Wähle ein neues Video.","");
+      videoInput.value=""; resetBtn.hidden=true; setStatus("Bereit — lade dein Video für die KI-Analyse.","");
     });
     function showFinalResult(data) {
       var url=data.download_url||data.final_video||""; var fname=data.filename||data.final_filename||"final.mp4";
@@ -471,7 +471,7 @@
     renderBtn.addEventListener("click", async function(){
       const jobId=jobIdEl.textContent.trim();
       if(!isValidJobId(jobId)){showRenderError("Kein aktiver Job","Bitte zuerst ein Video analysieren.");return;}
-      hideRenderState(); renderBtn.disabled=true; renderStatus.textContent="Verbinde mit Server…"; renderStatus.hidden=false;
+      hideRenderState(); renderBtn.disabled=true; renderStatus.textContent="🔄 Verbinde mit KI-Engine…"; renderStatus.hidden=false;
       try {
         var preUrl=GETJOB_API+"?job_id="+encodeURIComponent(jobId);
         var preResp=await fetchWithRetry(preUrl,{method:"GET"},function(n){renderStatus.textContent="Server wacht auf (Cold Start) — Versuch "+n+" in 35s…";});
@@ -482,7 +482,7 @@
           if(!videoFile){clearJobStorage();updateUrlHash(null);renderStatus.hidden=true;showRenderError("Server neu gestartet — bitte Video erneut hochladen","Wähle das Video oben erneut aus.");finalSection.hidden=true;resetBtn.hidden=true;clearChildren(slotsBox);metaBox.style.display="none";return;}
           await reAnalyzeAndRender(videoFile);return;
         }
-        renderStatus.textContent="Rendere … 30–120 Sekunden. Bitte Tab offen lassen.";
+        renderStatus.textContent="⚡ Rendere KI-Video — ca. 30–120 Sek. Tab offen lassen…";
         var formData=new FormData(); formData.append("job_id",jobId);
         var response=await fetchWithRetry(RENDER_API,{method:"POST",body:formData},function(n){renderStatus.textContent="Render: Cold Start — Versuch "+n+" in 35s…";});
         var text=await response.text(); var data; try{data=JSON.parse(text);}catch(e){throw new Error("Antwort war kein JSON:\n"+text);}
