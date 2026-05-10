@@ -55,6 +55,8 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
 .pack-price strong{color:var(--text);font-size:1.15rem;}
 .pack-tag{display:inline-block;background:rgba(245,197,66,.12);border:1px solid rgba(245,197,66,.28);color:var(--accent);font-size:10px;font-weight:800;padding:3px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:.05em;}
 .pack-btn{margin-top:18px;width:100%;padding:10px;border-radius:10px;background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--muted);font-size:13px;font-weight:700;cursor:not-allowed;opacity:.6;}
+.pack-btn-active{margin-top:18px;width:100%;padding:10px;border-radius:10px;background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.3);color:var(--accent);font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;display:block;text-align:center;transition:background .15s,border-color .15s;}
+.pack-btn-active:hover{background:rgba(245,197,66,.2);border-color:rgba(245,197,66,.55);}
 /* Info note */
 .info-note{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 24px;margin-bottom:28px;color:var(--muted);font-size:13px;line-height:1.6;}
 .info-note strong{color:var(--text);}
@@ -107,39 +109,40 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
 </div>
 <div class="page">
   <div class="wrap">
-    <div class="page-eyebrow">💎 Kristalle & Pakete</div>
-    <h1 class="page-h1">Kristalle –<br><span>Deine Studio-Währung</span></h1>
-    <p class="page-sub">Kristalle sind die interne Währung des Cinematic Vision Studios. Kaufe Pakete und setze sie für KI-Videos, Prompts, Sticker und mehr ein.</p>
+    <div class="page-eyebrow">✦ Deine Creator-Credits</div>
+    <span class="gem-hero">💎</span>
+    <h1 class="page-h1">Mehr schaffen.<br><span>Mit Kristallen.</span></h1>
+    <p class="page-sub">Kristalle sind dein Zugang zu allem im Studio — Prompts, KI-Videos, Sticker-Packs und Shop-Assets. Einmal aufladen, überall einsetzen.</p>
 
     <div class="packs-grid">
       <div class="pack">
         <div class="pack-gem">💎</div>
         <div class="pack-name">Starter</div>
-        <div class="pack-crystals">100 K</div>
+        <div class="pack-crystals">100 💎</div>
         <div class="pack-price"><strong>5 €</strong></div>
         <div class="pack-tag">Einstieg</div>
-        <button class="pack-btn">Bald kaufbar</button>
+        <a href="contact.php" class="pack-btn-active">Frühzugang anfragen →</a>
       </div>
       <div class="pack featured">
         <div class="pack-gem">💎💎</div>
         <div class="pack-name">Creator</div>
-        <div class="pack-crystals">500 K</div>
+        <div class="pack-crystals">500 💎</div>
         <div class="pack-price"><strong>19 €</strong> statt 25 €</div>
         <div class="pack-tag">⭐ Beliebt</div>
-        <button class="pack-btn">Bald kaufbar</button>
+        <a href="contact.php" class="pack-btn-active">Frühzugang anfragen →</a>
       </div>
       <div class="pack">
         <div class="pack-gem">💎💎💎</div>
         <div class="pack-name">Pro Studio</div>
-        <div class="pack-crystals">1500 K</div>
+        <div class="pack-crystals">1.500 💎</div>
         <div class="pack-price"><strong>49 €</strong> statt 75 €</div>
         <div class="pack-tag">Profi</div>
-        <button class="pack-btn">Bald kaufbar</button>
+        <a href="contact.php" class="pack-btn-active">Frühzugang anfragen →</a>
       </div>
     </div>
 
     <div class="info-note">
-      <strong>💡 Demo-Version:</strong> Das Kristalle-System befindet sich im Aufbau. Der Kauf wird bald per Stripe &amp; PayPal aktiviert. Für Early-Access-Anfragen: <a href="contact.php">Kontakt aufnehmen</a>.
+      <strong>💎 Beta-Phase:</strong> Kristalle sind ab Launch sofort einsetzbar — für Prompts, KI-Videos, Sticker und Shop-Assets. Jetzt Frühzugang sichern und beim Start direkt loslegen: <a href="contact.php">Frühzugang anfragen →</a>
     </div>
 
     <a href="scene-editor-test.html" class="btn-ghost">← Zurück zum Hub</a>
