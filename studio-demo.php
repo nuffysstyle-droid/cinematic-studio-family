@@ -216,7 +216,7 @@
             <input id="videoInput" type="file" accept="video/mp4,video/webm,video/quicktime,video/x-matroska" class="dropzone-input">
             <span class="dropzone-icon">🎬</span>
             <div class="dropzone-title">Video hierher ziehen oder auswählen</div>
-            <div class="dropzone-sub">MP4 &nbsp;·&nbsp; WebM &nbsp;·&nbsp; MOV &nbsp;·&nbsp; MKV &nbsp;·&nbsp; max. 200 MB empfohlen</div>
+            <div class="dropzone-sub">MP4 &nbsp;·&nbsp; WebM &nbsp;·&nbsp; MOV &nbsp;·&nbsp; MKV &nbsp;·&nbsp; max. 15 Sek. &nbsp;·&nbsp; max. 50 MB</div>
             <div class="dropzone-filename" id="dropzoneName"></div>
           </div>
           <div class="dropzone-actions">
@@ -317,7 +317,7 @@
     function networkErrorMessage(err, endpoint) {
       const msg = err && err.message ? err.message : String(err);
       const isNetwork = err && (err.name === "TypeError" || /failed to fetch|networkerror|load failed/i.test(msg));
-      if (isNetwork) return "Backend nicht erreichbar (" + endpoint + ").\nMögliche Ursachen: Render schläft, DNS-Hiccup, Verbindung weg.\nBitte 20–30 Sekunden warten.";
+      if (isNetwork) return "Backend nicht erreichbar (" + endpoint + ").\nMögliche Ursachen: Render schläft, DNS-Hiccup, Verbindung weg.\nBitte 30–60 Sekunden warten.";
       return msg;
     }
     const COLD_MS = 35000; const COLD_RETRIES = 2;
@@ -472,7 +472,7 @@
       } catch(err) {
         renderStatus.hidden=true;
         var isNet=err instanceof TypeError||/failed to fetch|networkerror|load failed/i.test(err&&err.message?err.message:"");
-        if(isNet){showRenderError("Verbindung unterbrochen",'"Status prüfen" nach 60s.');checkStatusBtn.hidden=false;}
+        if(isNet){showRenderError("Verbindung unterbrochen",'"Status prüfen" nach 30–60s.');checkStatusBtn.hidden=false;}
         else showRenderError("Render fehlgeschlagen",err&&err.message?err.message:String(err));
       } finally { renderBtn.disabled=false; }
     }
@@ -490,7 +490,7 @@
           if(!videoFile){clearJobStorage();updateUrlHash(null);renderStatus.hidden=true;showRenderError("Server neu gestartet — bitte Video erneut hochladen","Wähle das Video oben erneut aus.");finalSection.hidden=true;resetBtn.hidden=true;clearChildren(slotsBox);metaBox.style.display="none";return;}
           await reAnalyzeAndRender(videoFile);return;
         }
-        renderStatus.textContent="⚡ Rendere KI-Video — ca. 30–120 Sek. Tab offen lassen…";
+        renderStatus.textContent="⚡ Rendere 720p-Video — ca. 10–30 Sek. Tab offen lassen…";
         var formData=new FormData(); formData.append("job_id",jobId);
         var response=await fetchWithRetry(RENDER_API,{method:"POST",body:formData},function(n){renderStatus.textContent="Render: Cold Start — Versuch "+n+" in 35s…";});
         var text=await response.text(); var data; try{data=JSON.parse(text);}catch(e){throw new Error("Antwort war kein JSON:\n"+text);}
@@ -499,7 +499,7 @@
       } catch(err) {
         renderStatus.hidden=true;
         var isNetErr=err&&(err.name==="TypeError"||/failed to fetch|networkerror|load failed/i.test(err.message?err.message:String(err)));
-        if(isNetErr){showRenderError("Verbindung unterbrochen — Render kann noch laufen","Warte 60–120 Sekunden, dann klicke \"Status prüfen\".");checkStatusBtn.hidden=false;}
+        if(isNetErr){showRenderError("Verbindung unterbrochen — Render kann noch laufen","Warte 30–60 Sekunden, dann klicke \"Status prüfen\".");checkStatusBtn.hidden=false;}
         else {
           var missingFiles=err&&err.message&&(err.message.indexOf("meta.json")!==-1||err.message.indexOf("Originalvideo")!==-1||(err.message.indexOf("nicht gefunden")!==-1&&err.message.indexOf("Job")!==-1));
           if(missingFiles){var vfFallback=videoInput&&videoInput.files&&videoInput.files[0];if(vfFallback){hideRenderState();await reAnalyzeAndRender(vfFallback);return;}else{clearJobStorage();updateUrlHash(null);showRenderError("Server neu gestartet — bitte Video neu auswählen","Wähle dein Video oben erneut aus.");return;}}
