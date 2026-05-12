@@ -199,6 +199,8 @@
         <p>Lade ein Video hoch, wähle Szenen aus und ersetze sie mit eigenen Bildern, Videos oder Text. Kein Schnitt-Know-how nötig.</p>
       </div>
 
+      <div class="note" style="text-align:center;font-weight:700;margin-bottom:18px;">⚡ Demo-Modus &mdash; max. 15 Sek. &middot; 720p &middot; kein Ton</div>
+
       <div class="steps" id="stepBar">
         <div class="step active" id="step1"><span class="step-num">1</span><span class="step-label">Video hochladen</span></div>
         <div class="step-arrow">→</div>
@@ -240,8 +242,8 @@
 
         <section id="finalSection" class="final-section" hidden>
           <h2>✦ Finaler Render</h2>
-          <p>Alle Szenen konfiguriert — dein KI-Film wird jetzt zusammengeführt. Nicht bearbeitete Szenen bleiben original. Ausgabe: 1080p · MP4.</p>
-          <button id="renderBtn" class="render-btn" type="button">🎬 KI-Video erstellen · 1080p</button>
+          <p>Alle Szenen konfiguriert — dein KI-Film wird jetzt zusammengeführt. Nicht bearbeitete Szenen bleiben original. Ausgabe: 720p · MP4.</p>
+          <button id="renderBtn" class="render-btn" type="button">🎬 KI-Video erstellen · 720p</button>
           <div id="renderStatus" class="render-status" hidden></div>
           <div id="renderError" class="render-error" hidden></div>
           <button id="checkStatusBtn" class="check-btn" type="button" hidden>🔍 Status prüfen</button>
@@ -253,7 +255,7 @@
           </div>
         </section>
 
-        <p class="note">Hinweis: Ausgabe ohne Audio (kommt in V2). Render-Dauer ca. 30–120 Sekunden je nach Videolänge.</p>
+        <p class="note">Demo-Modus: max. 15 Sek. &middot; 720p &middot; kein Ton. Render-Dauer ca. 5&ndash;30 Sekunden.</p>
       </div>
 
     </div>

@@ -83,11 +83,11 @@ register_shutdown_function(function () {
 render_log('--- START render-final.php (PID ' . getmypid() . ') ---');
 
 // ── Konstanten (MVP-Spec) ───────────────────────────────────────────────────
-const RENDER_OUT_W      = 1920;
-const RENDER_OUT_H      = 1080;
+const RENDER_OUT_W      = 1280;   // Free-Plan: 720p statt 1080p (55% weniger Pixel)
+const RENDER_OUT_H      = 720;
 const RENDER_OUT_FPS    = 30;
 const RENDER_CRF        = 20;
-const RENDER_PRESET     = 'fast';
+const RENDER_PRESET     = 'ultrafast'; // Free-Plan: rc_lookahead=0 → ~150 MB weniger RAM
 const RENDER_SLOT_TO    = 180;   // Sekunden Timeout pro Slot-Encode
 const RENDER_CONCAT_TO  = 180;   // Sekunden Timeout für Concat
 const RENDER_STDERR_TAIL = 800;  // Bytes vom stderr-Ende im Fehlerfall

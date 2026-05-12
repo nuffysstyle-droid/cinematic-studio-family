@@ -95,23 +95,28 @@ if ($duration <= 0) {
     exit;
 }
 
+// Free-Plan-Limit: max. 15 Sekunden
+if ($duration > 15) {
+    echo json_encode([
+        "status"   => "error",
+        "message"  => "Demo-Modus: Videos dürfen maximal 15 Sekunden lang sein. Bitte ein kürzeres Video hochladen.",
+        "duration" => round($duration, 2),
+        "limit"    => 15,
+    ], JSON_PRETTY_PRINT);
+    exit;
+}
+
 /*
 |--------------------------------------------------------------------------
-| Intelligente Slot-Logik
+| Slot-Logik (Free-Plan-kompatibel: max. 3 Slots)
 |--------------------------------------------------------------------------
-| Kurze Videos bekommen weniger Slots, lange Videos mehr.
-| Dadurch entstehen keine unsinnigen 0,3-Sekunden-Slots bei sehr kurzen Videos.
+| Kurze Videos bekommen 2 Slots, alle anderen 3.
+| Limit verhindert OOM-Crashes auf dem 512-MB-Free-Container.
 */
 if ($duration <= 6) {
-    $slotCount = 3;
-} elseif ($duration <= 15) {
-    $slotCount = 5;
-} elseif ($duration <= 30) {
-    $slotCount = 8;
-} elseif ($duration <= 60) {
-    $slotCount = 10;
+    $slotCount = 2;
 } else {
-    $slotCount = 12;
+    $slotCount = 3;
 }
 
 $slotLength = $duration / $slotCount;
