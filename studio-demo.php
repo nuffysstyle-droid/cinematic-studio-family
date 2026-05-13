@@ -235,7 +235,7 @@
         </div>
 
         <div class="slot-instruction" id="slotInstruction" style="display:none">
-          <p class="slot-instruction-text"><strong>Wähle pro Szene</strong> ein Bild, Video oder gib Text ein — dann erstelle dein fertiges KI-Video.</p>
+          <p class="slot-instruction-text"><strong>Wähle pro Szene</strong> ein Bild, Video oder Text — nur Text ergibt eine schwarze Titelkarte im Video.</p>
         </div>
 
         <div id="slots" class="slots"></div>
@@ -341,12 +341,12 @@
       const body = document.createElement("div"); body.className = "slot-body";
       const title = document.createElement("div"); title.className = "slot-title"; title.textContent = "Szene " + slot.slot; body.appendChild(title);
       const time = document.createElement("div"); time.className = "time"; time.textContent = formatTime(slot.start_seconds) + " → " + formatTime(slot.end_seconds); body.appendChild(time);
-      const textField = document.createElement("input"); textField.type = "text"; textField.className = "field"; textField.placeholder = "KI-Inhalt beschreiben..."; textField.maxLength = MAX_TEXT_LEN;
+      const textField = document.createElement("input"); textField.type = "text"; textField.className = "field"; textField.placeholder = "Titelkarte: Text erscheint im Video"; textField.maxLength = MAX_TEXT_LEN;
       if (slot.text) textField.value = String(slot.text); body.appendChild(textField);
       const fileInput = document.createElement("input"); fileInput.type = "file"; fileInput.className = "replace"; fileInput.accept = "image/*,video/*"; body.appendChild(fileInput);
       const saveBtn = document.createElement("button"); saveBtn.type = "button"; saveBtn.className = "save-btn"; saveBtn.textContent = "Szene speichern"; body.appendChild(saveBtn);
       const slotStatus = document.createElement("div"); slotStatus.className = "slot-status";
-      if (slot.replaced && slot.replacement_file) { const parts = String(slot.replacement_file).split("/"); slotStatus.textContent = "Aktuelle Datei: " + parts[parts.length-1]; }
+      if (slot.replaced && slot.replacement_file) { const parts = String(slot.replacement_file).split("/"); slotStatus.textContent = "Aktuelle Datei: " + parts[parts.length-1]; } else if (slot.replaced && slot.text) { const preview = String(slot.text).slice(0,40) + (slot.text.length > 40 ? "…" : ""); slotStatus.textContent = "Titelkarte: " + preview; slotStatus.classList.add("ok"); }
       body.appendChild(slotStatus); card.appendChild(body);
       saveBtn.addEventListener("click", function(){ saveSlot({card,fileInput,textField,slotStatus,saveBtn}); });
       return card;
@@ -372,7 +372,7 @@
         let data; try { data = JSON.parse(responseText); } catch(e){ throw new Error("Antwort war kein JSON:\n"+responseText); }
         if (!response.ok || data.status !== "ok") throw new Error(data.message || "Speichern fehlgeschlagen");
         card.classList.add("is-replaced");
-        let infoText = "✓ Szene aktiv"; if (data.replacement_file) { const parts = String(data.replacement_file).split("/"); infoText += " · " + parts[parts.length-1]; }
+        let infoText = "✓ Szene aktiv"; if (data.replacement_file) { const parts = String(data.replacement_file).split("/"); infoText += " · " + parts[parts.length-1]; } else if (data.text) { infoText = "✓ Titelkarte gespeichert"; }
         setSlotStatus(slotStatus,infoText,"ok"); fileInput.value = "";
       } catch(err) { setSlotStatus(slotStatus,"Fehler: "+(err&&err.message?err.message:err),"err"); }
       finally { saveBtn.disabled = false; }
