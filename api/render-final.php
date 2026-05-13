@@ -91,6 +91,7 @@ const RENDER_PRESET     = 'ultrafast'; // Free-Plan: rc_lookahead=0 → ~150 MB 
 const RENDER_SLOT_TO    = 180;   // Sekunden Timeout pro Slot-Encode
 const RENDER_CONCAT_TO  = 180;   // Sekunden Timeout für Concat
 const RENDER_STDERR_TAIL = 800;  // Bytes vom stderr-Ende im Fehlerfall
+const RENDER_FONT_PATH  = '/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf';
 
 // ── Fehler-Helfer ───────────────────────────────────────────────────────────
 function render_fail(int $code, string $msg, array $extra = []): void
@@ -100,6 +101,20 @@ function render_fail(int $code, string $msg, array $extra = []): void
     $resp = ['status' => 'error', 'message' => $msg] + $extra;
     echo json_encode($resp, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     exit;
+}
+
+// ── drawtext-Escape (FFmpeg filter-level) ───────────────────────────────────
+function csf_drawtext_escape(string $text): string {
+    $text = str_replace("\r", '',    $text);
+    $text = str_replace("\n", ' ',   $text);
+    $text = str_replace('\\', '\\\\', $text); // backslash zuerst!
+    $text = str_replace("'",  "\\'",  $text);
+    $text = str_replace(':',  '\\:',  $text);
+    $text = str_replace('=',  '\\=',  $text);
+    // Farbige Emoji entfernen (Liberation Sans hat keine Emoji-Glyphen)
+    $text = preg_replace('/[\x{1F000}-\x{1FFFF}]/u', '', $text);
+    $text = preg_replace('/[\x{2600}-\x{27BF}]/u',   '', $text);
+    return trim($text);
 }
 
 // ── Methode + Eingabe validieren ────────────────────────────────────────────
@@ -223,9 +238,10 @@ foreach ($slots as $idx => $slot) {
         ]);
     }
 
-    $replaced = !empty($slot['replaced']);
-    $type     = $slot['replacement_type'] ?? null;
-    $repUrl   = $slot['replacement_file']  ?? null;
+    $replaced  = !empty($slot['replaced']);
+    $type      = $slot['replacement_type'] ?? null;
+    $repUrl    = $slot['replacement_file']  ?? null;
+    $slotText  = isset($slot['text']) && is_string($slot['text']) ? trim($slot['text']) : '';
 
     $args   = [];
     $source = 'original';
@@ -267,6 +283,33 @@ foreach ($slots as $idx => $slot) {
             '-crf',      (string)RENDER_CRF,
             '-preset',   RENDER_PRESET,
             '-pix_fmt',  'yuv420p',
+            '-an',
+            '-y',
+            $clipOut,
+        ];
+    } elseif ($replaced && $slotText !== '' && ($repUrl === null || $repUrl === '')) {
+        // Text-only-Slot: schwarze Titelkarte mit drawtext
+        $source   = 'text';
+        $safeText = csf_drawtext_escape(mb_substr($slotText, 0, 80));
+        $textVf   = $scaleFilter
+            . ",drawtext=text='" . $safeText . "'"
+            . ':fontfile=' . RENDER_FONT_PATH
+            . ':fontsize=54'
+            . ':fontcolor=white'
+            . ':shadowcolor=black@0.7'
+            . ':shadowx=2'
+            . ':shadowy=2'
+            . ':x=(w-text_w)/2'
+            . ':y=(h-text_h)/2';
+        $args = [
+            '-f',      'lavfi',
+            '-i',      'color=c=black:size=' . RENDER_OUT_W . 'x' . RENDER_OUT_H . ':rate=' . RENDER_OUT_FPS,
+            '-t',      sprintf('%.3f', $duration),
+            '-vf',     $textVf,
+            '-c:v',    'libx264',
+            '-crf',    (string)RENDER_CRF,
+            '-preset', RENDER_PRESET,
+            '-pix_fmt','yuv420p',
             '-an',
             '-y',
             $clipOut,

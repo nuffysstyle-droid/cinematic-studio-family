@@ -15,6 +15,7 @@ FROM php:8.2-apache
 # ── System-Abhängigkeiten ─────────────────────────────────────────────────────
 RUN apt-get update && apt-get install -y --no-install-recommends \
         ffmpeg \
+        fonts-liberation \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libpng-dev \
