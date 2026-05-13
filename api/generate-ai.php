@@ -117,13 +117,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     csf_ai_gen_error(405, 'Nur POST erlaubt.');
 }
 
-// ── API-Key (ausschließlich Umgebungsvariable) ────────────────────────────────
-
-$apiKey = (string) (getenv('KIE_AI_API_KEY') ?: '');
-if ($apiKey === '') {
-    csf_ai_gen_error(503, 'KI-Generierung ist nicht konfiguriert. KIE_AI_API_KEY fehlt auf dem Server.');
-}
-
 // ── Eingaben lesen (JSON-Body oder multipart/form-data) ──────────────────────
 
 $jsonBody    = [];
@@ -139,6 +132,8 @@ $prompt     = trim((string) ($jsonBody['prompt']      ?? $_POST['prompt']      ?
 $model      = trim((string) ($jsonBody['model']       ?? $_POST['model']       ?? 'flux-kontext-pro'));
 
 // ── Eingabe-Validierung ───────────────────────────────────────────────────────
+// Läuft vor dem API-Key-Check, damit Clients klares Feedback zu ihren Eingaben
+// erhalten — unabhängig davon, ob der Server konfiguriert ist.
 
 if (!preg_match('/^job_\d{8}_\d{6}_[a-f0-9]{8}$/', $jobId)) {
     csf_ai_gen_error(400, 'Ungültige job_id. Format: job_YYYYMMDD_HHMMSS_xxxxxxxx');
@@ -160,6 +155,13 @@ const KIE_ALLOWED_MODELS = ['flux-kontext-pro', 'flux-kontext-max'];
 
 if (!in_array($model, KIE_ALLOWED_MODELS, true)) {
     csf_ai_gen_error(400, 'Ungültiges Modell. Erlaubt: ' . implode(', ', KIE_ALLOWED_MODELS) . '.');
+}
+
+// ── API-Key (ausschließlich Umgebungsvariable) ────────────────────────────────
+
+$apiKey = (string) (getenv('KIE_AI_API_KEY') ?: '');
+if ($apiKey === '') {
+    csf_ai_gen_error(503, 'KI-Generierung ist nicht konfiguriert. KIE_AI_API_KEY fehlt auf dem Server.');
 }
 
 // ── Pfade + Pfad-Traversal-Schutz ────────────────────────────────────────────
