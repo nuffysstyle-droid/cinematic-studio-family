@@ -69,5 +69,14 @@ if (is_dir($storageTemp) && @file_put_contents($probe, 'ok') !== false) {
     $response['ok'] = false;
 }
 
+// ── KI-Konfiguration (Wert nie ausgeben, nur Präsenz) ────────────────────────
+$kieKey = getenv('KIE_AI_API_KEY') ?: ($_SERVER['KIE_AI_API_KEY'] ?? $_ENV['KIE_AI_API_KEY'] ?? '');
+$response['ai'] = [
+    'kie_key_set'      => $kieKey !== '',
+    'kie_key_source'   => $kieKey !== ''
+        ? (getenv('KIE_AI_API_KEY') ? 'getenv' : (isset($_SERVER['KIE_AI_API_KEY']) ? '_SERVER' : '_ENV'))
+        : 'none',
+];
+
 http_response_code($response['ok'] ? 200 : 503);
 echo json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
