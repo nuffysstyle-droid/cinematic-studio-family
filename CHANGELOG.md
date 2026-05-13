@@ -7,6 +7,67 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## [Unreleased]
 
+### Free MVP — Studio Demo Live · 2026-05-13
+
+#### Commits
+| Hash | Typ | Beschreibung |
+|------|-----|--------------|
+| `3b582a5` | fix | Free-Plan-Stabilisierung: 720p, ultrafast, max 15s/3 Slots |
+| `f99207e` | copy | studio-demo.php: Texte auf Free-Render-Limits abgestimmt |
+| `0d00a68` | feat | Text-Overlay: schwarze Titelkarte via FFmpeg drawtext |
+| `2892e46` | copy | UX: Titelkarten-Verhalten in Slot-UI kommuniziert |
+
+#### Free-Plan-Limits (produktiv)
+- Max. **15 Sekunden** Videolänge (analyze.php lehnt >15s ab)
+- Max. **3 Szenen** (≤6s → 2 Slots, >6s → 3 Slots)
+- Ausgabe **720p** (1280×720, H.264, yuv420p)
+- **Kein Ton** (`-an` durchgängig, Concat-Homogenität)
+- **Ephemeral Storage** — Jobs/Exports gehen bei Container-Restart verloren
+- RAM-Limit: ~512 MB Free-Container → `ultrafast`-Preset (rc_lookahead=0)
+
+#### Implementierter Flow
+```
+Upload (≤50 MB, ≤15s)
+  → analyze.php  → job_id + meta.json + Thumbnails
+  → replace-slot.php (pro Slot):
+      Typ A: Text-only  → replaced=true, text="…", replacement_file=null
+      Typ B: Bild       → replaced=true, replacement_type=image, replacement_file=…
+      Typ C: Video      → replaced=true, replacement_type=video, replacement_file=…
+  → render-final.php:
+      Slot Typ A → lavfi color=black + drawtext (Liberation Sans, 54pt, zentriert)
+      Slot Typ B → -loop 1 -i <img> + scale 720p
+      Slot Typ C → -i <vid> + scale 720p
+      Slot unverändert → -ss cut aus Original
+      Concat via -f concat -c copy
+  → /storage/exports/<job_id>_final_<hex>.mp4
+```
+
+#### E2E Test-Ergebnis (2026-05-13) — alle Checks grün ✅
+| Check | Ergebnis |
+|-------|---------|
+| >15s Fehlermeldung | ✅ `status:error` mit Limit-Hinweis |
+| Upload + Analyse | ✅ 8s, 3 Slots erkannt |
+| Text-Titelkarte (Slot 1) | ✅ `R=4 G=1 B=5` = schwarz (drawtext) |
+| Bild-Replacement (Slot 2) | ✅ `R=205 G=131 B=0` = orange (Bild) |
+| Original-Szene (Slot 3) | ✅ `R=51 G=84 B=188` = blau (Original) |
+| 720p Output | ✅ 1280×720 · H.264 · yuv420p |
+| Kein Audio-Stream | ✅ |
+| MP4 Download | ✅ 30 KB |
+| UX: Placeholder | ✅ „Titelkarte: Text erscheint im Video" |
+| UX: Slot-Instruction | ✅ „nur Text ergibt eine schwarze Titelkarte" |
+| UX: Save-Status | ✅ „✓ Titelkarte gespeichert" |
+| UX: Restore-Status | ✅ „Titelkarte: <Textvorschau>" nach Reload |
+| Mobile kein Horizontal-Scroll | ✅ 390px |
+
+#### Nicht enthalten (bewusst ausgelassen)
+- Externe KI-API (Seedance/Runway/etc.) — Prompt-Generator only
+- Audio-Preservation — deferred V2 (Concat-Homogenität mit Replacements inkompatibel)
+- Persistenz nach Container-Restart — Free-Plan ephemeral (Starter+ mit Disk nötig)
+- Login / Payment / Kristalle-Transaktion — Dummy/Demo only
+- 1080p-Render — RAM-Budget Free-Plan reicht nicht
+
+---
+
 ### Hinzugefügt (Scene Replacement Editor — User-Phase 2) — 2026-05-01
 - **Backend-Architektur:** Render hostet die API (`/api/*`), IONOS hostet das
   Frontend (`scene-editor-test.html`). CORS läuft über Apache auf Render —

@@ -1,10 +1,25 @@
 # PROJECT_STATUS.md — Cinematic Studio Family
 
 ## Aktueller Status
-**Phase:** Phase 4 abgeschlossen, Phase 5 in Arbeit  
-**Stand:** 2026-04-29  
-**Version:** 0.0.1  
-**Git:** Phase 4 ✅ (#27–#34), Phase 5 #37 ✅, #38 Setup ✅ (Live-Deploy pending User)
+**Phase:** Free MVP live ✅  
+**Stand:** 2026-05-13  
+**Version:** 0.1.0 (Free MVP)  
+**Git:** `2892e46` — aktuellster Commit auf `main`, deployed auf Render
+
+### Free MVP Checkpoint — 2026-05-13
+Live-URL: `https://cinematic-studio-family.onrender.com/studio-demo.php`  
+E2E-Test: **alle Checks grün** (siehe CHANGELOG.md → Free MVP 2026-05-13)
+
+**Was funktioniert:**
+- Upload → Analyse → Text-Titelkarte / Bild-Replacement / Original-Cut → Render → MP4 Download
+- FFmpeg drawtext mit Liberation Sans (fonts-liberation im Docker)
+- Free-Plan-stabile Pipeline: 720p · ultrafast · max 15s · max 3 Slots · kein Ton
+
+**Was fehlt (V2-Backlog):**
+- Audio-Preservation (Concat-Homogenität blockiert bei gemischten Slot-Typen)
+- Persistenz (Starter+ Disk oder R2/S3 nötig)
+- Echte KI-API-Anbindung (aktuell Prompt-Generator only)
+- Login / Payment / Kristalle (Demo-Dummy)
 
 ---
 
