@@ -99,8 +99,10 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 }
 
 // ── API-Key ───────────────────────────────────────────────────────────────────
+// Reihenfolge: getenv() → $_SERVER → $_ENV
+// Apache mod_env benötigt PassEnv in apache.conf damit getenv() greift.
 
-$apiKey = (string) (getenv('KIE_AI_API_KEY') ?: '');
+$apiKey = (string) (getenv('KIE_AI_API_KEY') ?: ($_SERVER['KIE_AI_API_KEY'] ?? $_ENV['KIE_AI_API_KEY'] ?? ''));
 if ($apiKey === '') {
     csf_ai_status_error(503, 'KI-Generierung ist nicht konfiguriert. KIE_AI_API_KEY fehlt auf dem Server.');
 }
