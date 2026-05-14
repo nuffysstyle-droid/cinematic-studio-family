@@ -795,6 +795,21 @@ require_once 'includes/header.php';
         previewBox.className = 'sk-preview-box style-' + (style || 'neon');
     }
 
+    // ── Logo hochladen (nur bei Typ "logo" + ausgewählter Datei) ─────
+    async function uploadLogoIfNeeded() {
+        if (fieldType.value !== 'logo') return '';
+        const file = logoInput.files?.[0];
+        if (!file) return '';
+
+        const fd = new FormData();
+        fd.append('file', file);
+
+        const res  = await fetch('api/upload.php', { method: 'POST', body: fd });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.error ?? 'Logo-Upload fehlgeschlagen.');
+        return data.url ?? '';
+    }
+
     // ── Anfrage erstellen ─────────────────────────────────────────
     btnSubmit.addEventListener('click', async () => {
         if (!validate()) return;
@@ -804,7 +819,16 @@ require_once 'includes/header.php';
         btnSubmit.textContent = '…';
 
         try {
+            // Logo zuerst hochladen (falls vorhanden)
+            let logoUrl = '';
+            if (fieldType.value === 'logo' && logoInput.files?.length) {
+                btnSubmit.textContent = 'Logo wird hochgeladen…';
+                logoUrl = await uploadLogoIfNeeded();
+            }
+
             const vals = getValues();
+            if (logoUrl) vals.logo_url = logoUrl;
+
             const res  = await fetch('api/sticker-request.php', {
                 method:  'POST',
                 headers: { 'Content-Type': 'application/json' },
