@@ -1,0 +1,225 @@
+# CLAUDE.md — Cinematic Vision Studio
+# Zentrale Projektdokumentation für AI-Agenten, Claude Code, LLM Council
+
+> **Pflichtlektüre.** Jeder Agent (Claude Code, Sub-Agent, Council-Advisor) liest diese
+> Datei VOR Arbeitsbeginn. Sie ist die Single Source of Truth über das Projekt.
+> Detail-Kontext liegt in `memory/`. Deployment-Details in `memory/deployment.md`.
+
+---
+
+## Projekt-Identität
+
+| Feld | Wert |
+|---|---|
+| **Produktname** | Cinematic Vision Studio |
+| **Repo / Codebase** | cinematic-studio-family |
+| **Version** | 0.1.0 (Free MVP, live seit 2026-05-13) |
+| **Live-URL** | https://cinematic-studio-family.onrender.com |
+| **GitHub** | nuffysstyle-droid/cinematic-studio-family |
+| **Stand** | 2026-05-14 |
+
+---
+
+## Projektvision
+
+Familien sollen Urlaubsvideos, Geburtstagsfilme und Jahresrückblicke in Kinoqualität
+produzieren können — **ohne professionelle Vorkenntnisse, in unter 10 Minuten.**
+
+Das Produkt kombiniert serverseitige Videoverarbeitung (FFmpeg) mit KI-Bildgenerierung
+(Kie.ai) zu einem vollständigen "Upload → Edit → Render → Download"-Flow.
+
+---
+
+## Zielgruppe
+
+- **Primär:** Familien, die Erinnerungen dokumentieren (Urlaub, Geburtstag, Jahresrückblick)
+- **Sekundär:** Content Creator, die cinematic Short-Videos ohne teures Equipment produzieren
+- **Skill-Level:** Keine Video-Vorkenntnisse nötig — guided UX, template-basiert
+- **Plattform:** Browser-basiert (Desktop + Mobile), Windows + macOS
+
+---
+
+## Geschäftsmodell
+
+| Stufe | Zugang | Preis |
+|---|---|---|
+| **Free** | 720p, max 15s, max 3 Slots, kein Ton, ephemeral Storage | kostenlos |
+| **Starter+** | 1080p, Audio, Persistent Disk, mehr Slots | geplant ~$7–12/mo |
+| **Pro** | KI-Generierungen, Premium Templates, API-Zugang | geplant ~$29/mo |
+
+**Kristalle** — geplante interne Währung für KI-Generierungen (Kie.ai Credits).
+Aktuell Demo-Dummy; echte Transaktion in V2.
+
+---
+
+## Tech-Stack (verbindlich — nicht ohne Diskussion ändern)
+
+| Schicht | Technologie | Begründung |
+|---|---|---|
+| **Backend** | PHP 8.2 + Apache (mod_php) | Kein Build-Step, direkt deploybar, FFmpeg via apt |
+| **Frontend** | Vanilla JS + HTML5 + CSS3 | Kein Framework-Overhead in V1 |
+| **Video-Engine** | FFmpeg 7.1.3 (serverseitig) | Volle Codec-Kontrolle, kein WASM |
+| **AI-Provider** | Kie.ai (Flux Kontext Pro/Max) | Async Task-API, JPEG-Output, 14-Tage CDN |
+| **Deployment** | Render.com (Docker) | PHP + FFmpeg + Persistent Disk in einem |
+| **Storage** | JSON-Dateien + LOCK_EX | Kein DB-Setup in V1 |
+| **Fonts** | Liberation Sans (fonts-liberation) | FFmpeg drawtext, Linux-native |
+
+### Harte Don'ts
+
+- ❌ Kein `innerHTML` für User-Daten → `textContent` / DOM-API / `<template>`-Cloning
+- ❌ Kein npm, kein Composer, kein Build-Tool in V1
+- ❌ Kein externes JS-Framework (React, Vue, jQuery)
+- ❌ Kein Login / Auth in V1
+- ❌ Keine neuen CSS-Hex-Werte → bestehende CSS-Variablen verwenden
+- ❌ Kein S3/R2 in V1 (ephemeral filesystem + Render Disk akzeptiert)
+- ❌ Kein cURL (file_get_contents + stream_context reicht)
+
+### Harte Do's
+
+- ✅ `declare(strict_types=1)` in jeder PHP-Datei
+- ✅ `escapeshellarg()` auf ALLEN Shell-Argumenten
+- ✅ `csf_validate_path()` + `realpath()` + `CSF_STORAGE_ROOT`-Prefix vor jedem File-Access
+- ✅ `LOCK_EX` bei jedem meta.json-Write
+- ✅ Toast-Feedback + Error-Box bei jeder API-Aktion
+- ✅ Mobile: 44px Touch-Targets, Stack-Layout unter 600px
+
+---
+
+## Aktueller Feature-Stand (V0.1.0)
+
+### Vollständig implementiert ✅
+| Feature | Dateien |
+|---|---|
+| Video-Upload (≤50 MB, ≤15s) | `api/upload.php`, `assets/js/upload.js` |
+| Slot-Analyse via FFmpeg | `api/analyze.php` → `meta.json` + Thumbnails |
+| Slot-Replacement: Bild | `api/replace-slot.php` → `meta.json` |
+| Slot-Replacement: Video | `api/replace-slot.php` → `meta.json` |
+| Slot-Replacement: Text-Titelkarte | `api/replace-slot.php` + `api/render-final.php` |
+| Finaler Render → MP4 | `api/render-final.php` (FFmpeg concat) |
+| Text-Overlay via FFmpeg drawtext | `api/render-final.php` → `csf_drawtext_escape()` |
+| Export-Polling / Progress-Bar | `api/progress.php`, `assets/js/progress.js` |
+| AI-Generierung (Kie.ai Flux Kontext) | `api/generate-ai.php` + `api/ai-status.php` |
+| Demo-Studio-Interface | `studio-demo.php` |
+| TikTok Prompt Generator | `tiktok-studio.php` + `api/generate-tiktok.php` |
+| Trailer Builder | `trailer-builder.php` + `api/generate-trailer.php` |
+| Academy (13 Guides) | `academy.php` |
+| Health-Check-Endpoint | `api/health.php` |
+| Element Library (Grundgerüst) | `elements.php` + `api/elements.php` |
+
+### Dummy / Placeholder (V2)
+| Feature | Status |
+|---|---|
+| Login / User-Accounts | Demo-Dummy |
+| Kristalle / Payment / Stripe | Demo-Dummy |
+| Audio-Preservation | Deferred (Concat-Homogenität blockiert) |
+| KI-Video-Generierung | Architecture only (Kie.ai video endpoints geplant) |
+
+---
+
+## Deployment
+
+| Feld | Wert |
+|---|---|
+| **Platform** | Render.com |
+| **Plan** | Free → Starter ($7/mo) |
+| **Runtime** | Docker (php:8.2-apache) |
+| **Port** | `$PORT` (Render: 10000) → dynamisch via Entrypoint |
+| **Storage** | Render Persistent Disk 1 GB → `/var/www/html/render-data` |
+| **Auto-Deploy** | Bei Push auf `main` |
+| **Health-Check** | `/index.php` (Render intern) + `/api/health.php` (manuell) |
+
+**Kritisch:** `KIE_AI_API_KEY` muss als Render-Environment-Variable gesetzt sein.
+Apache braucht `PassEnv KIE_AI_API_KEY` in `docker/apache.conf` damit `getenv()` greift.
+→ Details: `memory/deployment.md`
+
+---
+
+## Aktuelle Probleme (Stand 2026-05-14)
+
+| Problem | Priorität | Status |
+|---|---|---|
+| `KIE_AI_API_KEY` nicht in PHP sichtbar (getenv liefert false) | 🔴 P0 | PassEnv deployed, Key-Eintragung ausstehend |
+| Kein echter AI-E2E-Test abgeschlossen | 🔴 P0 | Warte auf gültigen Key in Render |
+| Audio-Preservation nicht implementiert | 🟡 P2 | V2 Backlog |
+| `elements.php` Edit-Button disabled (API 501) | 🟡 P2 | Tech Debt |
+| Logo-Upload nicht mit api/upload.php verbunden | 🟡 P2 | Tech Debt |
+| `API_PROVIDER_LINK` Platzhalter in config.php | 🟢 P3 | Tech Debt |
+
+→ Vollständige Liste: `memory/current-problems.md`
+
+---
+
+## Roadmap (Kurzform)
+
+| Milestone | Inhalt | Status |
+|---|---|---|
+| **V0.1.0** | Free MVP: Upload → Analyse → Replace → Render → Download | ✅ Live |
+| **V0.2.0** | AI-Generierung live (Kie.ai E2E) | 🟡 In Progress |
+| **V0.3.0** | Audio-Preservation, Starter+ Plan | ⬜ Geplant |
+| **V1.0.0** | Login, Kristalle, Payment (Stripe) | ⬜ Geplant |
+| **V2.0.0** | Multi-User, S3/R2, KI-Video, Templates | ⬜ Vision |
+
+→ Details: `memory/roadmap.md`
+
+---
+
+## Dateistruktur (Schlüsseldateien)
+
+```
+cinematic-studio-family/
+├── CLAUDE.md                    ← Diese Datei (AI-Kontext)
+├── memory/                      ← Strukturierter AI-Kontext
+│   ├── business.md
+│   ├── architecture.md
+│   ├── deployment.md
+│   ├── ffmpeg.md
+│   ├── byok-system.md
+│   ├── video-pipeline.md
+│   ├── roadmap.md
+│   └── current-problems.md
+├── docs/
+│   └── project-overview.md      ← Menschenlesbare Übersicht
+│
+├── studio-demo.php              ← Haupt-UI (MVP)
+├── api/
+│   ├── analyze.php              ← Video → Slots + meta.json
+│   ├── replace-slot.php         ← Slot-Ersatz speichern
+│   ├── render-final.php         ← FFmpeg Render-Pipeline
+│   ├── generate-ai.php          ← Kie.ai Task starten
+│   ├── ai-status.php            ← Kie.ai Task pollen + Bild speichern
+│   ├── health.php               ← Server-Status
+│   └── ...
+├── includes/
+│   ├── config.php               ← Konstanten, Session-Start
+│   ├── functions.php            ← FFmpeg-Service-Library
+│   └── ...
+├── docker/
+│   ├── apache.conf              ← PassEnv KIE_AI_API_KEY hier!
+│   └── entrypoint.sh
+├── Dockerfile                   ← PHP 8.2 + Apache + FFmpeg + fonts-liberation
+└── render.yaml                  ← Render-Deployment-Config
+```
+
+---
+
+## Working Environment
+
+| Feld | Wert |
+|---|---|
+| **Dev-OS** | Windows |
+| **Shell** | Git Bash + PowerShell 5.1 |
+| **Pfade** | POSIX-Style in Bash (`/c/Users/...`), Backslash in PowerShell |
+| **Chaining** | `; if ($?) { }` in PS — kein `&&`/`||` |
+| **File-Upload** | PowerShell `System.Net.Http.HttpClient` (curl hat Pfad-Probleme auf Windows) |
+| **Encoding** | UTF-8 |
+
+---
+
+## Agent-Regeln (für Claude Code + Sub-Agents)
+
+1. **Diese Datei + memory/ VOR jeder Arbeit lesen.**
+2. **Nie ohne Freigabe committen.** git diff zeigen → auf OK warten.
+3. **Keine Frameworks einführen** — Flat PHP bleibt Flat PHP.
+4. **Keine Dateien löschen** ohne explizite Anweisung.
+5. **Nach jedem Feature:** `PROJECT_STATUS.md` + `CHANGELOG.md` + `agents/points.md` updaten.
+6. **Council-Trigger:** Bei Entscheidungen mit mehreren validen Optionen → "council this:" vorschlagen.
