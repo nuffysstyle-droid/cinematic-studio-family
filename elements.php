@@ -121,6 +121,71 @@ require_once 'includes/header.php';
 </div><!-- .studio-page -->
 
 
+<!-- ── Edit-Modal ─────────────────────────────────────────────── -->
+<div id="edit-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="edit-modal-title" hidden>
+    <div class="modal-backdrop" id="edit-modal-backdrop"></div>
+    <div class="modal-box" style="max-width:480px">
+        <div class="modal-header">
+            <h3 class="modal-title" id="edit-modal-title">Element bearbeiten</h3>
+            <button class="modal-close" id="edit-close-btn" aria-label="Schließen">✕</button>
+        </div>
+        <form id="edit-form">
+            <input type="hidden" id="edit-id">
+            <div class="modal-body" style="display:flex;flex-direction:column;gap:14px">
+                <div class="form-group" style="margin-bottom:0">
+                    <label for="edit-name">Name <span class="text-muted">(erforderlich)</span></label>
+                    <input type="text" id="edit-name" maxlength="100" placeholder="Name…" required>
+                </div>
+                <div class="form-group" style="margin-bottom:0">
+                    <label for="edit-type">Typ</label>
+                    <select id="edit-type">
+                        <option value="">— Typ wählen —</option>
+                        <option value="character">Charakter</option>
+                        <option value="car">Auto</option>
+                        <option value="product">Produkt</option>
+                        <option value="creature">Kreatur</option>
+                        <option value="environment">Umgebung</option>
+                        <option value="logo">Logo</option>
+                        <option value="object">Objekt</option>
+                        <option value="style_reference">Style Reference</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin-bottom:0">
+                    <label for="edit-role">Rolle</label>
+                    <select id="edit-role">
+                        <option value="">— Rolle wählen —</option>
+                        <option value="main_character">Hauptcharakter</option>
+                        <option value="main_object">Hauptobjekt</option>
+                        <option value="background">Hintergrund</option>
+                        <option value="style_reference">Style Reference</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin-bottom:0">
+                    <label for="edit-desc">Beschreibung</label>
+                    <textarea id="edit-desc" rows="3" maxlength="1000" placeholder="Kurze Beschreibung…"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" id="edit-save-btn" class="btn btn-primary">Speichern</button>
+                <button type="button" class="btn btn-secondary" id="edit-close-btn-2" onclick="document.getElementById('edit-modal').hidden=true">Abbrechen</button>
+            </div>
+        </form>
+    </div>
+</div>
+<style>
+.modal{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;}
+.modal[hidden]{display:none;}
+.modal-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);cursor:pointer;}
+.modal-box{position:relative;background:var(--bg-panel);border:1px solid var(--border-color);border-radius:var(--radius-lg);width:100%;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow);z-index:1;}
+.modal-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 22px 14px;border-bottom:1px solid var(--border-color);}
+.modal-title{font-size:.95rem;font-weight:700;color:var(--text-primary);}
+.modal-close{font-size:1rem;color:var(--text-muted);background:none;border:none;cursor:pointer;padding:4px 8px;border-radius:var(--radius-sm);line-height:1;}
+.modal-close:hover{color:var(--text-primary);background:var(--bg-elevated);}
+.modal-body{padding:18px 22px;}
+.modal-footer{padding:14px 22px 18px;display:flex;gap:10px;border-top:1px solid var(--border-color);}
+</style>
+
+
 <!-- ── Element Card Template (JS clont diesen) ────────────────── -->
 <template id="element-card-template">
     <div class="element-card" data-id="">
@@ -137,7 +202,7 @@ require_once 'includes/header.php';
             <p class="element-card__desc text-muted text-sm"></p>
         </div>
         <div class="element-card__actions">
-            <button class="btn btn-secondary btn-sm btn-edit" disabled title="Bearbeiten — kommt in Phase 3">Bearbeiten</button>
+            <button class="btn btn-secondary btn-sm btn-edit">Bearbeiten</button>
             <button class="btn btn-danger btn-sm btn-delete">Löschen</button>
         </div>
     </div>
@@ -431,11 +496,89 @@ require_once 'includes/header.php';
             roleEl.remove();
         }
 
+        // Bearbeiten
+        card.querySelector('.btn-edit').addEventListener('click', () => openEditModal(el));
+
         // Löschen
         card.querySelector('.btn-delete').addEventListener('click', () => deleteElement(el.id, card));
 
         gridEl.prepend(clone);
     }
+
+    // ── Element bearbeiten ────────────────────────────────────
+    const editModal     = document.getElementById('edit-modal');
+    const editModalBack = document.getElementById('edit-modal-backdrop');
+    const editForm      = document.getElementById('edit-form');
+    const editId        = document.getElementById('edit-id');
+    const editName      = document.getElementById('edit-name');
+    const editType      = document.getElementById('edit-type');
+    const editRole      = document.getElementById('edit-role');
+    const editDesc      = document.getElementById('edit-desc');
+    const editSaveBtn   = document.getElementById('edit-save-btn');
+    const editCloseBtn  = document.getElementById('edit-close-btn');
+
+    function openEditModal(el) {
+        editId.value   = el.id;
+        editName.value = el.name        ?? '';
+        editType.value = el.type        ?? '';
+        editRole.value = el.role        ?? '';
+        editDesc.value = el.description ?? '';
+        editModal.hidden = false;
+        editName.focus();
+    }
+
+    function closeEditModal() { editModal.hidden = true; }
+
+    editModalBack?.addEventListener('click', closeEditModal);
+    editCloseBtn?.addEventListener('click',  closeEditModal);
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && !editModal?.hidden) closeEditModal();
+    });
+
+    editForm?.addEventListener('submit', async e => {
+        e.preventDefault();
+        editSaveBtn.disabled = true;
+        editSaveBtn.textContent = 'Speichern…';
+
+        const payload = {
+            action:      'update',
+            id:          editId.value,
+            name:        editName.value.trim(),
+            type:        editType.value,
+            role:        editRole.value,
+            description: editDesc.value.trim(),
+        };
+
+        try {
+            const res  = await fetch('api/elements.php', {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:    JSON.stringify(payload),
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                // Karte im DOM aktualisieren
+                const card = gridEl.querySelector(`.element-card[data-id="${payload.id}"]`);
+                if (card) {
+                    card.querySelector('.element-card__name').textContent = data.data.name;
+                    card.querySelector('.element-card__desc').textContent = data.data.description ?? '';
+                    card.querySelector('.element-card__type').textContent = TYPE_LABELS[data.data.type] ?? data.data.type;
+                    const roleEl = card.querySelector('.element-card__role');
+                    if (roleEl) roleEl.textContent = ROLE_LABELS[data.data.role] ?? '';
+                }
+                closeEditModal();
+                Toast.success('Element gespeichert.');
+            } else {
+                Toast.error(data.error ?? 'Speichern fehlgeschlagen.');
+            }
+        } catch {
+            Toast.error('Netzwerkfehler.');
+        } finally {
+            editSaveBtn.disabled    = false;
+            editSaveBtn.textContent = 'Speichern';
+        }
+    });
 
     // ── Element löschen ───────────────────────────────────────
     async function deleteElement(id, cardEl) {

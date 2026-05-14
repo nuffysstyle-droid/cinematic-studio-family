@@ -64,9 +64,70 @@ switch ($action) {
         break;
 
     case 'update':
-        // TODO Phase 3: Felder aktualisieren
-        http_response_code(501);
-        echo json_encode(['success' => false, 'error' => 'Update wird in Phase 3 implementiert.']);
+        $id = trim($body['id'] ?? '');
+        if ($id === '') {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'error' => '"id" erforderlich.']);
+            break;
+        }
+
+        // Erlaubte editierbare Felder
+        $allowed = ['name', 'type', 'role', 'description'];
+
+        $elements = loadElements($path);
+        $found    = false;
+
+        foreach ($elements as &$el) {
+            if ($el['id'] !== $id) continue;
+            $found = true;
+
+            foreach ($allowed as $field) {
+                if (!array_key_exists($field, $body)) continue;
+                $val = trim((string)$body[$field]);
+
+                // Feldspezifische Validierung
+                if ($field === 'name' && $val === '') {
+                    http_response_code(400);
+                    echo json_encode(['success' => false, 'error' => 'Name darf nicht leer sein.']);
+                    break 2;
+                }
+                if ($field === 'name' && mb_strlen($val) > 100) {
+                    http_response_code(400);
+                    echo json_encode(['success' => false, 'error' => 'Name zu lang (max. 100 Zeichen).']);
+                    break 2;
+                }
+                if ($field === 'description' && mb_strlen($val) > 1000) {
+                    http_response_code(400);
+                    echo json_encode(['success' => false, 'error' => 'Beschreibung zu lang (max. 1000 Zeichen).']);
+                    break 2;
+                }
+
+                $el[$field] = $val;
+            }
+            $el['updated_at'] = date('c');
+            break;
+        }
+        unset($el);
+
+        if (!$found) {
+            http_response_code(404);
+            echo json_encode(['success' => false, 'error' => 'Element nicht gefunden.']);
+            break;
+        }
+
+        // Finde das aktualisierte Element für die Response
+        $updated = null;
+        foreach ($elements as $el) {
+            if ($el['id'] === $id) { $updated = $el; break; }
+        }
+
+        if (!saveElements($elements, $path)) {
+            http_response_code(500);
+            echo json_encode(['success' => false, 'error' => 'Speichern fehlgeschlagen.']);
+            break;
+        }
+
+        echo json_encode(['success' => true, 'data' => $updated]);
         break;
 
     default:

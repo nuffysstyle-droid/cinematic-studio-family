@@ -97,5 +97,40 @@ if ($debugMode) {
     ));
 }
 
+// ── Storage-Nutzung (Job-Count, Export-Count) ─────────────────────────────────
+$jobsDir    = __DIR__ . '/../storage/jobs';
+$exportsDir = __DIR__ . '/../storage/exports';
+
+$jobCount    = 0;
+$exportCount = 0;
+$exportBytes = 0;
+
+if (is_dir($jobsDir)) {
+    foreach ((array)@scandir($jobsDir) as $e) {
+        if (str_starts_with((string)$e, 'job_') && is_dir($jobsDir . '/' . $e)) { $jobCount++; }
+    }
+}
+if (is_dir($exportsDir)) {
+    foreach ((array)@scandir($exportsDir) as $e) {
+        $fp = $exportsDir . '/' . $e;
+        if (str_starts_with((string)$e, 'job_') && is_file($fp)) {
+            $exportCount++;
+            $exportBytes += (int)filesize($fp);
+        }
+    }
+}
+
+$response['storage'] = [
+    'active_jobs'    => $jobCount,
+    'export_files'   => $exportCount,
+    'export_mb'      => round($exportBytes / 1048576, 2),
+];
+
+// ── Manuelles Cleanup per ?cleanup=1 (nur im Debug-Modus) ────────────────────
+if ($debugMode && isset($_GET['cleanup']) && $_GET['cleanup'] === '1') {
+    $cleaned = csf_cleanup_old_jobs();
+    $response['cleanup_run'] = $cleaned;
+}
+
 http_response_code($response['ok'] ? 200 : 503);
 echo json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);

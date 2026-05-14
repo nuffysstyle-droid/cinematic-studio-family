@@ -511,6 +511,17 @@ if ($fpWrite !== false) {
 }
 // meta-Update ist best effort — bricht das Rendering nicht.
 
+// ── Probabilistisches Disk-Cleanup (1/50) ──────────────────────────────────
+// Wird nach jedem 50. Render ausgeführt — kein blockierender Overhead.
+// Löscht Jobs + Exports älter als 48h und Temp-Dateien älter als 2h.
+if (random_int(1, 50) === 1) {
+    try {
+        csf_cleanup_old_jobs();
+    } catch (Throwable) {
+        // Cleanup-Fehler darf Render-Response nicht blockieren
+    }
+}
+
 // ── Erfolgsantwort ──────────────────────────────────────────────────────────
 render_log("DONE {$finalName} ({$finalSize} bytes, {$slotCount} slots)");
 

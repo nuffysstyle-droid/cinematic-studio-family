@@ -731,6 +731,198 @@ function csf_eval_fps(string $fraction): float {
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
+ * Löscht abgelaufene Job-Verzeichnisse und Temp-Dateien aus storage/.
+ *
+ * Regeln:
+ *   - storage/jobs/job_*   → löschen wenn älter als $jobMaxAge Sekunden (Standard: 48 h)
+ *   - storage/exports/     → Dateien mit Prefix job_ löschen wenn älter als $jobMaxAge s
+ *   - storage/temp/        → Dateien älter als $tempMaxAge Sekunden (Standard: 2 h)
+ *   - storage/thumbnails/  → Dateien älter als $jobMaxAge s, ohne zugehörigen Job
+ *
+ * Sicherheit:
+ *   - Löscht nur Einträge mit Prefix job_ (verhindert unbeabsichtigte Löschung)
+ *   - Löscht keine .gitkeep / .htaccess Dateien
+ *   - Prüft ob Pfade innerhalb storage/ bleiben (Traversal-Schutz)
+ *   - Max. Ausführungszeit: $timeLimit Sekunden (Schutz vor Endlosläufen)
+ *
+ * @param  int $jobMaxAge  Maximales Job-Alter in Sekunden (Standard: 172800 = 48 h)
+ * @param  int $tempMaxAge Maximales Temp-Alter in Sekunden (Standard: 7200 = 2 h)
+ * @param  int $timeLimit  Maximale Ausführungszeit in Sekunden (Standard: 20)
+ * @return array{
+ *   jobs_deleted:    int,
+ *   exports_deleted: int,
+ *   temp_deleted:    int,
+ *   thumb_deleted:   int,
+ *   bytes_freed:     int,
+ *   errors:          string[],
+ *   duration_ms:     int
+ * }
+ */
+function csf_cleanup_old_jobs(
+    int $jobMaxAge  = 172800,
+    int $tempMaxAge = 7200,
+    int $timeLimit  = 20
+): array {
+    $t0           = microtime(true);
+    $storage      = CSF_STORAGE_ROOT;
+    $now          = time();
+    $jobsDeleted  = 0;
+    $exportsDeleted = 0;
+    $tempDeleted  = 0;
+    $thumbDeleted = 0;
+    $bytesFreed   = 0;
+    $errors       = [];
+
+    /** Recursively removes a directory and all its contents. Returns bytes freed. */
+    $rmdir_r = static function(string $dir) use ($storage, &$errors): int {
+        // Safety: must be inside storage/
+        $real = realpath($dir);
+        if ($real === false) { return 0; }
+        $root = rtrim(str_replace('\\', '/', $storage), '/');
+        $rp   = rtrim(str_replace('\\', '/', $real), '/');
+        if (!str_starts_with($rp, $root . '/')) { return 0; }
+
+        $freed = 0;
+        try {
+            $it = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($real, FilesystemIterator::SKIP_DOTS),
+                RecursiveIteratorIterator::CHILD_FIRST
+            );
+            foreach ($it as $item) {
+                if ($item->isFile() || $item->isLink()) {
+                    $freed += (int)$item->getSize();
+                    @unlink($item->getPathname());
+                } elseif ($item->isDir()) {
+                    @rmdir($item->getPathname());
+                }
+            }
+        } catch (Throwable $e) {
+            $errors[] = 'rmdir_r error: ' . $e->getMessage();
+        }
+        @rmdir($real);
+        return $freed;
+    };
+
+    // ── 1. Jobs ───────────────────────────────────────────────────────────────
+    $jobsDir = $storage . '/jobs';
+    if (is_dir($jobsDir)) {
+        $entries = @scandir($jobsDir);
+        if (is_array($entries)) {
+            foreach ($entries as $entry) {
+                // Safety check: exit if we're running too long
+                if ((microtime(true) - $t0) > $timeLimit) { break; }
+                if (!str_starts_with($entry, 'job_')) { continue; }
+
+                $jobPath = $jobsDir . '/' . $entry;
+                if (!is_dir($jobPath)) { continue; }
+
+                // Age: use meta.json created_at if available, else dir mtime
+                $age = $now - (int)filemtime($jobPath);
+                $metaFile = $jobPath . '/meta.json';
+                if (is_file($metaFile)) {
+                    $meta = @json_decode((string)@file_get_contents($metaFile), true);
+                    if (is_array($meta) && isset($meta['created_at'])) {
+                        $ts = strtotime((string)$meta['created_at']);
+                        if ($ts !== false && $ts > 0) {
+                            $age = $now - $ts;
+                        }
+                    }
+                }
+
+                if ($age >= $jobMaxAge) {
+                    $bytesFreed += $rmdir_r($jobPath);
+                    $jobsDeleted++;
+                }
+            }
+        }
+    }
+
+    // ── 2. Exports ────────────────────────────────────────────────────────────
+    $exportsDir = $storage . '/exports';
+    if (is_dir($exportsDir)) {
+        $entries = @scandir($exportsDir);
+        if (is_array($entries)) {
+            foreach ($entries as $entry) {
+                if ((microtime(true) - $t0) > $timeLimit) { break; }
+                if (!str_starts_with($entry, 'job_')) { continue; }
+
+                $filePath = $exportsDir . '/' . $entry;
+                if (!is_file($filePath)) { continue; }
+
+                if (($now - (int)filemtime($filePath)) >= $jobMaxAge) {
+                    $bytesFreed += (int)filesize($filePath);
+                    @unlink($filePath);
+                    $exportsDeleted++;
+                }
+            }
+        }
+    }
+
+    // ── 3. Temp-Dateien ───────────────────────────────────────────────────────
+    $tempDir = $storage . '/temp';
+    if (is_dir($tempDir)) {
+        $entries = @scandir($tempDir);
+        if (is_array($entries)) {
+            foreach ($entries as $entry) {
+                if ((microtime(true) - $t0) > $timeLimit) { break; }
+                if (in_array($entry, ['.', '..', '.gitkeep', '.htaccess', 'render.log'], true)) { continue; }
+
+                $filePath = $tempDir . '/' . $entry;
+                if (!is_file($filePath)) { continue; }
+
+                if (($now - (int)filemtime($filePath)) >= $tempMaxAge) {
+                    $bytesFreed += (int)filesize($filePath);
+                    @unlink($filePath);
+                    $tempDeleted++;
+                }
+            }
+        }
+    }
+
+    // ── 4. Thumbnails ohne zugehörigen Job ────────────────────────────────────
+    $thumbDir = $storage . '/thumbnails';
+    if (is_dir($thumbDir)) {
+        $entries = @scandir($thumbDir);
+        if (is_array($entries)) {
+            foreach ($entries as $entry) {
+                if ((microtime(true) - $t0) > $timeLimit) { break; }
+                if (!str_starts_with($entry, 'job_')) { continue; }
+
+                $filePath = $thumbDir . '/' . $entry;
+                if (!is_file($filePath)) { continue; }
+
+                // Only delete if old enough (job_id prefix before first dot/underscore-4th-part)
+                if (($now - (int)filemtime($filePath)) < $jobMaxAge) { continue; }
+
+                // Extract job_id: job_YYYYMMDD_HHMMSS_xxxxxxxx (first 4 parts joined by _)
+                $parts = explode('_', $entry);
+                if (count($parts) >= 4) {
+                    $jobId  = implode('_', array_slice($parts, 0, 4));
+                    $jobDir = $storage . '/jobs/' . $jobId;
+                    if (!is_dir($jobDir)) {
+                        $bytesFreed += (int)filesize($filePath);
+                        @unlink($filePath);
+                        $thumbDeleted++;
+                    }
+                }
+            }
+        }
+    }
+
+    return [
+        'jobs_deleted'    => $jobsDeleted,
+        'exports_deleted' => $exportsDeleted,
+        'temp_deleted'    => $tempDeleted,
+        'thumb_deleted'   => $thumbDeleted,
+        'bytes_freed'     => $bytesFreed,
+        'errors'          => $errors,
+        'duration_ms'     => (int)round((microtime(true) - $t0) * 1000),
+    ];
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
  * Schreibt eine FFmpeg-Fehlerzeile in data/ffmpeg-debug.log.
  *
  * Wird ausschließlich bei FFmpeg-Fehlern aufgerufen (siehe checkFfmpegAvailable).
