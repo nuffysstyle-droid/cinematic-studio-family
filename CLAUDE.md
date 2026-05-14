@@ -16,7 +16,7 @@
 | **Version** | 0.1.0 (Free MVP, live seit 2026-05-13) |
 | **Live-URL** | https://cinematic-studio-family.onrender.com |
 | **GitHub** | nuffysstyle-droid/cinematic-studio-family |
-| **Stand** | 2026-05-14 (Session 2) |
+| **Stand** | 2026-05-14 (Session 3) |
 
 ---
 
@@ -117,6 +117,18 @@ Aktuell Demo-Dummy; echte Transaktion in V2.
 | **index.php Redirect** | `index.php` | HTTP 302 → `scene-editor-test.html` (war Placeholder) |
 | **Korrekte Stats** | `scene-editor-test.html` | `720p` statt `4K`, Badge `Demo` für Kontakt/Verfügbarkeit |
 
+### Neu implementiert in Session 3 (2026-05-14) ✅
+| Feature | Dateien | Details |
+|---|---|---|
+| **Disk-Cleanup** | `includes/functions.php`, `api/cleanup.php`, `api/render-final.php` | `csf_cleanup_old_jobs()` — löscht Jobs/Exports/Temp >48h und Thumbnails ohne Job. Probabilistisch 1/50 nach Render. Manuell via `/api/cleanup.php?key=CLEANUP_SECRET`. |
+| **Health: Storage-Stats** | `api/health.php` | `active_jobs`, `export_files`, `export_mb` in Response. `?debug=1&cleanup=1` triggert manuelles Cleanup. |
+| **Elements Edit** | `elements.php`, `api/elements.php` | Edit-Button enabled. `update` Action implementiert (Name/Typ/Rolle/Beschreibung). Edit-Modal mit Live-DOM-Update auf Save. |
+| **Logo-Upload verbunden** | `tiktok-animation.php`, `tiktok-sticker.php` | `uploadLogoIfNeeded()` — lädt Logo zu `api/upload.php` bevor Anfrage gesendet wird. `logo_url` im Request-Payload. |
+| **Nav-Cleanup Sekundärseiten** | `availability.php`, `contact.php`, `crystals.php`, `ki-videos.php`, `portfolio.php`, `prompt-generator.php`, `shop.php` | Wallet `💎 Free`, Footer `© 2026`, Nav auf 5 Links vereinheitlicht. |
+| **config.php Fixes** | `includes/config.php` | `APP_NAME` korrekt, `MAX_UPLOAD_BYTES` 50 MB (war 500 MB), `video/webm` hinzugefügt, `API_PROVIDER_LINK` → kie.ai |
+| **save-request.php** | `api/save-request.php` (NEW) | POST-Endpoint: Contact-Anfragen aus ready-videos.php in `storage/requests.json` speichern. `flock(LOCK_EX)`, SHA-256 IP-Hash. |
+| **SSRF-Schutz** | `api/ai-status.php` | DNS-IP-Validierung: `gethostbyname()` + `FILTER_FLAG_NO_PRIV_RANGE` |
+
 ### Dummy / Placeholder (V2+)
 | Feature | Status |
 |---|---|
@@ -145,17 +157,15 @@ Apache braucht `PassEnv KIE_AI_API_KEY` in `docker/apache.conf` damit `getenv()`
 
 ---
 
-## Aktuelle Probleme (Stand 2026-05-14, Session 2)
+## Aktuelle Probleme (Stand 2026-05-14, Session 3)
 
 | Problem | Priorität | Status |
 |---|---|---|
 | `KIE_AI_API_KEY` nicht in Render eingetragen | 🔴 P0 | **User-Aktion nötig:** Render Dashboard → Environment → `KIE_AI_API_KEY` eintragen → Redeploy |
 | Kein echter AI-E2E-Test abgeschlossen | 🔴 P0 | Warte auf gültigen Key in Render |
+| `CLEANUP_SECRET` nicht in Render eingetragen | 🟡 P2 | Optional: Render Dashboard → `CLEANUP_SECRET` (min. 20 Zeichen) → Redeploy |
 | Audio (Original-Ton): stille Spur statt Originalton | 🟡 P2 | V3 Backlog — aktuell anullsrc AAC, Original-Audio-Erhalt folgt |
-| `elements.php` Edit-Button disabled (API 501) | 🟡 P2 | Tech Debt |
-| Logo-Upload nicht mit api/upload.php verbunden | 🟡 P2 | Tech Debt |
-| `ready-videos.php` Modal sendet nicht wirklich | 🟡 P2 | Dummy Toast, kein Backend |
-| `API_PROVIDER_LINK` Platzhalter in config.php | 🟢 P3 | Tech Debt |
+| Disk-Cleanup noch kein Cron | 🟢 P3 | Aktuell: 1/50 probabilistisch nach Render. Scheduled Task via Render noch nicht konfiguriert |
 
 → Vollständige Liste: `memory/current-problems.md`
 
@@ -238,29 +248,39 @@ cinematic-studio-family/
 
 ---
 
-## Was wurde in der letzten Session gebaut (2026-05-14)
+## Was wurde in der letzten Session gebaut (Session 3 — 2026-05-14)
 
 > Dieser Block ist für jeden neuen Agenten / Account. Lesen, dann loslegen.
 
 ### Geänderte Dateien
 | Datei | Was geändert |
 |---|---|
-| `api/render-final.php` | Job-Lock (LOCK_NB) + Audio: alle 4 Slot-Typen haben jetzt anullsrc AAC-Spur statt -an |
+| `api/render-final.php` | Job-Lock (LOCK_NB) + Audio: alle 4 Slot-Typen haben jetzt anullsrc AAC-Spur statt -an + 1/50 Cleanup-Trigger |
 | `studio-demo.php` | Nav verschlankt (5 Links), Wallet "💎 Free", Cold-Start-Text humanisiert, KI-Bild Button + generateAiImage() + pollAiStatus() |
 | `scene-editor-test.html` | Nav verschlankt, Wallet "💎 Free", Stat 720p statt 4K, Academy-CTA, Badge-Fixes |
 | `index.php` | HTTP 302 Redirect → scene-editor-test.html |
+| `includes/functions.php` | `csf_cleanup_old_jobs()` hinzugefügt |
+| `includes/config.php` | APP_NAME, MAX_UPLOAD_BYTES (50MB), video/webm, API-Links |
+| `api/cleanup.php` (NEU) | Cleanup-Endpoint mit CLEANUP_SECRET |
+| `api/health.php` | Storage-Stats, ?debug=1&cleanup=1 |
+| `api/elements.php` | `update` Action implementiert |
+| `elements.php` | Edit-Button + Edit-Modal |
+| `api/save-request.php` (NEU) | Contact-Anfragen aus ready-videos.php speichern |
+| `api/ai-status.php` | SSRF-Schutz: DNS-IP-Validierung |
+| `tiktok-animation.php` | Logo-Upload zu api/upload.php verbunden |
+| `tiktok-sticker.php` | Logo-Upload zu api/upload.php verbunden |
+| `availability.php`, `contact.php`, `crystals.php`, `ki-videos.php`, `portfolio.php`, `prompt-generator.php`, `shop.php` | Nav 5 Links, Wallet 💎 Free, Footer 2026 |
 
-### Was NICHT geändert wurde (Don't Touch)
+### Was NICHT geändert werden soll (Don't Touch)
 - `api/generate-ai.php` — Backend ist fertig, wartet nur auf KIE_AI_API_KEY
-- `api/ai-status.php` — fertig
 - `api/analyze.php`, `api/replace-slot.php` — unverändert, funktionieren
-- `includes/functions.php` — Library, nicht anfassen
 - `docker/apache.conf` — PassEnv bereits deployed
+- `data/ready-videos.json` — 12 Demo-Einträge, gut so
 
 ### Nächste offene Aufgaben (in dieser Reihenfolge)
 1. **[User-Aktion]** `KIE_AI_API_KEY` in Render-Dashboard eintragen → Redeploy
-2. **[Agent]** E2E-Test: Upload Video → KI-Bild generieren → Render → Download
-3. **[Agent]** `ready-videos.php` Modal-Submit an Backend anschließen
-4. **[Agent]** `health.php` debug-Felder hinter `?debug=1` Guard
-5. **[Agent]** SSRF-Schutz in `api/ai-status.php` (IP-Validierung nach DNS-Auflösung)
+2. **[User-Aktion]** `CLEANUP_SECRET` in Render-Dashboard eintragen (min. 20 Zeichen, beliebig)
+3. **[Agent]** E2E-Test: Upload Video → KI-Bild generieren → Render → Download (nach Key-Eintrag)
+4. **[Agent]** Original-Audio-Erhalt in render-final.php (V3) — aktuell stille AAC
+5. **[Agent]** Cron-Job für Cleanup auf Render konfigurieren (`render.yaml` cron section)
 6. **[Entscheidung]** Domain-Strategie: cinematic-studio-family.com vs cinematic-vision-studio.com
