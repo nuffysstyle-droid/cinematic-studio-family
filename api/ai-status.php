@@ -294,9 +294,28 @@ if (!is_string($resultImageUrl) || $resultImageUrl === '') {
     csf_ai_status_error(502, 'Kie.ai successFlag=1, aber keine resultImageUrl in der Antwort.');
 }
 
-// Bild-URL muss https:// beginnen (Sicherheitscheck gegen SSRF)
+// ── SSRF-Schutz ──────────────────────────────────────────────────────────────
+// 1. Schema: nur https:// erlaubt
 if (!str_starts_with($resultImageUrl, 'https://')) {
     csf_ai_status_error(502, 'resultImageUrl hat ungültiges Schema (erwartet https://).');
+}
+
+// 2. Hostname darf nicht auf private/loopback/reservierte IP auflösen
+//    (verhindert SSRF über z.B. https://169.254.169.254/... nach DNS-Auflösung)
+$ssrfHost = parse_url($resultImageUrl, PHP_URL_HOST);
+if (is_string($ssrfHost) && $ssrfHost !== '') {
+    $resolved = @gethostbyname($ssrfHost);
+    // gethostbyname() gibt bei Fehler den Host selbst zurück → dann Prüfung überspringen
+    if ($resolved !== $ssrfHost) {
+        $isPublic = filter_var(
+            $resolved,
+            FILTER_VALIDATE_IP,
+            FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
+        );
+        if ($isPublic === false) {
+            csf_ai_status_error(502, 'resultImageUrl löst zu privater oder reservierter IP auf — SSRF blockiert.');
+        }
+    }
 }
 
 // Bild herunterladen (kein API-Key nötig — CDN-URL ist öffentlich)

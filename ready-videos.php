@@ -609,16 +609,31 @@ $categories = [
         if (e.key === 'Escape' && !modal.hidden) closeModal();
     });
 
-    modalSubmit.addEventListener('click', () => {
+    modalSubmit.addEventListener('click', async () => {
         const contact = modalEmail.value.trim();
         if (!contact) {
             Toast.warning('Bitte E-Mail oder Telegram angeben.');
             modalEmail.focus();
             return;
         }
-        // Kein echter Versand — Toast + Schließen
-        Toast.success('Anfrage gespeichert! Wir melden uns bald.');
-        closeModal();
+        modalSubmit.disabled = true;
+        modalSubmit.textContent = '⏳ Wird gesendet…';
+        try {
+            const fd = new FormData();
+            fd.append('contact', contact);
+            fd.append('message', modalMessage.value.trim());
+            fd.append('context', modalContext.textContent.trim());
+            const resp = await fetch('/api/save-request.php', { method: 'POST', body: fd });
+            const data = await resp.json().catch(() => ({ status: 'error', message: 'Ungültige Antwort.' }));
+            if (!resp.ok || data.status !== 'ok') throw new Error(data.message || 'Fehler beim Speichern.');
+            Toast.success('✓ Anfrage gespeichert! Wir melden uns bald.');
+            closeModal();
+        } catch (err) {
+            Toast.warning('Fehler: ' + (err && err.message ? err.message : 'Bitte erneut versuchen.'));
+        } finally {
+            modalSubmit.disabled = false;
+            modalSubmit.textContent = '📩 Anfrage senden';
+        }
     });
 
     // ── Card rendern ──────────────────────────────────────────────

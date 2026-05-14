@@ -16,7 +16,7 @@
 | **Version** | 0.1.0 (Free MVP, live seit 2026-05-13) |
 | **Live-URL** | https://cinematic-studio-family.onrender.com |
 | **GitHub** | nuffysstyle-droid/cinematic-studio-family |
-| **Stand** | 2026-05-14 |
+| **Stand** | 2026-05-14 (Session 2) |
 
 ---
 
@@ -106,12 +106,23 @@ Aktuell Demo-Dummy; echte Transaktion in V2.
 | Health-Check-Endpoint | `api/health.php` |
 | Element Library (Grundgerüst) | `elements.php` + `api/elements.php` |
 
-### Dummy / Placeholder (V2)
+### Neu implementiert in Session 2 (2026-05-14) ✅
+| Feature | Dateien | Details |
+|---|---|---|
+| **Audio: stille AAC-Spur** | `api/render-final.php` | `-an` entfernt, alle 4 Slot-Typen bekommen `anullsrc` AAC 96k stereo. Concat `-c copy` funktioniert weiterhin. Original-Audio-Erhalt V3. |
+| **Job-Level Lock** | `api/render-final.php` | `flock(LOCK_EX\|LOCK_NB)` auf `render.lock` → 409 bei parallelem Render |
+| **KI-Bild Button** | `studio-demo.php` | Jede Slot-Card hat Prompt-Textarea + `✨ KI-Bild generieren` Button (lila/blau). `generateAiImage()` + `pollAiStatus()` mit 5s-Intervall, 3 Min. max, Thumbnail-Update on success. Auto-resume bei Page-Restore wenn `pending`. |
+| **Nav verschlankt** | `studio-demo.php`, `scene-editor-test.html` | 5 Links: Home · Studio · Academy · Shop Beta · Kristalle |
+| **Wallet Pill** | `studio-demo.php`, `scene-editor-test.html` | `💎 Free` (war `💎 500`) |
+| **index.php Redirect** | `index.php` | HTTP 302 → `scene-editor-test.html` (war Placeholder) |
+| **Korrekte Stats** | `scene-editor-test.html` | `720p` statt `4K`, Badge `Demo` für Kontakt/Verfügbarkeit |
+
+### Dummy / Placeholder (V2+)
 | Feature | Status |
 |---|---|
 | Login / User-Accounts | Demo-Dummy |
 | Kristalle / Payment / Stripe | Demo-Dummy |
-| Audio-Preservation | Deferred (Concat-Homogenität blockiert) |
+| Audio-Preservation (Original-Ton) | V3 Backlog (aktuell: stille AAC-Spur) |
 | KI-Video-Generierung | Architecture only (Kie.ai video endpoints geplant) |
 
 ---
@@ -134,15 +145,16 @@ Apache braucht `PassEnv KIE_AI_API_KEY` in `docker/apache.conf` damit `getenv()`
 
 ---
 
-## Aktuelle Probleme (Stand 2026-05-14)
+## Aktuelle Probleme (Stand 2026-05-14, Session 2)
 
 | Problem | Priorität | Status |
 |---|---|---|
-| `KIE_AI_API_KEY` nicht in PHP sichtbar (getenv liefert false) | 🔴 P0 | PassEnv deployed, Key-Eintragung ausstehend |
+| `KIE_AI_API_KEY` nicht in Render eingetragen | 🔴 P0 | **User-Aktion nötig:** Render Dashboard → Environment → `KIE_AI_API_KEY` eintragen → Redeploy |
 | Kein echter AI-E2E-Test abgeschlossen | 🔴 P0 | Warte auf gültigen Key in Render |
-| Audio-Preservation nicht implementiert | 🟡 P2 | V2 Backlog |
+| Audio (Original-Ton): stille Spur statt Originalton | 🟡 P2 | V3 Backlog — aktuell anullsrc AAC, Original-Audio-Erhalt folgt |
 | `elements.php` Edit-Button disabled (API 501) | 🟡 P2 | Tech Debt |
 | Logo-Upload nicht mit api/upload.php verbunden | 🟡 P2 | Tech Debt |
+| `ready-videos.php` Modal sendet nicht wirklich | 🟡 P2 | Dummy Toast, kein Backend |
 | `API_PROVIDER_LINK` Platzhalter in config.php | 🟢 P3 | Tech Debt |
 
 → Vollständige Liste: `memory/current-problems.md`
@@ -154,8 +166,8 @@ Apache braucht `PassEnv KIE_AI_API_KEY` in `docker/apache.conf` damit `getenv()`
 | Milestone | Inhalt | Status |
 |---|---|---|
 | **V0.1.0** | Free MVP: Upload → Analyse → Replace → Render → Download | ✅ Live |
-| **V0.2.0** | AI-Generierung live (Kie.ai E2E) | 🟡 In Progress |
-| **V0.3.0** | Audio-Preservation, Starter+ Plan | ⬜ Geplant |
+| **V0.2.0** | KI-Bild Button live (UI fertig), Audio-Spur vorhanden (silent), Job-Lock | 🟡 UI fertig — KIE_AI_API_KEY ausstehend |
+| **V0.3.0** | Original-Audio-Erhalt, Starter+ Plan, 1080p | ⬜ Geplant |
 | **V1.0.0** | Login, Kristalle, Payment (Stripe) | ⬜ Geplant |
 | **V2.0.0** | Multi-User, S3/R2, KI-Video, Templates | ⬜ Vision |
 
@@ -221,5 +233,34 @@ cinematic-studio-family/
 2. **Nie ohne Freigabe committen.** git diff zeigen → auf OK warten.
 3. **Keine Frameworks einführen** — Flat PHP bleibt Flat PHP.
 4. **Keine Dateien löschen** ohne explizite Anweisung.
-5. **Nach jedem Feature:** `PROJECT_STATUS.md` + `CHANGELOG.md` + `agents/points.md` updaten.
+5. **Nach jedem Feature:** `PROJECT_STATUS.md` + `CHANGELOG.md` + `CLAUDE.md` updaten.
 6. **Council-Trigger:** Bei Entscheidungen mit mehreren validen Optionen → "council this:" vorschlagen.
+
+---
+
+## Was wurde in der letzten Session gebaut (2026-05-14)
+
+> Dieser Block ist für jeden neuen Agenten / Account. Lesen, dann loslegen.
+
+### Geänderte Dateien
+| Datei | Was geändert |
+|---|---|
+| `api/render-final.php` | Job-Lock (LOCK_NB) + Audio: alle 4 Slot-Typen haben jetzt anullsrc AAC-Spur statt -an |
+| `studio-demo.php` | Nav verschlankt (5 Links), Wallet "💎 Free", Cold-Start-Text humanisiert, KI-Bild Button + generateAiImage() + pollAiStatus() |
+| `scene-editor-test.html` | Nav verschlankt, Wallet "💎 Free", Stat 720p statt 4K, Academy-CTA, Badge-Fixes |
+| `index.php` | HTTP 302 Redirect → scene-editor-test.html |
+
+### Was NICHT geändert wurde (Don't Touch)
+- `api/generate-ai.php` — Backend ist fertig, wartet nur auf KIE_AI_API_KEY
+- `api/ai-status.php` — fertig
+- `api/analyze.php`, `api/replace-slot.php` — unverändert, funktionieren
+- `includes/functions.php` — Library, nicht anfassen
+- `docker/apache.conf` — PassEnv bereits deployed
+
+### Nächste offene Aufgaben (in dieser Reihenfolge)
+1. **[User-Aktion]** `KIE_AI_API_KEY` in Render-Dashboard eintragen → Redeploy
+2. **[Agent]** E2E-Test: Upload Video → KI-Bild generieren → Render → Download
+3. **[Agent]** `ready-videos.php` Modal-Submit an Backend anschließen
+4. **[Agent]** `health.php` debug-Felder hinter `?debug=1` Guard
+5. **[Agent]** SSRF-Schutz in `api/ai-status.php` (IP-Validierung nach DNS-Auflösung)
+6. **[Entscheidung]** Domain-Strategie: cinematic-studio-family.com vs cinematic-vision-studio.com

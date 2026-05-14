@@ -14,7 +14,8 @@
  *
  * CORS: Apache regelt das — kein PHP-Header.
  *
- * Audio: V1 stumm (`-an`). Audio kommt in V2.
+ * Audio: V2 — stille AAC 44.1 kHz / Stereo in allen Slots (anullsrc).
+ *         Original-Audio-Erhalt kommt in V3.
  *
  * Eingabe (POST, multipart oder x-www-form-urlencoded):
  *   - job_id  string  Format: job_YYYYMMDD_HHMMSS_xxxxxxxx
@@ -151,6 +152,18 @@ if (!is_file($metaPath)) {
     render_fail(404, 'Job nicht gefunden — meta.json fehlt.', ['error_code' => 'job_not_found']);
 }
 
+// ── Job-Level Lock (verhindert parallele Renders derselben Job-ID) ──────────
+// LOCK_NB = non-blocking: zweiter Request bekommt sofort 409 statt zu warten.
+$_renderLockFile = $jobDir . '/render.lock';
+$_fpLock         = @fopen($_renderLockFile, 'c');
+if ($_fpLock === false || !flock($_fpLock, LOCK_EX | LOCK_NB)) {
+    if ($_fpLock !== false) fclose($_fpLock);
+    render_fail(409, 'Render läuft bereits für diesen Job — bitte kurz warten.', [
+        'error_code' => 'render_locked',
+    ]);
+}
+// Lock bleibt bis Prozess-Ende aktiv; PHP gibt ihn beim exit automatisch frei.
+
 // ── meta.json lesen (LOCK_SH) ───────────────────────────────────────────────
 $fpRead = @fopen($metaPath, 'r');
 if ($fpRead === false) {
@@ -257,13 +270,19 @@ foreach ($slots as $idx => $slot) {
         $args = [
             '-loop',     '1',
             '-i',        $imgPath,
+            '-f',        'lavfi',
+            '-i',        'anullsrc=r=44100:cl=stereo',
             '-t',        sprintf('%.3f', $duration),
             '-vf',       $scaleFilter,
+            '-map',      '0:v',
+            '-map',      '1:a',
             '-c:v',      'libx264',
             '-crf',      (string)RENDER_CRF,
             '-preset',   RENDER_PRESET,
             '-pix_fmt',  'yuv420p',
-            '-an',
+            '-c:a',      'aac',
+            '-b:a',      '96k',
+            '-shortest',
             '-y',
             $clipOut,
         ];
@@ -277,13 +296,19 @@ foreach ($slots as $idx => $slot) {
         $source = 'video';
         $args = [
             '-i',        $vidPath,
+            '-f',        'lavfi',
+            '-i',        'anullsrc=r=44100:cl=stereo',
             '-t',        sprintf('%.3f', $duration),
             '-vf',       $scaleFilter,
+            '-map',      '0:v',
+            '-map',      '1:a',
             '-c:v',      'libx264',
             '-crf',      (string)RENDER_CRF,
             '-preset',   RENDER_PRESET,
             '-pix_fmt',  'yuv420p',
-            '-an',
+            '-c:a',      'aac',
+            '-b:a',      '96k',
+            '-shortest',
             '-y',
             $clipOut,
         ];
@@ -304,28 +329,42 @@ foreach ($slots as $idx => $slot) {
         $args = [
             '-f',      'lavfi',
             '-i',      'color=c=black:size=' . RENDER_OUT_W . 'x' . RENDER_OUT_H . ':rate=' . RENDER_OUT_FPS,
+            '-f',      'lavfi',
+            '-i',      'anullsrc=r=44100:cl=stereo',
             '-t',      sprintf('%.3f', $duration),
             '-vf',     $textVf,
+            '-map',    '0:v',
+            '-map',    '1:a',
             '-c:v',    'libx264',
             '-crf',    (string)RENDER_CRF,
             '-preset', RENDER_PRESET,
             '-pix_fmt','yuv420p',
-            '-an',
+            '-c:a',    'aac',
+            '-b:a',    '96k',
+            '-shortest',
             '-y',
             $clipOut,
         ];
     } else {
         // Original-Slot: Cut aus dem Originalvideo
+        // Audio: anullsrc-Stille, damit concat -c copy mit allen Slot-Typen funktioniert.
+        // Original-Audio-Erhalt (AAC-Transcode aus Input) folgt in V3.
         $args = [
             '-ss',       sprintf('%.3f', $start),
             '-i',        $originalPath,
+            '-f',        'lavfi',
+            '-i',        'anullsrc=r=44100:cl=stereo',
             '-t',        sprintf('%.3f', $duration),
             '-vf',       $scaleFilter,
+            '-map',      '0:v',
+            '-map',      '1:a',
             '-c:v',      'libx264',
             '-crf',      (string)RENDER_CRF,
             '-preset',   RENDER_PRESET,
             '-pix_fmt',  'yuv420p',
-            '-an',
+            '-c:a',      'aac',
+            '-b:a',      '96k',
+            '-shortest',
             '-y',
             $clipOut,
         ];

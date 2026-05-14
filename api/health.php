@@ -70,18 +70,23 @@ if (is_dir($storageTemp) && @file_put_contents($probe, 'ok') !== false) {
 }
 
 // ── KI-Konfiguration (Wert nie ausgeben, nur Präsenz) ────────────────────────
-$kieKey = getenv('KIE_AI_API_KEY') ?: ($_SERVER['KIE_AI_API_KEY'] ?? $_ENV['KIE_AI_API_KEY'] ?? '');
+$kieKey    = getenv('KIE_AI_API_KEY') ?: ($_SERVER['KIE_AI_API_KEY'] ?? $_ENV['KIE_AI_API_KEY'] ?? '');
+$debugMode = isset($_GET['debug']) && $_GET['debug'] === '1';
+
 $response['ai'] = [
     'kie_key_set'    => $kieKey !== '',
     'kie_key_source' => $kieKey !== ''
         ? (getenv('KIE_AI_API_KEY') ? 'getenv' : (isset($_SERVER['KIE_AI_API_KEY']) ? '_SERVER' : '_ENV'))
         : 'none',
-    // Alle Env-Var-KEYS (keine Werte!) — nur zur Diagnose ob Render Vars liefert
-    'env_keys'       => array_values(array_filter(
+];
+
+// Verbose debug-Felder nur bei ?debug=1 — nicht in Produktion sichtbar
+if ($debugMode) {
+    $response['ai']['env_keys'] = array_values(array_filter(
         array_keys((array)(getenv() ?: [])),
         fn($k) => !str_starts_with($k, 'APACHE_') && !str_starts_with($k, 'HTTPS')
-    )),
-    'server_keys_custom' => array_values(array_filter(
+    ));
+    $response['ai']['server_keys_custom'] = array_values(array_filter(
         array_keys($_SERVER),
         fn($k) => !str_starts_with($k, 'HTTP_') && !str_starts_with($k, 'APACHE_')
                 && !in_array($k, ['SERVER_NAME','SERVER_PORT','SERVER_ADDR','SERVER_PROTOCOL',
@@ -89,8 +94,8 @@ $response['ai'] = [
                                    'SCRIPT_FILENAME','SCRIPT_NAME','PHP_SELF','GATEWAY_INTERFACE',
                                    'SERVER_SOFTWARE','REMOTE_ADDR','REMOTE_PORT','REQUEST_TIME',
                                    'REQUEST_TIME_FLOAT','SERVER_SIGNATURE'], true)
-    )),
-];
+    ));
+}
 
 http_response_code($response['ok'] ? 200 : 503);
 echo json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);

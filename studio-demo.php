@@ -91,6 +91,17 @@
     .slot-status{margin-top:7px;font-size:11px;color:var(--muted);min-height:1.2em;word-break:break-word;}
     .slot-status.ok{color:var(--ok);}
     .slot-status.err{color:var(--danger);}
+    /* ── KI-Bild Section ───────────────────────────────────────────────────── */
+    .ai-sep{display:flex;align-items:center;gap:8px;margin:12px 0 6px;font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--muted2);}
+    .ai-sep::before,.ai-sep::after{content:"";flex:1;height:1px;background:var(--border);}
+    .ai-prompt{width:100%;margin-top:4px;padding:8px 11px;border-radius:9px;border:1px solid var(--border);background:rgba(0,0,0,.28);color:var(--text);outline:none;font-family:inherit;font-size:12px;resize:vertical;min-height:56px;}
+    .ai-prompt:focus{border-color:rgba(147,51,234,.5);box-shadow:0 0 0 2px rgba(147,51,234,.12);}
+    .ai-btn{margin-top:7px;width:100%;min-height:38px;padding:9px 12px;font-size:12px;font-weight:800;border-radius:9px;background:linear-gradient(90deg,#9333ea,#3b82f6);color:#fff;border:0;cursor:pointer;transition:transform .15s,opacity .15s;}
+    .ai-btn:hover:not(:disabled){transform:translateY(-1px);opacity:.9;}
+    .ai-btn:disabled{opacity:.45;cursor:not-allowed;transform:none;}
+    .ai-status{margin-top:6px;font-size:11px;color:var(--muted);min-height:1.2em;word-break:break-word;}
+    .ai-status.ok{color:var(--ok);}
+    .ai-status.err{color:var(--danger);}
     .note{margin-top:18px;padding:12px 14px;background:rgba(245,197,66,.05);border:1px solid rgba(245,197,66,.14);border-radius:11px;color:var(--muted);font-size:12px;line-height:1.5;}
     .reset-btn{background:transparent;color:var(--muted);border:1px solid var(--border);padding:11px 14px;border-radius:11px;font-weight:700;cursor:pointer;min-height:42px;font-size:12px;}
     .reset-btn:hover{color:var(--text);border-color:rgba(255,255,255,.28);}
@@ -160,32 +171,24 @@
     <div class="nav-links">
       <a href="scene-editor-test.html" class="nav-link">Home</a>
       <a href="studio-demo.php" class="nav-link active">Studio</a>
-      <a href="prompt-generator.php" class="nav-link">Prompts</a>
-      <a href="shop.php" class="nav-link">Shop Beta</a>
-      <a href="portfolio.php" class="nav-link">Portfolio</a>
-      <a href="availability.php" class="nav-link">Verfügbarkeit</a>
       <a href="academy.php" class="nav-link">Academy</a>
+      <a href="shop.php" class="nav-link">Shop Beta</a>
       <a href="crystals.php" class="nav-link">Kristalle</a>
-      <a href="contact.php" class="nav-link">Kontakt</a>
     </div>
     <div class="nav-actions">
       <a href="contact.php" class="nav-btn-ghost">Beta-Zugang</a>
-      <a href="crystals.php" class="wallet-pill">💎 500</a>
+      <a href="crystals.php" class="wallet-pill">💎 Free</a>
     </div>
     <button class="mob-burger" id="mobBurger" aria-label="Menü öffnen" aria-expanded="false"><span></span><span></span><span></span></button>
   </nav>
   <div class="mob-menu" id="mobMenu">
     <a href="scene-editor-test.html" class="mob-link">🏠 Home</a>
     <a href="studio-demo.php" class="mob-link active">🎬 Studio</a>
-    <a href="prompt-generator.php" class="mob-link">✍️ Prompts</a>
-    <a href="shop.php" class="mob-link">🛍️ Shop Beta</a>
-    <a href="portfolio.php" class="mob-link">🎞️ Portfolio</a>
-    <a href="availability.php" class="mob-link">📅 Verfügbarkeit</a>
     <a href="academy.php" class="mob-link">🎓 Academy</a>
+    <a href="shop.php" class="mob-link">🛍️ Shop Beta</a>
     <a href="crystals.php" class="mob-link">💎 Kristalle</a>
-    <a href="contact.php" class="mob-link">✉️ Kontakt</a>
     <div class="mob-sep"></div>
-    <a href="studio-demo.php" class="mob-cta">🎬 Studio starten</a>
+    <a href="contact.php" class="mob-cta">✉️ Beta-Zugang sichern</a>
   </div>
 
   <div class="page">
@@ -194,12 +197,12 @@
       <a href="scene-editor-test.html" class="back-link">← Zurück zur Startseite</a>
 
       <div class="demo-header">
-        <div class="demo-eyebrow">✦ Studio Demo · Live</div>
-        <h1>Ersetze Szenen. <span>KI-gestützt.</span></h1>
-        <p>Lade ein Video hoch, wähle Szenen aus und ersetze sie mit eigenen Bildern, Videos oder Text. Kein Schnitt-Know-how nötig.</p>
+        <div class="demo-eyebrow">✦ KI-Film-Studio · Live</div>
+        <h1>Dein Video. <span>Deine Szenen.</span></h1>
+        <p>Video hochladen → Szenen auswählen → mit Bild, Text oder KI-Bild ersetzen → fertiges MP4 herunterladen. In unter 2 Minuten.</p>
       </div>
 
-      <div class="note" style="text-align:center;font-weight:700;margin-bottom:18px;">⚡ Demo-Modus &mdash; max. 15 Sek. &middot; 720p &middot; kein Ton</div>
+      <div class="note" style="text-align:center;font-weight:700;margin-bottom:18px;">⚡ Demo-Modus &mdash; max. 15 Sek. &middot; 720p MP4 &middot; kostenlos</div>
 
       <div class="steps" id="stepBar">
         <div class="step active" id="step1"><span class="step-num">1</span><span class="step-label">Video hochladen</span></div>
@@ -215,8 +218,8 @@
           <div class="dropzone" id="dropzone">
             <input id="videoInput" type="file" accept="video/mp4,video/webm,video/quicktime,video/x-matroska" class="dropzone-input">
             <span class="dropzone-icon">🎬</span>
-            <div class="dropzone-title">Video hierher ziehen oder auswählen</div>
-            <div class="dropzone-sub">MP4 &nbsp;·&nbsp; WebM &nbsp;·&nbsp; MOV &nbsp;·&nbsp; MKV &nbsp;·&nbsp; max. 15 Sek. &nbsp;·&nbsp; max. 50 MB</div>
+            <div class="dropzone-title">Video hierher ziehen oder klicken</div>
+            <div class="dropzone-sub">MP4 · WebM · MOV · MKV &nbsp;|&nbsp; max. 15 Sek. · max. 50 MB · kostenlos</div>
             <div class="dropzone-filename" id="dropzoneName"></div>
           </div>
           <div class="dropzone-actions">
@@ -224,7 +227,7 @@
             <button id="resetBtn" class="reset-btn" type="button" hidden>↻ Job zurücksetzen</button>
           </div>
           <div id="restoredHint" class="restored-hint" hidden></div>
-          <div id="status" class="status">Bereit — lade dein Video für die KI-Analyse.</div>
+          <div id="status" class="status">Bereit — lade ein Video hoch und starte die KI-Analyse.</div>
         </div>
 
         <div id="meta" class="meta">
@@ -241,9 +244,9 @@
         <div id="slots" class="slots"></div>
 
         <section id="finalSection" class="final-section" hidden>
-          <h2>✦ Finaler Render</h2>
-          <p>Alle Szenen konfiguriert — dein KI-Film wird jetzt zusammengeführt. Nicht bearbeitete Szenen bleiben original. Ausgabe: 720p · MP4.</p>
-          <button id="renderBtn" class="render-btn" type="button">🎬 KI-Video erstellen · 720p</button>
+          <h2>✦ Video erstellen</h2>
+          <p>Szenen fertig? Jetzt rendern — alle Szenen werden zu einem MP4 zusammengefügt. Nicht bearbeitete Szenen bleiben original. Dauert ca. 10–20 Sekunden.</p>
+          <button id="renderBtn" class="render-btn" type="button">🎬 Video rendern · 720p MP4</button>
           <div id="renderStatus" class="render-status" hidden></div>
           <div id="renderError" class="render-error" hidden></div>
           <button id="checkStatusBtn" class="check-btn" type="button" hidden>🔍 Status prüfen</button>
@@ -255,7 +258,7 @@
           </div>
         </section>
 
-        <p class="note">Demo-Modus: max. 15 Sek. &middot; 720p &middot; kein Ton. Render-Dauer ca. 5&ndash;30 Sekunden.</p>
+        <p class="note">Demo-Modus: max. 15 Sek. · 720p MP4 · kostenlos. Render-Dauer ca. 10–20 Sekunden.</p>
       </div>
 
     </div>
@@ -278,10 +281,12 @@
   <script>
     "use strict";
     const BASE_URL    = "https://cinematic-studio-family.onrender.com";
-    const ANALYZE_API = BASE_URL + "/api/analyze.php";
-    const REPLACE_API = BASE_URL + "/api/replace-slot.php";
-    const GETJOB_API  = BASE_URL + "/api/get-job.php";
-    const RENDER_API  = BASE_URL + "/api/render-final.php";
+    const ANALYZE_API     = BASE_URL + "/api/analyze.php";
+    const REPLACE_API     = BASE_URL + "/api/replace-slot.php";
+    const GETJOB_API      = BASE_URL + "/api/get-job.php";
+    const RENDER_API      = BASE_URL + "/api/render-final.php";
+    const GENERATE_AI_API = BASE_URL + "/api/generate-ai.php";
+    const AISTATUS_API    = BASE_URL + "/api/ai-status.php";
     const LS_KEY      = "csf_last_job_id";
     const MAX_IMG_BYTES = 10  * 1024 * 1024;
     const MAX_VID_BYTES = 100 * 1024 * 1024;
@@ -317,7 +322,7 @@
     function networkErrorMessage(err, endpoint) {
       const msg = err && err.message ? err.message : String(err);
       const isNetwork = err && (err.name === "TypeError" || /failed to fetch|networkerror|load failed/i.test(msg));
-      if (isNetwork) return "Backend nicht erreichbar (" + endpoint + ").\nMögliche Ursachen: Render schläft, DNS-Hiccup, Verbindung weg.\nBitte 30–60 Sekunden warten.";
+      if (isNetwork) return "Server antwortet gerade nicht — bitte 30–60 Sekunden warten und erneut versuchen.";
       return msg;
     }
     const COLD_MS = 35000; const COLD_RETRIES = 2;
@@ -349,6 +354,36 @@
       if (slot.replaced && slot.replacement_file) { const parts = String(slot.replacement_file).split("/"); slotStatus.textContent = "Aktuelle Datei: " + parts[parts.length-1]; } else if (slot.replaced && slot.text) { const preview = String(slot.text).slice(0,40) + (slot.text.length > 40 ? "…" : ""); slotStatus.textContent = "Titelkarte: " + preview; slotStatus.classList.add("ok"); }
       body.appendChild(slotStatus); card.appendChild(body);
       saveBtn.addEventListener("click", function(){ saveSlot({card,fileInput,textField,slotStatus,saveBtn}); });
+
+      // ── KI-Bild Section ─────────────────────────────────────────────────────
+      const aiSep = document.createElement("div"); aiSep.className = "ai-sep"; aiSep.textContent = "KI-Bild"; body.appendChild(aiSep);
+      const aiPrompt = document.createElement("textarea"); aiPrompt.className = "ai-prompt";
+      aiPrompt.placeholder = 'Szene beschreiben: z.B. "Cinematic sunset over ocean, golden hour, 4K"';
+      aiPrompt.maxLength = 500;
+      if (slot.ai_prompt) aiPrompt.value = String(slot.ai_prompt);
+      body.appendChild(aiPrompt);
+      const aiBtn = document.createElement("button"); aiBtn.type = "button"; aiBtn.className = "ai-btn";
+      const aiStatus = document.createElement("div"); aiStatus.className = "ai-status";
+      if (slot.ai_status === "done") {
+        aiBtn.textContent = "✨ Neues KI-Bild generieren";
+        aiStatus.textContent = "✓ KI-Bild aktiv"; aiStatus.classList.add("ok");
+      } else if (slot.ai_status === "pending") {
+        aiBtn.textContent = "⏳ KI generiert…"; aiBtn.disabled = true;
+        aiStatus.textContent = "KI-Bild wird generiert — bitte warten…";
+      } else if (slot.ai_status === "failed") {
+        aiBtn.textContent = "✨ KI-Bild erneut versuchen";
+        aiStatus.textContent = "✗ KI-Generierung fehlgeschlagen."; aiStatus.classList.add("err");
+      } else {
+        aiBtn.textContent = "✨ KI-Bild generieren";
+      }
+      body.appendChild(aiBtn);
+      body.appendChild(aiStatus);
+      aiBtn.addEventListener("click", function(){ generateAiImage({card, aiPrompt, aiBtn, aiStatus}); });
+      // Auto-resume polling if this slot was in "pending" state on restore
+      if (slot.ai_status === "pending") {
+        setTimeout(function(){ pollAiStatus({card, aiBtn, aiStatus}); }, 4000);
+      }
+
       return card;
     }
     function renderSlots(data) { clearChildren(slotsBox); data.slots.forEach(function(slot){ slotsBox.appendChild(createSlotCard(data.job_id, slot)); }); }
@@ -367,7 +402,7 @@
       try {
         const formData = new FormData(); formData.append("job_id",card.dataset.jobId); formData.append("slot_number",card.dataset.slotNumber); formData.append("text",text);
         if (file) formData.append("replacement_file",file);
-        const response = await fetchWithRetry(REPLACE_API,{method:"POST",body:formData},function(n){setSlotStatus(slotStatus,"Render schläft — Versuch "+n+" in 35s…");});
+        const response = await fetchWithRetry(REPLACE_API,{method:"POST",body:formData},function(n){setSlotStatus(slotStatus,"Server startet — Versuch "+n+"…");});
         const responseText = await response.text();
         let data; try { data = JSON.parse(responseText); } catch(e){ throw new Error("Antwort war kein JSON:\n"+responseText); }
         if (!response.ok || data.status !== "ok") throw new Error(data.message || "Speichern fehlgeschlagen");
@@ -377,6 +412,71 @@
       } catch(err) { setSlotStatus(slotStatus,"Fehler: "+(err&&err.message?err.message:err),"err"); }
       finally { saveBtn.disabled = false; }
     }
+
+    // ── KI-Bild generieren ───────────────────────────────────────────────────
+    async function generateAiImage({card, aiPrompt, aiBtn, aiStatus}) {
+      const prompt = aiPrompt.value.trim();
+      if (!prompt) { aiStatus.textContent = "Bitte einen Prompt eingeben."; aiStatus.className = "ai-status err"; return; }
+      if (prompt.length > 500) { aiStatus.textContent = "Prompt zu lang (max. 500 Zeichen)."; aiStatus.className = "ai-status err"; return; }
+      aiBtn.disabled = true; aiBtn.textContent = "⏳ KI generiert…";
+      aiStatus.className = "ai-status"; aiStatus.textContent = "Prompt wird gesendet…";
+      try {
+        const fd = new FormData();
+        fd.append("job_id", card.dataset.jobId);
+        fd.append("slot_number", card.dataset.slotNumber);
+        fd.append("prompt", prompt);
+        fd.append("model", "flux-kontext-pro");
+        const resp = await fetch(GENERATE_AI_API, {method:"POST", body:fd});
+        const txt = await resp.text();
+        let data; try { data = JSON.parse(txt); } catch(e){ throw new Error("Antwort war kein JSON:\n"+txt); }
+        if (!resp.ok || data.status !== "pending") throw new Error(data.message || "KI-Start fehlgeschlagen (Status: "+(data.status||resp.status)+")");
+        aiStatus.textContent = "✓ KI-Job gestartet — Bild kommt in ~15 Sekunden…";
+        pollAiStatus({card, aiBtn, aiStatus});
+      } catch(err) {
+        aiBtn.disabled = false; aiBtn.textContent = "✨ KI-Bild generieren";
+        aiStatus.className = "ai-status err"; aiStatus.textContent = "Fehler: "+(err&&err.message?err.message:String(err));
+      }
+    }
+
+    // ── KI-Bild Status pollen ────────────────────────────────────────────────
+    function pollAiStatus({card, aiBtn, aiStatus}) {
+      const jobId   = card.dataset.jobId;
+      const slotNum = card.dataset.slotNumber;
+      const maxAttempts = 36; // 36 × 5s = 3 Min. max
+      let attempt = 0;
+      function check() {
+        attempt++;
+        if (attempt > maxAttempts) {
+          aiBtn.disabled = false; aiBtn.textContent = "✨ KI-Bild erneut versuchen";
+          aiStatus.className = "ai-status err"; aiStatus.textContent = "Timeout — bitte erneut generieren.";
+          return;
+        }
+        const remaining = Math.round((maxAttempts - attempt) * 5);
+        aiStatus.textContent = "KI generiert — ca. noch " + remaining + "s…";
+        const url = AISTATUS_API + "?job_id=" + encodeURIComponent(jobId) + "&slot_number=" + encodeURIComponent(slotNum);
+        fetch(url).then(function(resp){ return resp.text(); }).then(function(txt){
+          let data; try { data = JSON.parse(txt); } catch(e){ data = {status:"error"}; }
+          if (data.status === "done") {
+            aiBtn.disabled = false; aiBtn.textContent = "✨ Neues KI-Bild generieren";
+            aiStatus.className = "ai-status ok"; aiStatus.textContent = "✓ KI-Bild generiert und als Szene gesetzt!";
+            card.classList.add("is-replaced");
+            if (data.replacement_file) {
+              var thumbImg = card.querySelector(".thumb img");
+              if (thumbImg) { thumbImg.src = BASE_URL + data.replacement_file + "?t=" + Date.now(); }
+              var badge = card.querySelector(".badge");
+              if (badge) { badge.style.display = "inline-block"; }
+            }
+          } else if (data.status === "failed") {
+            aiBtn.disabled = false; aiBtn.textContent = "✨ KI-Bild erneut versuchen";
+            aiStatus.className = "ai-status err"; aiStatus.textContent = "✗ Generierung fehlgeschlagen — erneut versuchen.";
+          } else {
+            setTimeout(check, 5000); // still generating → poll again
+          }
+        }).catch(function(){ setTimeout(check, 5000); }); // network hiccup → retry silently
+      }
+      setTimeout(check, 5000); // first check after 5s
+    }
+
     analyzeBtn.addEventListener("click", async function(){
       const file = videoInput.files[0];
       if (!file) { setStatus("Bitte zuerst ein Video auswählen.","err"); return; }
@@ -385,7 +485,7 @@
       dbg("analyze: POST",{endpoint:ANALYZE_API,name:file.name,size:file.size});
       try {
         const formData = new FormData(); formData.append("video",file);
-        const response = await fetchWithRetry(ANALYZE_API,{method:"POST",body:formData},function(n){setStatus("Render schläft (Cold Start) — Versuch "+n+" in 35s…");});
+        const response = await fetchWithRetry(ANALYZE_API,{method:"POST",body:formData},function(n){setStatus("Studio startet — gleich geht's los (Versuch "+n+")…");});
         const text = await response.text();
         let data; try { data = JSON.parse(text); } catch(e){ throw new Error("Antwort war kein JSON:\n"+text); }
         if (!response.ok || data.status !== "ok") throw new Error(data.message || "Analyse fehlgeschlagen");
@@ -425,7 +525,7 @@
       setStatus("Job "+jobId+" wird geladen…");
       try {
         const url=GETJOB_API+"?job_id="+encodeURIComponent(jobId);
-        const response=await fetchWithRetry(url,{method:"GET"},function(n){setStatus("Render schläft (Cold Start) — Versuch "+n+" in 35s…");});
+        const response=await fetchWithRetry(url,{method:"GET"},function(n){setStatus("Studio startet — gleich geht's los (Versuch "+n+")…");});
         const text=await response.text();
         let data; try{data=JSON.parse(text);}catch(e){throw new Error("Antwort war kein JSON:\n"+text);}
         if(response.status===404){ clearJobStorage(); updateUrlHash(null); setStatus("Gespeicherter Job nicht mehr verfügbar — bitte ein neues Video analysieren.","err"); return; }
@@ -458,14 +558,14 @@
       try {
         renderStatus.textContent="Server neu gestartet — analysiere Video erneut…"; renderStatus.hidden=false;
         var fd=new FormData(); fd.append("video",videoFile);
-        var aResp=await fetchWithRetry(ANALYZE_API,{method:"POST",body:fd},function(n){renderStatus.textContent="Analyse: Cold Start — Versuch "+n+" in 35s…";});
+        var aResp=await fetchWithRetry(ANALYZE_API,{method:"POST",body:fd},function(n){renderStatus.textContent="Video wird analysiert — Versuch "+n+"…";});
         var aText=await aResp.text(); var aData; try{aData=JSON.parse(aText);}catch(e){throw new Error("Analyse-Antwort kein JSON:\n"+aText);}
         if(!aResp.ok||aData.status!=="ok") throw new Error(aData.message||"Re-Analyse fehlgeschlagen");
         var newJobId=aData.job_id; jobIdEl.textContent=newJobId; saveJobToStorage(newJobId); updateUrlHash(newJobId);
         renderSlots({job_id:newJobId,slots:aData.slots||[]});
         renderStatus.textContent="Analyse fertig. Starte Render ("+aData.slot_count+" Slots)…";
         var rf=new FormData(); rf.append("job_id",newJobId);
-        var rResp=await fetchWithRetry(RENDER_API,{method:"POST",body:rf},function(n){renderStatus.textContent="Render: Versuch "+n+" in 35s…";});
+        var rResp=await fetchWithRetry(RENDER_API,{method:"POST",body:rf},function(n){renderStatus.textContent="Rendering läuft — Versuch "+n+"…";});
         var rText=await rResp.text(); var rData; try{rData=JSON.parse(rText);}catch(e){throw new Error("Render-Antwort kein JSON:\n"+rText);}
         if(!rResp.ok||rData.status!=="ok") throw new Error(rData.message||"Render fehlgeschlagen");
         renderStatus.hidden=true; showFinalResult(rData);
@@ -482,7 +582,7 @@
       hideRenderState(); renderBtn.disabled=true; renderStatus.textContent="🔄 Verbinde mit KI-Engine…"; renderStatus.hidden=false;
       try {
         var preUrl=GETJOB_API+"?job_id="+encodeURIComponent(jobId);
-        var preResp=await fetchWithRetry(preUrl,{method:"GET"},function(n){renderStatus.textContent="Server wacht auf (Cold Start) — Versuch "+n+" in 35s…";});
+        var preResp=await fetchWithRetry(preUrl,{method:"GET"},function(n){renderStatus.textContent="Server startet — Versuch "+n+"…";});
         var preText=await preResp.text(); var preData; try{preData=JSON.parse(preText);}catch(e){throw new Error("Server-Antwort kein JSON:\n"+preText);}
         if(preResp.ok&&preData.status==="ok"&&preData.job&&preData.job.final_video){renderStatus.hidden=true;showFinalResult(preData.job);return;}
         if(preResp.status===404||!preResp.ok||preData.status!=="ok"){
@@ -492,7 +592,7 @@
         }
         renderStatus.textContent="⚡ Rendere 720p-Video — ca. 10–30 Sek. Tab offen lassen…";
         var formData=new FormData(); formData.append("job_id",jobId);
-        var response=await fetchWithRetry(RENDER_API,{method:"POST",body:formData},function(n){renderStatus.textContent="Render: Cold Start — Versuch "+n+" in 35s…";});
+        var response=await fetchWithRetry(RENDER_API,{method:"POST",body:formData},function(n){renderStatus.textContent="Rendering läuft — Versuch "+n+"…";});
         var text=await response.text(); var data; try{data=JSON.parse(text);}catch(e){throw new Error("Antwort war kein JSON:\n"+text);}
         if(!response.ok||data.status!=="ok") throw new Error(data.message||"Render fehlgeschlagen");
         renderStatus.hidden=true; showFinalResult(data);
@@ -513,7 +613,7 @@
       checkStatusBtn.disabled=true; checkStatusBtn.textContent="Prüfe …";
       try {
         const url=GETJOB_API+"?job_id="+encodeURIComponent(jobId);
-        const response=await fetchWithRetry(url,{method:"GET"},function(n){checkStatusBtn.textContent="Cold Start — Versuch "+n+" in 35s…";});
+        const response=await fetchWithRetry(url,{method:"GET"},function(n){checkStatusBtn.textContent="Server startet — Versuch "+n+"…";});
         const text=await response.text(); let data; try{data=JSON.parse(text);}catch(e){throw new Error("Antwort war kein JSON:\n"+text);}
         if(!response.ok||data.status!=="ok"||!data.job) throw new Error(data.message||"Status konnte nicht geladen werden.");
         const job=data.job; const finalUrl=job.final_video||job.final_video_url||job.result_url||null;
