@@ -274,7 +274,7 @@
         <a href="crystals.php">Kristalle</a>
         <a href="contact.php">Kontakt</a>
       </nav>
-      <div class="footer-copy">© 2025 · Premium KI-Filmproduktion</div>
+      <div class="footer-copy">© 2026 · Premium KI-Filmproduktion</div>
     </div>
   </footer>
 
