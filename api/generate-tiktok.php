@@ -67,7 +67,7 @@ const HOOK_SUGGESTIONS = [
     ],
     'tiktok_shop'   => [
         'Das Produkt kauft gerade jeder — und das ist der Grund.',
-        'Ich hab's getestet. Hier ist das Ergebnis.',
+        'Ich hab\'s getestet. Hier ist das Ergebnis.',
         'Dieses Ding ist überall ausverkauft — zum Glück nicht hier.',
         'Einmal bestellt, nie mehr ohne.',
     ],
