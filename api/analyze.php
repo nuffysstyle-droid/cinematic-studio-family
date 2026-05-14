@@ -1,8 +1,11 @@
 <?php
 declare(strict_types=1);
+
+require_once __DIR__ . '/../includes/config.php';
+
 header("Content-Type: application/json");
 
-$storageRoot = __DIR__ . "/../storage";
+$storageRoot = realpath(__DIR__ . "/../storage") ?: (__DIR__ . "/../storage");
 $uploadDir = $storageRoot . "/uploads/videos";
 $thumbDir = $storageRoot . "/thumbnails";
 
@@ -36,15 +39,46 @@ if ($file["error"] !== UPLOAD_ERR_OK) {
     exit;
 }
 
-$allowed = ["mp4", "mov", "webm", "mkv"];
-$ext = strtolower(pathinfo($file["name"], PATHINFO_EXTENSION));
-
-if (!in_array($ext, $allowed)) {
+// ── Größenlimit (konsistent mit MAX_UPLOAD_BYTES aus config.php) ───
+if ((int)$file["size"] > MAX_UPLOAD_BYTES) {
+    $limitMb = round(MAX_UPLOAD_BYTES / 1048576);
+    http_response_code(413);
     echo json_encode([
-        "status" => "error",
-        "message" => "Dateityp nicht erlaubt",
-        "allowed" => $allowed
+        "status"   => "error",
+        "message"  => "Datei zu groß. Limit: {$limitMb} MB.",
+        "size"     => $file["size"],
+        "limit"    => MAX_UPLOAD_BYTES,
     ], JSON_PRETTY_PRINT);
+    exit;
+}
+
+// ── MIME-Prüfung via finfo (nicht dem Browser-Feld vertrauen) ──────
+$finfo    = new finfo(FILEINFO_MIME_TYPE);
+$mimeType = $finfo->file($file["tmp_name"]);
+
+$allowedMimes = ALLOWED_VIDEO_TYPES; // aus config.php
+if (!in_array($mimeType, $allowedMimes, true)) {
+    http_response_code(415);
+    echo json_encode([
+        "status"   => "error",
+        "message"  => "Dateityp nicht erlaubt. Nur MP4, MOV, WebM, MKV.",
+        "detected" => $mimeType,
+    ], JSON_PRETTY_PRINT);
+    exit;
+}
+
+$extMap = [
+    'video/mp4'         => 'mp4',
+    'video/quicktime'   => 'mov',
+    'video/webm'        => 'webm',
+    'video/x-matroska'  => 'mkv',
+];
+$ext = $extMap[$mimeType] ?? 'mp4';
+
+// is_uploaded_file guard (path traversal)
+if (!is_uploaded_file($file["tmp_name"])) {
+    http_response_code(400);
+    echo json_encode(["status" => "error", "message" => "Ungültige Datei."], JSON_PRETTY_PRINT);
     exit;
 }
 
