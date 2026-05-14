@@ -79,31 +79,23 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
   <div class="nav-links">
     <a href="scene-editor-test.html" class="nav-link">Home</a>
     <a href="studio-demo.php" class="nav-link">Studio</a>
-    <a href="prompt-generator.php" class="nav-link">Prompts</a>
     <a href="shop.php" class="nav-link">Shop Beta</a>
-    <a href="portfolio.php" class="nav-link">Portfolio</a>
-    <a href="availability.php" class="nav-link">Verfügbarkeit</a>
     <a href="academy.php" class="nav-link">Academy</a>
     <a href="crystals.php" class="nav-link active">Kristalle</a>
-    <a href="contact.php" class="nav-link">Kontakt</a>
   </div>
   <div class="nav-actions">
     <a href="contact.php" class="nav-btn-ghost">Beta-Zugang</a>
     <a href="studio-demo.php" class="nav-btn-gold">Studio starten</a>
-    <a href="crystals.php" class="wallet-pill">💎 500</a>
+    <a href="crystals.php" class="wallet-pill">💎 Free</a>
   </div>
   <button class="mob-burger" id="mobBurger" aria-label="Menü öffnen" aria-expanded="false"><span></span><span></span><span></span></button>
 </nav>
 <div class="mob-menu" id="mobMenu">
   <a href="scene-editor-test.html" class="mob-link">🏠 Home</a>
   <a href="studio-demo.php" class="mob-link">🎬 Studio</a>
-  <a href="prompt-generator.php" class="mob-link">✍️ Prompts</a>
   <a href="shop.php" class="mob-link">🛍️ Shop Beta</a>
-  <a href="portfolio.php" class="mob-link">🎞️ Portfolio</a>
-  <a href="availability.php" class="mob-link">📅 Verfügbarkeit</a>
   <a href="academy.php" class="mob-link">🎓 Academy</a>
   <a href="crystals.php" class="mob-link active">💎 Kristalle</a>
-  <a href="contact.php" class="mob-link">✉️ Kontakt</a>
   <div class="mob-sep"></div>
   <a href="studio-demo.php" class="mob-cta">🎬 Studio starten</a>
 </div>
@@ -157,7 +149,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
       <a href="crystals.php">Kristalle</a>
       <a href="contact.php">Kontakt</a>
     </nav>
-    <div class="footer-copy">© 2025 · Premium KI-Filmproduktion</div>
+    <div class="footer-copy">© 2026 · Premium KI-Filmproduktion</div>
   </div>
 </footer>
 <script>(function(){var b=document.getElementById('mobBurger'),m=document.getElementById('mobMenu');if(!b||!m)return;function t(){m.style.top=document.querySelector('.nav').offsetHeight+'px';}t();window.addEventListener('resize',t);b.addEventListener('click',function(e){e.stopPropagation();var o=m.classList.toggle('open');b.classList.toggle('open',o);b.setAttribute('aria-expanded',o?'true':'false');b.setAttribute('aria-label',o?'Menü schließen':'Menü öffnen');});m.querySelectorAll('.mob-link,.mob-cta').forEach(function(l){l.addEventListener('click',function(){m.classList.remove('open');b.classList.remove('open');b.setAttribute('aria-expanded','false');b.setAttribute('aria-label','Menü öffnen');});});document.addEventListener('click',function(e){if(!b.contains(e.target)&&!m.contains(e.target)){m.classList.remove('open');b.classList.remove('open');b.setAttribute('aria-expanded','false');}});document.addEventListener('keydown',function(e){if(e.key==='Escape'){m.classList.remove('open');b.classList.remove('open');b.setAttribute('aria-expanded','false');}});})();</script>

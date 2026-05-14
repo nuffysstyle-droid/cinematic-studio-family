@@ -88,16 +88,13 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
     <a href="studio-demo.php" class="nav-link">Studio</a>
     <a href="prompt-generator.php" class="nav-link active">Prompts</a>
     <a href="shop.php" class="nav-link">Shop Beta</a>
-    <a href="portfolio.php" class="nav-link">Portfolio</a>
-    <a href="availability.php" class="nav-link">Verfügbarkeit</a>
     <a href="academy.php" class="nav-link">Academy</a>
     <a href="crystals.php" class="nav-link">Kristalle</a>
-    <a href="contact.php" class="nav-link">Kontakt</a>
   </div>
   <div class="nav-actions">
     <a href="contact.php" class="nav-btn-ghost">Beta-Zugang</a>
     <a href="studio-demo.php" class="nav-btn-gold">Studio starten</a>
-    <a href="crystals.php" class="wallet-pill">💎 500</a>
+    <a href="crystals.php" class="wallet-pill">💎 Free</a>
   </div>
   <button class="mob-burger" id="mobBurger" aria-label="Menü öffnen" aria-expanded="false"><span></span><span></span><span></span></button>
 </nav>
@@ -106,11 +103,8 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
   <a href="studio-demo.php" class="mob-link">🎬 Studio</a>
   <a href="prompt-generator.php" class="mob-link active">✍️ Prompts</a>
   <a href="shop.php" class="mob-link">🛍️ Shop Beta</a>
-  <a href="portfolio.php" class="mob-link">🎞️ Portfolio</a>
-  <a href="availability.php" class="mob-link">📅 Verfügbarkeit</a>
   <a href="academy.php" class="mob-link">🎓 Academy</a>
   <a href="crystals.php" class="mob-link">💎 Kristalle</a>
-  <a href="contact.php" class="mob-link">✉️ Kontakt</a>
   <div class="mob-sep"></div>
   <a href="studio-demo.php" class="mob-cta">🎬 Studio starten</a>
 </div>
@@ -227,7 +221,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
       <a href="crystals.php">Kristalle</a>
       <a href="contact.php">Kontakt</a>
     </nav>
-    <div class="footer-copy">© 2025 · Premium KI-Filmproduktion</div>
+    <div class="footer-copy">© 2026 · Premium KI-Filmproduktion</div>
   </div>
 </footer>
 
