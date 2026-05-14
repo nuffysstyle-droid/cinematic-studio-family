@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * api/upload.php — Sicherer Datei-Upload Endpunkt
  * Unterstützt: Bilder (JPEG, PNG, WEBP) und Videos (MP4, WEBM, MOV)

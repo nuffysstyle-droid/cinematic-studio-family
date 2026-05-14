@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * api/projects.php — Projekt-CRUD auf JSON-Basis
  * Speicherort: data/projects/projects.json

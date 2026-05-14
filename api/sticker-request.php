@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * api/sticker-request.php — Sticker Service Anfrage speichern
  * Speichert Sticker-Anfragen in data/sticker-requests.json

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * api/save-element.php — Neues Element speichern
  * Speicherort: data/elements.json

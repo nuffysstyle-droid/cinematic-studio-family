@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * api/generate-trailer.php — Cinematic Trailer Prompt Builder
  * Erzeugt Timeline-Struktur + Szenen-Prompts + Gesamt-Prompt.

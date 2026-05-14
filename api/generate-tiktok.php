@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * api/generate-tiktok.php — TikTok Prompt Generator
  * Nutzt bestehende Prompt Engine (buildVideoPrompt + Modifier).

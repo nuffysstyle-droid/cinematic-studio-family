@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * api/test-key.php — API-Key Session-Handling
  * Empfängt den Key, validiert Mindestlänge, speichert in Session.

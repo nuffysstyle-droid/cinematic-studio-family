@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * api/generate-image.php — Bild-Prompt Generator
  * Nutzt die Prompt Engine, gibt strukturierten Prompt zurück.

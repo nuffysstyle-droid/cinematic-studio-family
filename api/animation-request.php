@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * api/animation-request.php — Animation Service Anfrage speichern
  * Speichert Animations-Anfragen in data/animation-requests.json

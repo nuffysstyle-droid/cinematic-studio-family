@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * api/elements.php — Element Library CRUD
  * Aktionen: list, delete, update (vorbereitet)

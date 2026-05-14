@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * api/job-status.php — Job Status Polling (Platzhalter V1)
  * Wird mit echter Seedance/Kie.ai API in Phase 4 verbunden.
