@@ -40,7 +40,7 @@ services:
     # legt die Standard-Ordnerstruktur an und biegt /var/www/html/storage und
     # /var/www/html/data via Symlink auf die Disk um.
     #
-    # Disks sind an genau EINEN Service gebunden (kein Sharing).
+    # Diese Disk wird auch vom csf-cleanup-cron-Service gemountet (gleicher Name).
     # Bei Bedarf via Render-Dashboard auf 5GB / 10GB / mehr upgraden.
     disk:
       name: csf-storage
@@ -52,3 +52,32 @@ services:
     # gilt der Deploy als gescheitert. Smoketest läuft separat über
     # /api/health.php (mit FFmpeg-Status).
     healthCheckPath: /index.php
+
+  # ── Cron: Tägliches Disk-Cleanup ─────────────────────────────────────────
+  # Läuft täglich um 03:00 UTC — löscht Jobs/Exports älter als 48 h und
+  # Temp-Dateien älter als 2 h. Ergänzt den probabilistischen Cleanup in
+  # render-final.php (1/50 Chance nach jedem Render).
+  #
+  # VORAUSSETZUNG: Render Starter-Plan erlaubt bis zu 3 Services pro Disk.
+  # Falls der Plan keinen Disk-Share unterstützt, kann alternativ die HTTP-API
+  # genutzt werden (cronjob.org o.ä. ruft /api/cleanup.php?key=CLEANUP_SECRET auf).
+  #
+  # Disk-Strategie: Derselbe Disk-Name wie Web-Service → gleiche Persistent Disk.
+  # Cron und Web-Service DÜRFEN nie gleichzeitig schreiben → kein Konflikt, weil
+  # Cron nachts läuft und bei laufendem Render-Job automatisch gewartet wird
+  # (LOCK_EX in csf_cleanup_old_jobs()).
+  #
+  # Kosten: Render Cron auf Starter = $0 (im Starter-Plan enthalten).
+  - type: cron
+    name: csf-cleanup-cron
+    env: docker
+    dockerfilePath: ./Dockerfile
+    schedule: "0 3 * * *"       # Täglich 03:00 UTC
+    startCommand: php /var/www/html/bin/cleanup-cron.php
+    envVars:
+      - key: PERSIST_ROOT
+        value: /var/www/html/render-data
+    disk:
+      name: csf-storage         # MUSS derselbe Name wie oben sein (gleiche Disk)
+      mountPath: /var/www/html/render-data
+      sizeGB: 1

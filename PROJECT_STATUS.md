@@ -2,24 +2,31 @@
 
 ## Aktueller Status
 **Phase:** Free MVP live ✅  
-**Stand:** 2026-05-13  
+**Stand:** 2026-05-15  
 **Version:** 0.1.0 (Free MVP)  
-**Git:** `2892e46` — aktuellster Commit auf `main`, deployed auf Render
+**Git:** `main` — deployed auf Render
 
-### Free MVP Checkpoint — 2026-05-13
+### Free MVP Checkpoint — 2026-05-15
 Live-URL: `https://cinematic-studio-family.onrender.com/studio-demo.php`  
-E2E-Test: **alle Checks grün** (siehe CHANGELOG.md → Free MVP 2026-05-13)
+Hub: `scene-editor-test.html` (IONOS-Push ausstehend — User-Aktion)
 
 **Was funktioniert:**
 - Upload → Analyse → Text-Titelkarte / Bild-Replacement / Original-Cut → Render → MP4 Download
 - FFmpeg drawtext mit Liberation Sans (fonts-liberation im Docker)
-- Free-Plan-stabile Pipeline: 720p · ultrafast · max 15s · max 3 Slots · kein Ton
+- Audio-Preservation V3: Original-Audio via ffprobe für alle Slot-Typen
+- Free-Plan-stabile Pipeline: 720p · ultrafast · max 15s · max 3 Slots
+- Kie.ai Flux Kontext KI-Bild-Generierung in studio-demo.php (wartet auf API-Key)
+- `api/generate-ai.php` + `api/ai-status.php` vollständig implementiert
+- Probabilistischer Cleanup (1/50 nach Render-Job) + `bin/cleanup-cron.php` + `api/cleanup.php`
+- Kontaktanfragen: `ready-videos.php` Modal → `api/save-request.php` → `storage/requests.json`
+- settings.php: Export-Qualität 720p/1080p Toggle (Session-basiert)
+- Alle 6 Studio-Cards im Hub verlinkt
 
-**Was fehlt (V2-Backlog):**
-- Audio-Preservation (Concat-Homogenität blockiert bei gemischten Slot-Typen)
-- Persistenz (Starter+ Disk oder R2/S3 nötig)
-- Echte KI-API-Anbindung (aktuell Prompt-Generator only)
+**V2-Backlog (bewusst zurückgestellt):**
+- KIE_AI_API_KEY in Render Dashboard eintragen → Redeploy (User-Aktion, P0)
+- CLEANUP_SECRET in Render Dashboard eintragen (User-Aktion, P2)
 - Login / Payment / Kristalle (Demo-Dummy)
+- scene-editor-test.html → IONOS pushen (User-Aktion)
 
 ---
 
@@ -40,8 +47,8 @@ Cinematic Studio Family ist eine Anwendung zur professionellen Erstellung und Ve
 | Phase 1 — Fundament  | ✅ Fertig       | 14 Seiten-Grundgerüste, includes/, api/, assets/                          |
 | Phase 2 — Kern       | ✅ Fertig       | Prompt Engine, Studios, Elements, Guidance, Dashboard, Projektverwaltung  |
 | Phase 3 — TikTok+    | ✅ Fertig 🧊    | TikTok Studio, Animation, Sticker, Trailer, Showroom, Academy             |
-| Phase 4 — Export     | ✅ Fertig       | FFmpeg ✅, Clip-Merge ✅, Export-API ✅, Polling ✅, Thumbnail-UI ✅, Progress-Bar ✅, Error-Box ✅ |
-| Phase 5 — Release    | 🟡 In Arbeit    | Security ✅ (#37), Render Deployment Setup ✅ (#38, Live-Klick beim User), Settings, Tests |
+| Phase 4 — Export     | ✅ Fertig       | FFmpeg ✅, Clip-Merge ✅, Export-API ✅, Polling ✅, Thumbnail-UI ✅, Progress-Bar ✅, Error-Box ✅, Audio V3 ✅ |
+| Phase 5 — Release    | 🟡 In Arbeit    | Security ✅ (#37), Render Deploy Setup ✅ (#38), settings.php ✅ (#35), KI-API-Key ⬜ (User) |
 
 ---
 
@@ -77,13 +84,22 @@ Cinematic Studio Family ist eine Anwendung zur professionellen Erstellung und Ve
 
 ## Offene Punkte nach Phase 3
 
-### Technische Schulden (vor Phase 5 beheben)
+### Technische Schulden (offen)
 | Punkt | Datei | Priorität |
 |-------|-------|-----------|
-| Logo-Upload nicht mit api/upload.php verbunden | tiktok-animation.php, tiktok-sticker.php | P2 |
-| Anfrage-Modal sendet nicht wirklich (nur Toast) | ready-videos.php | P2 |
-| elements.php "Bearbeiten"-Button disabled | elements.php + api/elements.php (501) | P2 |
+| KIE_AI_API_KEY nicht eingetragen | Render Dashboard | P0 (User) |
+| CLEANUP_SECRET nicht eingetragen | Render Dashboard | P2 (User) |
 | API_PROVIDER_LINK ist Platzhalter | includes/config.php | P3 |
+| Polling in progress.js ohne Backoff | assets/js/progress.js | P3 |
+
+### Behobene Schulden (Session 3–5)
+| Punkt | Gelöst |
+|-------|--------|
+| Logo-Upload nicht verbunden | ✅ Session 3: `uploadLogoIfNeeded()` |
+| Anfrage-Modal sendet nicht wirklich | ✅ Session 3: `api/save-request.php` |
+| elements.php "Bearbeiten"-Button disabled | ✅ Session 3: Edit-Modal + API update |
+| Audio fehlt (concat-Homogenität) | ✅ Session 4: Audio V3 anullsrc+ffprobe |
+| KI-Bild Button fehlend in studio-demo.php | ✅ Session 5: generateAiImage() + pollAiStatus() |
 
 ---
 

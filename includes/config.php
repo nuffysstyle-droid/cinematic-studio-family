@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 // App-Konfiguration
 define('APP_NAME',    'Cinematic Vision Studio');
 define('APP_VERSION', '0.1.0');
@@ -19,6 +21,9 @@ define('API_PROVIDER_CREDITS_LINK', 'https://kie.ai/pricing');
 define('API_KEY_MIN_LENGTH', 20);
 
 // Session starten (API-Key nur in Session, nie persistent)
+// Session-Name konsistent über alle Seiten — muss VOR session_start() gesetzt werden.
 if (session_status() === PHP_SESSION_NONE) {
+    $sessionName = getenv('PHP_SESSION_NAME') ?: 'csf_session';
+    session_name($sessionName);
     session_start();
 }

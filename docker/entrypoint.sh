@@ -4,7 +4,12 @@
 #   1) Dynamischen PORT von Render übernehmen ($PORT, sonst 80)
 #   2) Persistent-Disk-Layout vorbereiten (Symlinks für storage/ + data/)
 #   3) Berechtigungen setzen
-#   4) Apache im Vordergrund starten
+#   4) Befehl ausführen: "$@" (CMD aus Dockerfile) oder Fallback auf apache2-foreground
+#
+# Pattern: ENTRYPOINT [entrypoint.sh] + CMD [apache2-foreground]
+#   → Web-Service:  Container startet ohne CMD-Override → Apache
+#   → Cron-Service: startCommand = php /var/www/html/bin/cleanup-cron.php
+#                   → Entrypoint setzt Disk-Symlinks, dann exec php ...
 #
 # Hinweis: lokal ohne Render-Disk fällt das Skript sauber zurück
 # (es wird einfach das vorhandene /var/www/html/storage verwendet).
@@ -68,6 +73,15 @@ fi
 # Berechtigungen final sicherstellen (Symlink-Targets folgen automatisch)
 chown -R www-data:www-data /var/www/html/storage /var/www/html/data 2>/dev/null || true
 
-# ── 3) Apache starten ─────────────────────────────────────────────────────────
-echo "[entrypoint] starting apache2-foreground on port ${APACHE_PORT}"
-exec apache2-foreground
+# ── 3) Befehl ausführen ───────────────────────────────────────────────────────
+# CMD oder startCommand-Override wird als Argumente an dieses Skript übergeben:
+#   $# > 0 → exec "$@"  — z. B. "php /var/www/html/bin/cleanup-cron.php" (Cron)
+#              oder "apache2-foreground" (CMD-Default des Web-Service)
+#   $# = 0 → Safety-Fallback: exec apache2-foreground
+if [ "$#" -gt 0 ]; then
+    echo "[entrypoint] exec: $*"
+    exec "$@"
+else
+    echo "[entrypoint] starting apache2-foreground on port ${APACHE_PORT}"
+    exec apache2-foreground
+fi

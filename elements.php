@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 require_once 'includes/config.php';
 $pageTitle = 'Element Library';
 $extraJs   = ['upload.js'];

@@ -35,7 +35,7 @@ RUN { \
     } > /usr/local/etc/php/conf.d/csf.ini
 
 # ── Apache-Konfiguration ──────────────────────────────────────────────────────
-RUN a2enmod rewrite headers env
+RUN a2enmod rewrite headers env expires deflate filter
 
 COPY docker/apache.conf /etc/apache2/sites-available/000-default.conf
 
@@ -79,4 +79,9 @@ ENV PERSIST_ROOT=/var/www/html/render-data
 EXPOSE 10000
 
 # ── Startbefehl ───────────────────────────────────────────────────────────────
+# ENTRYPOINT führt Setup-Logik aus (Port, Disk-Symlinks, Permissions).
+# CMD = Default-Befehl wenn kein startCommand in render.yaml gesetzt ist.
+# Cron-Services überschreiben CMD mit "php /var/www/html/bin/cleanup-cron.php"
+# → Entrypoint setzt Disk-Symlinks, dann exec php ...
 ENTRYPOINT ["/usr/local/bin/csf-entrypoint.sh"]
+CMD ["apache2-foreground"]

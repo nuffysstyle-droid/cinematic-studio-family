@@ -16,7 +16,7 @@
 | **Version** | 0.1.0 (Free MVP, live seit 2026-05-13) |
 | **Live-URL** | https://cinematic-studio-family.onrender.com |
 | **GitHub** | nuffysstyle-droid/cinematic-studio-family |
-| **Stand** | 2026-05-14 (Session 3) |
+| **Stand** | 2026-05-14 (Session 4) |
 
 ---
 
@@ -129,12 +129,20 @@ Aktuell Demo-Dummy; echte Transaktion in V2.
 | **save-request.php** | `api/save-request.php` (NEW) | POST-Endpoint: Contact-Anfragen aus ready-videos.php in `storage/requests.json` speichern. `flock(LOCK_EX)`, SHA-256 IP-Hash. |
 | **SSRF-Schutz** | `api/ai-status.php` | DNS-IP-Validierung: `gethostbyname()` + `FILTER_FLAG_NO_PRIV_RANGE` |
 
+### Neu implementiert in Session 4 (2026-05-14) ✅
+| Feature | Dateien | Details |
+|---|---|---|
+| **V3 Audio: Original-Ton-Erhalt** | `api/render-final.php` | `csf_ffprobe_run()` prüft vor dem Slot-Loop ob Original-Video einen Audio-Stream hat. Wenn ja → `-map 0:a` + `-ar 44100 -ac 2 -c:a aac`. Wenn nein → anullsrc. Auch Video-Replacements mit Audio-Track werden korrekt behandelt. |
+| **Cron-Job: täglicher Cleanup** | `render.yaml`, `bin/cleanup-cron.php` | Render Cron-Service (`type: cron`, 03:00 UTC täglich). `bin/cleanup-cron.php` CLI-Script — ruft `csf_cleanup_old_jobs()` auf, gibt Stats aus. Ergänzt probabilistisches 1/50 Cleanup. |
+| **Apache: storage/jobs Freigabe** | `docker/apache.conf` | `<Directory /var/www/html/storage/jobs>` mit `Require all granted` hinzugefügt. `meta.json` und PHP-Dateien bleiben blockiert per `<FilesMatch>`. Behebt 403-Fehler für KI-generierte Replacement-Bilder. |
+| **PassEnv CLEANUP_SECRET** | `docker/apache.conf` | `PassEnv CLEANUP_SECRET` eingetragen — PHP-`getenv()` kann `CLEANUP_SECRET` jetzt lesen. |
+| **Header-Einrückung** | `docker/apache.conf` | CORS-Header-Zeilen korrekt eingerückt (waren nicht eingerückt, Apache-Fehler möglich). |
+
 ### Dummy / Placeholder (V2+)
 | Feature | Status |
 |---|---|
 | Login / User-Accounts | Demo-Dummy |
 | Kristalle / Payment / Stripe | Demo-Dummy |
-| Audio-Preservation (Original-Ton) | V3 Backlog (aktuell: stille AAC-Spur) |
 | KI-Video-Generierung | Architecture only (Kie.ai video endpoints geplant) |
 
 ---
@@ -157,15 +165,13 @@ Apache braucht `PassEnv KIE_AI_API_KEY` in `docker/apache.conf` damit `getenv()`
 
 ---
 
-## Aktuelle Probleme (Stand 2026-05-14, Session 3)
+## Aktuelle Probleme (Stand 2026-05-14, Session 4)
 
 | Problem | Priorität | Status |
 |---|---|---|
 | `KIE_AI_API_KEY` nicht in Render eingetragen | 🔴 P0 | **User-Aktion nötig:** Render Dashboard → Environment → `KIE_AI_API_KEY` eintragen → Redeploy |
 | Kein echter AI-E2E-Test abgeschlossen | 🔴 P0 | Warte auf gültigen Key in Render |
 | `CLEANUP_SECRET` nicht in Render eingetragen | 🟡 P2 | Optional: Render Dashboard → `CLEANUP_SECRET` (min. 20 Zeichen) → Redeploy |
-| Audio (Original-Ton): stille Spur statt Originalton | 🟡 P2 | V3 Backlog — aktuell anullsrc AAC, Original-Audio-Erhalt folgt |
-| Disk-Cleanup noch kein Cron | 🟢 P3 | Aktuell: 1/50 probabilistisch nach Render. Scheduled Task via Render noch nicht konfiguriert |
 
 → Vollständige Liste: `memory/current-problems.md`
 
@@ -177,7 +183,8 @@ Apache braucht `PassEnv KIE_AI_API_KEY` in `docker/apache.conf` damit `getenv()`
 |---|---|---|
 | **V0.1.0** | Free MVP: Upload → Analyse → Replace → Render → Download | ✅ Live |
 | **V0.2.0** | KI-Bild Button live (UI fertig), Audio-Spur vorhanden (silent), Job-Lock | 🟡 UI fertig — KIE_AI_API_KEY ausstehend |
-| **V0.3.0** | Original-Audio-Erhalt, Starter+ Plan, 1080p | ⬜ Geplant |
+| **V0.3.0** | Original-Audio-Erhalt ✅, Cron-Cleanup ✅, storage/jobs-Fix ✅ | 🟡 Code fertig — Deploy ausstehend |
+| **V0.4.0** | Starter+ Plan, 1080p Export, User-Accounts | ⬜ Geplant |
 | **V1.0.0** | Login, Kristalle, Payment (Stripe) | ⬜ Geplant |
 | **V2.0.0** | Multi-User, S3/R2, KI-Video, Templates | ⬜ Vision |
 
@@ -248,39 +255,52 @@ cinematic-studio-family/
 
 ---
 
-## Was wurde in der letzten Session gebaut (Session 3 — 2026-05-14)
+## Was wurde in der letzten Session gebaut (Session 5 — 2026-05-14)
 
 > Dieser Block ist für jeden neuen Agenten / Account. Lesen, dann loslegen.
+
+### Session 5 — Geänderte / neue Dateien
+| Datei | Was geändert |
+|---|---|
+| `studio-demo.php` | Wallet-Pill `💎 500` → `💎 Free`. Footer `© 2025` → `© 2026`. KI-Bild-Button + AI-Prompt-Textarea in jedem Slot-Card. `generateAiImage()` + `pollAiStatus()` (5s-Intervall, 3 Min. Timeout, Thumbnail-Update on success, Auto-Resume bei pending). CSS `.ai-btn`, `.ai-prompt`, `.ai-status`. Stale "Audio kommt in V2"-Hinweis entfernt. |
+| `memory/current-problems.md` | Alle gelösten Probleme (Sessions 2–5) in "Resolved"-Tabelle verschoben. |
+| `CLAUDE.md` | Session 5 Dokumentation hinzugefügt. |
+
+### Session 5 — Verifiziert als vollständig implementiert (kein Code geändert)
+- `api/cleanup.php` — Vollständig, CLEANUP_SECRET-Auth, csf_cleanup_old_jobs()
+- `api/save-request.php` — Vollständig, LOCK_EX, SHA-256 IP-Hash, storage/requests.json
+- `api/generate-ai.php` — Vollständig, Kie.ai Flux Kontext, meta.json Update, Limit-Checks
+- `api/ai-status.php` — Vollständig, SSRF-Schutz, Bild-Download, MIME-Check, meta.json Update
+- `bin/cleanup-cron.php` — Vollständig, CLI-Only-Guard, csf_cleanup_old_jobs()
+- `includes/header.php`, `footer.php` — Vollständig
+- Alle 6 storage/-Subdirektory `.htaccess` — Korrekt konfiguriert
+- `data/requests.json` — Wird dynamisch von save-request.php erstellt (storage/requests.json)
+- 8 aus Worktree kopierte Seiten — Verifiziert in main project
+
+### Was NICHT geändert werden soll (Don't Touch)
+- `api/generate-ai.php`, `api/ai-status.php` — Backend fertig, wartet auf KIE_AI_API_KEY
+- `api/analyze.php`, `api/replace-slot.php`, `api/render-final.php` — Funktionieren korrekt
+- `api/cleanup.php` — Korrekt, wartet auf CLEANUP_SECRET in Render
+- `includes/functions.php` — `csf_cleanup_old_jobs()` ist final
+- `data/ready-videos.json` — 12 Demo-Einträge, gut so
+- `docker/apache.conf`, `Dockerfile`, `render.yaml` — Korrekt konfiguriert
+
+### Nächste offene Aufgaben (in dieser Reihenfolge)
+1. **[User-Aktion]** `KIE_AI_API_KEY` in Render-Dashboard → Environment Variables → Redeploy
+2. **[User-Aktion]** `CLEANUP_SECRET` in Render-Dashboard → min. 20 Zeichen → Redeploy
+3. **[Agent]** E2E-Test: Upload Video → KI-Bild generieren → Render → Download (nach Key-Eintrag)
+4. **[Entscheidung]** Domain-Strategie: cinematic-studio-family.com vs cinematic-vision-studio.com
+5. **[Agent]** academy.php Guides mit echten Inhalten befüllen (aktuell 13 Placeholder-Texte)
+6. **[Agent]** Starter+ Plan: 1080p toggle in render-final.php über `$_SESSION['export_quality']`
+
+---
+
+## Was wurde in Session 4 gebaut (2026-05-14)
 
 ### Geänderte Dateien
 | Datei | Was geändert |
 |---|---|
-| `api/render-final.php` | Job-Lock (LOCK_NB) + Audio: alle 4 Slot-Typen haben jetzt anullsrc AAC-Spur statt -an + 1/50 Cleanup-Trigger |
-| `studio-demo.php` | Nav verschlankt (5 Links), Wallet "💎 Free", Cold-Start-Text humanisiert, KI-Bild Button + generateAiImage() + pollAiStatus() |
-| `scene-editor-test.html` | Nav verschlankt, Wallet "💎 Free", Stat 720p statt 4K, Academy-CTA, Badge-Fixes |
-| `index.php` | HTTP 302 Redirect → scene-editor-test.html |
-| `includes/functions.php` | `csf_cleanup_old_jobs()` hinzugefügt |
-| `includes/config.php` | APP_NAME, MAX_UPLOAD_BYTES (50MB), video/webm, API-Links |
-| `api/cleanup.php` (NEU) | Cleanup-Endpoint mit CLEANUP_SECRET |
-| `api/health.php` | Storage-Stats, ?debug=1&cleanup=1 |
-| `api/elements.php` | `update` Action implementiert |
-| `elements.php` | Edit-Button + Edit-Modal |
-| `api/save-request.php` (NEU) | Contact-Anfragen aus ready-videos.php speichern |
-| `api/ai-status.php` | SSRF-Schutz: DNS-IP-Validierung |
-| `tiktok-animation.php` | Logo-Upload zu api/upload.php verbunden |
-| `tiktok-sticker.php` | Logo-Upload zu api/upload.php verbunden |
-| `availability.php`, `contact.php`, `crystals.php`, `ki-videos.php`, `portfolio.php`, `prompt-generator.php`, `shop.php` | Nav 5 Links, Wallet 💎 Free, Footer 2026 |
-
-### Was NICHT geändert werden soll (Don't Touch)
-- `api/generate-ai.php` — Backend ist fertig, wartet nur auf KIE_AI_API_KEY
-- `api/analyze.php`, `api/replace-slot.php` — unverändert, funktionieren
-- `docker/apache.conf` — PassEnv bereits deployed
-- `data/ready-videos.json` — 12 Demo-Einträge, gut so
-
-### Nächste offene Aufgaben (in dieser Reihenfolge)
-1. **[User-Aktion]** `KIE_AI_API_KEY` in Render-Dashboard eintragen → Redeploy
-2. **[User-Aktion]** `CLEANUP_SECRET` in Render-Dashboard eintragen (min. 20 Zeichen, beliebig)
-3. **[Agent]** E2E-Test: Upload Video → KI-Bild generieren → Render → Download (nach Key-Eintrag)
-4. **[Agent]** Original-Audio-Erhalt in render-final.php (V3) — aktuell stille AAC
-5. **[Agent]** Cron-Job für Cleanup auf Render konfigurieren (`render.yaml` cron section)
-6. **[Entscheidung]** Domain-Strategie: cinematic-studio-family.com vs cinematic-vision-studio.com
+| `api/render-final.php` | V3 Audio: ffprobe-Check vor Slot-Loop (`hasOriginalAudio`). Original-Slots nutzen jetzt `-map 0:a -ar 44100 -ac 2 -c:a aac`. Video-Replacement-Slots analog. `audio_source` in `$debug[]`. |
+| `docker/apache.conf` | `PassEnv CLEANUP_SECRET` hinzugefügt. CORS-Header-Einrückung korrigiert. `<Directory /var/www/html/storage/jobs>` mit `Require all granted` + `meta.json`/PHP-Block per `<FilesMatch>`. |
+| `render.yaml` | Cron-Service `csf-cleanup-cron` hinzugefügt (`0 3 * * *`, dieselbe Disk). |
+| `bin/cleanup-cron.php` (NEU) | CLI-Script für Render Cron. Ruft `csf_cleanup_old_jobs()` auf, Exit 0/1. |

@@ -13,11 +13,13 @@
 
    Verwendung:
      csfTrackJob(jobId, {
-         onProgress: (percent, status, job) => {...},
-         onDone:     (job) => {...},
-         onError:    (err, job) => {...},
-         intervalMs: 2000,   // optional, default 2000
-         maxTicks:   120,    // optional, default 120 (= 4 Minuten)
+         onProgress:    (percent, status, job) => {...},
+         onDone:        (job) => {...},
+         onError:       (err, job) => {...},
+         intervalMs:    2000,   // optional, Basis-Interval (default 2000)
+         maxIntervalMs: 30000,  // optional, Backoff-Cap (default 30000)
+         backoffFactor: 1.5,    // optional, Wachstumsfaktor (default 1.5)
+         maxTicks:      120,    // optional, default 120 (= ca. 4–60 Min. je nach Backoff)
      });
 
    Alternativ: csfIndeterminate(barFillEl, statusTextEl, label) für
@@ -35,14 +37,18 @@
      * @param {(percent:number, status:string, job:object) => void} [cb.onProgress]
      * @param {(job:object) => void} [cb.onDone]
      * @param {(error:string, job?:object) => void} [cb.onError]
-     * @param {number} [cb.intervalMs=2000]
-     * @param {number} [cb.maxTicks=120]   Sicherheits-Stop nach N Ticks
+     * @param {number} [cb.intervalMs=2000]      Basis-Polling-Interval in ms
+     * @param {number} [cb.maxIntervalMs=30000]  Backoff-Obergrenze in ms
+     * @param {number} [cb.backoffFactor=1.5]    Exponentieller Wachstumsfaktor
+     * @param {number} [cb.maxTicks=120]         Sicherheits-Stop nach N Ticks
      * @returns {{stop: () => void}}
      */
     function csfTrackJob(jobId, cb) {
         cb = cb || {};
-        const interval = (typeof cb.intervalMs === 'number' && cb.intervalMs >= 500) ? cb.intervalMs : 2000;
-        const maxTicks = (typeof cb.maxTicks   === 'number' && cb.maxTicks   > 0)    ? cb.maxTicks   : 120;
+        const baseInterval = (typeof cb.intervalMs    === 'number' && cb.intervalMs    >= 500) ? cb.intervalMs    : 2000;
+        const maxInterval  = (typeof cb.maxIntervalMs === 'number' && cb.maxIntervalMs > 0)    ? cb.maxIntervalMs : 30000;
+        const backoff      = (typeof cb.backoffFactor === 'number' && cb.backoffFactor > 1)    ? cb.backoffFactor : 1.5;
+        const maxTicks     = (typeof cb.maxTicks      === 'number' && cb.maxTicks      > 0)    ? cb.maxTicks      : 120;
 
         let ticks   = 0;
         let stopped = false;
@@ -115,7 +121,9 @@
 
         function scheduleNext() {
             if (stopped) return;
-            timer = setTimeout(tick, interval);
+            // Exponentielles Backoff: interval * factor^(ticks-1), begrenzt auf maxInterval
+            const delay = Math.min(baseInterval * Math.pow(backoff, Math.max(0, ticks - 1)), maxInterval);
+            timer = setTimeout(tick, delay);
         }
 
         function stop() {

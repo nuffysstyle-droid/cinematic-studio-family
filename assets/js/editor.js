@@ -60,84 +60,85 @@ const PromptField = (() => {
 
 /* ----------------------------------------------------------
    AI ACTION BUTTONS
-   Platzhalter — noch keine echte KI-Anbindung
+   Wird von Seiten genutzt, die KEINE eigene Inline-Implementierung
+   der Modifier-Buttons haben. Seiten mit eigenem API-Binding
+   (video-studio.php, image-studio.php, …) rufen EditorActions.init()
+   NICHT auf — sie registrieren ihre eigenen Click-Handler.
    ---------------------------------------------------------- */
 const EditorActions = (() => {
 
-    const actions = {
-        'make-it-better': {
-            label: 'Make it Better',
-            // TODO: Prompt-Enhancement via AI API
-            handler() {
-                const current = PromptField.getValue();
-                if (!current) { Toast.warning('Bitte zuerst einen Prompt eingeben.'); return; }
-                Toast.info('Make it Better … (Platzhalter)');
-                console.log('[EditorActions] make-it-better →', current);
+    /**
+     * Bindet einen Button an einen asynchronen API-Call.
+     * @param {string}   btnId    Element-ID (ohne führendes #)
+     * @param {Function} apiFn   async () => void — wird bei Klick ausgeführt
+     */
+    function wire(btnId, apiFn) {
+        const btn = document.getElementById(btnId);
+        if (!btn) return;
+        btn.addEventListener('click', async () => {
+            const orig = btn.textContent;
+            btn.disabled = true;
+            btn.textContent = '…';
+            try {
+                await apiFn();
+            } finally {
+                btn.disabled = false;
+                btn.textContent = orig;
             }
-        },
-        'fix-faces': {
-            label: 'Fix Faces',
-            // TODO: Face-Correction via AI API
-            handler() {
-                Toast.info('Fix Faces … (Platzhalter)');
-                console.log('[EditorActions] fix-faces');
-            }
-        },
-        'better-motion': {
-            label: 'Better Motion',
-            // TODO: Motion-Enhancement via AI API
-            handler() {
-                Toast.info('Better Motion … (Platzhalter)');
-                console.log('[EditorActions] better-motion');
-            }
-        },
-        'perfect-transition': {
-            label: 'Perfect Transition',
-            // TODO: Transition-Optimierung via AI API
-            handler() {
-                Toast.info('Perfect Transition … (Platzhalter)');
-                console.log('[EditorActions] perfect-transition');
-            }
-        },
-        'cinematic-upgrade': {
-            label: 'Cinematic Upgrade',
-            // TODO: Cinematic LUT + Grading via AI API
-            handler() {
-                Toast.info('Cinematic Upgrade … (Platzhalter)');
-                console.log('[EditorActions] cinematic-upgrade');
-            }
-        },
-    };
+        });
+    }
 
-    function init() {
-        Object.entries(actions).forEach(([id, action]) => {
-            const btn = document.getElementById(`btn-${id}`);
-            if (!btn) return;
-            btn.addEventListener('click', () => {
-                setLoading(btn, true);
-                // Simuliertes Async — wird durch echten API-Call ersetzt
-                setTimeout(() => {
-                    action.handler();
-                    setLoading(btn, false);
-                }, 600);
+    /**
+     * Fallback-Init für Seiten OHNE eigene Prompt-Modifier-Implementierung.
+     * Bindet jeden bekannten Modifier-Button an einen generischen API-Endpoint.
+     *
+     * @param {string} endpoint   PHP-Endpoint (z.B. 'api/generate-video.php')
+     * @param {Function} getBody  () => object — Request-Body Builder
+     * @param {Function} onResult (data) => void — wird mit dem JSON-Response aufgerufen
+     */
+    function initFallback(endpoint, getBody, onResult) {
+        const modifiers = ['make-it-better', 'fix-faces', 'better-motion', 'perfect-transition', 'cinematic-upgrade'];
+
+        const actionMap = {
+            'make-it-better':      'improve',
+            'fix-faces':           'fix_faces',
+            'better-motion':       'better_motion',
+            'perfect-transition':  'perfect_transition',
+            'cinematic-upgrade':   'cinematic',
+        };
+
+        modifiers.forEach(id => {
+            wire(`btn-${id}`, async () => {
+                const action = actionMap[id];
+                const body   = { ...getBody(), action };
+                try {
+                    const res  = await fetch(endpoint, {
+                        method:  'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body:    JSON.stringify(body),
+                    });
+                    const data = await res.json();
+                    if (!data.success) {
+                        Toast.error(data.error ?? 'Fehler beim Verarbeiten.');
+                        return;
+                    }
+                    onResult(data);
+                } catch {
+                    Toast.error('Netzwerkfehler — bitte erneut versuchen.');
+                }
             });
         });
     }
 
-    function setLoading(btn, loading) {
-        btn.disabled = loading;
-        btn.dataset.originalText = btn.dataset.originalText ?? btn.textContent;
-        btn.textContent = loading ? '…' : btn.dataset.originalText;
-    }
-
-    return { init };
+    return { wire, initFallback };
 })();
 
 
 /* ----------------------------------------------------------
    INIT
+   Nur PromptField.initCounter() — EditorActions wird von den
+   jeweiligen Seiten bei Bedarf manuell initialisiert.
    ---------------------------------------------------------- */
 document.addEventListener('DOMContentLoaded', () => {
     PromptField.initCounter();
-    EditorActions.init();
 });

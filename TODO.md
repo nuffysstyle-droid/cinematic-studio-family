@@ -80,7 +80,7 @@
 
 | # | Aufgabe                                      | Status | Priorität |
 |---|----------------------------------------------|--------|-----------|
-|35 | settings.php — App-Einstellungen UI          | ⬜     | P2        |
+|35 | settings.php — App-Einstellungen UI          | ✅     | P2        |
 |36 | Performance-Optimierung                      | ⬜     | P2        |
 |37 | storage/ + data/ gegen Web-Zugriff absichern | ✅     | P1        |
 |38 | Render Deployment konfigurieren              | 🟡     | P1        |
@@ -99,20 +99,22 @@
 | S4  | meta.json Schema + Backwards-Compat              | ✅     | P1        |
 | S5  | scene-editor-test.html Replace-UI + DOM-Refactor | ✅     | P1        |
 | S6  | scene-editor-test.html → IONOS pushen            | 🟡     | P1 (User) |
-| S7  | Live-Test: Slot ersetzen + meta.json verifizieren | ⬜     | P1        |
-| S8  | get-job.php Frontend-Restore (nach Reload)        | ⬜     | P2        |
+| S7  | Live-Test: Slot ersetzen + meta.json verifizieren | ⬜     | P1 (nach API-Key) |
+| S8  | get-job.php Frontend-Restore (nach Reload)        | ✅     | P2        |
 | S9  | Phase 3: Slot-Cuts → finales Video rendern        | ⬜     | später    |
 
 ---
 
-## Offene Technische Schulden (vor Phase 5 beheben)
+## Offene Technische Schulden
 
-| Punkt                                                        | Priorität |
-|--------------------------------------------------------------|-----------|
-| Logo-Upload in Animation + Sticker nicht mit api/upload.php  | P2        |
-| Anfrage-Modal in ready-videos.php sendet nicht wirklich      | P2        |
-| elements.php "Bearbeiten"-Button deaktiviert (API 501)       | P2        |
-| API_PROVIDER_LINK in config.php ist Platzhalter              | P3        |
+| Punkt                                                        | Status | Priorität |
+|--------------------------------------------------------------|--------|-----------|
+| ~~Logo-Upload in Animation + Sticker nicht mit api/upload.php~~ | ✅ Session 3 | — |
+| ~~Anfrage-Modal in ready-videos.php sendet nicht wirklich~~  | ✅ Session 3 | — |
+| ~~elements.php "Bearbeiten"-Button deaktiviert (API 501)~~   | ✅ Session 3 | — |
+| API_PROVIDER_LINK in config.php ist Platzhalter              | ⬜     | P3        |
+| CLEANUP_SECRET nicht in Render eingetragen                   | ⬜ User-Aktion | P2 |
+| KIE_AI_API_KEY nicht in Render eingetragen                   | ⬜ User-Aktion | P0 |
 
 ---
 

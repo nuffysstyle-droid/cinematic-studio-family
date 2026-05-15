@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * merge-clips.php — Multi-Scene Clip-Merge
  * Cinematic Studio Family

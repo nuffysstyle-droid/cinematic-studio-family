@@ -65,30 +65,29 @@
 
 ---
 
-## Aktueller Stand (auto-updaten nach jedem TODO)
+## Aktueller Stand (Stand: Session 6 — 2026-05-15)
 
 | Feld | Wert |
 |------|------|
-| **Aktive Phase** | **Scene Replacement Editor (Phase 2)** — User-Numbering |
-| **Render Backend** | Live · `/api/health.php` ✅ · `/api/analyze.php` ✅ · FFmpeg+ffprobe laufen |
-| **IONOS Frontend** | `scene-editor-test.html` deployed, ruft Render-API auf |
-| **Phase 2 Backend** | `replace-slot.php` ✅ · `get-job.php` ✅ · `meta.json` Schema definiert |
-| **Phase 2 Frontend** | Slot-Speichern + DOM-API-Refactor ✅ (lokal — IONOS-Push offen) |
-| **Storage-Struktur** | `storage/jobs/{job_id}/meta.json` + `storage/jobs/{job_id}/replacements/` |
-| **V1 Multi-Page (Phase 0–5)** | Pausiert — Phase 4 ✅, #38 Setup ✅ (Live-Klick beim User) |
+| **Version** | 0.1.0 — Free MVP live |
+| **Render Backend** | `https://cinematic-studio-family.onrender.com` · FFmpeg ✅ · Audio V3 ✅ |
+| **KI-Integration** | `api/generate-ai.php` + `api/ai-status.php` fertig · wartet auf KIE_AI_API_KEY |
+| **studio-demo.php** | Scene Replacement Editor + KI-Bild-Button ✅ |
+| **scene-editor-test.html** | Hub-Landingpage — Steps-Section ✅ · CTA-Section ✅ · Hub-Kategorien ✅ (IONOS-Push ausstehend) |
+| **Permissions** | `.claude/settings.json` — `PowerShell(*)` + MCP-Tools allowlisted |
+| **Fokus laut AGENT.md** | scene-editor-test.html (Design + UX + Conversion) — kein Backend, kein Commit |
+| **Nächste User-Aktion** | `KIE_AI_API_KEY` + `CLEANUP_SECRET` in Render-Dashboard · scene-editor-test.html auf IONOS pushen |
 
 ---
 
-## Bekannte technische Schulden (vor V1-Launch beheben oder bewusst akzeptieren)
+## Bekannte technische Schulden (offene Punkte)
 
 | Schuld | Datei | Priorität |
 |--------|-------|-----------|
-| Logo-Upload nicht mit `api/upload.php` verbunden | `tiktok-animation.php`, `tiktok-sticker.php` | P2 |
-| Anfrage-Modal sendet nicht wirklich (nur Toast) | `ready-videos.php` | P2 |
-| "Bearbeiten"-Button disabled (API 501) | `elements.php` + `api/elements.php` | P2 |
-| `API_PROVIDER_LINK` ist Platzhalter | `includes/config.php` | P3 |
-| Polling-Mechanik existiert, läuft aber synchron | `assets/js/progress.js` + `api/merge-clips.php` / `api/export.php` | P3 |
-| Share-Funktion (Download / WhatsApp / YouTube) entfallen — TODO #34 wurde umgewidmet | – | P2 falls erneut gewünscht |
+| `KIE_AI_API_KEY` nicht in Render eingetragen | Render Dashboard | P0 (User-Aktion) |
+| `CLEANUP_SECRET` nicht in Render eingetragen | Render Dashboard | P2 (User-Aktion) |
+| `API_PROVIDER_LINK` ist kein Affiliate-Link | `includes/config.php` | P3 |
+| Polling in progress.js ohne Backoff | `assets/js/progress.js` | P3 |
 
 ---
 

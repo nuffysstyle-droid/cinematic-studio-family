@@ -20,9 +20,10 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $body   = json_decode(file_get_contents('php://input'), true) ?? [];
 $apiKey = trim($body['api_key'] ?? $_POST['api_key'] ?? '');
 
+// Leerer Key = Session-Clear (wird von api-key.php für "Key entfernen" genutzt)
 if ($apiKey === '') {
-    http_response_code(400);
-    echo json_encode(['success' => false, 'error' => 'Kein API-Key angegeben.']);
+    unset($_SESSION['api_key']);
+    echo json_encode(['success' => true, 'message' => 'API-Key aus Session entfernt.']);
     exit;
 }
 

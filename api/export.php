@@ -8,9 +8,9 @@
  *   thumbnail → Thumbnail aus Video extrahieren (POST)
  *   info      → Video-Metadaten auslesen (GET oder POST)
  *
- * Vorbereitet für spätere Integration:
- *   merge     → Stub (501) — aktuell in api/merge-clips.php
- *   status    → Stub (501) — kommt in TODO #30 (Polling)
+ * Zusätzliche Actions:
+ *   merge     → 400 mit Redirect-Hinweis auf api/merge-clips.php
+ *   status    → Liest export-jobs.json (LOCK_SH), gibt Job-Status zurück
  *
  * Input-Format (POST):  JSON-Body
  * Input-Format (GET):   Query-Parameter (nur für action=info)
@@ -47,8 +47,8 @@ const EXPORT_ACTIONS = [
     'convert'   => ['post_only' => true],
     'thumbnail' => ['post_only' => true],
     'info'      => ['post_only' => false],
-    'merge'     => ['post_only' => true],   // Stub — TODO #28 Integration
-    'status'    => ['post_only' => false],  // Stub — TODO #30 Polling
+    'merge'     => ['post_only' => true],   // 400 redirect → api/merge-clips.php
+    'status'    => ['post_only' => false],  // Liest export-jobs.json
 ];
 
 /** Gültige Export-Presets für action=convert */
@@ -132,27 +132,95 @@ if (EXPORT_ACTIONS[$action]['post_only'] && $method !== 'POST') {
     exit;
 }
 
-// ── Stub-Actions ──────────────────────────────────────────────────────────────
+// ── Delegierte Actions ────────────────────────────────────────────────────────
 
 if ($action === 'merge') {
-    // Merge-Funktionalität bleibt in api/merge-clips.php (TODO #28).
-    // Kann in einer späteren Phase hier integriert werden.
-    http_response_code(501);
+    // Merge-Funktionalität ist in api/merge-clips.php implementiert.
+    // Dieser Endpunkt gibt einen klaren Hinweis zurück (kein 501-Fehler mehr).
+    http_response_code(400);
     echo json_encode([
         'success' => false,
         'action'  => 'merge',
-        'error'   => 'action=merge: Nutze api/merge-clips.php. Integration geplant.',
+        'error'   => 'action=merge: Bitte direkt api/merge-clips.php verwenden.',
     ]);
     exit;
 }
 
 if ($action === 'status') {
-    // Job-Status-Polling kommt in TODO #30 (api/progress.php).
-    http_response_code(501);
+    // Delegiert an export-jobs.json-Logik (identisch zu api/progress.php).
+    $jobId = trim((string)($input['job_id'] ?? ''));
+
+    if ($jobId === '' || !preg_match('/^[a-zA-Z0-9_\-]{1,64}$/', $jobId)) {
+        http_response_code(400);
+        echo json_encode([
+            'success' => false,
+            'action'  => 'status',
+            'error'   => '"job_id" fehlt oder enthält ungültige Zeichen.',
+        ]);
+        exit;
+    }
+
+    $jobsFile = DATA_PATH . 'export-jobs.json';
+
+    if (!file_exists($jobsFile)) {
+        http_response_code(404);
+        echo json_encode(['success' => false, 'action' => 'status', 'error' => 'Job nicht gefunden.']);
+        exit;
+    }
+
+    $fpStatus = @fopen($jobsFile, 'r');
+    if ($fpStatus === false) {
+        http_response_code(500);
+        echo json_encode(['success' => false, 'action' => 'status', 'error' => 'Job-Protokoll nicht lesbar.']);
+        exit;
+    }
+    flock($fpStatus, LOCK_SH);
+    $statusContent = stream_get_contents($fpStatus);
+    flock($fpStatus, LOCK_UN);
+    fclose($fpStatus);
+
+    $statusJobs = json_decode($statusContent ?: '[]', true);
+    if (!is_array($statusJobs)) {
+        http_response_code(500);
+        echo json_encode(['success' => false, 'action' => 'status', 'error' => 'Job-Protokoll beschädigt.']);
+        exit;
+    }
+
+    $foundJob = null;
+    foreach (array_reverse($statusJobs) as $j) {
+        if (is_array($j) && isset($j['id']) && $j['id'] === $jobId) {
+            $foundJob = $j;
+            break;
+        }
+    }
+
+    if ($foundJob === null) {
+        http_response_code(404);
+        echo json_encode(['success' => false, 'action' => 'status', 'error' => 'Job nicht gefunden.']);
+        exit;
+    }
+
+    $jobStatusVal = (string)($foundJob['status'] ?? 'pending');
+    $progress = match ($jobStatusVal) {
+        'done'    => 100,
+        'failed'  => 100,
+        'running' => 50,
+        default   => 0,
+    };
+
     echo json_encode([
-        'success' => false,
+        'success' => true,
         'action'  => 'status',
-        'error'   => 'action=status: Polling-Endpunkt kommt in TODO #30 (api/progress.php).',
+        'job_id'  => $jobId,
+        'data'    => [
+            'id'         => (string)($foundJob['id']     ?? $jobId),
+            'action'     => (string)($foundJob['action'] ?? ''),
+            'status'     => $jobStatusVal,
+            'progress'   => $progress,
+            'output_url' => isset($foundJob['output_url']) ? (string)$foundJob['output_url'] : null,
+            'error'      => isset($foundJob['error'])      ? (string)$foundJob['error']      : null,
+            'created_at' => (string)($foundJob['created_at'] ?? ''),
+        ],
     ]);
     exit;
 }

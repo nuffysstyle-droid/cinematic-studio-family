@@ -7,15 +7,19 @@
  *   - Nicht ersetzte Slots = Cut aus Original (start_seconds → end_seconds)
  *   - Ersetzte Bild-Slots = Loop für Slot-Dauer
  *   - Ersetzte Video-Slots = Trim auf Slot-Dauer
- *   - Alle Clips werden auf 1920×1080 / 30 fps / H.264 / yuv420p / -an normalisiert
+ *   - Alle Clips werden auf 1280×720 / 30 fps / H.264 / yuv420p normalisiert
  *   - FFmpeg concat-Demuxer (`-c copy -movflags +faststart`) → finales MP4
  *   - Output: storage/exports/{job_id}_final_<rand>.mp4
  *   - meta.json wird mit final_video + rendered_at angereichert (LOCK_EX)
  *
  * CORS: Apache regelt das — kein PHP-Header.
  *
- * Audio: V2 — stille AAC 44.1 kHz / Stereo in allen Slots (anullsrc).
- *         Original-Audio-Erhalt kommt in V3.
+ * Audio: V3 — Original-Audio-Erhalt in Original-Slots (AAC-Transcode aus Input).
+ *   - Originalvideo hat Audio → Original-Slots nutzen dessen Audio (re-encodiert)
+ *   - Originalvideo hat kein Audio → anullsrc-Stille (wie V2)
+ *   - Image/Text-Slots: anullsrc-Stille
+ *   - Video-Replacements: Audio aus Replacement-Datei (wenn vorhanden), sonst Stille
+ *   Alle Clips: AAC / 44.1 kHz / Stereo → concat -c copy läuft sauber durch.
  *
  * Eingabe (POST, multipart oder x-www-form-urlencoded):
  *   - job_id  string  Format: job_YYYYMMDD_HHMMSS_xxxxxxxx
@@ -25,11 +29,14 @@
  *            duration_seconds, slot_count, rendered_at }
  *   fail  → { status:"error", message, [stderr], [debug], [slot] }
  *
- * @since Phase 3 MVP
+ * @since Phase 3 MVP — V3 Audio
  */
 
 declare(strict_types=1);
 
+// config.php startet die Session (session_start bei PHP_SESSION_NONE).
+// Muss VOR functions.php eingebunden werden, damit $_SESSION verfügbar ist.
+require_once __DIR__ . '/../includes/config.php';
 require_once __DIR__ . '/../includes/functions.php';
 
 header('Content-Type: application/json');
@@ -82,10 +89,21 @@ register_shutdown_function(function () {
 });
 
 render_log('--- START render-final.php (PID ' . getmypid() . ') ---');
+// Quality wird nach Input-Validierung geloggt (session-abhängig)
+
+// ── Render-Qualität aus Session (settings.php → $_SESSION['export_quality']) ──
+// Free-Plan-Standard: 720p. Settings-Seite erlaubt 1080p pro Session.
+// Sicherheitshalber nur erlaubte Werte annehmen; alles andere → 720p.
+$_exportQuality = in_array($_SESSION['export_quality'] ?? '', ['720p', '1080p'], true)
+    ? $_SESSION['export_quality']
+    : '720p';
 
 // ── Konstanten (MVP-Spec) ───────────────────────────────────────────────────
-const RENDER_OUT_W      = 1280;   // Free-Plan: 720p statt 1080p (55% weniger Pixel)
-const RENDER_OUT_H      = 720;
+// RENDER_OUT_W / _H als Variablen — abhängig von $_exportQuality.
+// Alle anderen Werte sind qualitätsunabhängig.
+$RENDER_OUT_W   = $_exportQuality === '1080p' ? 1920 : 1280;
+$RENDER_OUT_H   = $_exportQuality === '1080p' ? 1080 : 720;
+
 const RENDER_OUT_FPS    = 30;
 const RENDER_CRF        = 20;
 const RENDER_PRESET     = 'ultrafast'; // Free-Plan: rc_lookahead=0 → ~150 MB weniger RAM
@@ -212,12 +230,29 @@ foreach (glob($clipsDir . '/slot_*.mp4') ?: [] as $oldClip) {
     @unlink($oldClip);
 }
 
+// ── V3 Audio: Prüfen ob Original-Video einen Audio-Stream hat ───────────────
+// Schnelle ffprobe-Abfrage — typisch < 200 ms. Ergebnis steuert Audio-Mapping
+// aller Original-Slots: mit Audio → -map 0:a (re-encodiert zu AAC 44.1k/stereo),
+// ohne Audio → anullsrc-Stille (erzwingt konsistente Concat-Kompatibilität).
+$hasOriginalAudio = false;
+{
+    $audioProbe = csf_ffprobe_run([
+        '-v',              'quiet',
+        '-select_streams', 'a:0',
+        '-show_entries',   'stream=codec_type',
+        '-of',             'csv=p=0',
+        $originalPath,
+    ]);
+    $hasOriginalAudio = trim((string)($audioProbe['stdout'] ?? '')) !== '';
+    render_log('audio_probe: hasOriginalAudio=' . ($hasOriginalAudio ? 'true' : 'false'));
+}
+
 // ── Scale-/Pad-/FPS-Filter (für jeden Slot identisch) ──────────────────────
 $scaleFilter = sprintf(
     'scale=%d:%d:force_original_aspect_ratio=decrease,'
     . 'pad=%d:%d:(ow-iw)/2:(oh-ih)/2:color=black,'
     . 'setsar=1,fps=%d',
-    RENDER_OUT_W, RENDER_OUT_H, RENDER_OUT_W, RENDER_OUT_H, RENDER_OUT_FPS
+    $RENDER_OUT_W, $RENDER_OUT_H, $RENDER_OUT_W, $RENDER_OUT_H, RENDER_OUT_FPS
 );
 
 // Hilfsfunktion: replacement_file (URL ab /storage/...) → absoluter Disk-Pfad
@@ -230,7 +265,9 @@ $resolveReplacement = function (string $url) use ($storageRoot): ?string {
 // ── Slot-Clips erzeugen ─────────────────────────────────────────────────────
 $clipPaths = [];
 $debug     = [];
-render_log('job=' . $jobId . ' slots=' . $slotCount . ' — start slot encoding loop');
+render_log('job=' . $jobId . ' slots=' . $slotCount
+    . ' quality=' . $_exportQuality . ' (' . $RENDER_OUT_W . 'x' . $RENDER_OUT_H . ')'
+    . ' — start slot encoding loop');
 
 foreach ($slots as $idx => $slot) {
     $slotNum = (int)($slot['slot'] ?? ($idx + 1));
@@ -294,24 +331,53 @@ foreach ($slots as $idx => $slot) {
             ]);
         }
         $source = 'video';
-        $args = [
-            '-i',        $vidPath,
-            '-f',        'lavfi',
-            '-i',        'anullsrc=r=44100:cl=stereo',
-            '-t',        sprintf('%.3f', $duration),
-            '-vf',       $scaleFilter,
-            '-map',      '0:v',
-            '-map',      '1:a',
-            '-c:v',      'libx264',
-            '-crf',      (string)RENDER_CRF,
-            '-preset',   RENDER_PRESET,
-            '-pix_fmt',  'yuv420p',
-            '-c:a',      'aac',
-            '-b:a',      '96k',
-            '-shortest',
-            '-y',
-            $clipOut,
-        ];
+
+        // V3 Audio: Wenn Replacement-Video Audio hat → übernehmen; sonst Stille.
+        $repAudioProbe = csf_ffprobe_run([
+            '-v', 'quiet', '-select_streams', 'a:0',
+            '-show_entries', 'stream=codec_type', '-of', 'csv=p=0', $vidPath,
+        ]);
+        $repHasAudio = trim((string)($repAudioProbe['stdout'] ?? '')) !== '';
+
+        if ($repHasAudio) {
+            $args = [
+                '-i',        $vidPath,
+                '-t',        sprintf('%.3f', $duration),
+                '-vf',       $scaleFilter,
+                '-map',      '0:v',
+                '-map',      '0:a',
+                '-c:v',      'libx264',
+                '-crf',      (string)RENDER_CRF,
+                '-preset',   RENDER_PRESET,
+                '-pix_fmt',  'yuv420p',
+                '-c:a',      'aac',
+                '-b:a',      '96k',
+                '-ar',       '44100',
+                '-ac',       '2',
+                '-shortest',
+                '-y',
+                $clipOut,
+            ];
+        } else {
+            $args = [
+                '-i',        $vidPath,
+                '-f',        'lavfi',
+                '-i',        'anullsrc=r=44100:cl=stereo',
+                '-t',        sprintf('%.3f', $duration),
+                '-vf',       $scaleFilter,
+                '-map',      '0:v',
+                '-map',      '1:a',
+                '-c:v',      'libx264',
+                '-crf',      (string)RENDER_CRF,
+                '-preset',   RENDER_PRESET,
+                '-pix_fmt',  'yuv420p',
+                '-c:a',      'aac',
+                '-b:a',      '96k',
+                '-shortest',
+                '-y',
+                $clipOut,
+            ];
+        }
     } elseif ($replaced && $slotText !== '' && ($repUrl === null || $repUrl === '')) {
         // Text-only-Slot: schwarze Titelkarte mit drawtext
         $source   = 'text';
@@ -328,7 +394,7 @@ foreach ($slots as $idx => $slot) {
             . ':y=(h-text_h)/2';
         $args = [
             '-f',      'lavfi',
-            '-i',      'color=c=black:size=' . RENDER_OUT_W . 'x' . RENDER_OUT_H . ':rate=' . RENDER_OUT_FPS,
+            '-i',      'color=c=black:size=' . $RENDER_OUT_W . 'x' . $RENDER_OUT_H . ':rate=' . RENDER_OUT_FPS,
             '-f',      'lavfi',
             '-i',      'anullsrc=r=44100:cl=stereo',
             '-t',      sprintf('%.3f', $duration),
@@ -347,27 +413,52 @@ foreach ($slots as $idx => $slot) {
         ];
     } else {
         // Original-Slot: Cut aus dem Originalvideo
-        // Audio: anullsrc-Stille, damit concat -c copy mit allen Slot-Typen funktioniert.
-        // Original-Audio-Erhalt (AAC-Transcode aus Input) folgt in V3.
-        $args = [
-            '-ss',       sprintf('%.3f', $start),
-            '-i',        $originalPath,
-            '-f',        'lavfi',
-            '-i',        'anullsrc=r=44100:cl=stereo',
-            '-t',        sprintf('%.3f', $duration),
-            '-vf',       $scaleFilter,
-            '-map',      '0:v',
-            '-map',      '1:a',
-            '-c:v',      'libx264',
-            '-crf',      (string)RENDER_CRF,
-            '-preset',   RENDER_PRESET,
-            '-pix_fmt',  'yuv420p',
-            '-c:a',      'aac',
-            '-b:a',      '96k',
-            '-shortest',
-            '-y',
-            $clipOut,
-        ];
+        // V3 Audio: Wenn Original Audio hat → aus Input übernehmen (AAC re-encode).
+        //           Wenn kein Audio → anullsrc-Stille (garantiert konsistenten Concat).
+        if ($hasOriginalAudio) {
+            // Audio aus Originalvideo: -map 0:a (Stream 0, erste Audiospur)
+            // Normalisiert auf 44.1 kHz Stereo AAC damit concat -c copy funktioniert.
+            $args = [
+                '-ss',       sprintf('%.3f', $start),
+                '-i',        $originalPath,
+                '-t',        sprintf('%.3f', $duration),
+                '-vf',       $scaleFilter,
+                '-map',      '0:v',
+                '-map',      '0:a',
+                '-c:v',      'libx264',
+                '-crf',      (string)RENDER_CRF,
+                '-preset',   RENDER_PRESET,
+                '-pix_fmt',  'yuv420p',
+                '-c:a',      'aac',
+                '-b:a',      '96k',
+                '-ar',       '44100',   // Normalisierung Samplerate
+                '-ac',       '2',       // Normalisierung Kanalanzahl (Stereo)
+                '-shortest',
+                '-y',
+                $clipOut,
+            ];
+        } else {
+            // Kein Audio-Track im Original → stille Spur (anullsrc)
+            $args = [
+                '-ss',       sprintf('%.3f', $start),
+                '-i',        $originalPath,
+                '-f',        'lavfi',
+                '-i',        'anullsrc=r=44100:cl=stereo',
+                '-t',        sprintf('%.3f', $duration),
+                '-vf',       $scaleFilter,
+                '-map',      '0:v',
+                '-map',      '1:a',
+                '-c:v',      'libx264',
+                '-crf',      (string)RENDER_CRF,
+                '-preset',   RENDER_PRESET,
+                '-pix_fmt',  'yuv420p',
+                '-c:a',      'aac',
+                '-b:a',      '96k',
+                '-shortest',
+                '-y',
+                $clipOut,
+            ];
+        }
     }
 
     render_log("Slot {$slotNum} encode start (source={$source}, dur=" . round($duration, 2) . 's)');
@@ -382,16 +473,26 @@ foreach ($slots as $idx => $slot) {
         $result['success'] = true;
     }
 
+    // Audio-Quelle fürs Debugging: 'original' | 'replacement' | 'silence'
+    $audioSource = match(true) {
+        $source === 'original' && $hasOriginalAudio => 'original',
+        $source === 'video'    && isset($repHasAudio) && $repHasAudio => 'replacement',
+        default => 'silence',
+    };
+
     $debug[] = [
-        'slot'       => $slotNum,
-        'source'     => $source,           // 'original' | 'image' | 'video'
-        'replaced'   => $replaced,
-        'duration'   => round($duration, 3),
-        'success'    => (bool)$result['success'],
-        'exit_code'  => (int)$result['exit_code'],
-        'timed_out'  => (bool)$result['timed_out'],
-        'clip_bytes' => $clipSize,
+        'slot'         => $slotNum,
+        'source'       => $source,        // 'original' | 'image' | 'video' | 'text'
+        'audio_source' => $audioSource,   // 'original' | 'replacement' | 'silence'
+        'replaced'     => $replaced,
+        'duration'     => round($duration, 3),
+        'success'      => (bool)$result['success'],
+        'exit_code'    => (int)$result['exit_code'],
+        'timed_out'    => (bool)$result['timed_out'],
+        'clip_bytes'   => $clipSize,
     ];
+
+    unset($repHasAudio); // Variable zurücksetzen — nur für aktuellen Slot gültig
 
     if (!$result['success'] || $clipSize <= 0) {
         render_log("Slot {$slotNum} encode FAIL exit={$result['exit_code']} bytes={$clipSize}");
@@ -494,6 +595,7 @@ if ($fpWrite !== false) {
             $curMeta['final_filename']   = $finalName;
             $curMeta['final_size_bytes'] = $finalSize;
             $curMeta['rendered_at']      = $nowIso;
+            $curMeta['render_quality']   = $_exportQuality;
             $newJson = json_encode(
                 $curMeta,
                 JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
@@ -534,4 +636,6 @@ echo json_encode([
     'duration_seconds' => round($totalDuration, 2),
     'slot_count'       => $slotCount,
     'rendered_at'      => $nowIso,
+    'quality'          => $_exportQuality,          // '720p' | '1080p'
+    'resolution'       => $RENDER_OUT_W . 'x' . $RENDER_OUT_H,
 ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);

@@ -7,6 +7,62 @@ Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/).
 
 ## [Unreleased]
 
+### Session 5 — 2026-05-14
+
+#### Geändert
+- `studio-demo.php` — Wallet-Pill `💎 500` → `💎 Free`, Footer `© 2025` → `© 2026`, stale Audio-Hinweis entfernt
+- `studio-demo.php` — KI-Bild-Button pro Slot-Card: Prompt-Textarea + `✨ KI-Bild generieren` Button, `generateAiImage()`, `pollAiStatus()` (5s Polling, 3 Min. Timeout, Auto-Resume), Thumbnail-Update on success
+- `memory/current-problems.md` — Alle gelösten Probleme (Sessions 2–5) in Resolved-Tabelle
+
+#### Verifiziert (kein Code geändert, vollständig implementiert)
+- `api/cleanup.php`, `api/save-request.php`, `api/generate-ai.php`, `api/ai-status.php`, `bin/cleanup-cron.php`
+- Alle `storage/` Subdirectory `.htaccess` Dateien
+- `includes/header.php`, `includes/footer.php`
+- 8 aus Worktree kopierte Seiten im Main-Project
+
+---
+
+### Session 4 — 2026-05-14
+
+#### Neu
+- `bin/cleanup-cron.php` — CLI-Script für Render Cron (täglich 03:00 UTC), ruft `csf_cleanup_old_jobs()` auf
+
+#### Geändert
+- `api/render-final.php` — V3 Audio: ffprobe prüft Original-Audio-Stream, `-map 0:a -ar 44100 -ac 2 -c:a aac` bei Originalslots und Video-Replacements, `anullsrc` bei Text/Bild-Slots
+- `docker/apache.conf` — `PassEnv CLEANUP_SECRET`, CORS-Header-Einrückung, `<Directory storage/jobs>` mit `Require all granted` + FilesMatch-Blocking für meta.json + PHP
+- `render.yaml` — Cron-Service `csf-cleanup-cron` (`0 3 * * *`, gleiche Disk wie Web-Service)
+
+---
+
+### Session 3 — 2026-05-14
+
+#### Neu
+- `api/cleanup.php` — Manueller Cleanup-Endpunkt (`?key=CLEANUP_SECRET`), ruft `csf_cleanup_old_jobs()` auf
+- `api/save-request.php` — POST-Endpoint für Kontaktanfragen aus ready-videos.php, speichert in `storage/requests.json` (LOCK_EX, SHA-256 IP-Hash)
+- `api/generate-ai.php` — Kie.ai Flux Kontext Task starten, meta.json Update, Limit: max 1 AI-Gen pro Slot, max 3 pro Job
+- `api/ai-status.php` — Kie.ai Task-Status pollen, SSRF-Schutz via gethostbyname + FILTER_FLAG_NO_PRIV_RANGE, Bild-Download + MIME-Check + Speichern, meta.json Update
+
+#### Geändert
+- `includes/functions.php` — `csf_cleanup_old_jobs()` hinzugefügt (Jobs >48h, Exports, Temp >2h, Thumbs ohne Job)
+- `elements.php` + `api/elements.php` — Edit-Button aktiviert, `update`-Action in api/elements.php implementiert, Edit-Modal mit Live-DOM-Update
+- `tiktok-animation.php` + `tiktok-sticker.php` — `uploadLogoIfNeeded()` verbunden mit `api/upload.php`, `logo_url` im Request-Payload
+- `includes/config.php` — `MAX_UPLOAD_BYTES` 50 MB (war 500 MB), `video/webm` MIME-Typ, `API_PROVIDER_LINK` → kie.ai
+- 7 Sekundärseiten (`availability.php`, `contact.php`, `crystals.php`, `ki-videos.php`, `portfolio.php`, `prompt-generator.php`, `shop.php`) — Wallet `💎 Free`, Footer `© 2026`, Nav auf 5+3 Links
+
+---
+
+### Session 2 — 2026-05-14
+
+#### Neu
+- `index.php` — HTTP 302 Redirect auf `scene-editor-test.html` (war Placeholder)
+
+#### Geändert
+- `api/render-final.php` — V2 Audio: `anullsrc` AAC 96k stereo für alle 4 Slot-Typen (war `-an`), Job-Level Lock `flock(LOCK_EX|LOCK_NB)` auf `render.lock` → 409 bei parallelem Render
+- `studio-demo.php` — `generateAiImage()` + `pollAiStatus()` (5s Polling, 3 Min. Timeout, Thumbnail-Update, Auto-Resume bei `pending`)
+- `scene-editor-test.html` — Wallet `💎 Free`, Stats `720p` statt `4K`, Badge `Demo` für Kontakt/Verfügbarkeit
+
+---
+
 ### Free MVP — Studio Demo Live · 2026-05-13
 
 #### Commits

@@ -23,26 +23,12 @@
     .nav-btn-gold{background:var(--gold);color:#1a0e00;text-decoration:none;font-size:13px;font-weight:800;padding:9px 16px;border-radius:10px;}
     .wallet-pill{display:flex;align-items:center;gap:6px;background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.3);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:800;color:var(--accent);cursor:pointer;text-decoration:none;}
     @media(max-width:900px){.nav-links{display:none;}}
-    @media(max-width:640px){.nav{padding:12px 16px;gap:8px;}.nav-logo{font-size:11px;letter-spacing:1.5px;min-width:0;flex-shrink:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}.nav-logo span{display:none;}.nav-btn-ghost{display:none;}.nav-btn-gold{display:none;}.wallet-pill{display:none;}}
-    .mob-burger{display:none;flex-direction:column;justify-content:center;gap:5px;width:40px;height:40px;padding:8px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:10px;cursor:pointer;flex-shrink:0;}
-    .mob-burger span{display:block;height:2px;border-radius:2px;background:var(--text);transition:transform .22s,opacity .22s;}
-    .mob-burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
-    .mob-burger.open span:nth-child(2){opacity:0;}
-    .mob-burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
-    .mob-menu{position:fixed;left:0;right:0;z-index:99;background:rgba(6,6,15,.97);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);box-shadow:0 24px 60px rgba(0,0,0,.6),0 0 50px rgba(59,130,246,.07);max-height:0;overflow:hidden;opacity:0;pointer-events:none;transition:max-height .3s cubic-bezier(.4,0,.2,1),opacity .22s;display:none;}
-    .mob-menu.open{max-height:560px;opacity:1;pointer-events:auto;}
-    .mob-link{display:block;padding:14px 24px;color:var(--muted);text-decoration:none;font-size:15px;font-weight:700;border-left:3px solid transparent;transition:color .15s,border-color .15s,background .15s;}
-    .mob-link:active{background:rgba(255,255,255,.06);}
-    .mob-link.active{color:var(--accent);border-left-color:var(--accent);}
-    .mob-sep{height:1px;background:var(--border);margin:10px 20px;}
-    .mob-cta{display:block;margin:12px 20px 8px;padding:15px;background:var(--gold);color:#1a0e00;text-decoration:none;font-size:15px;font-weight:900;border-radius:13px;text-align:center;}
-    @media(max-width:900px){.mob-burger{display:flex;}.mob-menu{display:block;}}
     /* Page */
-    .page{padding:100px 0 60px;position:relative;}.page::before{content:"";position:absolute;top:0;left:0;right:0;height:380px;background:radial-gradient(ellipse 70% 120% at 15% 0%,rgba(59,130,246,.07) 0%,transparent 60%),radial-gradient(ellipse 50% 80% at 85% 20%,rgba(147,51,234,.05) 0%,transparent 55%);pointer-events:none;z-index:0;}
-    .wrap{width:min(1160px,calc(100% - 48px));margin:0 auto;position:relative;z-index:1;}
+    .page{padding:100px 0 60px;}
+    .wrap{width:min(1160px,calc(100% - 48px));margin:0 auto;}
     /* Demo header */
     .demo-header{margin-bottom:32px;}
-    .demo-eyebrow{font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--accent);background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.28);border-radius:999px;padding:6px 14px;display:inline-flex;align-items:center;gap:8px;margin-bottom:14px;}
+    .demo-eyebrow{font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--blue);background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.25);border-radius:999px;padding:6px 14px;display:inline-flex;align-items:center;gap:8px;margin-bottom:14px;}
     .demo-eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok);animation:rblink 2s ease-in-out infinite;}
     @keyframes rblink{0%,100%{opacity:1}50%{opacity:.2}}
     .demo-header h1{font-size:clamp(28px,4vw,48px);font-weight:900;letter-spacing:-1.5px;margin-bottom:8px;}
@@ -61,52 +47,32 @@
     .status{margin-top:12px;color:var(--muted);white-space:pre-wrap;font-size:13px;}
     .status.ok{color:var(--ok);}
     .status.err{color:var(--danger);}
-    .meta{display:none;margin-top:18px;grid-template-columns:repeat(3,1fr);gap:10px;}
+    .meta{display:none;margin-top:18px;grid-template-columns:repeat(4,1fr);gap:10px;}
     .meta div{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;padding:13px;}
     .meta strong{display:block;font-size:11px;color:var(--muted);margin-bottom:4px;letter-spacing:.4px;}
-    .meta-hide{display:none!important;}
-    .slot-instruction{margin-top:22px;margin-bottom:4px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
-    .slot-instruction-text{font-size:13px;color:var(--muted);line-height:1.5;}
-    .slot-instruction-text strong{color:var(--text);font-weight:800;}
     .slots{margin-top:22px;display:grid;grid-template-columns:repeat(5,1fr);gap:12px;}
     .slot{background:linear-gradient(160deg,var(--card),var(--card2));border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 8px 22px rgba(0,0,0,.22);transition:border-color .2s,box-shadow .2s;}
-    .slot::before{content:"";display:block;height:3px;background:linear-gradient(90deg,rgba(59,130,246,.7),rgba(147,51,234,.6));flex-shrink:0;}
     .slot.is-replaced{border-color:var(--ok);box-shadow:0 0 0 1px var(--ok),0 8px 22px rgba(0,0,0,.22);}
-    .slot.is-replaced::before{background:linear-gradient(90deg,var(--ok),rgba(59,130,246,.8));}
-    .thumb{position:relative;aspect-ratio:16/9;background:#030308;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;overflow:hidden;}
+    .thumb{position:relative;aspect-ratio:9/16;background:#030308;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;overflow:hidden;}
     .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
     .badge{display:none;position:absolute;top:8px;left:8px;font-size:10px;font-weight:800;color:#0a2b14;background:var(--ok);padding:3px 7px;border-radius:999px;box-shadow:0 4px 10px rgba(0,0,0,.4);}
     .slot.is-replaced .badge{display:inline-block;}
     .slot-body{padding:11px;}
     .slot-title{font-weight:800;margin-bottom:5px;font-size:13px;}
-    .time{color:var(--blue);font-size:11px;font-weight:700;letter-spacing:.8px;margin-bottom:9px;font-family:'Courier New',monospace;}
+    .time{color:var(--muted);font-size:12px;margin-bottom:9px;}
     .field{width:100%;margin-top:7px;padding:9px 11px;border-radius:9px;border:1px solid var(--border);background:rgba(0,0,0,.28);color:var(--text);outline:none;font-family:inherit;font-size:12px;}
-    .replace{margin-top:7px;width:100%;font-size:11px;color:var(--muted);background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:7px 10px;cursor:pointer;transition:border-color .15s;}
-    .replace:hover{border-color:rgba(255,255,255,.22);}
-    .replace::-webkit-file-upload-button{background:rgba(255,255,255,.08);border:0;border-radius:6px;color:var(--text);font-size:11px;font-weight:700;padding:4px 8px;cursor:pointer;margin-right:6px;}
-    .replace::file-selector-button{background:rgba(255,255,255,.08);border:0;border-radius:6px;color:var(--text);font-size:11px;font-weight:700;padding:4px 8px;cursor:pointer;margin-right:6px;}
+    .replace{margin-top:7px;width:100%;font-size:12px;color:var(--muted);}
     .save-btn{margin-top:8px;width:100%;min-height:38px;padding:9px 12px;font-size:12px;font-weight:800;border-radius:9px;background:var(--accent);color:#171000;border:0;cursor:pointer;transition:transform .15s,opacity .15s;}
     .save-btn:hover:not(:disabled){transform:translateY(-1px);}
     .save-btn:disabled{opacity:.45;cursor:not-allowed;transform:none;}
     .slot-status{margin-top:7px;font-size:11px;color:var(--muted);min-height:1.2em;word-break:break-word;}
     .slot-status.ok{color:var(--ok);}
     .slot-status.err{color:var(--danger);}
-    /* ── KI-Bild Section ───────────────────────────────────────────────────── */
-    .ai-sep{display:flex;align-items:center;gap:8px;margin:12px 0 6px;font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--muted2);}
-    .ai-sep::before,.ai-sep::after{content:"";flex:1;height:1px;background:var(--border);}
-    .ai-prompt{width:100%;margin-top:4px;padding:8px 11px;border-radius:9px;border:1px solid var(--border);background:rgba(0,0,0,.28);color:var(--text);outline:none;font-family:inherit;font-size:12px;resize:vertical;min-height:56px;}
-    .ai-prompt:focus{border-color:rgba(147,51,234,.5);box-shadow:0 0 0 2px rgba(147,51,234,.12);}
-    .ai-btn{margin-top:7px;width:100%;min-height:38px;padding:9px 12px;font-size:12px;font-weight:800;border-radius:9px;background:linear-gradient(90deg,#9333ea,#3b82f6);color:#fff;border:0;cursor:pointer;transition:transform .15s,opacity .15s;}
-    .ai-btn:hover:not(:disabled){transform:translateY(-1px);opacity:.9;}
-    .ai-btn:disabled{opacity:.45;cursor:not-allowed;transform:none;}
-    .ai-status{margin-top:6px;font-size:11px;color:var(--muted);min-height:1.2em;word-break:break-word;}
-    .ai-status.ok{color:var(--ok);}
-    .ai-status.err{color:var(--danger);}
     .note{margin-top:18px;padding:12px 14px;background:rgba(245,197,66,.05);border:1px solid rgba(245,197,66,.14);border-radius:11px;color:var(--muted);font-size:12px;line-height:1.5;}
     .reset-btn{background:transparent;color:var(--muted);border:1px solid var(--border);padding:11px 14px;border-radius:11px;font-weight:700;cursor:pointer;min-height:42px;font-size:12px;}
     .reset-btn:hover{color:var(--text);border-color:rgba(255,255,255,.28);}
     .restored-hint{margin-top:11px;padding:11px 13px;background:rgba(74,222,128,.06);border:1px solid rgba(74,222,128,.22);border-radius:11px;color:var(--ok);font-size:12px;line-height:1.4;}
-    .final-section{margin-top:26px;padding:26px;background:linear-gradient(145deg,rgba(245,197,66,.07),rgba(255,140,0,.03));border:1px solid rgba(245,197,66,.3);border-radius:14px;box-shadow:0 0 50px rgba(245,197,66,.06);}
+    .final-section{margin-top:26px;padding:22px;background:rgba(245,197,66,.04);border:1px solid rgba(245,197,66,.18);border-radius:14px;}
     .final-section h2{font-size:19px;font-weight:900;margin-bottom:7px;}
     .final-section p{color:var(--muted);font-size:12px;line-height:1.5;margin-bottom:14px;}
     .render-btn{background:var(--accent);color:#171000;border:0;border-radius:12px;padding:13px 22px;font-size:14px;font-weight:800;cursor:pointer;min-height:46px;transition:transform .15s,opacity .15s,box-shadow .15s;}
@@ -124,41 +90,23 @@
     .check-btn{background:transparent;color:var(--accent);border:1px solid var(--accent);border-radius:11px;padding:11px 16px;font-weight:800;cursor:pointer;min-height:42px;font-size:13px;margin-top:9px;}
     .check-btn:hover:not(:disabled){background:rgba(245,197,66,.07);}
     .check-btn:disabled{opacity:.45;cursor:not-allowed;}
-    /* Steps */
-    .steps{display:flex;align-items:center;margin-bottom:28px;flex-wrap:wrap;gap:4px;}
-    .step{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:var(--muted2);transition:color .2s;}
-    .step-num{width:26px;height:26px;border-radius:50%;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;flex-shrink:0;transition:background .2s,color .2s;}
-    .step.active{color:var(--accent);}
-    .step.active .step-num{background:rgba(245,197,66,.12);}
-    .step.done{color:var(--ok);}
-    .step.done .step-num{background:rgba(74,222,128,.12);}
-    .step-arrow{color:var(--muted2);font-size:13px;padding:0 8px;flex-shrink:0;}
-    @media(max-width:560px){.step-label{display:none;}.step-arrow{padding:0 5px;}}
-    /* Dropzone */
-    .dropzone{position:relative;border:2px dashed rgba(59,130,246,.28);border-radius:16px;padding:36px 24px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;background:rgba(59,130,246,.03);}
-    .dropzone:hover{border-color:rgba(59,130,246,.6);background:rgba(59,130,246,.06);}
-    .dropzone.drag-over{border-color:var(--blue);background:rgba(59,130,246,.1);box-shadow:0 0 0 4px rgba(59,130,246,.08);}
-    .dropzone .dropzone-input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;font-size:0;}
-    .dropzone-icon{font-size:2.2rem;margin-bottom:10px;display:block;transition:transform .2s;}
-    .dropzone:hover .dropzone-icon{transform:translateY(-3px);}
-    .dropzone-title{font-size:15px;font-weight:800;color:var(--text);margin-bottom:5px;}
-    .dropzone-sub{font-size:12px;color:var(--muted);line-height:1.6;}
-    .dropzone-filename{margin-top:10px;font-size:13px;color:var(--ok);font-weight:700;display:none;}
-    .dropzone-filename.visible{display:block;}
-    .dropzone-actions{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;}
-    .analyze-btn{flex:1;min-height:48px;font-size:14px;font-weight:900;border-radius:13px;background:var(--gold);color:#1a0e00;border:0;cursor:pointer;box-shadow:0 6px 22px rgba(245,197,66,.22);transition:transform .15s,box-shadow .15s,opacity .15s;}
-    .analyze-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 32px rgba(245,197,66,.38);}
-    .analyze-btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none;}
+    /* KI-Bild Button */
+    .ai-prompt{width:100%;margin-top:8px;padding:8px 10px;border-radius:8px;border:1px solid rgba(147,51,234,.3);background:rgba(147,51,234,.05);color:var(--text);font-family:inherit;font-size:11px;resize:none;outline:none;}
+    .ai-prompt:focus{border-color:rgba(147,51,234,.6);background:rgba(147,51,234,.08);}
+    .ai-btn{margin-top:6px;width:100%;min-height:36px;padding:7px 10px;font-size:11px;font-weight:800;border-radius:8px;background:linear-gradient(135deg,#7c3aed,#2563eb);color:#fff;border:0;cursor:pointer;transition:opacity .15s,transform .15s;}
+    .ai-btn:hover:not(:disabled){opacity:.88;transform:translateY(-1px);}
+    .ai-btn:disabled{opacity:.45;cursor:not-allowed;transform:none;}
+    .ai-status{margin-top:5px;font-size:10px;color:var(--muted);min-height:1em;word-break:break-word;}
+    .ai-status.ai-ok{color:#a78bfa;}
+    .ai-status.ai-err{color:var(--danger);}
+    .slot.ai-pending{box-shadow:0 0 0 1px rgba(147,51,234,.5),0 8px 22px rgba(0,0,0,.22);}
     /* Back link */
-    .back-link{display:inline-flex;align-items:center;gap:8px;color:var(--text);text-decoration:none;font-size:14px;font-weight:700;margin-bottom:28px;padding:13px 22px;border:1px solid var(--border);border-radius:12px;transition:border-color .15s,background .15s;}
-    .back-link:hover{border-color:rgba(255,255,255,.28);background:rgba(255,255,255,.05);}
+    .back-link{display:inline-flex;align-items:center;gap:6px;color:var(--muted);text-decoration:none;font-size:13px;font-weight:600;margin-bottom:28px;transition:color .15s;}
+    .back-link:hover{color:var(--text);}
     /* Footer */
     .footer{border-top:1px solid var(--border);padding:32px 0;margin-top:60px;}
     .footer-inner{width:min(1160px,calc(100% - 48px));margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
     .footer-logo{font-size:13px;font-weight:900;letter-spacing:2px;background:var(--gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-    .footer-nav{display:flex;gap:18px;flex-wrap:wrap;}
-    .footer-nav a{color:var(--muted);text-decoration:none;font-size:12px;font-weight:600;transition:color .15s;}
-    .footer-nav a:hover{color:var(--text);}
     .footer-copy{font-size:12px;color:var(--muted2);}
     @media(max-width:900px){.slots{grid-template-columns:repeat(3,1fr);}.meta{grid-template-columns:repeat(2,1fr);}}
     @media(max-width:560px){.slots{grid-template-columns:repeat(2,1fr);}.meta{grid-template-columns:1fr;}}
@@ -171,25 +119,18 @@
     <div class="nav-links">
       <a href="scene-editor-test.html" class="nav-link">Home</a>
       <a href="studio-demo.php" class="nav-link active">Studio</a>
+      <a href="shop.php" class="nav-link">Shop</a>
+      <a href="portfolio.php" class="nav-link">Portfolio</a>
+      <a href="availability.php" class="nav-link">Verfügbarkeit</a>
       <a href="academy.php" class="nav-link">Academy</a>
-      <a href="shop.php" class="nav-link">Shop Beta</a>
       <a href="crystals.php" class="nav-link">Kristalle</a>
+      <a href="contact.php" class="nav-link">Kontakt</a>
     </div>
     <div class="nav-actions">
-      <a href="contact.php" class="nav-btn-ghost">Beta-Zugang</a>
+      <a href="contact.php" class="nav-btn-ghost">Anmelden</a>
       <a href="crystals.php" class="wallet-pill">💎 Free</a>
     </div>
-    <button class="mob-burger" id="mobBurger" aria-label="Menü öffnen" aria-expanded="false"><span></span><span></span><span></span></button>
   </nav>
-  <div class="mob-menu" id="mobMenu">
-    <a href="scene-editor-test.html" class="mob-link">🏠 Home</a>
-    <a href="studio-demo.php" class="mob-link active">🎬 Studio</a>
-    <a href="academy.php" class="mob-link">🎓 Academy</a>
-    <a href="shop.php" class="mob-link">🛍️ Shop Beta</a>
-    <a href="crystals.php" class="mob-link">💎 Kristalle</a>
-    <div class="mob-sep"></div>
-    <a href="contact.php" class="mob-cta">✉️ Beta-Zugang sichern</a>
-  </div>
 
   <div class="page">
     <div class="wrap">
@@ -197,56 +138,36 @@
       <a href="scene-editor-test.html" class="back-link">← Zurück zur Startseite</a>
 
       <div class="demo-header">
-        <div class="demo-eyebrow">✦ KI-Film-Studio · Live</div>
-        <h1>Dein Video. <span>Deine Szenen.</span></h1>
-        <p>Video hochladen → Szenen auswählen → mit Bild, Text oder KI-Bild ersetzen → fertiges MP4 herunterladen. In unter 2 Minuten.</p>
-      </div>
-
-      <div class="note" style="text-align:center;font-weight:700;margin-bottom:18px;">⚡ Demo-Modus &mdash; max. 15 Sek. &middot; 720p MP4 &middot; kostenlos</div>
-
-      <div class="steps" id="stepBar">
-        <div class="step active" id="step1"><span class="step-num">1</span><span class="step-label">Video hochladen</span></div>
-        <div class="step-arrow">→</div>
-        <div class="step" id="step2"><span class="step-num">2</span><span class="step-label">Szenen bearbeiten</span></div>
-        <div class="step-arrow">→</div>
-        <div class="step" id="step3"><span class="step-num">3</span><span class="step-label">Video erstellen</span></div>
+        <div class="demo-eyebrow">Demo aktiv</div>
+        <h1>Scene <span>Replacement Editor</span></h1>
+        <p>Lade ein Referenzvideo hoch — das Backend analysiert es, erzeugt Szenen-Slots und zeigt Thumbnails. Dann kannst du pro Slot Bilder, Videos oder Text ersetzen.</p>
       </div>
 
       <div class="demo-module">
 
         <div class="panel">
-          <div class="dropzone" id="dropzone">
-            <input id="videoInput" type="file" accept="video/mp4,video/webm,video/quicktime,video/x-matroska" class="dropzone-input">
-            <span class="dropzone-icon">🎬</span>
-            <div class="dropzone-title">Video hierher ziehen oder klicken</div>
-            <div class="dropzone-sub">MP4 · WebM · MOV · MKV &nbsp;|&nbsp; max. 15 Sek. · max. 50 MB · kostenlos</div>
-            <div class="dropzone-filename" id="dropzoneName"></div>
-          </div>
-          <div class="dropzone-actions">
-            <button id="analyzeBtn" class="analyze-btn">▶ Szenen analysieren</button>
+          <div class="row">
+            <input id="videoInput" type="file" accept="video/mp4,video/webm,video/quicktime,video/x-matroska">
+            <button id="analyzeBtn">Video analysieren</button>
             <button id="resetBtn" class="reset-btn" type="button" hidden>↻ Job zurücksetzen</button>
           </div>
           <div id="restoredHint" class="restored-hint" hidden></div>
-          <div id="status" class="status">Bereit — lade ein Video hoch und starte die KI-Analyse.</div>
+          <div id="status" class="status">Bereit. Wähle ein kurzes MP4-Testvideo.</div>
         </div>
 
         <div id="meta" class="meta">
-          <div><strong>Videolänge</strong><span id="duration">-</span></div>
-          <div><strong>Qualität</strong><span id="resolution">-</span></div>
-          <div><strong>Szenen erkannt</strong><span id="slotCount">-</span></div>
-          <span id="jobId" hidden></span>
-        </div>
-
-        <div class="slot-instruction" id="slotInstruction" style="display:none">
-          <p class="slot-instruction-text"><strong>Wähle pro Szene</strong> ein Bild, Video oder Text — nur Text ergibt eine schwarze Titelkarte im Video.</p>
+          <div><strong>Job ID</strong><span id="jobId">-</span></div>
+          <div><strong>Dauer</strong><span id="duration">-</span></div>
+          <div><strong>Auflösung</strong><span id="resolution">-</span></div>
+          <div><strong>Slots</strong><span id="slotCount">-</span></div>
         </div>
 
         <div id="slots" class="slots"></div>
 
         <section id="finalSection" class="final-section" hidden>
-          <h2>✦ Video erstellen</h2>
-          <p>Szenen fertig? Jetzt rendern — alle Szenen werden zu einem MP4 zusammengefügt. Nicht bearbeitete Szenen bleiben original. Dauert ca. 10–20 Sekunden.</p>
-          <button id="renderBtn" class="render-btn" type="button">🎬 Video rendern · 720p MP4</button>
+          <h2>Finales Video erstellen</h2>
+          <p>Alle nicht ersetzten Slots werden aus dem Originalvideo geschnitten. Ersetzte Slots verwenden dein Bild oder Video. Endergebnis: 1080p · MP4 · stumm (Audio kommt in V2).</p>
+          <button id="renderBtn" class="render-btn" type="button">🎬 Finales Video erstellen</button>
           <div id="renderStatus" class="render-status" hidden></div>
           <div id="renderError" class="render-error" hidden></div>
           <button id="checkStatusBtn" class="check-btn" type="button" hidden>🔍 Status prüfen</button>
@@ -258,7 +179,7 @@
           </div>
         </section>
 
-        <p class="note">Demo-Modus: max. 15 Sek. · 720p MP4 · kostenlos. Render-Dauer ca. 10–20 Sekunden.</p>
+        <p class="note">Hinweis: Ein Klick auf „Finales Video erstellen" rendert blockierend (Schätzwert: 30–120 Sekunden je nach Slots). Original-Audio wird beibehalten wenn vorhanden. KI-Bilder erfordern einen gesetzten API-Key auf dem Server.</p>
       </div>
 
     </div>
@@ -267,26 +188,19 @@
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-logo">Cinematic Vision Studio</div>
-      <nav class="footer-nav">
-        <a href="studio-demo.php">Studio</a>
-        <a href="shop.php">Shop</a>
-        <a href="portfolio.php">Portfolio</a>
-        <a href="crystals.php">Kristalle</a>
-        <a href="contact.php">Kontakt</a>
-      </nav>
-      <div class="footer-copy">© 2026 · Premium KI-Filmproduktion</div>
+      <div class="footer-copy">© 2026 · Demo-Version · <a href="scene-editor-test.html" style="color:var(--accent);text-decoration:none;">Startseite</a></div>
     </div>
   </footer>
 
   <script>
     "use strict";
-    const BASE_URL    = "https://cinematic-studio-family.onrender.com";
-    const ANALYZE_API     = BASE_URL + "/api/analyze.php";
-    const REPLACE_API     = BASE_URL + "/api/replace-slot.php";
-    const GETJOB_API      = BASE_URL + "/api/get-job.php";
-    const RENDER_API      = BASE_URL + "/api/render-final.php";
-    const GENERATE_AI_API = BASE_URL + "/api/generate-ai.php";
-    const AISTATUS_API    = BASE_URL + "/api/ai-status.php";
+    const BASE_URL       = "https://cinematic-studio-family.onrender.com";
+    const ANALYZE_API    = BASE_URL + "/api/analyze.php";
+    const REPLACE_API    = BASE_URL + "/api/replace-slot.php";
+    const GETJOB_API     = BASE_URL + "/api/get-job.php";
+    const RENDER_API     = BASE_URL + "/api/render-final.php";
+    const AI_GEN_API     = BASE_URL + "/api/generate-ai.php";
+    const AI_STATUS_API  = BASE_URL + "/api/ai-status.php";
     const LS_KEY      = "csf_last_job_id";
     const MAX_IMG_BYTES = 10  * 1024 * 1024;
     const MAX_VID_BYTES = 100 * 1024 * 1024;
@@ -315,14 +229,13 @@
 
     function setStatus(text, type) { statusBox.className = "status" + (type ? " " + type : ""); statusBox.textContent = text; }
     function formatSeconds(value) { return Number(value).toFixed(2) + "s"; }
-    function formatTime(s) { var sec=Number(s); var m=Math.floor(sec/60); var r=Math.floor(sec%60); return (m<10?"0":"")+m+":"+(r<10?"0":"")+r; }
     function clearChildren(el) { while (el.firstChild) el.removeChild(el.firstChild); }
     function setSlotStatus(el, text, type) { el.textContent = text; el.classList.remove("ok","err"); if (type) el.classList.add(type); }
     function dbg(label, data) { try { if (data === undefined) console.log("[csf] " + label); else console.log("[csf] " + label, data); } catch(_){} }
     function networkErrorMessage(err, endpoint) {
       const msg = err && err.message ? err.message : String(err);
       const isNetwork = err && (err.name === "TypeError" || /failed to fetch|networkerror|load failed/i.test(msg));
-      if (isNetwork) return "Server antwortet gerade nicht — bitte 30–60 Sekunden warten und erneut versuchen.";
+      if (isNetwork) return "Backend nicht erreichbar (" + endpoint + ").\nMögliche Ursachen: Render schläft, DNS-Hiccup, Verbindung weg.\nBitte 20–30 Sekunden warten.";
       return msg;
     }
     const COLD_MS = 35000; const COLD_RETRIES = 2;
@@ -344,45 +257,40 @@
       const badge = document.createElement("span"); badge.className = "badge"; badge.textContent = "✓ ersetzt"; thumb.appendChild(badge);
       card.appendChild(thumb);
       const body = document.createElement("div"); body.className = "slot-body";
-      const title = document.createElement("div"); title.className = "slot-title"; title.textContent = "Szene " + slot.slot; body.appendChild(title);
-      const time = document.createElement("div"); time.className = "time"; time.textContent = formatTime(slot.start_seconds) + " → " + formatTime(slot.end_seconds); body.appendChild(time);
-      const textField = document.createElement("input"); textField.type = "text"; textField.className = "field"; textField.placeholder = "Titelkarte: Text erscheint im Video"; textField.maxLength = MAX_TEXT_LEN;
+      const title = document.createElement("div"); title.className = "slot-title"; title.textContent = "Slot " + slot.slot; body.appendChild(title);
+      const time = document.createElement("div"); time.className = "time"; time.textContent = formatSeconds(slot.start_seconds) + " – " + formatSeconds(slot.end_seconds); body.appendChild(time);
+      const textField = document.createElement("input"); textField.type = "text"; textField.className = "field"; textField.placeholder = "Text für diese Szene..."; textField.maxLength = MAX_TEXT_LEN;
       if (slot.text) textField.value = String(slot.text); body.appendChild(textField);
       const fileInput = document.createElement("input"); fileInput.type = "file"; fileInput.className = "replace"; fileInput.accept = "image/*,video/*"; body.appendChild(fileInput);
-      const saveBtn = document.createElement("button"); saveBtn.type = "button"; saveBtn.className = "save-btn"; saveBtn.textContent = "Szene speichern"; body.appendChild(saveBtn);
+      const saveBtn = document.createElement("button"); saveBtn.type = "button"; saveBtn.className = "save-btn"; saveBtn.textContent = "Slot speichern"; body.appendChild(saveBtn);
       const slotStatus = document.createElement("div"); slotStatus.className = "slot-status";
-      if (slot.replaced && slot.replacement_file) { const parts = String(slot.replacement_file).split("/"); slotStatus.textContent = "Aktuelle Datei: " + parts[parts.length-1]; } else if (slot.replaced && slot.text) { const preview = String(slot.text).slice(0,40) + (slot.text.length > 40 ? "…" : ""); slotStatus.textContent = "Titelkarte: " + preview; slotStatus.classList.add("ok"); }
-      body.appendChild(slotStatus); card.appendChild(body);
-      saveBtn.addEventListener("click", function(){ saveSlot({card,fileInput,textField,slotStatus,saveBtn}); });
+      if (slot.replaced && slot.replacement_file) { const parts = String(slot.replacement_file).split("/"); slotStatus.textContent = "Aktuelle Datei: " + parts[parts.length-1]; }
+      body.appendChild(slotStatus);
 
-      // ── KI-Bild Section ─────────────────────────────────────────────────────
-      const aiSep = document.createElement("div"); aiSep.className = "ai-sep"; aiSep.textContent = "KI-Bild"; body.appendChild(aiSep);
-      const aiPrompt = document.createElement("textarea"); aiPrompt.className = "ai-prompt";
-      aiPrompt.placeholder = 'Szene beschreiben: z.B. "Cinematic sunset over ocean, golden hour, 4K"';
-      aiPrompt.maxLength = 500;
+      // ── KI-Bild-Bereich ─────────────────────────────────────────
+      const aiPrompt = document.createElement("textarea"); aiPrompt.className = "ai-prompt"; aiPrompt.rows = 2; aiPrompt.placeholder = "KI-Prompt: z.B. cinematic forest scene, golden hour…"; aiPrompt.maxLength = 500;
       if (slot.ai_prompt) aiPrompt.value = String(slot.ai_prompt);
       body.appendChild(aiPrompt);
-      const aiBtn = document.createElement("button"); aiBtn.type = "button"; aiBtn.className = "ai-btn";
-      const aiStatus = document.createElement("div"); aiStatus.className = "ai-status";
-      if (slot.ai_status === "done") {
-        aiBtn.textContent = "✨ Neues KI-Bild generieren";
-        aiStatus.textContent = "✓ KI-Bild aktiv"; aiStatus.classList.add("ok");
-      } else if (slot.ai_status === "pending") {
-        aiBtn.textContent = "⏳ KI generiert…"; aiBtn.disabled = true;
-        aiStatus.textContent = "KI-Bild wird generiert — bitte warten…";
-      } else if (slot.ai_status === "failed") {
-        aiBtn.textContent = "✨ KI-Bild erneut versuchen";
-        aiStatus.textContent = "✗ KI-Generierung fehlgeschlagen."; aiStatus.classList.add("err");
-      } else {
-        aiBtn.textContent = "✨ KI-Bild generieren";
+      const aiBtn = document.createElement("button"); aiBtn.type = "button"; aiBtn.className = "ai-btn"; aiBtn.textContent = "✨ KI-Bild generieren"; body.appendChild(aiBtn);
+      const aiStatusEl = document.createElement("div"); aiStatusEl.className = "ai-status"; body.appendChild(aiStatusEl);
+
+      card.appendChild(body);
+
+      saveBtn.addEventListener("click", function(){ saveSlot({card,fileInput,textField,slotStatus,saveBtn}); });
+
+      // Auto-resume: Wenn Slot beim Laden bereits 'pending' ist → sofort pollen
+      if (slot.ai_status === "pending" && slot.ai_task_id) {
+        card.classList.add("ai-pending");
+        aiBtn.disabled = true; aiBtn.textContent = "⏳ Generiert…";
+        aiStatusEl.textContent = "Generierung läuft (wiederhergestellt)…"; aiStatusEl.className = "ai-status";
+        pollAiStatus(jobId, slot.slot, card, aiBtn, aiStatusEl);
       }
-      body.appendChild(aiBtn);
-      body.appendChild(aiStatus);
-      aiBtn.addEventListener("click", function(){ generateAiImage({card, aiPrompt, aiBtn, aiStatus}); });
-      // Auto-resume polling if this slot was in "pending" state on restore
-      if (slot.ai_status === "pending") {
-        setTimeout(function(){ pollAiStatus({card, aiBtn, aiStatus}); }, 4000);
-      }
+
+      aiBtn.addEventListener("click", function(){
+        const p = aiPrompt.value.trim();
+        if (!p) { aiStatusEl.textContent = "Bitte Prompt eingeben."; aiStatusEl.className = "ai-status ai-err"; return; }
+        generateAiImage(jobId, slot.slot, p, card, aiBtn, aiStatusEl);
+      });
 
       return card;
     }
@@ -402,90 +310,25 @@
       try {
         const formData = new FormData(); formData.append("job_id",card.dataset.jobId); formData.append("slot_number",card.dataset.slotNumber); formData.append("text",text);
         if (file) formData.append("replacement_file",file);
-        const response = await fetchWithRetry(REPLACE_API,{method:"POST",body:formData},function(n){setSlotStatus(slotStatus,"Server startet — Versuch "+n+"…");});
+        const response = await fetchWithRetry(REPLACE_API,{method:"POST",body:formData},function(n){setSlotStatus(slotStatus,"Render schläft — Versuch "+n+" in 35s…");});
         const responseText = await response.text();
         let data; try { data = JSON.parse(responseText); } catch(e){ throw new Error("Antwort war kein JSON:\n"+responseText); }
         if (!response.ok || data.status !== "ok") throw new Error(data.message || "Speichern fehlgeschlagen");
         card.classList.add("is-replaced");
-        let infoText = "✓ Szene aktiv"; if (data.replacement_file) { const parts = String(data.replacement_file).split("/"); infoText += " · " + parts[parts.length-1]; } else if (data.text) { infoText = "✓ Titelkarte gespeichert"; }
+        let infoText = "Gespeichert"; if (data.replacement_file) { const parts = String(data.replacement_file).split("/"); infoText += " · " + parts[parts.length-1]; }
         setSlotStatus(slotStatus,infoText,"ok"); fileInput.value = "";
       } catch(err) { setSlotStatus(slotStatus,"Fehler: "+(err&&err.message?err.message:err),"err"); }
       finally { saveBtn.disabled = false; }
     }
-
-    // ── KI-Bild generieren ───────────────────────────────────────────────────
-    async function generateAiImage({card, aiPrompt, aiBtn, aiStatus}) {
-      const prompt = aiPrompt.value.trim();
-      if (!prompt) { aiStatus.textContent = "Bitte einen Prompt eingeben."; aiStatus.className = "ai-status err"; return; }
-      if (prompt.length > 500) { aiStatus.textContent = "Prompt zu lang (max. 500 Zeichen)."; aiStatus.className = "ai-status err"; return; }
-      aiBtn.disabled = true; aiBtn.textContent = "⏳ KI generiert…";
-      aiStatus.className = "ai-status"; aiStatus.textContent = "Prompt wird gesendet…";
-      try {
-        const fd = new FormData();
-        fd.append("job_id", card.dataset.jobId);
-        fd.append("slot_number", card.dataset.slotNumber);
-        fd.append("prompt", prompt);
-        fd.append("model", "flux-kontext-pro");
-        const resp = await fetch(GENERATE_AI_API, {method:"POST", body:fd});
-        const txt = await resp.text();
-        let data; try { data = JSON.parse(txt); } catch(e){ throw new Error("Antwort war kein JSON:\n"+txt); }
-        if (!resp.ok || data.status !== "pending") throw new Error(data.message || "KI-Start fehlgeschlagen (Status: "+(data.status||resp.status)+")");
-        aiStatus.textContent = "✓ KI-Job gestartet — Bild kommt in ~15 Sekunden…";
-        pollAiStatus({card, aiBtn, aiStatus});
-      } catch(err) {
-        aiBtn.disabled = false; aiBtn.textContent = "✨ KI-Bild generieren";
-        aiStatus.className = "ai-status err"; aiStatus.textContent = "Fehler: "+(err&&err.message?err.message:String(err));
-      }
-    }
-
-    // ── KI-Bild Status pollen ────────────────────────────────────────────────
-    function pollAiStatus({card, aiBtn, aiStatus}) {
-      const jobId   = card.dataset.jobId;
-      const slotNum = card.dataset.slotNumber;
-      const maxAttempts = 36; // 36 × 5s = 3 Min. max
-      let attempt = 0;
-      function check() {
-        attempt++;
-        if (attempt > maxAttempts) {
-          aiBtn.disabled = false; aiBtn.textContent = "✨ KI-Bild erneut versuchen";
-          aiStatus.className = "ai-status err"; aiStatus.textContent = "Timeout — bitte erneut generieren.";
-          return;
-        }
-        const remaining = Math.round((maxAttempts - attempt) * 5);
-        aiStatus.textContent = "KI generiert — ca. noch " + remaining + "s…";
-        const url = AISTATUS_API + "?job_id=" + encodeURIComponent(jobId) + "&slot_number=" + encodeURIComponent(slotNum);
-        fetch(url).then(function(resp){ return resp.text(); }).then(function(txt){
-          let data; try { data = JSON.parse(txt); } catch(e){ data = {status:"error"}; }
-          if (data.status === "done") {
-            aiBtn.disabled = false; aiBtn.textContent = "✨ Neues KI-Bild generieren";
-            aiStatus.className = "ai-status ok"; aiStatus.textContent = "✓ KI-Bild generiert und als Szene gesetzt!";
-            card.classList.add("is-replaced");
-            if (data.replacement_file) {
-              var thumbImg = card.querySelector(".thumb img");
-              if (thumbImg) { thumbImg.src = BASE_URL + data.replacement_file + "?t=" + Date.now(); }
-              var badge = card.querySelector(".badge");
-              if (badge) { badge.style.display = "inline-block"; }
-            }
-          } else if (data.status === "failed") {
-            aiBtn.disabled = false; aiBtn.textContent = "✨ KI-Bild erneut versuchen";
-            aiStatus.className = "ai-status err"; aiStatus.textContent = "✗ Generierung fehlgeschlagen — erneut versuchen.";
-          } else {
-            setTimeout(check, 5000); // still generating → poll again
-          }
-        }).catch(function(){ setTimeout(check, 5000); }); // network hiccup → retry silently
-      }
-      setTimeout(check, 5000); // first check after 5s
-    }
-
     analyzeBtn.addEventListener("click", async function(){
       const file = videoInput.files[0];
       if (!file) { setStatus("Bitte zuerst ein Video auswählen.","err"); return; }
       analyzeBtn.disabled = true; clearChildren(slotsBox); metaBox.style.display = "none";
-      setStatus("📤 Upload läuft — KI-Analyse startet sofort…");
+      setStatus("Upload läuft... Render kann beim Free Plan kurz aufwachen. Bitte warten.");
       dbg("analyze: POST",{endpoint:ANALYZE_API,name:file.name,size:file.size});
       try {
         const formData = new FormData(); formData.append("video",file);
-        const response = await fetchWithRetry(ANALYZE_API,{method:"POST",body:formData},function(n){setStatus("Studio startet — gleich geht's los (Versuch "+n+")…");});
+        const response = await fetchWithRetry(ANALYZE_API,{method:"POST",body:formData},function(n){setStatus("Render schläft (Cold Start) — Versuch "+n+" in 35s…");});
         const text = await response.text();
         let data; try { data = JSON.parse(text); } catch(e){ throw new Error("Antwort war kein JSON:\n"+text); }
         if (!response.ok || data.status !== "ok") throw new Error(data.message || "Analyse fehlgeschlagen");
@@ -494,8 +337,7 @@
         metaBox.style.display = "grid"; renderSlots(data);
         saveJobToStorage(data.job_id); updateUrlHash(data.job_id); hideRestoredHint(); hideRenderState();
         finalSection.hidden = false; resetBtn.hidden = false;
-        var si=document.getElementById("slotInstruction");if(si)si.style.display="flex";
-        setStatus("✓ Szenen erkannt — wähle Szenen zum Bearbeiten.","ok");
+        setStatus("Analyse erfolgreich. Slots wurden erzeugt.","ok");
         dbg("analyze: ok",{job_id:data.job_id,slots:data.slot_count});
       } catch(err) { dbg("analyze: error",err); setStatus("Fehler:\n"+networkErrorMessage(err,ANALYZE_API),"err"); }
       finally { analyzeBtn.disabled = false; }
@@ -525,7 +367,7 @@
       setStatus("Job "+jobId+" wird geladen…");
       try {
         const url=GETJOB_API+"?job_id="+encodeURIComponent(jobId);
-        const response=await fetchWithRetry(url,{method:"GET"},function(n){setStatus("Studio startet — gleich geht's los (Versuch "+n+")…");});
+        const response=await fetchWithRetry(url,{method:"GET"},function(n){setStatus("Render schläft (Cold Start) — Versuch "+n+" in 35s…");});
         const text=await response.text();
         let data; try{data=JSON.parse(text);}catch(e){throw new Error("Antwort war kein JSON:\n"+text);}
         if(response.status===404){ clearJobStorage(); updateUrlHash(null); setStatus("Gespeicherter Job nicht mehr verfügbar — bitte ein neues Video analysieren.","err"); return; }
@@ -536,7 +378,6 @@
         slotCountEl.textContent=String(job.slot_count||(job.slots?job.slots.length:0));
         metaBox.style.display="grid"; renderSlots({job_id:job.job_id,slots:job.slots||[]});
         finalSection.hidden=false; resetBtn.hidden=false; hideRenderState(); showRestoredHint(jobId);
-        var si=document.getElementById("slotInstruction");if(si)si.style.display="flex";
         setStatus("Job wiederhergestellt.","ok");
       } catch(err) { setStatus("Job-Restore fehlgeschlagen:\n"+networkErrorMessage(err,GETJOB_API),"err"); }
     }
@@ -544,7 +385,7 @@
       clearJobStorage(); updateUrlHash(null); hideRestoredHint(); hideRenderState();
       finalSection.hidden=true; clearChildren(slotsBox); metaBox.style.display="none";
       jobIdEl.textContent="-"; durationEl.textContent="-"; resolutionEl.textContent="-"; slotCountEl.textContent="-";
-      videoInput.value=""; resetBtn.hidden=true; setStatus("Bereit — lade dein Video für die KI-Analyse.","");
+      videoInput.value=""; resetBtn.hidden=true; setStatus("Bereit. Wähle ein neues Video.","");
     });
     function showFinalResult(data) {
       var url=data.download_url||data.final_video||""; var fname=data.filename||data.final_filename||"final.mp4";
@@ -558,31 +399,31 @@
       try {
         renderStatus.textContent="Server neu gestartet — analysiere Video erneut…"; renderStatus.hidden=false;
         var fd=new FormData(); fd.append("video",videoFile);
-        var aResp=await fetchWithRetry(ANALYZE_API,{method:"POST",body:fd},function(n){renderStatus.textContent="Video wird analysiert — Versuch "+n+"…";});
+        var aResp=await fetchWithRetry(ANALYZE_API,{method:"POST",body:fd},function(n){renderStatus.textContent="Analyse: Cold Start — Versuch "+n+" in 35s…";});
         var aText=await aResp.text(); var aData; try{aData=JSON.parse(aText);}catch(e){throw new Error("Analyse-Antwort kein JSON:\n"+aText);}
         if(!aResp.ok||aData.status!=="ok") throw new Error(aData.message||"Re-Analyse fehlgeschlagen");
         var newJobId=aData.job_id; jobIdEl.textContent=newJobId; saveJobToStorage(newJobId); updateUrlHash(newJobId);
         renderSlots({job_id:newJobId,slots:aData.slots||[]});
         renderStatus.textContent="Analyse fertig. Starte Render ("+aData.slot_count+" Slots)…";
         var rf=new FormData(); rf.append("job_id",newJobId);
-        var rResp=await fetchWithRetry(RENDER_API,{method:"POST",body:rf},function(n){renderStatus.textContent="Rendering läuft — Versuch "+n+"…";});
+        var rResp=await fetchWithRetry(RENDER_API,{method:"POST",body:rf},function(n){renderStatus.textContent="Render: Versuch "+n+" in 35s…";});
         var rText=await rResp.text(); var rData; try{rData=JSON.parse(rText);}catch(e){throw new Error("Render-Antwort kein JSON:\n"+rText);}
         if(!rResp.ok||rData.status!=="ok") throw new Error(rData.message||"Render fehlgeschlagen");
         renderStatus.hidden=true; showFinalResult(rData);
       } catch(err) {
         renderStatus.hidden=true;
         var isNet=err instanceof TypeError||/failed to fetch|networkerror|load failed/i.test(err&&err.message?err.message:"");
-        if(isNet){showRenderError("Verbindung unterbrochen",'"Status prüfen" nach 30–60s.');checkStatusBtn.hidden=false;}
+        if(isNet){showRenderError("Verbindung unterbrochen",'"Status prüfen" nach 60s.');checkStatusBtn.hidden=false;}
         else showRenderError("Render fehlgeschlagen",err&&err.message?err.message:String(err));
       } finally { renderBtn.disabled=false; }
     }
     renderBtn.addEventListener("click", async function(){
       const jobId=jobIdEl.textContent.trim();
       if(!isValidJobId(jobId)){showRenderError("Kein aktiver Job","Bitte zuerst ein Video analysieren.");return;}
-      hideRenderState(); renderBtn.disabled=true; renderStatus.textContent="🔄 Verbinde mit KI-Engine…"; renderStatus.hidden=false;
+      hideRenderState(); renderBtn.disabled=true; renderStatus.textContent="Verbinde mit Server…"; renderStatus.hidden=false;
       try {
         var preUrl=GETJOB_API+"?job_id="+encodeURIComponent(jobId);
-        var preResp=await fetchWithRetry(preUrl,{method:"GET"},function(n){renderStatus.textContent="Server startet — Versuch "+n+"…";});
+        var preResp=await fetchWithRetry(preUrl,{method:"GET"},function(n){renderStatus.textContent="Server wacht auf (Cold Start) — Versuch "+n+" in 35s…";});
         var preText=await preResp.text(); var preData; try{preData=JSON.parse(preText);}catch(e){throw new Error("Server-Antwort kein JSON:\n"+preText);}
         if(preResp.ok&&preData.status==="ok"&&preData.job&&preData.job.final_video){renderStatus.hidden=true;showFinalResult(preData.job);return;}
         if(preResp.status===404||!preResp.ok||preData.status!=="ok"){
@@ -590,16 +431,16 @@
           if(!videoFile){clearJobStorage();updateUrlHash(null);renderStatus.hidden=true;showRenderError("Server neu gestartet — bitte Video erneut hochladen","Wähle das Video oben erneut aus.");finalSection.hidden=true;resetBtn.hidden=true;clearChildren(slotsBox);metaBox.style.display="none";return;}
           await reAnalyzeAndRender(videoFile);return;
         }
-        renderStatus.textContent="⚡ Rendere 720p-Video — ca. 10–30 Sek. Tab offen lassen…";
+        renderStatus.textContent="Rendere … 30–120 Sekunden. Bitte Tab offen lassen.";
         var formData=new FormData(); formData.append("job_id",jobId);
-        var response=await fetchWithRetry(RENDER_API,{method:"POST",body:formData},function(n){renderStatus.textContent="Rendering läuft — Versuch "+n+"…";});
+        var response=await fetchWithRetry(RENDER_API,{method:"POST",body:formData},function(n){renderStatus.textContent="Render: Cold Start — Versuch "+n+" in 35s…";});
         var text=await response.text(); var data; try{data=JSON.parse(text);}catch(e){throw new Error("Antwort war kein JSON:\n"+text);}
         if(!response.ok||data.status!=="ok") throw new Error(data.message||"Render fehlgeschlagen");
         renderStatus.hidden=true; showFinalResult(data);
       } catch(err) {
         renderStatus.hidden=true;
         var isNetErr=err&&(err.name==="TypeError"||/failed to fetch|networkerror|load failed/i.test(err.message?err.message:String(err)));
-        if(isNetErr){showRenderError("Verbindung unterbrochen — Render kann noch laufen","Warte 30–60 Sekunden, dann klicke \"Status prüfen\".");checkStatusBtn.hidden=false;}
+        if(isNetErr){showRenderError("Verbindung unterbrochen — Render kann noch laufen","Warte 60–120 Sekunden, dann klicke \"Status prüfen\".");checkStatusBtn.hidden=false;}
         else {
           var missingFiles=err&&err.message&&(err.message.indexOf("meta.json")!==-1||err.message.indexOf("Originalvideo")!==-1||(err.message.indexOf("nicht gefunden")!==-1&&err.message.indexOf("Job")!==-1));
           if(missingFiles){var vfFallback=videoInput&&videoInput.files&&videoInput.files[0];if(vfFallback){hideRenderState();await reAnalyzeAndRender(vfFallback);return;}else{clearJobStorage();updateUrlHash(null);showRenderError("Server neu gestartet — bitte Video neu auswählen","Wähle dein Video oben erneut aus.");return;}}
@@ -613,7 +454,7 @@
       checkStatusBtn.disabled=true; checkStatusBtn.textContent="Prüfe …";
       try {
         const url=GETJOB_API+"?job_id="+encodeURIComponent(jobId);
-        const response=await fetchWithRetry(url,{method:"GET"},function(n){checkStatusBtn.textContent="Server startet — Versuch "+n+"…";});
+        const response=await fetchWithRetry(url,{method:"GET"},function(n){checkStatusBtn.textContent="Cold Start — Versuch "+n+" in 35s…";});
         const text=await response.text(); let data; try{data=JSON.parse(text);}catch(e){throw new Error("Antwort war kein JSON:\n"+text);}
         if(!response.ok||data.status!=="ok"||!data.job) throw new Error(data.message||"Status konnte nicht geladen werden.");
         const job=data.job; const finalUrl=job.final_video||job.final_video_url||job.result_url||null;
@@ -628,13 +469,89 @@
       } catch(err) { showRenderError("Status-Prüfung fehlgeschlagen",networkErrorMessage(err,GETJOB_API)); checkStatusBtn.hidden=false; }
       finally { checkStatusBtn.disabled=false; checkStatusBtn.textContent="🔍 Status prüfen"; }
     });
+    // ── KI-Bild-Generierung ────────────────────────────────────────────────
+    async function generateAiImage(jobId, slotNumber, prompt, card, aiBtn, aiStatusEl) {
+      aiBtn.disabled = true; aiBtn.textContent = "⏳ Starte KI…";
+      aiStatusEl.textContent = "Sende Anfrage an Kie.ai…"; aiStatusEl.className = "ai-status";
+      card.classList.remove("ai-pending");
+      try {
+        const resp = await fetchWithRetry(AI_GEN_API, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ job_id: jobId, slot_number: slotNumber, prompt: prompt }),
+        }, function(n){ aiStatusEl.textContent = "Verbindung … Versuch " + n; });
+        const txt = await resp.text();
+        let data; try { data = JSON.parse(txt); } catch(e) { throw new Error("Antwort kein JSON:\n" + txt); }
+        if (!resp.ok || (data.status !== "pending")) {
+          throw new Error(data.message || "KI-Start fehlgeschlagen (HTTP " + resp.status + ").");
+        }
+        card.classList.add("ai-pending");
+        aiBtn.textContent = "⏳ Generiert…";
+        aiStatusEl.textContent = "Task gestartet. Polling alle 5s (max. 3 Min.)…"; aiStatusEl.className = "ai-status";
+        pollAiStatus(jobId, slotNumber, card, aiBtn, aiStatusEl);
+      } catch(err) {
+        aiBtn.disabled = false; aiBtn.textContent = "✨ KI-Bild generieren";
+        aiStatusEl.textContent = "Fehler: " + (err && err.message ? err.message : String(err));
+        aiStatusEl.className = "ai-status ai-err";
+      }
+    }
+
+    function pollAiStatus(jobId, slotNumber, card, aiBtn, aiStatusEl) {
+      const maxAttempts = 36; // 36 × 5s = 3 Min.
+      let attempts = 0;
+      const interval = setInterval(async function() {
+        attempts++;
+        if (attempts > maxAttempts) {
+          clearInterval(interval);
+          aiBtn.disabled = false; aiBtn.textContent = "✨ KI-Bild generieren";
+          aiStatusEl.textContent = "Timeout — Generierung dauert länger als 3 Min. Seite neu laden.";
+          aiStatusEl.className = "ai-status ai-err";
+          card.classList.remove("ai-pending");
+          return;
+        }
+        try {
+          const url = AI_STATUS_API + "?job_id=" + encodeURIComponent(jobId) + "&slot_number=" + encodeURIComponent(slotNumber);
+          const resp = await fetch(url);
+          const txt  = await resp.text();
+          let data; try { data = JSON.parse(txt); } catch(e) { return; } // transient parse error → retry
+          if (data.status === "generating" || data.status === "pending") {
+            aiStatusEl.textContent = "Generiert … (" + attempts + "/" + maxAttempts + ")";
+            return;
+          }
+          if (data.status === "done") {
+            clearInterval(interval);
+            card.classList.remove("ai-pending");
+            card.classList.add("is-replaced");
+            aiBtn.disabled = false; aiBtn.textContent = "✨ KI-Bild generieren";
+            aiStatusEl.textContent = "✓ KI-Bild gespeichert!"; aiStatusEl.className = "ai-status ai-ok";
+            // Thumbnail aktualisieren
+            if (data.replacement_file) {
+              const thumbImg = card.querySelector(".thumb img");
+              if (thumbImg) {
+                thumbImg.src = BASE_URL + data.replacement_file + "?t=" + Date.now();
+                thumbImg.alt = "KI-generiertes Bild";
+              }
+              const badge = card.querySelector(".badge");
+              if (badge) badge.style.display = "inline-block";
+            }
+            return;
+          }
+          if (data.status === "failed" || data.status === "error") {
+            clearInterval(interval);
+            card.classList.remove("ai-pending");
+            aiBtn.disabled = false; aiBtn.textContent = "✨ KI-Bild generieren";
+            aiStatusEl.textContent = "KI-Generierung fehlgeschlagen: " + (data.message || data.status);
+            aiStatusEl.className = "ai-status ai-err";
+          }
+        } catch(_) { /* Netzwerkfehler → nächste Iteration */ }
+      }, 5000);
+    }
+
     (function boot(){
       const fromHash=readJobIdFromHash(); const fromStorage=loadJobFromStorage();
       const jobId=(fromHash&&isValidJobId(fromHash))?fromHash:(isValidJobId(fromStorage)?fromStorage:null);
       if(jobId) restoreJob(jobId);
     })();
   </script>
-  <script>(function(){var dz=document.getElementById('dropzone'),vi=document.getElementById('videoInput'),dn=document.getElementById('dropzoneName');if(!dz||!vi)return;vi.addEventListener('change',function(){if(vi.files&&vi.files[0]&&dn){dn.textContent='📎 '+vi.files[0].name;dn.classList.add('visible');}});dz.addEventListener('dragover',function(e){e.preventDefault();dz.classList.add('drag-over');});dz.addEventListener('dragleave',function(){dz.classList.remove('drag-over');});dz.addEventListener('drop',function(e){e.preventDefault();dz.classList.remove('drag-over');var files=e.dataTransfer&&e.dataTransfer.files;if(files&&files.length){try{var dt=new DataTransfer();dt.items.add(files[0]);vi.files=dt.files;if(dn){dn.textContent='📎 '+files[0].name;dn.classList.add('visible');}}catch(_){}}});})();</script>
-  <script>(function(){var b=document.getElementById('mobBurger'),m=document.getElementById('mobMenu');if(!b||!m)return;function t(){m.style.top=document.querySelector('.nav').offsetHeight+'px';}t();window.addEventListener('resize',t);b.addEventListener('click',function(e){e.stopPropagation();var o=m.classList.toggle('open');b.classList.toggle('open',o);b.setAttribute('aria-expanded',o?'true':'false');b.setAttribute('aria-label',o?'Menü schließen':'Menü öffnen');});m.querySelectorAll('.mob-link,.mob-cta').forEach(function(l){l.addEventListener('click',function(){m.classList.remove('open');b.classList.remove('open');b.setAttribute('aria-expanded','false');b.setAttribute('aria-label','Menü öffnen');});});document.addEventListener('click',function(e){if(!b.contains(e.target)&&!m.contains(e.target)){m.classList.remove('open');b.classList.remove('open');b.setAttribute('aria-expanded','false');}});document.addEventListener('keydown',function(e){if(e.key==='Escape'){m.classList.remove('open');b.classList.remove('open');b.setAttribute('aria-expanded','false');}});})();</script>
 </body>
 </html>

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 require_once 'includes/config.php';
 require_once 'includes/prompt-engine.php';
 require_once 'includes/guidance.php';
@@ -98,13 +100,13 @@ require_once 'includes/header.php';
                         <button id="btn-build-prompt" class="btn btn-primary">
                             ✦ Bild-Prompt erstellen
                         </button>
-                        <button id="btn-improve" class="btn btn-secondary" id="btn-make-it-better">
+                        <button id="btn-improve" class="btn btn-secondary">
                             ↑ Prompt verbessern
                         </button>
-                        <button id="btn-cinematic" class="btn btn-secondary" id="btn-cinematic-upgrade">
+                        <button id="btn-cinematic" class="btn btn-secondary">
                             🎬 Cinematic Upgrade
                         </button>
-                        <button id="btn-save-element" class="btn btn-secondary" disabled title="Kommt in Phase 2">
+                        <button id="btn-save-element" class="btn btn-secondary" disabled>
                             💾 Als Element speichern
                         </button>
                     </div>
@@ -164,10 +166,71 @@ require_once 'includes/header.php';
 </div><!-- .studio-page -->
 
 
+<!-- ── Element speichern Modal ───────────────────────────────── -->
+<div id="save-element-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="sem-title" hidden>
+    <div class="modal__backdrop" data-modal-close="save-element-modal"></div>
+    <div class="modal__box">
+        <div class="modal__header">
+            <h3 id="sem-title" class="modal__title">Element speichern</h3>
+            <button class="modal__close" data-modal-close="save-element-modal" aria-label="Schließen">✕</button>
+        </div>
+        <div class="modal__body">
+            <div class="form-group">
+                <label for="sem-name">Name <span style="color:var(--accent-orange)">*</span></label>
+                <input type="text" id="sem-name" maxlength="100" placeholder="z.B. Max, Porsche 911, Neon City …" autocomplete="off">
+            </div>
+            <div class="form-group">
+                <label for="sem-type">Typ <span style="color:var(--accent-orange)">*</span></label>
+                <select id="sem-type">
+                    <option value="">— Typ wählen —</option>
+                    <option value="character">👤 Charakter</option>
+                    <option value="car">🚗 Fahrzeug</option>
+                    <option value="product">📦 Produkt</option>
+                    <option value="creature">🐉 Kreatur</option>
+                    <option value="environment">🏔 Umgebung</option>
+                    <option value="logo">🎨 Logo</option>
+                    <option value="object">🧩 Objekt</option>
+                    <option value="style_reference">✦ Stil-Referenz</option>
+                </select>
+            </div>
+            <p class="text-sm text-muted" style="margin-top: 8px;">
+                Der generierte Prompt wird als Beschreibung gespeichert.
+            </p>
+        </div>
+        <div class="modal__footer">
+            <button id="sem-submit" class="btn btn-primary">💾 Speichern</button>
+            <button class="btn btn-secondary" data-modal-close="save-element-modal">Abbrechen</button>
+        </div>
+    </div>
+</div>
+
+
 <style>
 /* image-studio.php spezifisch — geteilte Studio-Styles in app.css */
 .mb-4 { margin-bottom: 16px; }
 .mt-6 { margin-top: 24px; }
+/* Modal (falls noch nicht in app.css) */
+.modal { display: none; position: fixed; inset: 0; z-index: 1000; align-items: center; justify-content: center; }
+.modal[aria-hidden="false"], .modal:not([hidden]) { display: flex; }
+.modal__backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.7); cursor: pointer; }
+.modal__box {
+    position: relative; z-index: 1;
+    background: var(--bg-panel);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    width: 90%; max-width: 440px;
+    box-shadow: var(--shadow);
+}
+.modal__header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid var(--border-color);
+}
+.modal__title { font-size: 0.95rem; font-weight: 600; }
+.modal__close { background: none; border: none; color: var(--text-secondary); cursor: pointer; font-size: 1rem; padding: 4px 8px; }
+.modal__close:hover { color: var(--text-primary); }
+.modal__body  { padding: 18px 20px; }
+.modal__footer { padding: 14px 20px 18px; display: flex; gap: 10px; justify-content: flex-end; border-top: 1px solid var(--border-color); }
 </style>
 
 <script>
@@ -179,6 +242,11 @@ require_once 'includes/header.php';
     const btnCinematic  = document.getElementById('btn-cinematic');
     const btnCopyPos    = document.getElementById('btn-copy-positive');
     const btnRemoveUp   = document.getElementById('btn-remove-upload');
+    const btnSaveEl     = document.getElementById('btn-save-element');
+    const semModal      = document.getElementById('save-element-modal');
+    const semName       = document.getElementById('sem-name');
+    const semType       = document.getElementById('sem-type');
+    const semSubmit     = document.getElementById('sem-submit');
 
     const resultEmpty   = document.getElementById('result-empty');
     const resultOutput  = document.getElementById('result-output');
@@ -250,7 +318,65 @@ require_once 'includes/header.php';
         btnCopyPos.hidden   = false;
         btnImprove.disabled    = false;
         btnCinematic.disabled  = false;
+        if (btnSaveEl) btnSaveEl.disabled = false;
     }
+
+    // ── Element speichern ─────────────────────────────────────
+    function openSaveModal() {
+        if (!currentPositive) { Toast.warning('Bitte zuerst einen Prompt erstellen.'); return; }
+        semName.value = '';
+        semType.value = '';
+        semModal.hidden = false;
+        semName.focus();
+    }
+
+    function closeSaveModal() { semModal.hidden = true; }
+
+    document.querySelectorAll('[data-modal-close="save-element-modal"]').forEach(el => {
+        el.addEventListener('click', closeSaveModal);
+    });
+
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && !semModal.hidden) closeSaveModal();
+    });
+
+    btnSaveEl?.addEventListener('click', openSaveModal);
+
+    semSubmit?.addEventListener('click', async () => {
+        const name = semName.value.trim();
+        const type = semType.value;
+        if (!name) { Toast.warning('Bitte einen Namen eingeben.'); semName.focus(); return; }
+        if (!type) { Toast.warning('Bitte einen Typ wählen.'); semType.focus(); return; }
+
+        semSubmit.disabled = true;
+        semSubmit.textContent = '⏳ Speichern…';
+
+        try {
+            const res  = await fetch('api/save-element.php', {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:    JSON.stringify({
+                    name,
+                    type,
+                    description: currentPositive,
+                    role: '',
+                    image_url: '',
+                }),
+            });
+            const data = await res.json();
+            if (data.success) {
+                Toast.success('Element „' + name + '" gespeichert!');
+                closeSaveModal();
+            } else {
+                Toast.error(data.error ?? 'Speichern fehlgeschlagen.');
+            }
+        } catch {
+            Toast.error('Netzwerkfehler beim Speichern.');
+        } finally {
+            semSubmit.disabled = false;
+            semSubmit.textContent = '💾 Speichern';
+        }
+    });
 
     // ── Event Listeners ───────────────────────────────────────
     btnBuild?.addEventListener('click',     () => callGenerateImage('build'));
