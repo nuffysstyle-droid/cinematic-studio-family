@@ -304,9 +304,12 @@ if (str_starts_with($redirect, '//') || str_contains($redirect, ':')) {
                 <input type="password" id="loginPw" name="password"
                        placeholder="••••••••" autocomplete="current-password" required>
             </div>
-            <div class="remember-row">
-                <input type="checkbox" id="loginRemember" name="remember">
-                <label for="loginRemember">Eingeloggt bleiben (30 Tage)</label>
+            <div class="remember-row" style="justify-content:space-between">
+                <div style="display:flex;align-items:center;gap:8px">
+                    <input type="checkbox" id="loginRemember" name="remember">
+                    <label for="loginRemember">Eingeloggt bleiben (30 Tage)</label>
+                </div>
+                <a href="forgot-password.php" style="font-size:.8rem;color:var(--primary);text-decoration:none">Passwort vergessen?</a>
             </div>
             <button type="submit" class="btn-submit" id="loginBtn">Einloggen</button>
         </form>

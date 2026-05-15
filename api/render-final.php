@@ -93,12 +93,20 @@ register_shutdown_function(function () {
 render_log('--- START render-final.php (PID ' . getmypid() . ') ---');
 // Quality wird nach Input-Validierung geloggt (session-abhängig)
 
-// ── Render-Qualität aus Session (settings.php → $_SESSION['export_quality']) ──
-// Free-Plan-Standard: 720p. Settings-Seite erlaubt 1080p pro Session.
-// Sicherheitshalber nur erlaubte Werte annehmen; alles andere → 720p.
-$_exportQuality = in_array($_SESSION['export_quality'] ?? '', ['720p', '1080p'], true)
+// ── Render-Qualität: Plan-Enforcement ─────────────────────────────────────────
+// Free-Plan → immer 720p, egal was Session sagt.
+// Starter+ / Pro → 1080p erlaubt wenn Session es anfordert.
+// Nicht eingeloggt (Demo) → 720p.
+$_sessionQuality = in_array($_SESSION['export_quality'] ?? '', ['720p', '1080p'], true)
     ? $_SESSION['export_quality']
     : '720p';
+
+// Plan aus Auth prüfen (authUser wurde weiter oben gesetzt)
+$_userPlan = $authUser['plan'] ?? 'free';
+$_canHD    = in_array($_userPlan, ['starter', 'pro'], true);
+
+// Free-User die 1080p anfordern → auf 720p zurücksetzen
+$_exportQuality = ($_sessionQuality === '1080p' && !$_canHD) ? '720p' : $_sessionQuality;
 
 // ── Konstanten (MVP-Spec) ───────────────────────────────────────────────────
 // RENDER_OUT_W / _H als Variablen — abhängig von $_exportQuality.
@@ -652,4 +660,6 @@ echo json_encode([
     'rendered_at'      => $nowIso,
     'quality'          => $_exportQuality,          // '720p' | '1080p'
     'resolution'       => $RENDER_OUT_W . 'x' . $RENDER_OUT_H,
+    'quality_capped'   => ($_sessionQuality === '1080p' && !$_canHD), // true wenn Free-User 1080p wollte
+    'plan'             => $_userPlan,
 ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
