@@ -13,10 +13,10 @@
 |---|---|
 | **Produktname** | Cinematic Vision Studio |
 | **Repo / Codebase** | cinematic-studio-family |
-| **Version** | 0.1.0 (Free MVP, live seit 2026-05-13) |
+| **Version** | 0.3.0 (Auth/Login live, Render deployed) |
 | **Live-URL** | https://cinematic-studio-family.onrender.com |
 | **GitHub** | nuffysstyle-droid/cinematic-studio-family |
-| **Stand** | 2026-05-14 (Session 4) |
+| **Stand** | 2026-05-16 (Session 6) |
 
 ---
 
@@ -138,11 +138,20 @@ Aktuell Demo-Dummy; echte Transaktion in V2.
 | **PassEnv CLEANUP_SECRET** | `docker/apache.conf` | `PassEnv CLEANUP_SECRET` eingetragen — PHP-`getenv()` kann `CLEANUP_SECRET` jetzt lesen. |
 | **Header-Einrückung** | `docker/apache.conf` | CORS-Header-Zeilen korrekt eingerückt (waren nicht eingerückt, Apache-Fehler möglich). |
 
+### Neu implementiert in Session 6 (2026-05-16) ✅
+| Feature | Dateien | Details |
+|---|---|---|
+| **IP Rate Limiting** | `includes/rate_limit.php`, `api/generate-ai.php`, `api/render-final.php`, `api/upload.php` | File-based, SHA-256 IP-Hash, slot-based windows. Limits: 10 KI/h, 15 renders/h, 30 uploads/h. `.htaccess` Deny in rate_limits/. |
+| **SQLite Auth DB** | `includes/db.php` | PDO Singleton, WAL+NORMAL+FK+busy_timeout=5000. Schema V1: users, crystal_transactions, login_attempts, remember_tokens. Render Persistent Disk Path. |
+| **Auth System** | `includes/auth.php` | ARGON2ID register, brute-force-guarded login (5/15min), session-fixation-schutz, remember-me rolling 30d HMAC token, plan enforcement (free/starter/pro), atomic crystal spend/add. |
+| **Auth API Endpoints** | `api/auth/login.php`, `api/auth/register.php`, `api/auth/logout.php`, `api/auth/me.php` | Rate-limited Login (20/h), Register (10/h), redirect-aware Logout, GET /me. |
+| **Login UI** | `login.php` | Tab-basiert Login + Register, dark theme, Passwort-Stärke-Anzeige, Redirect-Support, remember-me Checkbox. |
+| **Studio Auth-Integration** | `studio-demo.php` | PHP-Header, zeigt Login/Logout dynamisch je nach Session. Wallet zeigt echten Kristall-Stand. |
+
 ### Dummy / Placeholder (V2+)
 | Feature | Status |
 |---|---|
-| Login / User-Accounts | Demo-Dummy |
-| Kristalle / Payment / Stripe | Demo-Dummy |
+| Kristalle / Payment / Stripe | Demo-Dummy (DB-Tabellen bereit) |
 | KI-Video-Generierung | Architecture only (Kie.ai video endpoints geplant) |
 
 ---
@@ -165,13 +174,14 @@ Apache braucht `PassEnv KIE_AI_API_KEY` in `docker/apache.conf` damit `getenv()`
 
 ---
 
-## Aktuelle Probleme (Stand 2026-05-14, Session 4)
+## Aktuelle Probleme (Stand 2026-05-16, Session 6)
 
 | Problem | Priorität | Status |
 |---|---|---|
-| `KIE_AI_API_KEY` nicht in Render eingetragen | 🔴 P0 | **User-Aktion nötig:** Render Dashboard → Environment → `KIE_AI_API_KEY` eintragen → Redeploy |
-| Kein echter AI-E2E-Test abgeschlossen | 🔴 P0 | Warte auf gültigen Key in Render |
-| `CLEANUP_SECRET` nicht in Render eingetragen | 🟡 P2 | Optional: Render Dashboard → `CLEANUP_SECRET` (min. 20 Zeichen) → Redeploy |
+| `KIE_AI_API_KEY` in Render eingetragen? | 🔴 P0 | **User-Aktion nötig** wenn noch nicht gesetzt: Render Dashboard → Environment → `KIE_AI_API_KEY` → Redeploy |
+| `APP_SECRET` für Cookie-Signing nicht gesetzt | 🔴 P1 | Render Dashboard → `APP_SECRET` (min. 32 Zeichen random) → Redeploy — sonst Fallback in config.php |
+| Kein echter AI-E2E-Test abgeschlossen | 🟡 P2 | Erst nach KIE_AI_API_KEY Eintrag möglich |
+| `CLEANUP_SECRET` nicht in Render eingetragen | 🟢 P3 | Optional: Render Dashboard → `CLEANUP_SECRET` (min. 20 Zeichen) |
 
 → Vollständige Liste: `memory/current-problems.md`
 
@@ -182,10 +192,10 @@ Apache braucht `PassEnv KIE_AI_API_KEY` in `docker/apache.conf` damit `getenv()`
 | Milestone | Inhalt | Status |
 |---|---|---|
 | **V0.1.0** | Free MVP: Upload → Analyse → Replace → Render → Download | ✅ Live |
-| **V0.2.0** | KI-Bild Button live (UI fertig), Audio-Spur vorhanden (silent), Job-Lock | 🟡 UI fertig — KIE_AI_API_KEY ausstehend |
-| **V0.3.0** | Original-Audio-Erhalt ✅, Cron-Cleanup ✅, storage/jobs-Fix ✅ | 🟡 Code fertig — Deploy ausstehend |
-| **V0.4.0** | Starter+ Plan, 1080p Export, User-Accounts | ⬜ Geplant |
-| **V1.0.0** | Login, Kristalle, Payment (Stripe) | ⬜ Geplant |
+| **V0.2.0** | KI-Bild Button, Audio-Spur, Job-Lock | ✅ Live |
+| **V0.3.0** | Original-Audio-Erhalt, Cron-Cleanup, Rate Limiting, Auth/Login | ✅ Deployed |
+| **V0.4.0** | Starter+ Plan (1080p), Email-Verifizierung, Stripe-Integration | ⬜ Geplant |
+| **V1.0.0** | Kristalle live, echte KI-Abrechnung, Dashboard | ⬜ Geplant |
 | **V2.0.0** | Multi-User, S3/R2, KI-Video, Templates | ⬜ Vision |
 
 → Details: `memory/roadmap.md`
@@ -209,18 +219,27 @@ cinematic-studio-family/
 ├── docs/
 │   └── project-overview.md      ← Menschenlesbare Übersicht
 │
-├── studio-demo.php              ← Haupt-UI (MVP)
+├── studio-demo.php              ← Haupt-UI (MVP, auth-aware)
+├── login.php                    ← Login + Register UI (tab-basiert)
 ├── api/
 │   ├── analyze.php              ← Video → Slots + meta.json
 │   ├── replace-slot.php         ← Slot-Ersatz speichern
-│   ├── render-final.php         ← FFmpeg Render-Pipeline
+│   ├── render-final.php         ← FFmpeg Render-Pipeline (V3 Audio)
 │   ├── generate-ai.php          ← Kie.ai Task starten
 │   ├── ai-status.php            ← Kie.ai Task pollen + Bild speichern
 │   ├── health.php               ← Server-Status
+│   ├── auth/
+│   │   ├── login.php            ← POST /api/auth/login
+│   │   ├── register.php         ← POST /api/auth/register
+│   │   ├── logout.php           ← POST /api/auth/logout
+│   │   └── me.php               ← GET  /api/auth/me
 │   └── ...
 ├── includes/
 │   ├── config.php               ← Konstanten, Session-Start
 │   ├── functions.php            ← FFmpeg-Service-Library
+│   ├── db.php                   ← SQLite PDO Singleton + Schema-Init
+│   ├── auth.php                 ← Auth: register/login/logout/user/crystals
+│   ├── rate_limit.php           ← IP-basiertes Rate Limiting (file-based)
 │   └── ...
 ├── docker/
 │   ├── apache.conf              ← PassEnv KIE_AI_API_KEY hier!
@@ -255,52 +274,38 @@ cinematic-studio-family/
 
 ---
 
-## Was wurde in der letzten Session gebaut (Session 5 — 2026-05-14)
+## Was wurde in der letzten Session gebaut (Session 6 — 2026-05-16)
 
 > Dieser Block ist für jeden neuen Agenten / Account. Lesen, dann loslegen.
 
-### Session 5 — Geänderte / neue Dateien
+### Session 6 — Neue / geänderte Dateien
 | Datei | Was geändert |
 |---|---|
-| `studio-demo.php` | Wallet-Pill `💎 500` → `💎 Free`. Footer `© 2025` → `© 2026`. KI-Bild-Button + AI-Prompt-Textarea in jedem Slot-Card. `generateAiImage()` + `pollAiStatus()` (5s-Intervall, 3 Min. Timeout, Thumbnail-Update on success, Auto-Resume bei pending). CSS `.ai-btn`, `.ai-prompt`, `.ai-status`. Stale "Audio kommt in V2"-Hinweis entfernt. |
-| `memory/current-problems.md` | Alle gelösten Probleme (Sessions 2–5) in "Resolved"-Tabelle verschoben. |
-| `CLAUDE.md` | Session 5 Dokumentation hinzugefügt. |
-
-### Session 5 — Verifiziert als vollständig implementiert (kein Code geändert)
-- `api/cleanup.php` — Vollständig, CLEANUP_SECRET-Auth, csf_cleanup_old_jobs()
-- `api/save-request.php` — Vollständig, LOCK_EX, SHA-256 IP-Hash, storage/requests.json
-- `api/generate-ai.php` — Vollständig, Kie.ai Flux Kontext, meta.json Update, Limit-Checks
-- `api/ai-status.php` — Vollständig, SSRF-Schutz, Bild-Download, MIME-Check, meta.json Update
-- `bin/cleanup-cron.php` — Vollständig, CLI-Only-Guard, csf_cleanup_old_jobs()
-- `includes/header.php`, `footer.php` — Vollständig
-- Alle 6 storage/-Subdirektory `.htaccess` — Korrekt konfiguriert
-- `data/requests.json` — Wird dynamisch von save-request.php erstellt (storage/requests.json)
-- 8 aus Worktree kopierte Seiten — Verifiziert in main project
+| `includes/rate_limit.php` (NEU) | File-based IP Rate Limiter. `csf_rate_limit_check()`, `csf_rate_limit_cleanup()`. `.htaccess` Deny. SHA-256 IP-Hash. |
+| `includes/db.php` (NEU) | SQLite PDO Singleton. WAL, FK, busy_timeout. Schema V1 (users, crystal_transactions, login_attempts, remember_tokens). `csf_db_transaction()`. |
+| `includes/auth.php` (NEU) | ARGON2ID register. Brute-force login (5/15min). Session-Fixation-Schutz. Remember-Me 30d Rolling. `csf_auth_require()`, `csf_auth_require_plan()`, `csf_auth_spend_crystals()`, `csf_auth_add_crystals()`. |
+| `api/auth/register.php` (NEU) | POST /api/auth/register — Rate-limited 10/h |
+| `api/auth/login.php` (NEU) | POST /api/auth/login — Rate-limited 20/h, remaining_tries |
+| `api/auth/logout.php` (NEU) | POST /api/auth/logout — redirect-aware (HTML vs JSON) |
+| `api/auth/me.php` (NEU) | GET /api/auth/me — 401 wenn nicht eingeloggt |
+| `login.php` (NEU) | Tab-basiertes Login/Register UI. Dark theme. Passwort-Stärke. Remember-me. |
+| `studio-demo.php` | PHP-Header + `csf_auth_user()`. Nav zeigt Login/Logout/Kristalle dynamisch. |
+| `api/generate-ai.php` | `require auth.php`, `$authUser` tracking, `ai_user_id` in meta.json |
+| `api/render-final.php` | `require auth.php`, `$authUser` für künftige Tracking |
+| `api/upload.php` | `require auth.php`, `$authUser` für künftige Tracking |
 
 ### Was NICHT geändert werden soll (Don't Touch)
-- `api/generate-ai.php`, `api/ai-status.php` — Backend fertig, wartet auf KIE_AI_API_KEY
-- `api/analyze.php`, `api/replace-slot.php`, `api/render-final.php` — Funktionieren korrekt
+- `api/analyze.php`, `api/replace-slot.php` — Funktionieren korrekt
 - `api/cleanup.php` — Korrekt, wartet auf CLEANUP_SECRET in Render
 - `includes/functions.php` — `csf_cleanup_old_jobs()` ist final
 - `data/ready-videos.json` — 12 Demo-Einträge, gut so
 - `docker/apache.conf`, `Dockerfile`, `render.yaml` — Korrekt konfiguriert
 
 ### Nächste offene Aufgaben (in dieser Reihenfolge)
-1. **[User-Aktion]** `KIE_AI_API_KEY` in Render-Dashboard → Environment Variables → Redeploy
-2. **[User-Aktion]** `CLEANUP_SECRET` in Render-Dashboard → min. 20 Zeichen → Redeploy
-3. **[Agent]** E2E-Test: Upload Video → KI-Bild generieren → Render → Download (nach Key-Eintrag)
-4. **[Entscheidung]** Domain-Strategie: cinematic-studio-family.com vs cinematic-vision-studio.com
-5. **[Agent]** academy.php Guides mit echten Inhalten befüllen (aktuell 13 Placeholder-Texte)
-6. **[Agent]** Starter+ Plan: 1080p toggle in render-final.php über `$_SESSION['export_quality']`
-
----
-
-## Was wurde in Session 4 gebaut (2026-05-14)
-
-### Geänderte Dateien
-| Datei | Was geändert |
-|---|---|
-| `api/render-final.php` | V3 Audio: ffprobe-Check vor Slot-Loop (`hasOriginalAudio`). Original-Slots nutzen jetzt `-map 0:a -ar 44100 -ac 2 -c:a aac`. Video-Replacement-Slots analog. `audio_source` in `$debug[]`. |
-| `docker/apache.conf` | `PassEnv CLEANUP_SECRET` hinzugefügt. CORS-Header-Einrückung korrigiert. `<Directory /var/www/html/storage/jobs>` mit `Require all granted` + `meta.json`/PHP-Block per `<FilesMatch>`. |
-| `render.yaml` | Cron-Service `csf-cleanup-cron` hinzugefügt (`0 3 * * *`, dieselbe Disk). |
-| `bin/cleanup-cron.php` (NEU) | CLI-Script für Render Cron. Ruft `csf_cleanup_old_jobs()` auf, Exit 0/1. |
+1. **[User-Aktion]** `APP_SECRET` in Render-Dashboard → min. 32 Zeichen random → Redeploy
+2. **[User-Aktion]** `KIE_AI_API_KEY` in Render-Dashboard → Environment Variables → Redeploy
+3. **[User-Aktion]** `CLEANUP_SECRET` in Render-Dashboard → min. 20 Zeichen → Redeploy
+4. **[Agent]** E2E Login testen: `/login.php` → Register → Login → Studio → Logout
+5. **[Agent]** Email-Verifizierung (Mailgun/SendGrid oder SMTP via PHP mail())
+6. **[Agent]** Starter+ Plan: 1080p toggle in render-final.php über User-Plan
+7. **[Agent]** Dashboard-Seite: `dashboard.php` — Eigene Jobs, Kristall-Verlauf, Plan-Info
