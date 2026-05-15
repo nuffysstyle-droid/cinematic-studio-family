@@ -33,6 +33,9 @@
 
 declare(strict_types=1);
 
+require_once __DIR__ . '/../includes/functions.php';
+require_once __DIR__ . '/../includes/rate_limit.php';
+
 header('Content-Type: application/json');
 
 // ── Hilfsfunktionen ──────────────────────────────────────────────────────────
@@ -115,6 +118,31 @@ function csf_ai_gen_error(int $httpCode, string $message, array $extra = []): ne
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     csf_ai_gen_error(405, 'Nur POST erlaubt.');
+}
+
+// ── Rate Limiting (IP-basiert) ────────────────────────────────────────────────
+// KI-Generierungen kosten Geld → strenger limitieren: 10/Stunde pro IP
+
+$rl = csf_rate_limit_check('generate_ai', maxRequests: 10, windowSeconds: 3600);
+
+if (!$rl['allowed']) {
+    http_response_code(429);
+    header('Retry-After: ' . $rl['reset_in']);
+    header('X-RateLimit-Limit: ' . $rl['limit']);
+    header('X-RateLimit-Remaining: 0');
+    header('X-RateLimit-Reset: ' . $rl['reset_at']);
+    echo json_encode([
+        'status'    => 'error',
+        'message'   => 'Zu viele KI-Generierungen. Bitte in ' . ceil($rl['reset_in'] / 60) . ' Minuten erneut versuchen.',
+        'reset_in'  => $rl['reset_in'],
+        'reset_at'  => $rl['reset_at'],
+    ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
+// Probabilistisches Cleanup (1/100 Requests)
+if (random_int(1, 100) === 1) {
+    csf_rate_limit_cleanup();
 }
 
 // ── Eingaben lesen (JSON-Body oder multipart/form-data) ──────────────────────

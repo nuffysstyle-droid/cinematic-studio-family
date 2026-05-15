@@ -6,6 +6,8 @@ declare(strict_types=1);
  */
 
 require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/functions.php';
+require_once __DIR__ . '/../includes/rate_limit.php';
 
 header('Content-Type: application/json');
 
@@ -13,6 +15,20 @@ header('Content-Type: application/json');
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     echo json_encode(['success' => false, 'error' => 'Methode nicht erlaubt.']);
+    exit;
+}
+
+// ── Rate Limiting (IP-basiert) ────────────────────────────────────────────────
+// 30 Uploads/Stunde pro IP — verhindert Storage-Abuse
+$_rlUpload = csf_rate_limit_check('upload', maxRequests: 30, windowSeconds: 3600);
+if (!$_rlUpload['allowed']) {
+    http_response_code(429);
+    header('Retry-After: ' . $_rlUpload['reset_in']);
+    echo json_encode([
+        'success'  => false,
+        'error'    => 'Zu viele Uploads. Bitte in ' . ceil($_rlUpload['reset_in'] / 60) . ' Minuten erneut versuchen.',
+        'reset_in' => $_rlUpload['reset_in'],
+    ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     exit;
 }
 

@@ -38,6 +38,7 @@ declare(strict_types=1);
 // Muss VOR functions.php eingebunden werden, damit $_SESSION verfügbar ist.
 require_once __DIR__ . '/../includes/config.php';
 require_once __DIR__ . '/../includes/functions.php';
+require_once __DIR__ . '/../includes/rate_limit.php';
 
 header('Content-Type: application/json');
 
@@ -139,6 +140,15 @@ function csf_drawtext_escape(string $text): string {
 // ── Methode + Eingabe validieren ────────────────────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     render_fail(405, 'Methode nicht erlaubt — nur POST.');
+}
+
+// ── Rate Limiting ─────────────────────────────────────────────────────────────
+$_rlRender = csf_rate_limit_check('render_final', maxRequests: 15, windowSeconds: 3600);
+if (!$_rlRender['allowed']) {
+    render_fail(429, 'Zu viele Render-Anfragen. Bitte in ' . ceil($_rlRender['reset_in'] / 60) . ' Minuten erneut versuchen.', [
+        'reset_in' => $_rlRender['reset_in'],
+        'reset_at' => $_rlRender['reset_at'],
+    ]);
 }
 
 $jobId = trim((string)($_POST['job_id'] ?? ''));
