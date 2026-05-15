@@ -39,6 +39,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/../includes/config.php';
 require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../includes/rate_limit.php';
+require_once __DIR__ . '/../includes/auth.php';
 
 header('Content-Type: application/json');
 
@@ -150,6 +151,9 @@ if (!$_rlRender['allowed']) {
         'reset_at' => $_rlRender['reset_at'],
     ]);
 }
+
+// ── Auth (optional — Demo bleibt ohne Login zugänglich) ───────────────────────
+$authUser = csf_auth_user(); // null = Free-Demo-Modus
 
 $jobId = trim((string)($_POST['job_id'] ?? ''));
 if (!preg_match('/^job_\d{8}_\d{6}_[a-f0-9]{8}$/', $jobId)) {

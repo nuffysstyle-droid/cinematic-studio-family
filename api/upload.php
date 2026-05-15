@@ -8,6 +8,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/../includes/config.php';
 require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../includes/rate_limit.php';
+require_once __DIR__ . '/../includes/auth.php';
 
 header('Content-Type: application/json');
 
@@ -31,6 +32,9 @@ if (!$_rlUpload['allowed']) {
     ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     exit;
 }
+
+// Auth (optional — Demo bleibt ohne Login zugänglich)
+$authUser = csf_auth_user(); // null = Free-Demo-Modus
 
 // Datei vorhanden?
 if (empty($_FILES['file']) || $_FILES['file']['error'] === UPLOAD_ERR_NO_FILE) {

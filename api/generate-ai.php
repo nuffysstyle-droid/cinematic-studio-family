@@ -35,6 +35,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../includes/rate_limit.php';
+require_once __DIR__ . '/../includes/auth.php';
 
 header('Content-Type: application/json');
 
@@ -144,6 +145,11 @@ if (!$rl['allowed']) {
 if (random_int(1, 100) === 1) {
     csf_rate_limit_cleanup();
 }
+
+// ── Auth (optional — Demo bleibt ohne Login zugänglich) ───────────────────────
+// Wenn eingeloggt: User-ID wird in meta.json gespeichert (für spätere Kristall-Abrechnung).
+// Crystals-Spend kommt in V1 wenn Stripe live ist.
+$authUser = csf_auth_user(); // null = nicht eingeloggt (Free-Demo-Modus)
 
 // ── Eingaben lesen (JSON-Body oder multipart/form-data) ──────────────────────
 
@@ -370,6 +376,7 @@ if ($slotIndex === null) {
         'ai_task_id'       => $taskId,
         'ai_prompt'        => $prompt,
         'ai_created_at'    => $nowIso,
+        'ai_user_id'       => $authUser['id'] ?? null,
         'updated_at'       => $nowIso,
     ];
 } else {
@@ -381,6 +388,7 @@ if ($slotIndex === null) {
     $meta['slots'][$slotIndex]['ai_task_id']    = $taskId;
     $meta['slots'][$slotIndex]['ai_prompt']     = $prompt;
     $meta['slots'][$slotIndex]['ai_created_at'] = $nowIso;
+    $meta['slots'][$slotIndex]['ai_user_id']    = $authUser['id'] ?? null;
     $meta['slots'][$slotIndex]['updated_at']    = $nowIso;
 }
 

@@ -1,3 +1,9 @@
+<?php
+declare(strict_types=1);
+require_once __DIR__ . '/includes/functions.php';
+require_once __DIR__ . '/includes/auth.php';
+$authUser = csf_auth_user();
+?>
 <!doctype html>
 <html lang="de">
 <head>
@@ -137,9 +143,17 @@
       <a href="https://cinematic-vision-studio.de/crystals.html" class="nav-link">Kristalle</a>
     </div>
     <div class="nav-actions">
-      <a href="contact.php" class="nav-btn-ghost">Beta-Zugang</a>
-      <a href="studio-demo.php" class="nav-btn-gold">Studio starten</a>
-      <a href="https://cinematic-vision-studio.de/crystals.html" class="wallet-pill">💎 Free</a>
+      <?php if ($authUser): ?>
+        <a href="https://cinematic-vision-studio.de/crystals.html" class="wallet-pill">💎 <?= htmlspecialchars($authUser['crystals_balance']) ?></a>
+        <form method="POST" action="/api/auth/logout.php" style="display:inline" id="logoutForm">
+          <input type="hidden" name="redirect" value="studio-demo.php">
+          <button type="submit" class="nav-btn-ghost" style="cursor:pointer;font-family:inherit">Logout</button>
+        </form>
+      <?php else: ?>
+        <a href="login.php?redirect=studio-demo.php" class="nav-btn-ghost">Login</a>
+        <a href="login.php?tab=register&redirect=studio-demo.php" class="nav-btn-gold">Kostenlos starten</a>
+        <a href="https://cinematic-vision-studio.de/crystals.html" class="wallet-pill">💎 Free</a>
+      <?php endif; ?>
     </div>
     <button class="mob-burger" id="mobBurger" aria-label="Menü öffnen" aria-expanded="false"><span></span><span></span><span></span></button>
   </nav>
@@ -150,7 +164,16 @@
     <a href="https://cinematic-vision-studio.de/academy.html" class="mob-link">🎓 Academy</a>
     <a href="https://cinematic-vision-studio.de/crystals.html" class="mob-link">💎 Kristalle</a>
     <div class="mob-sep"></div>
-    <a href="studio-demo.php" class="mob-cta">🎬 Studio starten</a>
+    <?php if ($authUser): ?>
+      <span class="mob-link" style="color:var(--accent)">💎 <?= htmlspecialchars($authUser['crystals_balance']) ?> Kristalle · <?= htmlspecialchars($authUser['email']) ?></span>
+      <form method="POST" action="/api/auth/logout.php" style="margin:4px 0" id="logoutFormMob">
+        <input type="hidden" name="redirect" value="studio-demo.php">
+        <button type="submit" class="mob-cta" style="width:100%;cursor:pointer;font-family:inherit;background:rgba(255,92,122,.15);color:#ff5c7a">🚪 Logout</button>
+      </form>
+    <?php else: ?>
+      <a href="login.php?redirect=studio-demo.php" class="mob-link">🔑 Login</a>
+      <a href="login.php?tab=register&redirect=studio-demo.php" class="mob-cta">✨ Kostenlos starten</a>
+    <?php endif; ?>
   </div>
 
   <div class="page">

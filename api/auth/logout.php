@@ -24,6 +24,17 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 csf_auth_logout();
 
+// Wenn Browser-Form-POST (kein XHR/fetch): direkt weiterleiten
+$redirect = (string)($_POST['redirect'] ?? $_GET['redirect'] ?? '');
+// Nur relative Pfade erlauben
+if ($redirect !== '' && !str_starts_with($redirect, '//') && !str_contains($redirect, ':')) {
+    $accept = $_SERVER['HTTP_ACCEPT'] ?? '';
+    if (!str_contains($accept, 'application/json')) {
+        header('Location: ' . $redirect);
+        exit;
+    }
+}
+
 echo json_encode([
     'status'  => 'ok',
     'message' => 'Erfolgreich abgemeldet.',
