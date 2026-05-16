@@ -42,7 +42,7 @@
   /* ===== BACKGROUND IMAGE (Master) ===== */
   .bg {
     position: fixed; inset: 0; z-index: 0;
-    background-size: cover;
+    background-size: 100% 100%;
     background-position: center;
     background-repeat: no-repeat;
   }
@@ -398,10 +398,27 @@
   /* Subtle panel-corner glow pulses (life on the static panels) */
   .panel-glow {
     position: fixed; z-index: 4; pointer-events: none;
-    width: 24px; height: 24px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(49,215,255,0.6), transparent 70%);
+    width: 36px; height: 36px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(49,215,255,0.7), transparent 70%);
     animation: panelGlow 2.4s ease-in-out infinite;
     mix-blend-mode: screen;
+  }
+  /* Bigger ambient pulses over each panel area */
+  .panel-area-glow {
+    position: fixed; z-index: 3; pointer-events: none;
+    border-radius: 50%;
+    mix-blend-mode: screen;
+    animation: areaGlow 4s ease-in-out infinite;
+  }
+  .panel-area-glow.mission   { top: 22%; left: 12%;  width: 220px; height: 180px; background: radial-gradient(ellipse, rgba(255,184,0,0.18), transparent 65%); animation-delay: 0s; }
+  .panel-area-glow.stats     { top: 55%; left: 12%;  width: 220px; height: 160px; background: radial-gradient(ellipse, rgba(49,215,255,0.18), transparent 65%); animation-delay: 1s; }
+  .panel-area-glow.moti      { top: 82%; left: 12%;  width: 220px; height: 140px; background: radial-gradient(ellipse, rgba(255,184,0,0.15), transparent 65%); animation-delay: 2s; }
+  .panel-area-glow.systems   { top: 22%; right: 12%; width: 220px; height: 180px; background: radial-gradient(ellipse, rgba(49,215,255,0.18), transparent 65%); animation-delay: 0.5s; }
+  .panel-area-glow.plan      { top: 55%; right: 12%; width: 220px; height: 170px; background: radial-gradient(ellipse, rgba(108,255,0,0.16), transparent 65%); animation-delay: 1.5s; }
+  .panel-area-glow.sound     { top: 82%; right: 12%; width: 220px; height: 140px; background: radial-gradient(ellipse, rgba(49,215,255,0.18), transparent 65%); animation-delay: 2.5s; }
+  @keyframes areaGlow {
+    0%, 100% { opacity: 0.4; transform: scale(0.95); }
+    50%      { opacity: 1;   transform: scale(1.08); }
   }
   .panel-glow.g1 { top: 12%;  left: 1.5%;  animation-delay: 0s; }
   .panel-glow.g2 { top: 48%;  left: 22%;   animation-delay: 0.6s; background: radial-gradient(circle, rgba(255,184,0,0.55), transparent 70%); }
@@ -449,8 +466,10 @@
   }
   .core-status.idle { color: var(--cyan); text-shadow: 0 0 16px var(--glow-cyan); }
   .core-substatus {
-    font-size: clamp(9px, 0.85vw, 12px); letter-spacing: 3px; color: var(--dim);
+    font-size: clamp(10px, 0.95vw, 13px); letter-spacing: 3px; color: var(--cyan);
+    text-shadow: 0 0 8px var(--glow-cyan);
     margin-bottom: 14px;
+    font-weight: 700;
   }
   .core-time {
     font-size: clamp(48px, 7vw, 92px); font-weight: 900;
@@ -468,7 +487,9 @@
     50%      { text-shadow: 0 0 44px var(--glow-red), 0 0 80px var(--glow-red); }
   }
   .core-time-label {
-    font-size: clamp(9px, 0.85vw, 11px); letter-spacing: 4px; color: var(--dim); margin-top: 10px;
+    font-size: clamp(10px, 0.95vw, 12px); letter-spacing: 4px; color: var(--white);
+    text-shadow: 0 0 6px var(--glow-cyan);
+    margin-top: 10px; font-weight: 700; opacity: 0.95;
   }
   .core-pill {
     margin-top: 14px;
@@ -488,8 +509,10 @@
     animation: criticalPulse 1s ease-in-out infinite;
   }
   .core-foot {
-    margin-top: 10px; font-size: clamp(9px, 0.8vw, 11px); color: var(--dim);
+    margin-top: 10px; font-size: clamp(10px, 0.9vw, 12px); color: var(--white);
+    text-shadow: 0 0 6px rgba(108,255,0,0.5);
     display: flex; align-items: center; gap: 6px; justify-content: center;
+    opacity: 0.95;
   }
   .core-cancel { margin-top: 12px; }
 
@@ -500,16 +523,22 @@
   }
   .start-form .row { display: flex; flex-direction: column; gap: 3px; }
   .start-form label {
-    font-size: 9px; letter-spacing: 3px; color: var(--dim);
+    font-size: 10px; letter-spacing: 3px; color: var(--cyan);
+    text-shadow: 0 0 8px var(--glow-cyan);
+    font-weight: 700;
   }
   .start-form input[type="text"] {
-    width: 100%; padding: 8px 11px;
-    background: rgba(3,8,20,0.85);
-    border: 1px solid rgba(0,170,255,0.4);
+    width: 100%; padding: 9px 11px;
+    background: rgba(3,8,20,0.92);
+    border: 1px solid rgba(0,170,255,0.55);
     color: var(--white);
     border-radius: 8px;
-    font-size: 12px; outline: none;
+    font-size: 13px; outline: none;
+    font-weight: 600;
     transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .start-form input[type="text"]::placeholder {
+    color: rgba(238,244,255,0.45); font-weight: 400;
   }
   .start-form input[type="text"]:focus {
     border-color: var(--gold); box-shadow: 0 0 10px var(--glow-gold);
@@ -559,13 +588,18 @@
   .mission-name {
     font-size: clamp(14px, 1.4vw, 21px); font-weight: 900;
     letter-spacing: 1px; color: var(--gold);
-    text-shadow: 0 0 12px var(--glow-gold);
+    text-shadow: 0 0 14px var(--glow-gold), 0 0 26px var(--glow-gold);
     margin-bottom: 6px; line-height: 1.1; word-break: break-word;
+    animation: missionPulse 2.4s ease-in-out infinite;
+  }
+  @keyframes missionPulse {
+    0%, 100% { text-shadow: 0 0 12px var(--glow-gold), 0 0 22px var(--glow-gold); }
+    50%      { text-shadow: 0 0 22px var(--glow-gold), 0 0 44px var(--glow-gold), 0 0 70px rgba(255,184,0,0.5); }
   }
   .mission-goal {
-    font-size: clamp(11px, 0.95vw, 14px);
-    color: var(--white); line-height: 1.3;
-    text-shadow: 0 0 8px rgba(0,0,0,0.8);
+    font-size: clamp(12px, 1vw, 15px); font-weight: 600;
+    color: var(--white); line-height: 1.35;
+    text-shadow: 0 0 10px rgba(0,0,0,0.9), 0 0 6px rgba(49,215,255,0.4);
   }
 
   /* ===== SESSION PLAN VALUES OVERLAY (right)
@@ -580,9 +614,14 @@
     font-size: clamp(10px, 0.85vw, 13px);
   }
   .plan-overlay.show { display: flex; }
+  .plan-overlay .item {
+    color: var(--white); font-weight: 700;
+    text-shadow: 0 0 8px rgba(0,0,0,0.9);
+  }
   .plan-overlay .item .small {
-    color: var(--dim); font-size: clamp(8px, 0.7vw, 10px); letter-spacing: 1px;
-    display: block; margin-top: 1px;
+    color: var(--cyan); font-size: clamp(9px, 0.75vw, 11px); letter-spacing: 1px;
+    display: block; margin-top: 2px; font-weight: 800;
+    text-shadow: 0 0 8px var(--glow-cyan);
   }
   /* Mission-Text auch nur nach Session-Start zeigen */
   .mission-overlay { display: none; }
@@ -621,7 +660,17 @@
     animation: toastIn 0.3s ease-out;
   }
   .toast.gold  { border-color: rgba(255,184,0,0.6); border-left-color: var(--gold);  box-shadow: 0 0 24px var(--glow-gold); }
-  .toast.red   { border-color: rgba(255,47,47,0.6); border-left-color: var(--red);   box-shadow: 0 0 24px var(--glow-red); }
+  .toast.red   {
+    border: 2px solid var(--red); border-left: 6px solid var(--red);
+    background: rgba(50,5,10,0.95);
+    animation: redBlink 0.7s ease-in-out infinite;
+  }
+  .toast.red .title { color: var(--red); text-shadow: 0 0 10px var(--glow-red); font-size: 14px; }
+  .toast.red .body { color: #ffe0e0; font-weight: 700; }
+  @keyframes redBlink {
+    0%, 100% { box-shadow: 0 0 20px var(--glow-red), inset 0 0 10px rgba(255,47,47,0.2); transform: translateX(0) scale(1); }
+    50%      { box-shadow: 0 0 50px var(--glow-red), 0 0 80px var(--glow-red), inset 0 0 20px rgba(255,47,47,0.4); transform: translateX(0) scale(1.03); }
+  }
   .toast.green { border-color: rgba(108,255,0,0.6); border-left-color: var(--green); box-shadow: 0 0 24px var(--glow-green); }
   .toast .title {
     font-size: 12px; letter-spacing: 2px; font-weight: 800; margin-bottom: 4px;
@@ -837,6 +886,14 @@
 <div class="panel-glow g4"></div>
 <div class="panel-glow g5"></div>
 <div class="panel-glow g6"></div>
+
+<!-- Big breathing area glows behind each panel -->
+<div class="panel-area-glow mission"></div>
+<div class="panel-area-glow stats"></div>
+<div class="panel-area-glow moti"></div>
+<div class="panel-area-glow systems"></div>
+<div class="panel-area-glow plan"></div>
+<div class="panel-area-glow sound"></div>
 
 <!-- Lightning overlay (only during warn) -->
 <div class="lightning" id="lightning"></div>
@@ -1198,30 +1255,38 @@
   let currentTrack = 'drone';   // 'drone' | 'crystal' | 'earth' | 'stars'
   let userVolume = 0.7;         // 0..1, gesetzt vom Slider
 
+  // Schöne harmonische Tracks — proper Akkorde + Melodien
   const TRACKS = {
-    drone: {   // Tiefenfokus — E-Moll Drone
+    drone: {   // Tiefenfokus — C-Dur warm pad
       name: 'TIEFENFOKUS',
-      calm:     { freqs: [82.4, 123.5, 164.8],        baseVol: 0.6, lfoRate: 0.08, lfoDepth: 2.5, noiseFreq: 600, noiseVol: 0.05, type: 'sine' },
-      active:   { freqs: [110, 164.8, 220.5],         baseVol: 0.65, lfoRate: 0.15, lfoDepth: 3, noiseFreq: 700, noiseVol: 0.06, type: 'sine' },
+      // C2, G2, C3, E3, G3 — C-Dur Quinte gestapelt (warm, harmonisch)
+      calm:     { freqs: [65.4, 98.0, 130.8, 164.8, 196.0], baseVol: 0.35, lfoRate: 0.07, lfoDepth: 0.8, noiseFreq: 0, noiseVol: 0, type: 'sine' },
+      active:   { freqs: [65.4, 98.0, 130.8, 164.8, 196.0], baseVol: 0.4,  lfoRate: 0.10, lfoDepth: 1.0, noiseFreq: 0, noiseVol: 0, type: 'sine' },
+      melody:   [261.6, 329.6, 392.0, 329.6, 261.6, 196.0, 261.6, 329.6], // C-E-G-E-C-G-C-E
     },
-    crystal: { // Kristallraum — hohe ätherische Töne
+    crystal: { // Kristallraum — D-Dur hohe ätherische Töne (D, F#, A, D-octave)
       name: 'KRISTALLRAUM',
-      calm:     { freqs: [220, 329.6, 440, 659.2],    baseVol: 0.45, lfoRate: 0.12, lfoDepth: 4, noiseFreq: 2000, noiseVol: 0.03, type: 'sine' },
-      active:   { freqs: [220, 329.6, 440, 659.2],    baseVol: 0.5, lfoRate: 0.2, lfoDepth: 4.5, noiseFreq: 2000, noiseVol: 0.04, type: 'sine' },
+      calm:     { freqs: [146.8, 220.0, 277.2, 329.6, 440.0], baseVol: 0.28, lfoRate: 0.10, lfoDepth: 1.5, noiseFreq: 0, noiseVol: 0, type: 'sine' },
+      active:   { freqs: [146.8, 220.0, 277.2, 329.6, 440.0], baseVol: 0.32, lfoRate: 0.15, lfoDepth: 1.8, noiseFreq: 0, noiseVol: 0, type: 'sine' },
+      melody:   [587.3, 698.5, 880.0, 698.5, 587.3, 440.0, 587.3, 698.5], // hohe Glöckchen-Melodie
     },
-    earth: {   // Erdung — tiefe warme Töne
+    earth: {   // Erdung — A-Moll tiefe warme Töne (A1, E2, A2, C3, E3)
       name: 'ERDUNG',
-      calm:     { freqs: [55, 82.4, 110, 138.6],      baseVol: 0.7, lfoRate: 0.06, lfoDepth: 2, noiseFreq: 350, noiseVol: 0.07, type: 'sine' },
-      active:   { freqs: [55, 82.4, 110, 138.6],      baseVol: 0.75, lfoRate: 0.1, lfoDepth: 2.5, noiseFreq: 400, noiseVol: 0.08, type: 'sine' },
+      calm:     { freqs: [55.0, 82.4, 110.0, 130.8, 164.8],  baseVol: 0.45, lfoRate: 0.05, lfoDepth: 0.5, noiseFreq: 0, noiseVol: 0, type: 'sine' },
+      active:   { freqs: [55.0, 82.4, 110.0, 130.8, 164.8],  baseVol: 0.5,  lfoRate: 0.08, lfoDepth: 0.7, noiseFreq: 0, noiseVol: 0, type: 'sine' },
+      melody:   [220.0, 261.6, 329.6, 261.6, 220.0, 164.8, 220.0, 261.6], // A-C-E-C-A-E-A-C
     },
-    stars: {   // Sterne — funkelnd
+    stars: {   // Sterne — F-Dur funkelnd (F, A, C, F-octave)
       name: 'STERNE',
-      calm:     { freqs: [196, 293.7, 392, 587.3],    baseVol: 0.4, lfoRate: 0.18, lfoDepth: 6, noiseFreq: 3500, noiseVol: 0.025, type: 'sine' },
-      active:   { freqs: [196, 293.7, 392, 587.3],    baseVol: 0.45, lfoRate: 0.25, lfoDepth: 7, noiseFreq: 3500, noiseVol: 0.03, type: 'sine' },
+      calm:     { freqs: [87.3, 130.8, 174.6, 220.0, 261.6], baseVol: 0.28, lfoRate: 0.12, lfoDepth: 2.0, noiseFreq: 0, noiseVol: 0, type: 'sine' },
+      active:   { freqs: [87.3, 130.8, 174.6, 220.0, 261.6], baseVol: 0.32, lfoRate: 0.18, lfoDepth: 2.5, noiseFreq: 0, noiseVol: 0, type: 'sine' },
+      melody:   [523.3, 698.5, 1046.5, 698.5, 523.3, 392.0, 523.3, 698.5], // hoch funkelnd
     },
   };
-  const WARN_PRESET = {     freqs: [82.4, 123.5, 164.8, 247],         baseVol: 0.6, lfoRate: 1.2, lfoDepth: 4,   noiseFreq: 900, noiseVol: 0.08, type: 'sine' };
-  const CRITICAL_PRESET = { freqs: [55, 110, 138.6, 207.6],           baseVol: 0.35, lfoRate: 4.0, lfoDepth: 8,  noiseFreq: 1200, noiseVol: 0.12, type: 'sawtooth' };
+  // Warning + Critical bleiben dissonant für die Wirkung
+  const WARN_PRESET = {     freqs: [82.4, 123.5, 164.8, 247],   baseVol: 0.4, lfoRate: 1.2, lfoDepth: 4,  noiseFreq: 900,  noiseVol: 0.05, type: 'sine' };
+  const CRITICAL_PRESET = { freqs: [55, 110, 138.6, 207.6],     baseVol: 0.3, lfoRate: 4.0, lfoDepth: 8, noiseFreq: 1200, noiseVol: 0.08, type: 'sawtooth' };
+  let melodyHandle = null;
 
   function initAudio(){
     if (audioCtx) return;
@@ -1294,10 +1359,62 @@
     noise.start();
     ambientNodes.push(noise);
 
+    // Sanfte Melodie-Noten alle paar Sekunden (nur calm/active)
+    stopMelody();
+    if (intensity === 'calm' || intensity === 'active') {
+      startMelody();
+    }
+
     updateMusicPanelUI();
   }
 
+  function playMelodyNote(freq){
+    if (!audioCtx || !state.soundOn || !ambientGain) return;
+    const now = audioCtx.currentTime;
+    const dur = 2.8;
+    const osc = audioCtx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    const g = audioCtx.createGain();
+    g.gain.setValueAtTime(0, now);
+    g.gain.linearRampToValueAtTime(0.07, now + 0.4);
+    g.gain.linearRampToValueAtTime(0.04, now + 1.5);
+    g.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+    // Sanftes Echo durch Delay
+    const delay = audioCtx.createDelay();
+    delay.delayTime.value = 0.4;
+    const delayGain = audioCtx.createGain();
+    delayGain.gain.value = 0.35;
+    osc.connect(g);
+    g.connect(ambientGain);
+    g.connect(delay);
+    delay.connect(delayGain).connect(ambientGain);
+    osc.start(now);
+    osc.stop(now + dur + 0.1);
+  }
+
+  function startMelody(){
+    const track = TRACKS[currentTrack] || TRACKS.drone;
+    const melody = track.melody;
+    if (!melody) return;
+    let i = 0;
+    const playNext = () => {
+      if (!ambientGain || !state.soundOn) return;
+      if (intensityState !== 'calm' && intensityState !== 'active') return;
+      playMelodyNote(melody[i % melody.length]);
+      i++;
+      const gap = 3500 + Math.random()*2500; // 3.5-6 Sek zwischen Noten
+      melodyHandle = setTimeout(playNext, gap);
+    };
+    melodyHandle = setTimeout(playNext, 4000);
+  }
+
+  function stopMelody(){
+    if (melodyHandle) { clearTimeout(melodyHandle); melodyHandle = null; }
+  }
+
   function stopAmbient(){
+    stopMelody();
     if (!ambientGain) return;
     try {
       ambientGain.gain.cancelScheduledValues(audioCtx.currentTime);
