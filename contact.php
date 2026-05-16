@@ -42,18 +42,15 @@ h1{font-size:clamp(2rem,6vw,3rem);font-weight:800;margin-bottom:16px;background:
 </head>
 <body>
 <nav class="top-nav">
-  <span class="nav-brand">🎬 Cinematic Studio</span>
+  <a href="https://cinematic-vision-studio.de/scene-editor-test.html" class="nav-brand">🎬 Cinematic Studio</a>
   <div class="nav-links">
-    <a href="scene-editor-test.html">Hub</a>
-    <a href="studio-demo.php">Demo</a>
-    <a href="prompt-generator.php">Prompts</a>
-    <a href="ki-videos.php">KI Videos</a>
-    <a href="shop.php">Shop</a>
-    <a href="portfolio.php">Portfolio</a>
-    <a href="availability.php">Verfügbarkeit</a>
-    <a href="crystals.php">Kristalle</a>
+    <a href="https://cinematic-vision-studio.de/scene-editor-test.html">Home</a>
+    <a href="studio-demo.php">Studio</a>
+    <a href="https://cinematic-vision-studio.de/academy.html">Academy</a>
+    <a href="https://cinematic-vision-studio.de/shop.html">Shop</a>
     <a href="contact.php" class="active">Kontakt</a>
   </div>
+  <a href="login.php" style="margin-left:auto;color:var(--txm);font-size:.82rem;padding:5px 12px;border:1px solid var(--br);border-radius:6px;text-decoration:none;white-space:nowrap">Login</a>
 </nav>
 <div class="page-wrap">
   <div class="page-icon">✉️</div>
