@@ -215,6 +215,96 @@
     50%      { opacity: 1;   transform: translate(-50%, -50%) scale(1.15); }
   }
 
+  /* Brain pulse over the brain in stats panel */
+  .brain-pulse {
+    position: fixed; left: 7.5%; top: 56%; transform: translate(-50%, -50%);
+    z-index: 4;
+    width: 120px; height: 120px;
+    border-radius: 50%; pointer-events: none;
+    background: radial-gradient(circle, rgba(255,184,0,0.35) 0%, rgba(49,215,255,0.18) 35%, transparent 70%);
+    animation: brainPulse 1.6s ease-in-out infinite;
+    mix-blend-mode: screen;
+  }
+  @keyframes brainPulse {
+    0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(0.92); }
+    50%      { opacity: 1;   transform: translate(-50%, -50%) scale(1.12); }
+  }
+  /* Electrical sparks over brain */
+  .brain-sparks {
+    position: fixed; left: 7.5%; top: 56%; transform: translate(-50%, -50%);
+    z-index: 5;
+    width: 130px; height: 130px;
+    pointer-events: none;
+  }
+  .brain-sparks svg { width: 100%; height: 100%; }
+  .brain-sparks .spark {
+    animation: sparkFlash 0.6s ease-in-out infinite;
+    transform-origin: center;
+  }
+  .brain-sparks .spark.s1 { animation-delay: 0s; }
+  .brain-sparks .spark.s2 { animation-delay: 0.2s; }
+  .brain-sparks .spark.s3 { animation-delay: 0.35s; }
+  .brain-sparks .spark.s4 { animation-delay: 0.5s; }
+  @keyframes sparkFlash {
+    0%, 100% { opacity: 0; }
+    50%      { opacity: 1; }
+  }
+
+  /* Lightning overlay (only active in warn mode) */
+  .lightning {
+    position: fixed; inset: 0; z-index: 45;
+    pointer-events: none; opacity: 0;
+    background:
+      radial-gradient(ellipse at 30% 40%, rgba(255,255,255,0.25) 0%, transparent 30%),
+      radial-gradient(ellipse at 70% 60%, rgba(255,47,47,0.18) 0%, transparent 35%);
+    mix-blend-mode: screen;
+  }
+  .lightning.flash {
+    animation: lightningFlash 0.18s ease-out;
+  }
+  @keyframes lightningFlash {
+    0%   { opacity: 0; }
+    20%  { opacity: 1; }
+    40%  { opacity: 0.3; }
+    60%  { opacity: 0.9; }
+    100% { opacity: 0; }
+  }
+  /* SVG bolts */
+  .lightning-bolts {
+    position: fixed; inset: 0; z-index: 46;
+    pointer-events: none;
+    opacity: 0;
+  }
+  .lightning-bolts.flash {
+    animation: boltFlash 0.18s ease-out;
+  }
+  @keyframes boltFlash {
+    0%   { opacity: 0; }
+    30%  { opacity: 1; }
+    60%  { opacity: 0.4; }
+    100% { opacity: 0; }
+  }
+  .lightning-bolts svg { width: 100%; height: 100%; }
+
+  /* Subtle panel-corner glow pulses (life on the static panels) */
+  .panel-glow {
+    position: fixed; z-index: 4; pointer-events: none;
+    width: 24px; height: 24px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(49,215,255,0.6), transparent 70%);
+    animation: panelGlow 2.4s ease-in-out infinite;
+    mix-blend-mode: screen;
+  }
+  .panel-glow.g1 { top: 12%;  left: 1.5%;  animation-delay: 0s; }
+  .panel-glow.g2 { top: 48%;  left: 22%;   animation-delay: 0.6s; background: radial-gradient(circle, rgba(255,184,0,0.55), transparent 70%); }
+  .panel-glow.g3 { top: 75%;  left: 1.5%;  animation-delay: 1.2s; }
+  .panel-glow.g4 { top: 12%;  right: 1.5%; animation-delay: 0.3s; background: radial-gradient(circle, rgba(255,184,0,0.55), transparent 70%); }
+  .panel-glow.g5 { top: 48%;  right: 22%;  animation-delay: 0.9s; }
+  .panel-glow.g6 { top: 75%;  right: 1.5%; animation-delay: 1.5s; background: radial-gradient(circle, rgba(255,184,0,0.55), transparent 70%); }
+  @keyframes panelGlow {
+    0%, 100% { opacity: 0.3; transform: scale(0.9); }
+    50%      { opacity: 1;   transform: scale(1.2); }
+  }
+
   /* Particles canvas */
   #particles {
     position: fixed; inset: 0; z-index: 3; pointer-events: none;
@@ -586,6 +676,44 @@
 <div class="scanlines"></div>
 <div class="core-glow-overlay"></div>
 <div class="crystal-pulse"></div>
+<div class="brain-pulse"></div>
+<div class="brain-sparks">
+  <svg viewBox="0 0 130 130" xmlns="http://www.w3.org/2000/svg">
+    <g stroke="#31d7ff" stroke-width="1.5" fill="none" style="filter: drop-shadow(0 0 6px #31d7ff);">
+      <path class="spark s1" d="M 40 30 L 50 45 L 45 50 L 60 65"/>
+      <path class="spark s2" d="M 90 35 L 80 50 L 88 58 L 75 70"/>
+      <path class="spark s3" d="M 30 80 L 45 75 L 40 85 L 55 90"/>
+      <path class="spark s4" d="M 100 80 L 88 78 L 92 88 L 80 92"/>
+    </g>
+    <g fill="#ffb800" style="filter: drop-shadow(0 0 8px #ffb800);">
+      <circle class="spark s2" cx="65" cy="60" r="2.5"/>
+      <circle class="spark s4" cx="55" cy="75" r="2"/>
+      <circle class="spark s1" cx="75" cy="80" r="2"/>
+    </g>
+  </svg>
+</div>
+
+<!-- Panel corner glow accents -->
+<div class="panel-glow g1"></div>
+<div class="panel-glow g2"></div>
+<div class="panel-glow g3"></div>
+<div class="panel-glow g4"></div>
+<div class="panel-glow g5"></div>
+<div class="panel-glow g6"></div>
+
+<!-- Lightning overlay (only during warn) -->
+<div class="lightning" id="lightning"></div>
+<div class="lightning-bolts" id="lightningBolts">
+  <svg viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <g stroke="#ffffff" stroke-width="2.5" fill="none" style="filter: drop-shadow(0 0 8px #ff2f2f);">
+      <path d="M 200 0 L 240 200 L 180 320 L 260 480 L 200 640 L 280 780" opacity="0.85"/>
+      <path d="M 1700 0 L 1660 180 L 1730 340 L 1640 500 L 1720 660" opacity="0.85"/>
+      <path d="M 960 0 L 920 220 L 1000 380 L 940 580 L 1020 760" opacity="0.7"/>
+      <path d="M 500 1080 L 540 880 L 480 760 L 560 600" opacity="0.6"/>
+      <path d="M 1400 1080 L 1360 880 L 1430 740 L 1340 580" opacity="0.6"/>
+    </g>
+  </svg>
+</div>
 
 <!-- Orbiting lights SVG over the core ring -->
 <div class="core-animations">
@@ -929,36 +1057,116 @@
 
   // ===== Sound Engine =====
   let audioCtx = null, ambientGain = null, ambientNodes = [], masterGain = null;
+  let intensityState = 'calm'; // 'calm' | 'active' | 'warning' | 'critical'
 
   function initAudio(){
     if (audioCtx) return;
     try {
       audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       masterGain = audioCtx.createGain();
-      masterGain.gain.value = 0.6;
+      masterGain.gain.value = 0.65;
       masterGain.connect(audioCtx.destination);
       state.audioReady = true;
     } catch(e) {}
   }
-  function startAmbient(){
+
+  function startAmbient(intensity){
     if (!audioCtx || !state.soundOn) return;
+    intensity = intensity || 'calm';
+    intensityState = intensity;
     stopAmbient();
+
     ambientGain = audioCtx.createGain();
     ambientGain.gain.value = 0;
     ambientGain.connect(masterGain);
-    ambientGain.gain.linearRampToValueAtTime(0.09, audioCtx.currentTime + 2);
 
-    [110, 165, 220.5].forEach((f, i) => {
+    // Different presets per intensity
+    let preset;
+    switch(intensity) {
+      case 'critical':
+        // aggressive, dissonant, pulsing fast
+        preset = {
+          freqs: [55, 110, 138.6, 207.6],  // dissonant root + tritone
+          baseVol: 0.18,
+          lfoRate: 4.0,           // fast tremolo
+          lfoDepth: 8,
+          noiseVol: 0.10,
+          noiseFreq: 1200,
+          noiseQ: 1.8,
+          targetVol: 0.16,
+        };
+        break;
+      case 'warning':
+        // tense, faster pulse, higher pitch added
+        preset = {
+          freqs: [82.4, 123.5, 164.8, 247],   // E + B perfect fifth
+          baseVol: 0.4,
+          lfoRate: 1.2,
+          lfoDepth: 4,
+          noiseVol: 0.06,
+          noiseFreq: 900,
+          noiseQ: 1.2,
+          targetVol: 0.14,
+        };
+        break;
+      case 'active':
+        // focused but calm, slightly more present than idle
+        preset = {
+          freqs: [110, 164.8, 220.5],
+          baseVol: 0.5,
+          lfoRate: 0.15,
+          lfoDepth: 2.5,
+          noiseVol: 0.05,
+          noiseFreq: 700,
+          noiseQ: 0.8,
+          targetVol: 0.11,
+        };
+        break;
+      default: // 'calm'
+        preset = {
+          freqs: [82.4, 123.5, 164.8],  // E2/B2/E3 — peaceful drone
+          baseVol: 0.45,
+          lfoRate: 0.08,
+          lfoDepth: 2,
+          noiseVol: 0.035,
+          noiseFreq: 600,
+          noiseQ: 0.7,
+          targetVol: 0.08,
+        };
+    }
+
+    ambientGain.gain.linearRampToValueAtTime(preset.targetVol, audioCtx.currentTime + 2);
+
+    preset.freqs.forEach((f, i) => {
       const osc = audioCtx.createOscillator();
-      osc.type = 'sine'; osc.frequency.value = f;
-      const og = audioCtx.createGain(); og.gain.value = i === 0 ? 0.6 : 0.3;
-      const lfo = audioCtx.createOscillator(); lfo.frequency.value = 0.08 + i*0.05;
-      const lfoGain = audioCtx.createGain(); lfoGain.gain.value = 1.5 + i;
+      osc.type = (intensity === 'critical') ? 'sawtooth' : 'sine';
+      osc.frequency.value = f;
+      const og = audioCtx.createGain();
+      og.gain.value = preset.baseVol * (i === 0 ? 1.2 : 0.7);
+      const lfo = audioCtx.createOscillator();
+      lfo.frequency.value = preset.lfoRate + i*0.03;
+      const lfoGain = audioCtx.createGain();
+      lfoGain.gain.value = preset.lfoDepth + i;
       lfo.connect(lfoGain).connect(osc.frequency); lfo.start();
       osc.connect(og).connect(ambientGain); osc.start();
       ambientNodes.push(osc, lfo);
     });
 
+    // Pulsing volume in critical mode
+    if (intensity === 'critical') {
+      const pulse = audioCtx.createOscillator();
+      pulse.frequency.value = 2.5; // 2.5Hz pulse
+      const pulseGain = audioCtx.createGain();
+      pulseGain.gain.value = 0.08;
+      const pulseSink = audioCtx.createGain();
+      pulseSink.gain.value = 1;
+      pulse.connect(pulseGain).connect(pulseSink.gain);
+      pulseSink.connect(ambientGain);
+      pulse.start();
+      ambientNodes.push(pulse);
+    }
+
+    // Noise pad
     const bufferSize = audioCtx.sampleRate * 2;
     const noiseBuf = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
     const data = noiseBuf.getChannelData(0);
@@ -966,12 +1174,13 @@
     const noise = audioCtx.createBufferSource();
     noise.buffer = noiseBuf; noise.loop = true;
     const bp = audioCtx.createBiquadFilter();
-    bp.type = 'bandpass'; bp.frequency.value = 600; bp.Q.value = 0.7;
-    const ng = audioCtx.createGain(); ng.gain.value = 0.04;
+    bp.type = 'bandpass'; bp.frequency.value = preset.noiseFreq; bp.Q.value = preset.noiseQ;
+    const ng = audioCtx.createGain(); ng.gain.value = preset.noiseVol;
     noise.connect(bp).connect(ng).connect(ambientGain);
     noise.start();
     ambientNodes.push(noise);
   }
+
   function stopAmbient(){
     if (!ambientGain) return;
     try {
@@ -984,6 +1193,12 @@
       try { ambientGain.disconnect(); } catch(e) {}
       ambientGain = null;
     }, 600);
+  }
+
+  function transitionAmbient(newIntensity){
+    if (!audioCtx || !state.soundOn) return;
+    if (intensityState === newIntensity) return;
+    startAmbient(newIntensity);
   }
   function playTone(opts){
     if (!audioCtx || !state.soundOn) return;
@@ -1017,7 +1232,8 @@
     state.soundOn = true;
     soundBanner.classList.add('hidden');
     soundToggleBtn.classList.add('shown');
-    if (state.running) startAmbient();
+    // RUHIGE MUSIK direkt starten (auch ohne Session)
+    startAmbient(state.running ? 'active' : 'calm');
     playTone({freq:1320,dur:0.15,vol:0.2});
     playTone({freq:1760,dur:0.2,vol:0.18,delay:0.1});
     updateSoundIcon();
@@ -1027,7 +1243,12 @@
   soundEnableBtn.addEventListener('click', enableSound);
   soundToggleBtn.addEventListener('click', () => {
     if (state.soundOn) disableSound();
-    else { state.soundOn = true; if (state.running) startAmbient(); playTone({freq:880,dur:0.2}); updateSoundIcon(); }
+    else {
+      state.soundOn = true;
+      startAmbient(state.running ? (state.remainingSec <= 60 ? 'critical' : state.remainingSec <= 10*60 ? 'warning' : 'active') : 'calm');
+      playTone({freq:880,dur:0.2});
+      updateSoundIcon();
+    }
   });
 
   // ===== Reality Reminder =====
@@ -1075,7 +1296,7 @@
     activeScreen.classList.remove('hidden');
     updateTimerDisplay();
 
-    if (state.audioReady && state.soundOn) startAmbient();
+    if (state.audioReady && state.soundOn) startAmbient('active');
     scheduleDrink();
     state.tickHandle = setInterval(tick, 1000);
     toast('MISSION GESTARTET', mission + ' · ' + min + ' Min Fokus.', 'gold');
@@ -1106,9 +1327,50 @@
   function stopTimers(){
     if (state.tickHandle)  { clearInterval(state.tickHandle);  state.tickHandle  = null; }
     if (state.drinkHandle) { clearInterval(state.drinkHandle); state.drinkHandle = null; }
-    stopAmbient();
     state.running = false;
+    lightningController.setActive(false, false);
+    // Nach Ende: zurück zur ruhigen Musik (falls Sound an)
+    if (state.soundOn && audioCtx) transitionAmbient('calm');
   }
+
+  // ===== Lightning Controller =====
+  const lightningEl     = $('lightning');
+  const lightningBoltsEl= $('lightningBolts');
+  const lightningController = {
+    handle: null,
+    critical: false,
+    setActive(on, critical) {
+      this.critical = critical;
+      if (on && !this.handle) {
+        const tick = () => {
+          if (!this.handle) return;
+          // Trigger flash
+          lightningEl.classList.remove('flash');
+          lightningBoltsEl.classList.remove('flash');
+          void lightningEl.offsetWidth;
+          void lightningBoltsEl.offsetWidth;
+          lightningEl.classList.add('flash');
+          if (Math.random() < (this.critical ? 0.9 : 0.5)) {
+            lightningBoltsEl.classList.add('flash');
+          }
+          if (this.critical && state.soundOn && audioCtx) {
+            // sharp electrical click
+            playTone({freq: 80 + Math.random()*120, dur: 0.08, type: 'sawtooth', vol: 0.15});
+          }
+          const nextDelay = this.critical
+            ? 600 + Math.random()*1200
+            : 2500 + Math.random()*4000;
+          this.handle = setTimeout(tick, nextDelay);
+        };
+        this.handle = setTimeout(tick, 500);
+      } else if (!on && this.handle) {
+        clearTimeout(this.handle);
+        this.handle = null;
+        lightningEl.classList.remove('flash');
+        lightningBoltsEl.classList.remove('flash');
+      }
+    }
+  };
   function finalizeSession(completed){
     const elapsed = Math.min(state.totalSec, Math.round((Date.now()-state.startTime)/1000));
     if (completed) {
@@ -1147,6 +1409,17 @@
       corePill.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="5"/></svg> FOCUS SESSION AKTIV';
       coreStatus.textContent = 'FOCUS CORE AKTIV';
     }
+
+    // Musik-Intensität an Restzeit anpassen
+    if (state.soundOn && audioCtx) {
+      let needed = 'active';
+      if (state.remainingSec <= 60) needed = 'critical';
+      else if (state.remainingSec <= 10*60) needed = 'warning';
+      transitionAmbient(needed);
+    }
+
+    // Blitze: an wenn warn, intensiver wenn critical
+    lightningController.setActive(isWarn, state.remainingSec <= 60);
   }
   function trigger(key, fn){
     if (state.warningsTriggered.has(key)) return;
