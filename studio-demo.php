@@ -144,7 +144,7 @@ $authUser = csf_auth_user();
     </div>
     <div class="nav-actions">
       <?php if ($authUser): ?>
-        <a href="https://cinematic-vision-studio.de/crystals.html" class="wallet-pill">💎 <?= htmlspecialchars($authUser['crystals_balance']) ?></a>
+        <a href="https://cinematic-vision-studio.de/crystals.html" class="wallet-pill">💎 <?= htmlspecialchars((string)($authUser['crystals_balance'] ?? 0)) ?></a>
         <form method="POST" action="/api/auth/logout.php" style="display:inline" id="logoutForm">
           <input type="hidden" name="redirect" value="studio-demo.php">
           <button type="submit" class="nav-btn-ghost" style="cursor:pointer;font-family:inherit">Logout</button>
@@ -165,7 +165,7 @@ $authUser = csf_auth_user();
     <a href="https://cinematic-vision-studio.de/crystals.html" class="mob-link">💎 Kristalle</a>
     <div class="mob-sep"></div>
     <?php if ($authUser): ?>
-      <span class="mob-link" style="color:var(--accent)">💎 <?= htmlspecialchars($authUser['crystals_balance']) ?> Kristalle · <?= htmlspecialchars($authUser['email']) ?></span>
+      <span class="mob-link" style="color:var(--accent)">💎 <?= htmlspecialchars((string)($authUser['crystals_balance'] ?? 0)) ?> Kristalle · <?= htmlspecialchars((string)($authUser['email'] ?? '')) ?></span>
       <form method="POST" action="/api/auth/logout.php" style="margin:4px 0" id="logoutFormMob">
         <input type="hidden" name="redirect" value="studio-demo.php">
         <button type="submit" class="mob-cta" style="width:100%;cursor:pointer;font-family:inherit;background:rgba(255,92,122,.15);color:#ff5c7a">🚪 Logout</button>
