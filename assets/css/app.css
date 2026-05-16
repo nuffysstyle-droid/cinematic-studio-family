@@ -11,6 +11,10 @@
     padding: 0;
 }
 
+/* [hidden]-Attribute respektieren — CSS display:flex/grid kann browser-default
+   display:none überschreiben. !important entspricht dem W3C-Reset-Standard. */
+[hidden] { display: none !important; }
+
 html {
     font-size: 16px;
     -webkit-text-size-adjust: 100%;
