@@ -134,9 +134,9 @@ $authUser = csf_auth_user();
 <body>
 
   <nav class="nav">
-    <a href="https://cinematic-vision-studio.de/" class="nav-logo">Cinematic Vision Studio<span>Premium KI-Filmstudio</span></a>
+    <a href="https://cinematic-vision-studio.de/scene-editor-test.html" class="nav-logo">Cinematic Vision Studio<span>Premium KI-Filmstudio</span></a>
     <div class="nav-links">
-      <a href="https://cinematic-vision-studio.de/" class="nav-link">Home</a>
+      <a href="https://cinematic-vision-studio.de/scene-editor-test.html" class="nav-link">Home</a>
       <a href="studio-demo.php" class="nav-link active">Studio</a>
       <a href="https://cinematic-vision-studio.de/shop.html" class="nav-link">Shop Beta</a>
       <a href="https://cinematic-vision-studio.de/academy.html" class="nav-link">Academy</a>
@@ -158,7 +158,7 @@ $authUser = csf_auth_user();
     <button class="mob-burger" id="mobBurger" aria-label="Menü öffnen" aria-expanded="false"><span></span><span></span><span></span></button>
   </nav>
   <div class="mob-menu" id="mobMenu">
-    <a href="https://cinematic-vision-studio.de/" class="mob-link">🏠 Home</a>
+    <a href="https://cinematic-vision-studio.de/scene-editor-test.html" class="mob-link">🏠 Home</a>
     <a href="studio-demo.php" class="mob-link active">🎬 Studio</a>
     <a href="https://cinematic-vision-studio.de/shop.html" class="mob-link">🛍️ Shop Beta</a>
     <a href="https://cinematic-vision-studio.de/academy.html" class="mob-link">🎓 Academy</a>
@@ -179,7 +179,7 @@ $authUser = csf_auth_user();
   <div class="page">
     <div class="wrap">
 
-      <a href="https://cinematic-vision-studio.de/" class="back-link">← Zurück zur Startseite</a>
+      <a href="https://cinematic-vision-studio.de/scene-editor-test.html" class="back-link">← Zurück zur Startseite</a>
 
       <div class="demo-header">
         <div class="demo-eyebrow">Demo aktiv</div>
