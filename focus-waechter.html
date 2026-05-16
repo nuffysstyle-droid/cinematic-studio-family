@@ -51,11 +51,11 @@
   .bg-stage {
     position: fixed; inset: 0; z-index: 0;
     background:
-      radial-gradient(ellipse at 50% 38%, rgba(49,215,255,0.18), transparent 45%),
-      radial-gradient(ellipse at 50% 65%, rgba(0,80,200,0.32), transparent 60%),
-      radial-gradient(ellipse at 20% 25%, rgba(0,170,255,0.16), transparent 55%),
-      radial-gradient(ellipse at 80% 22%, rgba(255,184,0,0.10), transparent 50%),
-      linear-gradient(180deg, #02040a 0%, #04101e 35%, #06182f 60%, #02060e 100%);
+      radial-gradient(ellipse at 50% 40%, rgba(49,215,255,0.35), transparent 50%),
+      radial-gradient(ellipse at 50% 65%, rgba(0,120,230,0.50), transparent 65%),
+      radial-gradient(ellipse at 20% 25%, rgba(0,170,255,0.28), transparent 60%),
+      radial-gradient(ellipse at 80% 22%, rgba(255,184,0,0.18), transparent 55%),
+      linear-gradient(180deg, #04081a 0%, #07182f 35%, #0a2548 60%, #050d20 100%);
     overflow: hidden;
   }
   #particles { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; }
@@ -77,7 +77,7 @@
   /* Vignette */
   .vignette {
     position: fixed; inset: 0; z-index: 49; pointer-events: none;
-    background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.75) 100%);
+    background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.55) 100%);
   }
 
   /* ====================================================
@@ -456,17 +456,18 @@
 
   .core-inner {
     position: relative; z-index: 3;
-    width: 56%; aspect-ratio: 1 / 1;
+    width: 54%; aspect-ratio: 1 / 1;
     border-radius: 50%;
     background:
-      radial-gradient(circle at 50% 35%, rgba(20,45,90,0.85), rgba(3,8,18,0.95) 70%);
+      radial-gradient(circle at 50% 30%, rgba(40,90,160,0.55), rgba(8,20,45,0.92) 65%, rgba(3,8,18,0.98) 100%);
     display: grid; place-items: center;
     text-align: center; padding: 22px;
-    border: 1px solid rgba(0,170,255,0.4);
+    border: 2px solid rgba(0,170,255,0.55);
     box-shadow:
-      inset 0 0 60px rgba(0,0,0,0.7),
-      inset 0 0 25px rgba(0,170,255,0.15),
-      0 0 40px rgba(0,170,255,0.3);
+      inset 0 0 80px rgba(0,80,160,0.35),
+      inset 0 0 30px rgba(49,215,255,0.25),
+      0 0 50px rgba(0,170,255,0.5),
+      0 0 100px rgba(0,170,255,0.2);
   }
   .core-helmet-wm {
     position: absolute; top: 18px; left: 50%; transform: translateX(-50%);
@@ -599,8 +600,8 @@
   }
   .systems-card { position: relative; }
   .systems-shield {
-    position: absolute; top: 32px; right: 6px;
-    width: 70px; height: 78px;
+    position: absolute; top: 28px; right: 8px;
+    width: 54px; height: 62px;
     filter: drop-shadow(0 0 14px var(--glow-blue));
     pointer-events: none;
     animation: shieldPulse 4s ease-in-out infinite;
@@ -609,7 +610,7 @@
     0%, 100% { filter: drop-shadow(0 0 10px var(--glow-blue)); }
     50%      { filter: drop-shadow(0 0 22px var(--glow-blue)) drop-shadow(0 0 4px var(--glow-cyan)); }
   }
-  .systems-list { display: flex; flex-direction: column; gap: 9px; padding-right: 75px; }
+  .systems-list { display: flex; flex-direction: column; gap: 9px; padding-right: 58px; }
   .system-row {
     display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center;
     font-size: 12px;
@@ -914,16 +915,16 @@
     <svg viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient id="bgMountFar" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#1a3060" stop-opacity="0.7"/>
-          <stop offset="100%" stop-color="#020812" stop-opacity="1"/>
+          <stop offset="0%" stop-color="#2a4880" stop-opacity="0.95"/>
+          <stop offset="100%" stop-color="#04102a" stop-opacity="1"/>
         </linearGradient>
         <linearGradient id="bgMountMid" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#0e2148" stop-opacity="0.9"/>
-          <stop offset="100%" stop-color="#020610" stop-opacity="1"/>
+          <stop offset="0%" stop-color="#1a3268" stop-opacity="1"/>
+          <stop offset="100%" stop-color="#040c20" stop-opacity="1"/>
         </linearGradient>
         <linearGradient id="bgMountNear" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#0a1830" stop-opacity="1"/>
-          <stop offset="100%" stop-color="#01040a" stop-opacity="1"/>
+          <stop offset="0%" stop-color="#142850" stop-opacity="1"/>
+          <stop offset="100%" stop-color="#03081a" stop-opacity="1"/>
         </linearGradient>
         <radialGradient id="bgMoonGlow" cx="0.5" cy="0.5" r="0.5">
           <stop offset="0%"  stop-color="#31d7ff" stop-opacity="0.55"/>
@@ -1002,10 +1003,18 @@
       <path d="M0,840 L120,780 L260,820 L380,740 L500,800 L640,720 L780,780 L900,700 L1020,760 L1160,700 L1300,780 L1440,720 L1580,800 L1720,740 L1860,800 L1920,780 L1920,1080 L0,1080 Z"
             fill="url(#bgMountNear)"/>
 
+      <!-- glowing rim light on far mountains -->
+      <path d="M0,640 L120,560 L260,600 L380,520 L500,580 L640,490 L780,560 L900,470 L1020,540 L1160,480 L1300,560 L1440,490 L1580,570 L1720,500 L1860,560 L1920,540"
+            fill="none" stroke="#31d7ff" stroke-width="1.8" opacity="0.6"
+            style="filter: drop-shadow(0 0 8px rgba(49,215,255,0.7));"/>
+      <!-- glowing rim light on mid mountains -->
+      <path d="M0,720 L100,660 L220,700 L340,600 L460,680 L580,570 L700,660 L820,560 L940,650 L1060,560 L1180,660 L1300,580 L1420,680 L1540,600 L1660,680 L1780,620 L1920,700"
+            fill="none" stroke="#00aaff" stroke-width="2" opacity="0.7"
+            style="filter: drop-shadow(0 0 8px rgba(0,170,255,0.7));"/>
       <!-- glowing rim light on near mountains -->
       <path d="M0,840 L120,780 L260,820 L380,740 L500,800 L640,720 L780,780 L900,700 L1020,760 L1160,700 L1300,780 L1440,720 L1580,800 L1720,740 L1860,800 L1920,780"
-            fill="none" stroke="#00aaff" stroke-width="2" opacity="0.55"
-            style="filter: drop-shadow(0 0 6px rgba(0,170,255,0.6));"/>
+            fill="none" stroke="#31d7ff" stroke-width="2.5" opacity="0.85"
+            style="filter: drop-shadow(0 0 10px rgba(49,215,255,0.85));"/>
 
       <!-- energy platform under core -->
       <ellipse cx="960" cy="900" rx="380" ry="40" fill="none" stroke="#31d7ff" stroke-width="1.5" opacity="0.7"
@@ -1345,40 +1354,44 @@
 
         <circle cx="300" cy="300" r="290" fill="url(#coreGlow)"/>
 
-        <!-- OUTER RING -->
+        <!-- OUTER RING (thick gold) -->
         <g class="ring-rotate-slow">
-          <circle cx="300" cy="300" r="280" fill="none" stroke="url(#ringGold)" stroke-width="2" opacity="0.9"/>
-          <circle cx="300" cy="300" r="272" fill="none" stroke="#a66a00" stroke-width="0.8" opacity="0.6"/>
-          <g stroke="#ffb800" stroke-width="2.5">
-            <line x1="300" y1="14"  x2="300" y2="32"/>
-            <line x1="300" y1="568" x2="300" y2="586"/>
-            <line x1="14"  y1="300" x2="32"  y2="300"/>
-            <line x1="568" y1="300" x2="586" y2="300"/>
-            <line x1="92"  y1="92"  x2="105" y2="105"/>
-            <line x1="495" y1="92"  x2="508" y2="105"/>
-            <line x1="92"  y1="508" x2="105" y2="495"/>
-            <line x1="495" y1="508" x2="508" y2="495"/>
+          <circle cx="300" cy="300" r="282" fill="none" stroke="url(#ringGold)" stroke-width="4" opacity="1"
+                  style="filter: drop-shadow(0 0 8px rgba(255,184,0,0.7));"/>
+          <circle cx="300" cy="300" r="274" fill="none" stroke="#ffb800" stroke-width="1.5" opacity="0.8"/>
+          <circle cx="300" cy="300" r="268" fill="none" stroke="#a66a00" stroke-width="1" opacity="0.7"/>
+          <g stroke="#ffb800" stroke-width="4" style="filter: drop-shadow(0 0 4px #ffb800);">
+            <line x1="300" y1="6"   x2="300" y2="40"/>
+            <line x1="300" y1="560" x2="300" y2="594"/>
+            <line x1="6"   y1="300" x2="40"  y2="300"/>
+            <line x1="560" y1="300" x2="594" y2="300"/>
+            <line x1="85"  y1="85"  x2="110" y2="110"/>
+            <line x1="490" y1="85"  x2="515" y2="110"/>
+            <line x1="85"  y1="515" x2="110" y2="490"/>
+            <line x1="490" y1="515" x2="515" y2="490"/>
           </g>
         </g>
 
-        <!-- RING 2 blue dashed -->
+        <!-- RING 2 thick blue with dashed accent -->
         <g class="ring-rotate">
-          <circle cx="300" cy="300" r="255" fill="none" stroke="#31d7ff" stroke-width="1.5"
-                  stroke-dasharray="6 14" opacity="0.75"/>
-          <g fill="#00aaff" opacity="0.85">
-            <rect x="295" y="40"  width="10" height="14" rx="1"/>
-            <rect x="295" y="546" width="10" height="14" rx="1"/>
-            <rect x="40"  y="295" width="14" height="10" rx="1"/>
-            <rect x="546" y="295" width="14" height="10" rx="1"/>
+          <circle cx="300" cy="300" r="258" fill="none" stroke="#00aaff" stroke-width="3" opacity="0.9"
+                  style="filter: drop-shadow(0 0 8px rgba(0,170,255,0.6));"/>
+          <circle cx="300" cy="300" r="252" fill="none" stroke="#31d7ff" stroke-width="1.5"
+                  stroke-dasharray="8 14" opacity="0.85"/>
+          <g fill="#00aaff" opacity="1" style="filter: drop-shadow(0 0 6px #00aaff);">
+            <rect x="293" y="36"  width="14" height="18" rx="1"/>
+            <rect x="293" y="546" width="14" height="18" rx="1"/>
+            <rect x="36"  y="293" width="18" height="14" rx="1"/>
+            <rect x="546" y="293" width="18" height="14" rx="1"/>
           </g>
         </g>
 
-        <!-- RING 3 main gold -->
+        <!-- RING 3 MAIN GOLD (thick prominent) -->
         <g class="ring-rotate-rev">
-          <circle class="ring-glow" cx="300" cy="300" r="235" fill="none" stroke="url(#ringGold)" stroke-width="4"/>
-          <circle cx="300" cy="300" r="227" fill="none" stroke="#a66a00" stroke-width="0.5" opacity="0.7"/>
-          <circle cx="300" cy="300" r="243" fill="none" stroke="#a66a00" stroke-width="0.5" opacity="0.7"/>
-          <g fill="none" stroke="#fff3b8" stroke-width="2" opacity="0.9">
+          <circle class="ring-glow" cx="300" cy="300" r="235" fill="none" stroke="url(#ringGold)" stroke-width="8"/>
+          <circle cx="300" cy="300" r="225" fill="none" stroke="#ffb800" stroke-width="1.5" opacity="0.85"/>
+          <circle cx="300" cy="300" r="245" fill="none" stroke="#ffb800" stroke-width="1.5" opacity="0.85"/>
+          <g fill="none" stroke="#fff3b8" stroke-width="3" opacity="1" style="filter: drop-shadow(0 0 4px #fff3b8);">
             <path d="M 300 65  A 235 235 0 0 1 466 134" />
             <path d="M 466 466 A 235 235 0 0 1 300 535" />
             <path d="M 134 466 A 235 235 0 0 1 65  300" />
@@ -1399,10 +1412,12 @@
           </g>
         </g>
 
-        <!-- RING 4 inner blue -->
+        <!-- RING 4 inner blue (thick) -->
         <g class="ring-rotate-fast">
-          <circle cx="300" cy="300" r="210" fill="none" stroke="url(#ringBlue)" stroke-width="2.5"
-                  style="filter: drop-shadow(0 0 7px rgba(49,215,255,0.55));"/>
+          <circle cx="300" cy="300" r="210" fill="none" stroke="url(#ringBlue)" stroke-width="5"
+                  style="filter: drop-shadow(0 0 10px rgba(49,215,255,0.75));"/>
+          <circle cx="300" cy="300" r="203" fill="none" stroke="#31d7ff" stroke-width="1" opacity="0.6"/>
+          <circle cx="300" cy="300" r="217" fill="none" stroke="#31d7ff" stroke-width="1" opacity="0.6"/>
           <g stroke="#31d7ff" stroke-width="1.3" opacity="0.9">
             <line x1="300" y1="195" x2="300" y2="205"/>
             <line x1="300" y1="395" x2="300" y2="405"/>
@@ -1429,10 +1444,11 @@
           </g>
         </g>
 
-        <!-- RING 5 thin gold innermost -->
+        <!-- RING 5 gold innermost (thicker) -->
         <g class="ring-rotate">
-          <circle cx="300" cy="300" r="188" fill="none" stroke="#ffb800" stroke-width="1.5" opacity="0.8"/>
-          <circle cx="300" cy="300" r="183" fill="none" stroke="#a66a00" stroke-width="0.5" opacity="0.55"/>
+          <circle cx="300" cy="300" r="188" fill="none" stroke="#ffb800" stroke-width="3" opacity="1"
+                  style="filter: drop-shadow(0 0 6px rgba(255,184,0,0.6));"/>
+          <circle cx="300" cy="300" r="181" fill="none" stroke="#a66a00" stroke-width="1" opacity="0.7"/>
           <g stroke="#ffb800" stroke-width="2" fill="none" opacity="0.9">
             <path d="M 300 178 L 300 198 M 290 188 L 310 188"/>
             <path d="M 300 422 L 300 402 M 290 412 L 310 412"/>
