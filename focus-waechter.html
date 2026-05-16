@@ -6,793 +6,267 @@
 <title>FOCUS GUARDIAN — Meistere deinen Fokus</title>
 <style>
   /* =========================================================
-     FOCUS GUARDIAN — AAA Sci-Fi Dashboard
-     Single HTML file. No external libs. Offline.
+     FOCUS GUARDIAN — Image-Background Overlay UI
+     Hintergrund:        assets/bg.png  (Referenzbild, 16:9)
+     Statische Optik:    aus dem Bild
+     Dynamische Texte:   exakt darüber positioniert
      ========================================================= */
 
   :root {
-    --black:        #04070d;
-    --dark-blue:    #07111f;
-    --dark-blue-2:  #0b1a30;
-    --neon-blue:    #00aaff;
-    --cyan:         #31d7ff;
-    --gold:         #ffb800;
-    --dark-gold:    #a66a00;
-    --green:        #6cff00;
-    --green-soft:   #2ee06a;
-    --red:          #ff2f2f;
-    --white:        #eef4ff;
-    --text-dim:     #6b85aa;
+    --green:  #6cff00;
+    --red:    #ff2f2f;
+    --gold:   #ffb800;
+    --cyan:   #31d7ff;
+    --blue:   #00aaff;
+    --white:  #eef4ff;
+    --dim:    #6b85aa;
 
-    --glow-blue:    rgba(0,170,255,0.55);
-    --glow-cyan:    rgba(49,215,255,0.55);
-    --glow-gold:    rgba(255,184,0,0.6);
-    --glow-green:   rgba(108,255,0,0.6);
-    --glow-red:     rgba(255,47,47,0.65);
-
-    --panel-bg:     rgba(7, 17, 31, 0.62);
-    --panel-border: rgba(0, 170, 255, 0.28);
+    --glow-green: rgba(108,255,0,0.85);
+    --glow-red:   rgba(255,47,47,0.85);
+    --glow-gold:  rgba(255,184,0,0.85);
+    --glow-cyan:  rgba(49,215,255,0.85);
+    --glow-blue:  rgba(0,170,255,0.85);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   html, body {
     height: 100%;
-    background: var(--black);
+    background: #02050c;
     color: var(--white);
     font-family: "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
     overflow: hidden;
     user-select: none;
   }
 
-  /* ====================================================
-     LAYERED BACKGROUND: Cosmic Sky → Crystals → Mountains
-     ==================================================== */
-  .bg-stage {
+  /* ===== BACKGROUND IMAGE (Master) ===== */
+  .bg {
+    position: fixed; inset: 0; z-index: 0;
+    background-image: url('assets/bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  /* Fallback wenn bg.png fehlt: dunkler Sci-Fi-Verlauf */
+  .bg-fallback {
     position: fixed; inset: 0; z-index: 0;
     background:
-      radial-gradient(ellipse at 50% 40%, rgba(49,215,255,0.35), transparent 50%),
-      radial-gradient(ellipse at 50% 65%, rgba(0,120,230,0.50), transparent 65%),
-      radial-gradient(ellipse at 20% 25%, rgba(0,170,255,0.28), transparent 60%),
-      radial-gradient(ellipse at 80% 22%, rgba(255,184,0,0.18), transparent 55%),
-      linear-gradient(180deg, #04081a 0%, #07182f 35%, #0a2548 60%, #050d20 100%);
-    overflow: hidden;
+      radial-gradient(ellipse at 50% 40%, rgba(49,215,255,0.25), transparent 50%),
+      radial-gradient(ellipse at 50% 65%, rgba(0,120,230,0.40), transparent 65%),
+      linear-gradient(180deg, #04081a 0%, #07182f 50%, #050d20 100%);
   }
-  #particles { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; }
-  .bg-scene { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
-  .bg-scene svg { width: 100%; height: 100%; display: block; }
+  body.has-bg .bg-fallback { display: none; }
+  body:not(.has-bg) .bg { display: none; }
 
-  /* Scanlines overlay over the whole screen */
-  .scanlines {
-    position: fixed; inset: 0; z-index: 50; pointer-events: none;
-    background: repeating-linear-gradient(
-      0deg,
-      rgba(0,170,255,0.025) 0px,
-      rgba(0,170,255,0.025) 1px,
-      transparent 1px,
-      transparent 3px
-    );
-    mix-blend-mode: screen;
-  }
-  /* Vignette */
-  .vignette {
-    position: fixed; inset: 0; z-index: 49; pointer-events: none;
-    background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.55) 100%);
-  }
-
-  /* ====================================================
-     APP GRID
-     ==================================================== */
-  .app {
-    position: relative;
-    z-index: 10;
-    display: grid;
-    grid-template-columns: 320px 1fr 320px;
-    grid-template-rows: 88px 1fr 72px;
-    gap: 14px;
-    padding: 14px 18px;
-    height: 100vh;
-    min-height: 720px;
-  }
-
-  /* ====================================================
-     HEADER
-     ==================================================== */
-  .header {
-    grid-column: 1 / -1;
-    grid-row: 1;
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    background: linear-gradient(90deg, rgba(7,17,31,0.88), rgba(11,26,48,0.55), rgba(7,17,31,0.88));
-    border: 1px solid var(--panel-border);
-    border-radius: 14px;
-    padding: 10px 22px;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 0 30px rgba(0,170,255,0.15), inset 0 0 20px rgba(255,184,0,0.04);
-    position: relative;
-  }
-  .header::after {
-    content: "";
-    position: absolute; left: 16px; right: 16px; bottom: -1px; height: 1px;
-    background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
-    opacity: 0.6;
-  }
-  .brand { display: flex; align-items: center; gap: 16px; }
-  .brand-logo {
-    width: 60px; height: 60px;
-    display: grid; place-items: center;
-    filter: drop-shadow(0 0 12px var(--glow-gold));
-    animation: logoBreathe 4s ease-in-out infinite;
-  }
-  @keyframes logoBreathe {
-    0%, 100% { filter: drop-shadow(0 0 8px var(--glow-gold)); }
-    50%      { filter: drop-shadow(0 0 18px var(--glow-gold)) drop-shadow(0 0 4px var(--glow-cyan)); }
-  }
-  .brand-logo svg { width: 100%; height: 100%; }
-  .brand-title {
-    font-size: 28px; font-weight: 900; letter-spacing: 4px;
+  /* No-bg hint */
+  .no-bg-hint {
+    position: fixed; top: 12px; left: 50%; transform: translateX(-50%);
+    z-index: 200;
+    background: rgba(255,47,47,0.15);
+    border: 1px solid rgba(255,47,47,0.6);
     color: var(--white);
+    padding: 8px 16px; border-radius: 8px;
+    font-size: 12px; letter-spacing: 1px;
+    backdrop-filter: blur(6px);
   }
-  .brand-title .accent { color: var(--gold); text-shadow: 0 0 14px var(--glow-gold); }
-  .brand-subtitle {
-    font-size: 10px; letter-spacing: 3px; color: var(--text-dim); margin-top: 4px;
-  }
-  .brand-subtitle .accent { color: var(--gold); }
+  body.has-bg .no-bg-hint { display: none; }
 
-  .top-nav { display: flex; gap: 26px; justify-content: center; }
-  .top-nav .nav-item {
-    display: flex; flex-direction: column; align-items: center; gap: 5px;
-    font-size: 11px; letter-spacing: 2px; color: var(--text-dim);
-    cursor: pointer; position: relative; padding: 6px 4px;
-    transition: color 0.2s ease;
-  }
-  .top-nav .nav-item:hover { color: var(--cyan); }
-  .top-nav .nav-item.active { color: var(--gold); }
-  .top-nav .nav-item.active::after {
-    content: ""; position: absolute; bottom: -8px; left: 10%; right: 10%;
-    height: 2px; background: var(--gold);
-    box-shadow: 0 0 10px var(--glow-gold);
-  }
-  .top-nav .nav-ico {
-    width: 34px; height: 34px;
-    display: grid; place-items: center;
-    border: 1px solid rgba(0,170,255,0.25);
-    border-radius: 8px;
-    background: rgba(7,17,31,0.7);
-    transition: all 0.25s ease;
-  }
-  .top-nav .nav-item:hover .nav-ico {
-    border-color: var(--cyan);
-    box-shadow: 0 0 14px var(--glow-cyan);
-    background: rgba(0,170,255,0.08);
-  }
-  .top-nav .nav-item.active .nav-ico {
-    border-color: var(--gold);
-    box-shadow: 0 0 14px var(--glow-gold), inset 0 0 8px rgba(255,184,0,0.18);
-  }
-  .top-nav svg { width: 18px; height: 18px; }
-
-  .level { display: flex; align-items: center; gap: 14px; justify-content: flex-end; }
-  .level-info { text-align: right; }
-  .level-info .level-title { font-size: 11px; letter-spacing: 3px; color: var(--text-dim); }
-  .level-info .level-name {
-    font-size: 16px; letter-spacing: 2px; color: var(--white); font-weight: 700;
-  }
-  .level-bar {
-    width: 170px; height: 6px; background: rgba(0,170,255,0.18);
-    border-radius: 3px; margin-top: 6px; overflow: hidden; position: relative;
-    border: 1px solid rgba(0,170,255,0.3);
-  }
-  .level-bar::after {
-    content: ""; position: absolute; inset: 0;
-    background: repeating-linear-gradient(90deg, transparent 0, transparent 14px, rgba(0,0,0,0.5) 14px, rgba(0,0,0,0.5) 15px);
-  }
-  .level-bar .fill {
-    height: 100%; width: 62%;
-    background: linear-gradient(90deg, var(--neon-blue), var(--gold));
-    box-shadow: 0 0 12px var(--glow-blue);
-  }
-  .level-xp { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
-  .level-badge {
-    width: 54px; height: 54px;
-    display: grid; place-items: center;
-    filter: drop-shadow(0 0 12px var(--glow-blue));
-  }
-  .level-badge svg { width: 100%; height: 100%; }
-
-  /* ====================================================
-     PANELS (Holographic glass)
-     ==================================================== */
-  .panel {
-    background: var(--panel-bg);
-    border: 1px solid var(--panel-border);
-    border-radius: 14px;
-    padding: 14px 16px;
-    backdrop-filter: blur(10px);
-    box-shadow:
-      0 0 30px rgba(0,170,255,0.08),
-      inset 0 1px 0 rgba(255,255,255,0.05),
-      inset 0 0 20px rgba(0,80,160,0.05);
-    position: relative;
-    overflow: hidden;
-  }
-  /* top gradient line */
-  .panel::before {
-    content: ""; position: absolute; top: 0; left: 8%; right: 8%; height: 1px;
-    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
-    opacity: 0.85;
-  }
-  /* gold corner top-right */
-  .panel .corner-tr,
-  .panel .corner-bl {
-    position: absolute; width: 16px; height: 16px; pointer-events: none;
-  }
-  .panel .corner-tr {
-    top: 6px; right: 6px;
-    border-top: 2px solid var(--gold); border-right: 2px solid var(--gold);
-    box-shadow: 0 0 6px var(--glow-gold);
-  }
-  .panel .corner-bl {
-    bottom: 6px; left: 6px;
-    border-bottom: 2px solid var(--neon-blue); border-left: 2px solid var(--neon-blue);
-    box-shadow: 0 0 6px var(--glow-blue);
-  }
-  .panel-head {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 10px;
-  }
-  .panel-title {
-    display: flex; align-items: center; gap: 9px;
-    font-size: 12px; letter-spacing: 3px; color: var(--white);
-    font-weight: 700;
-  }
-  .panel-title .ico {
-    width: 18px; height: 18px; color: var(--cyan);
-    filter: drop-shadow(0 0 5px var(--glow-cyan));
-  }
-  .panel-close { color: var(--text-dim); font-size: 14px; cursor: pointer; line-height: 1; }
-  .panel-close:hover { color: var(--white); }
-
-  /* ====================================================
-     LEFT COLUMN
-     ==================================================== */
-  .col-left {
-    grid-column: 1; grid-row: 2;
-    display: grid; grid-template-rows: 1fr 1fr 1fr; gap: 14px;
-    min-height: 0;
-  }
-
-  .mission-card { position: relative; }
-  .mission-illustration {
-    position: absolute; top: 32px; right: 4px;
-    width: 132px; height: 132px;
-    filter: drop-shadow(0 0 14px var(--glow-blue));
-    pointer-events: none;
-    animation: floatY 6s ease-in-out infinite;
-  }
-  @keyframes floatY {
-    0%, 100% { transform: translateY(0); }
-    50%      { transform: translateY(-6px); }
-  }
-  .mission-name {
-    font-size: 18px; font-weight: 900; color: var(--gold);
-    letter-spacing: 1px; margin-bottom: 6px; max-width: 60%;
-    text-shadow: 0 0 12px var(--glow-gold);
-    word-break: break-word; line-height: 1.15;
-  }
-  .mission-goal {
-    font-size: 13px; color: var(--white); margin-bottom: 16px; max-width: 65%;
-    word-break: break-word; opacity: 0.92;
-  }
-  .mission-reward {
-    font-size: 10px; letter-spacing: 2px; color: var(--text-dim); margin-bottom: 10px;
-  }
-  .mission-reward strong { color: var(--gold); font-weight: 700; }
-
-  .stat-card .stat-grid {
-    display: grid; grid-template-columns: 80px 1fr 80px; gap: 8px; align-items: center;
-  }
-  .stat-brain {
-    width: 80px; height: 80px;
-    filter: drop-shadow(0 0 10px var(--glow-gold));
-    animation: brainPulse 3s ease-in-out infinite;
-  }
-  @keyframes brainPulse {
-    0%, 100% { filter: drop-shadow(0 0 6px var(--glow-gold)); }
-    50%      { filter: drop-shadow(0 0 14px var(--glow-gold)) drop-shadow(0 0 4px var(--glow-cyan)); }
-  }
-  .stat-circle { width: 100px; height: 100px; position: relative; margin: 0 auto; }
-  .stat-circle svg { width: 100%; height: 100%; transform: rotate(-90deg); }
-  .stat-circle .pct {
-    position: absolute; inset: 0; display: grid; place-items: center;
-    font-size: 22px; font-weight: 900; color: var(--gold);
-    text-shadow: 0 0 10px var(--glow-gold);
-  }
-  .stat-circle .pct small {
-    display: block; font-size: 8px; letter-spacing: 2px; color: var(--text-dim);
-    font-weight: 400; margin-top: 2px;
-  }
-  .stat-list { display: flex; flex-direction: column; gap: 7px; font-size: 11px; }
-  .stat-list .row { display: flex; flex-direction: column; }
-  .stat-list .label { letter-spacing: 1.5px; color: var(--text-dim); font-size: 9px; }
-  .stat-list .value { color: var(--white); font-weight: 700; font-size: 13px; }
-
-  .motivation-card { position: relative; overflow: hidden; }
-  .motivation-bg {
-    position: absolute; right: -10px; bottom: -10px;
-    width: 110px; height: 110px;
-    opacity: 0.35; filter: blur(0.3px);
-    pointer-events: none;
-  }
-  .motivation-card .quote {
-    font-style: italic; color: var(--white); font-size: 13px; line-height: 1.5;
-    position: relative; z-index: 1;
-  }
-  .motivation-card .author {
-    color: var(--text-dim); font-size: 11px; margin-top: 6px; position: relative; z-index: 1;
-  }
-
-  /* ====================================================
-     CENTER: FOCUS CORE
-     ==================================================== */
-  .col-center {
-    grid-column: 2; grid-row: 2;
-    display: grid; place-items: center;
-    position: relative;
-    min-height: 0;
-  }
-  .core-stage {
-    position: relative;
-    width: min(660px, 100%);
+  /* ===== TIMER + CORE OVERLAY (zentral) ===== */
+  /* Dieses Overlay sitzt exakt dort wo im Referenzbild der innere
+     Core-Kreis ist. Es maskiert die statischen Bild-Texte und zeigt
+     die echten dynamischen Werte. */
+  .core-overlay {
+    position: fixed; left: 50%; top: 44%; transform: translate(-50%, -50%);
+    z-index: 10;
+    width: min(28vw, 380px);
     aspect-ratio: 1 / 1;
-    max-height: 100%;
-    display: grid; place-items: center;
-  }
-  /* Energy platform glow under core */
-  .core-platform {
-    position: absolute;
-    bottom: -2%; left: 50%; transform: translateX(-50%);
-    width: 90%; height: 18%;
-    background:
-      radial-gradient(ellipse at center, rgba(49,215,255,0.45), rgba(0,80,160,0.15) 50%, transparent 80%);
-    filter: blur(8px);
-    z-index: 0;
-    pointer-events: none;
-    animation: platformPulse 3s ease-in-out infinite;
-  }
-  @keyframes platformPulse {
-    0%, 100% { opacity: 0.65; }
-    50%      { opacity: 1; }
-  }
-  /* Vertical light shafts going up from platform */
-  .core-shaft {
-    position: absolute; left: 50%; bottom: 8%;
-    width: 4px; height: 65%;
-    transform: translateX(-50%);
-    background: linear-gradient(180deg, transparent, rgba(49,215,255,0.5) 60%, rgba(49,215,255,0.9));
-    filter: blur(3px);
-    z-index: 0;
-    opacity: 0.55;
-    pointer-events: none;
-  }
-
-  .core-rings-svg {
-    position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1;
-  }
-  .core-rings-svg .ring-rotate      { transform-origin: 50% 50%; animation: spin 18s linear infinite; }
-  .core-rings-svg .ring-rotate-rev  { transform-origin: 50% 50%; animation: spinRev 12s linear infinite; }
-  .core-rings-svg .ring-rotate-fast { transform-origin: 50% 50%; animation: spin 7s linear infinite; }
-  .core-rings-svg .ring-rotate-slow { transform-origin: 50% 50%; animation: spinRev 25s linear infinite; }
-  @keyframes spin    { to { transform: rotate(360deg); } }
-  @keyframes spinRev { to { transform: rotate(-360deg); } }
-
-  .core-rings-svg .pulse-node       { transform-origin: center; animation: nodePulse 1.6s ease-in-out infinite; }
-  .core-rings-svg .pulse-node.d1 { animation-delay: 0.2s; }
-  .core-rings-svg .pulse-node.d2 { animation-delay: 0.4s; }
-  .core-rings-svg .pulse-node.d3 { animation-delay: 0.6s; }
-  .core-rings-svg .pulse-node.d4 { animation-delay: 0.8s; }
-  .core-rings-svg .pulse-node.d5 { animation-delay: 1.0s; }
-  .core-rings-svg .pulse-node.d6 { animation-delay: 1.2s; }
-  .core-rings-svg .pulse-node.d7 { animation-delay: 1.4s; }
-  @keyframes nodePulse {
-    0%, 100% { opacity: 0.35; r: 4; }
-    50%      { opacity: 1;    r: 8; }
-  }
-  .core-rings-svg .ring-glow { animation: ringGlow 3s ease-in-out infinite; }
-  @keyframes ringGlow {
-    0%, 100% { stroke-opacity: 0.5; filter: drop-shadow(0 0 4px rgba(255,184,0,0.4)); }
-    50%      { stroke-opacity: 1;   filter: drop-shadow(0 0 14px rgba(255,184,0,0.9)); }
-  }
-
-  /* Orbital light pulses */
-  .orbit { transform-origin: 50% 50%; }
-  .orbit-outer-1 { animation: spin 8s linear infinite; }
-  .orbit-outer-2 { animation: spin 8s linear infinite; animation-delay: -2.66s; }
-  .orbit-outer-3 { animation: spin 8s linear infinite; animation-delay: -5.33s; }
-  .orbit-mid-1   { animation: spinRev 6s linear infinite; }
-  .orbit-mid-2   { animation: spinRev 6s linear infinite; animation-delay: -3s; }
-  .orbit-inner-1 { animation: spin 4s linear infinite; }
-  .orbit-inner-2 { animation: spin 4s linear infinite; animation-delay: -2s; }
-
-  /* Energy auras (conic gradients) */
-  .core-energy, .core-energy-2 {
-    position: absolute; border-radius: 50%; pointer-events: none; z-index: 0;
-  }
-  .core-energy {
-    inset: 12%;
-    background: conic-gradient(from 0deg,
-      rgba(0,170,255,0) 0deg,
-      rgba(0,170,255,0.85) 70deg,
-      rgba(255,184,0,0.7) 180deg,
-      rgba(0,170,255,0.85) 280deg,
-      rgba(0,170,255,0) 360deg);
-    filter: blur(14px); opacity: 0.65;
-    animation: spin 6s linear infinite;
-  }
-  .core-energy-2 {
-    inset: 22%;
-    background: conic-gradient(from 180deg,
-      rgba(255,184,0,0) 0deg,
-      rgba(255,184,0,0.7) 90deg,
-      rgba(0,170,255,0.65) 180deg,
-      rgba(255,184,0,0.7) 270deg,
-      rgba(255,184,0,0) 360deg);
-    filter: blur(10px); opacity: 0.5;
-    animation: spinRev 9s linear infinite;
-  }
-
-  /* Crystal pyramid */
-  .core-crystal {
-    position: absolute;
-    bottom: -1%; left: 50%; transform: translateX(-50%);
-    width: 96px; height: 118px; z-index: 1; pointer-events: none;
-    animation: crystalBreathe 3s ease-in-out infinite;
-  }
-  @keyframes crystalBreathe {
-    0%, 100% { filter: drop-shadow(0 0 16px var(--glow-cyan));               transform: translateX(-50%) scale(1); }
-    50%      { filter: drop-shadow(0 0 30px var(--glow-cyan)) drop-shadow(0 0 8px var(--glow-blue)); transform: translateX(-50%) scale(1.06); }
-  }
-
-  .core-inner {
-    position: relative; z-index: 3;
-    width: 54%; aspect-ratio: 1 / 1;
     border-radius: 50%;
-    background:
-      radial-gradient(circle at 50% 30%, rgba(40,90,160,0.55), rgba(8,20,45,0.92) 65%, rgba(3,8,18,0.98) 100%);
     display: grid; place-items: center;
-    text-align: center; padding: 22px;
-    border: 2px solid rgba(0,170,255,0.55);
-    box-shadow:
-      inset 0 0 80px rgba(0,80,160,0.35),
-      inset 0 0 30px rgba(49,215,255,0.25),
-      0 0 50px rgba(0,170,255,0.5),
-      0 0 100px rgba(0,170,255,0.2);
+    text-align: center;
+    padding: 24px;
+    /* Soft dark mask, damit Bild-Texte hinter dem Overlay verschwinden */
+    background: radial-gradient(circle at 50% 45%,
+      rgba(4,10,20,0.92) 0%,
+      rgba(4,10,20,0.85) 55%,
+      rgba(4,10,20,0.0) 100%);
   }
-  .core-helmet-wm {
-    position: absolute; top: 18px; left: 50%; transform: translateX(-50%);
-    width: 36px; height: 36px;
-    opacity: 0.55;
-    filter: drop-shadow(0 0 6px var(--glow-gold));
-  }
-  .core-mode {
-    font-size: 11px; letter-spacing: 4px; color: var(--text-dim);
-    margin-top: 26px; margin-bottom: 4px;
-  }
+
   .core-status {
-    font-size: 19px; letter-spacing: 3px; font-weight: 900;
-    color: var(--green); text-shadow: 0 0 14px var(--glow-green);
+    font-size: clamp(14px, 1.6vw, 22px); font-weight: 900;
+    letter-spacing: 3px; color: var(--green);
+    text-shadow: 0 0 16px var(--glow-green);
     margin-bottom: 4px;
   }
-  .core-status.idle { color: var(--cyan); text-shadow: 0 0 14px var(--glow-cyan); }
+  .core-status.idle { color: var(--cyan); text-shadow: 0 0 16px var(--glow-cyan); }
   .core-substatus {
-    font-size: 11px; letter-spacing: 3px; color: var(--text-dim); margin-bottom: 12px;
+    font-size: clamp(9px, 0.85vw, 12px); letter-spacing: 3px; color: var(--dim);
+    margin-bottom: 14px;
   }
   .core-time {
-    font-size: 82px; font-weight: 900; letter-spacing: 2px;
-    color: var(--green); text-shadow: 0 0 26px var(--glow-green);
+    font-size: clamp(48px, 7vw, 92px); font-weight: 900;
+    letter-spacing: 2px;
+    color: var(--green); text-shadow: 0 0 30px var(--glow-green);
     font-variant-numeric: tabular-nums;
     line-height: 1;
-    font-family: "Segoe UI", "Roboto Mono", monospace;
   }
-  .core-time.warn  { color: var(--red);  text-shadow: 0 0 28px var(--glow-red);  animation: criticalPulse 1s ease-in-out infinite; }
-  .core-time.idle  { color: var(--cyan); text-shadow: 0 0 20px var(--glow-cyan); }
+  .core-time.warn {
+    color: var(--red); text-shadow: 0 0 32px var(--glow-red);
+    animation: criticalPulse 1s ease-in-out infinite;
+  }
   @keyframes criticalPulse {
-    0%, 100% { text-shadow: 0 0 18px var(--glow-red); }
-    50%      { text-shadow: 0 0 36px var(--glow-red), 0 0 60px var(--glow-red); }
+    0%, 100% { text-shadow: 0 0 22px var(--glow-red); }
+    50%      { text-shadow: 0 0 44px var(--glow-red), 0 0 80px var(--glow-red); }
   }
   .core-time-label {
-    font-size: 10px; letter-spacing: 4px; color: var(--text-dim); margin-top: 10px;
+    font-size: clamp(9px, 0.85vw, 11px); letter-spacing: 4px; color: var(--dim); margin-top: 10px;
   }
   .core-pill {
     margin-top: 14px;
     display: inline-flex; align-items: center; gap: 8px;
     padding: 9px 22px; border-radius: 999px;
     background: rgba(108,255,0,0.12);
-    border: 1px solid rgba(108,255,0,0.5);
-    color: var(--green); font-size: 11px; letter-spacing: 2px; font-weight: 700;
-    box-shadow: 0 0 14px rgba(108,255,0,0.3), inset 0 0 10px rgba(108,255,0,0.1);
+    border: 1px solid rgba(108,255,0,0.55);
+    color: var(--green);
+    font-size: clamp(9px, 0.85vw, 11px); letter-spacing: 2px; font-weight: 700;
+    box-shadow: 0 0 18px rgba(108,255,0,0.35), inset 0 0 10px rgba(108,255,0,0.1);
   }
   .core-pill.warn {
     background: rgba(255,47,47,0.12);
-    border-color: rgba(255,47,47,0.55);
-    color: var(--red); box-shadow: 0 0 16px var(--glow-red);
+    border-color: rgba(255,47,47,0.6);
+    color: var(--red);
+    box-shadow: 0 0 18px var(--glow-red);
     animation: criticalPulse 1s ease-in-out infinite;
   }
   .core-foot {
-    margin-top: 12px; font-size: 11px; color: var(--text-dim);
+    margin-top: 10px; font-size: clamp(9px, 0.8vw, 11px); color: var(--dim);
     display: flex; align-items: center; gap: 6px; justify-content: center;
   }
+  .core-cancel { margin-top: 12px; }
 
-  /* Start form */
-  .start-form { width: 84%; display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
-  .start-form .row { display: flex; flex-direction: column; gap: 4px; }
-  .start-form label { font-size: 10px; letter-spacing: 3px; color: var(--text-dim); }
+  /* ===== START FORM (idle, statt Timer) ===== */
+  .start-form {
+    width: 88%;
+    display: flex; flex-direction: column; gap: 9px;
+  }
+  .start-form .row { display: flex; flex-direction: column; gap: 3px; }
+  .start-form label {
+    font-size: 9px; letter-spacing: 3px; color: var(--dim);
+  }
   .start-form input[type="text"] {
-    width: 100%; padding: 10px 12px;
-    background: rgba(3,8,20,0.8);
-    border: 1px solid rgba(0,170,255,0.35);
+    width: 100%; padding: 8px 11px;
+    background: rgba(3,8,20,0.85);
+    border: 1px solid rgba(0,170,255,0.4);
     color: var(--white);
-    border-radius: 8px; font-size: 13px; outline: none;
+    border-radius: 8px;
+    font-size: 12px; outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
   }
   .start-form input[type="text"]:focus {
-    border-color: var(--gold); box-shadow: 0 0 12px var(--glow-gold);
+    border-color: var(--gold); box-shadow: 0 0 10px var(--glow-gold);
   }
   .start-form .time-row {
-    display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center;
+    display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center;
   }
   .start-form input[type="range"] { width: 100%; accent-color: var(--gold); }
   .time-display {
-    color: var(--gold); font-size: 18px; font-weight: 900;
-    letter-spacing: 1px; min-width: 80px; text-align: right;
+    color: var(--gold); font-size: 16px; font-weight: 900;
+    letter-spacing: 1px; min-width: 70px; text-align: right;
     text-shadow: 0 0 8px var(--glow-gold);
     font-variant-numeric: tabular-nums;
   }
 
+  /* ===== BUTTONS ===== */
   .btn {
     display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-    padding: 11px 22px;
-    background: linear-gradient(180deg, rgba(255,184,0,0.25), rgba(255,184,0,0.08));
+    padding: 10px 18px;
+    background: linear-gradient(180deg, rgba(255,184,0,0.28), rgba(255,184,0,0.08));
     color: var(--gold);
-    border: 1px solid rgba(255,184,0,0.55);
+    border: 1px solid rgba(255,184,0,0.6);
     border-radius: 8px;
-    font-size: 13px; letter-spacing: 3px; font-weight: 700;
+    font-size: 12px; letter-spacing: 3px; font-weight: 800;
     cursor: pointer; transition: all 0.2s ease;
     text-shadow: 0 0 8px var(--glow-gold);
-    box-shadow: 0 0 18px rgba(255,184,0,0.2), inset 0 0 12px rgba(255,184,0,0.08);
+    box-shadow: 0 0 18px rgba(255,184,0,0.25), inset 0 0 12px rgba(255,184,0,0.1);
   }
   .btn:hover {
-    background: linear-gradient(180deg, rgba(255,184,0,0.4), rgba(255,184,0,0.15));
+    background: linear-gradient(180deg, rgba(255,184,0,0.45), rgba(255,184,0,0.15));
     box-shadow: 0 0 30px var(--glow-gold);
     transform: translateY(-1px);
   }
-  .btn.green {
-    background: linear-gradient(180deg, rgba(108,255,0,0.22), rgba(108,255,0,0.08));
-    color: var(--green); border-color: rgba(108,255,0,0.55);
-    text-shadow: 0 0 8px var(--glow-green); box-shadow: 0 0 18px rgba(108,255,0,0.2);
-  }
-  .btn.blue {
-    background: linear-gradient(180deg, rgba(0,170,255,0.22), rgba(0,170,255,0.06));
-    color: var(--cyan); border-color: rgba(0,170,255,0.55);
-    text-shadow: 0 0 8px var(--glow-blue); box-shadow: 0 0 16px rgba(0,170,255,0.2);
-  }
   .btn.red {
-    background: linear-gradient(180deg, rgba(255,47,47,0.18), rgba(255,47,47,0.05));
-    color: var(--red); border-color: rgba(255,47,47,0.55);
+    background: linear-gradient(180deg, rgba(255,47,47,0.22), rgba(255,47,47,0.06));
+    color: var(--red); border-color: rgba(255,47,47,0.6);
     text-shadow: 0 0 8px var(--glow-red); box-shadow: 0 0 16px var(--glow-red);
   }
   .btn.small { padding: 7px 14px; font-size: 11px; letter-spacing: 2px; }
-  .btn.ghost {
-    background: rgba(7,17,31,0.6);
-    border: 1px solid rgba(0,170,255,0.35);
-    color: var(--white); text-shadow: none; box-shadow: none;
-  }
-  .btn.ghost:hover { border-color: var(--cyan); color: var(--cyan); box-shadow: 0 0 12px var(--glow-cyan); }
 
-  /* ====================================================
-     RIGHT COLUMN
-     ==================================================== */
-  .col-right {
-    grid-column: 3; grid-row: 2;
-    display: grid; grid-template-rows: 1fr 1fr 1fr; gap: 14px;
-    min-height: 0;
-  }
-  .systems-card { position: relative; }
-  .systems-shield {
-    position: absolute; top: 28px; right: 8px;
-    width: 54px; height: 62px;
-    filter: drop-shadow(0 0 14px var(--glow-blue));
+  /* ===== MISSION OVERLAY (left panel) ===== */
+  .mission-overlay {
+    position: fixed; left: 3.2%; top: 17.5%;
+    z-index: 9; width: 16%;
     pointer-events: none;
-    animation: shieldPulse 4s ease-in-out infinite;
   }
-  @keyframes shieldPulse {
-    0%, 100% { filter: drop-shadow(0 0 10px var(--glow-blue)); }
-    50%      { filter: drop-shadow(0 0 22px var(--glow-blue)) drop-shadow(0 0 4px var(--glow-cyan)); }
+  .mission-name {
+    font-size: clamp(14px, 1.4vw, 21px); font-weight: 900;
+    letter-spacing: 1px; color: var(--gold);
+    text-shadow: 0 0 12px var(--glow-gold);
+    margin-bottom: 6px; line-height: 1.1; word-break: break-word;
   }
-  .systems-list { display: flex; flex-direction: column; gap: 9px; padding-right: 58px; }
-  .system-row {
-    display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center;
-    font-size: 12px;
-  }
-  .system-row .ico {
-    width: 26px; height: 26px;
-    display: grid; place-items: center;
-    background: rgba(0,170,255,0.08);
-    border: 1px solid rgba(0,170,255,0.3);
-    border-radius: 6px;
-    color: var(--cyan);
-  }
-  .system-row .ico svg { width: 14px; height: 14px; }
-  .system-row .name { color: var(--white); letter-spacing: 0.5px; }
-  .system-row .state {
-    font-size: 11px; letter-spacing: 2px; color: var(--green-soft); font-weight: 700;
-    text-shadow: 0 0 8px var(--glow-green);
-  }
-  .system-row .state.mute { color: var(--gold); text-shadow: 0 0 8px var(--glow-gold); }
-
-  .plan-row {
-    display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center;
-  }
-  .plan-list { display: flex; flex-direction: column; gap: 8px; font-size: 12px; }
-  .plan-list .item { display: grid; grid-template-columns: auto 1fr; gap: 8px; }
-  .plan-list .item .ico {
-    width: 20px; height: 20px; display: grid; place-items: center; color: var(--cyan);
-  }
-  .plan-list .item .ico svg { width: 14px; height: 14px; }
-  .plan-list .item .text { color: var(--white); font-size: 12px; }
-  .plan-list .item .text small {
-    display: block; color: var(--text-dim); font-size: 10px; letter-spacing: 1px;
-  }
-  .plan-circle { width: 90px; height: 90px; position: relative; }
-  .plan-circle svg { width: 100%; height: 100%; transform: rotate(-90deg); }
-  .plan-circle .center {
-    position: absolute; inset: 0; display: grid; place-items: center;
-    font-size: 18px; color: var(--green); font-weight: 900;
-    text-shadow: 0 0 8px var(--glow-green);
-  }
-  .plan-circle .center small {
-    display: block; font-size: 8px; letter-spacing: 2px; color: var(--text-dim);
-    margin-top: 2px;
+  .mission-goal {
+    font-size: clamp(11px, 0.95vw, 14px);
+    color: var(--white); line-height: 1.3;
+    text-shadow: 0 0 8px rgba(0,0,0,0.8);
   }
 
-  .sound-card .sound-mode {
-    font-size: 14px; letter-spacing: 2px; color: var(--white); font-weight: 700;
+  /* ===== SESSION PLAN VALUES OVERLAY (right) ===== */
+  .plan-overlay {
+    position: fixed; right: 11%; top: 38%;
+    z-index: 9; width: 14%;
+    pointer-events: none;
+    display: flex; flex-direction: column; gap: 14px;
+    font-size: clamp(10px, 0.85vw, 13px);
   }
-  .sound-card .sound-sub {
-    font-size: 10px; letter-spacing: 3px; color: var(--gold); font-weight: 700;
-    text-shadow: 0 0 6px var(--glow-gold); margin-top: 2px;
-  }
-  .waves { width: 100%; height: 52px; margin: 8px 0; display: block; }
-  .sound-controls {
-    display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 4px;
-  }
-  .sound-ctrl-btn {
-    width: 38px; height: 38px; border-radius: 50%;
-    background: rgba(0,170,255,0.10);
-    border: 1px solid rgba(0,170,255,0.4);
-    color: var(--white);
-    display: grid; place-items: center;
-    cursor: pointer; transition: all 0.2s;
-  }
-  .sound-ctrl-btn.big { width: 50px; height: 50px; }
-  .sound-ctrl-btn:hover {
-    background: rgba(0,170,255,0.25); box-shadow: 0 0 14px var(--glow-blue);
-    color: var(--cyan);
-  }
-  .sound-switch-row {
-    display: flex; justify-content: center; align-items: center; gap: 8px;
-    margin-top: 10px; font-size: 10px; letter-spacing: 2px; color: var(--gold);
-    cursor: pointer;
-  }
-  .sound-switch-row:hover { text-shadow: 0 0 8px var(--glow-gold); }
-  .sound-switch-row svg { width: 12px; height: 12px; }
-
-  /* ====================================================
-     FOOTER
-     ==================================================== */
-  .footer {
-    grid-column: 1 / -1;
-    grid-row: 3;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    align-items: center;
-    background: linear-gradient(90deg, rgba(7,17,31,0.88), rgba(11,26,48,0.55), rgba(7,17,31,0.88));
-    border: 1px solid var(--panel-border);
-    border-radius: 14px;
-    padding: 10px 22px;
-    backdrop-filter: blur(8px);
-    position: relative;
-  }
-  .footer::before {
-    content: ""; position: absolute; top: -1px; left: 16px; right: 16px; height: 1px;
-    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
-    opacity: 0.6;
-  }
-  .streak { display: flex; align-items: center; gap: 14px; }
-  .streak-icon {
-    width: 40px; height: 40px;
-    display: grid; place-items: center;
-    color: var(--gold);
-    filter: drop-shadow(0 0 10px var(--glow-gold));
-    animation: flamePulse 1.6s ease-in-out infinite;
-  }
-  @keyframes flamePulse {
-    0%, 100% { transform: scale(1); filter: drop-shadow(0 0 8px var(--glow-gold)); }
-    50%      { transform: scale(1.08); filter: drop-shadow(0 0 16px var(--glow-gold)) drop-shadow(0 0 4px var(--red)); }
-  }
-  .streak-info .streak-text { font-size: 17px; font-weight: 900; color: var(--white); }
-  .streak-info .streak-text .num { color: var(--gold); font-size: 19px; }
-  .streak-info .streak-sub { font-size: 11px; color: var(--text-dim); margin-top: 1px; }
-  .streak-bar {
-    width: 120px; height: 4px; background: rgba(255,184,0,0.18);
-    border-radius: 2px; margin-top: 4px; overflow: hidden;
-  }
-  .streak-bar .fill {
-    height: 100%; width: 70%;
-    background: linear-gradient(90deg, var(--dark-gold), var(--gold));
-    box-shadow: 0 0 8px var(--glow-gold);
+  .plan-overlay .item .small {
+    color: var(--dim); font-size: clamp(8px, 0.7vw, 10px); letter-spacing: 1px;
+    display: block; margin-top: 1px;
   }
 
-  .bottom-nav { display: flex; justify-content: center; gap: 36px; }
-  .bottom-nav .nav-item {
-    display: flex; flex-direction: column; align-items: center; gap: 4px;
-    font-size: 10px; letter-spacing: 2px; color: var(--text-dim);
-    cursor: pointer; padding: 4px; position: relative;
-    transition: color 0.2s;
+  /* ===== CLOCK OVERLAY (bottom right) ===== */
+  .clock-overlay {
+    position: fixed; right: 1.5%; bottom: 2.5%;
+    z-index: 9; text-align: right;
+    pointer-events: none;
   }
-  .bottom-nav .nav-item:hover { color: var(--cyan); }
-  .bottom-nav .nav-item.active { color: var(--gold); }
-  .bottom-nav .nav-item.active::before {
-    content: ""; position: absolute; top: -10px; left: 30%; right: 30%; height: 2px;
-    background: var(--gold); box-shadow: 0 0 8px var(--glow-gold);
-  }
-  .bottom-nav svg { width: 20px; height: 20px; }
-
-  .footer-right { display: flex; align-items: center; justify-content: flex-end; gap: 14px; }
-  .footer-quote {
-    font-size: 10px; letter-spacing: 2px; color: var(--text-dim);
-    text-align: right; max-width: 240px; line-height: 1.55;
-  }
-  .footer-dragon {
-    width: 56px; height: 48px;
-    color: var(--cyan);
-    filter: drop-shadow(0 0 10px var(--glow-cyan));
-    animation: dragonFloat 5s ease-in-out infinite;
-  }
-  @keyframes dragonFloat {
-    0%, 100% { transform: translateY(0); }
-    50%      { transform: translateY(-3px); }
-  }
-  .footer-time { text-align: right; min-width: 80px; }
-  .footer-time .time {
-    font-size: 22px; color: var(--cyan); font-weight: 900;
-    text-shadow: 0 0 10px var(--glow-cyan);
+  .clock-overlay .time {
+    font-size: clamp(16px, 1.4vw, 22px); font-weight: 900;
+    color: var(--cyan); text-shadow: 0 0 10px var(--glow-cyan);
     font-variant-numeric: tabular-nums;
   }
-  .footer-time .date { font-size: 11px; color: var(--text-dim); }
+  .clock-overlay .date {
+    font-size: clamp(9px, 0.8vw, 12px); color: var(--dim);
+  }
 
-  /* ====================================================
-     TOASTS, REALITY OVERLAY, END OVERLAY
-     ==================================================== */
+  /* ===== TOASTS ===== */
   .toast-stack {
-    position: fixed; top: 110px; right: 20px; z-index: 100;
+    position: fixed; top: 88px; right: 20px; z-index: 100;
     display: flex; flex-direction: column; gap: 10px;
-    max-width: 360px;
+    max-width: 380px;
   }
   .toast {
-    background: rgba(7,17,31,0.95);
-    border: 1px solid rgba(0,170,255,0.5);
-    border-left: 4px solid var(--neon-blue);
-    border-radius: 8px; padding: 12px 16px;
+    background: rgba(4,10,20,0.93);
+    border: 1px solid rgba(0,170,255,0.55);
+    border-left: 4px solid var(--blue);
+    border-radius: 10px;
+    padding: 12px 16px;
     color: var(--white);
-    box-shadow: 0 0 22px rgba(0,170,255,0.3);
+    box-shadow: 0 0 24px rgba(0,170,255,0.35);
+    backdrop-filter: blur(10px);
     animation: toastIn 0.3s ease-out;
-    backdrop-filter: blur(8px);
   }
-  .toast.gold  { border-color: rgba(255,184,0,0.6); border-left-color: var(--gold);  box-shadow: 0 0 22px var(--glow-gold); }
-  .toast.red   { border-color: rgba(255,47,47,0.6); border-left-color: var(--red);   box-shadow: 0 0 22px var(--glow-red); }
-  .toast.green { border-color: rgba(108,255,0,0.6); border-left-color: var(--green); box-shadow: 0 0 22px var(--glow-green); }
+  .toast.gold  { border-color: rgba(255,184,0,0.6); border-left-color: var(--gold);  box-shadow: 0 0 24px var(--glow-gold); }
+  .toast.red   { border-color: rgba(255,47,47,0.6); border-left-color: var(--red);   box-shadow: 0 0 24px var(--glow-red); }
+  .toast.green { border-color: rgba(108,255,0,0.6); border-left-color: var(--green); box-shadow: 0 0 24px var(--glow-green); }
   .toast .title {
     font-size: 12px; letter-spacing: 2px; font-weight: 800; margin-bottom: 4px;
     color: var(--white);
@@ -803,66 +277,73 @@
     to   { transform: translateX(0);    opacity: 1; }
   }
 
+  /* ===== REALITY OVERLAY ===== */
   .reality {
     position: fixed; inset: 0; z-index: 200;
-    background: rgba(2,5,12,0.92); backdrop-filter: blur(8px);
+    background: rgba(2,5,12,0.93); backdrop-filter: blur(10px);
     display: none; place-items: center; padding: 30px;
   }
   .reality.show { display: grid; }
   .reality-card {
-    max-width: 600px; width: 100%;
-    background: var(--panel-bg);
+    max-width: 640px; width: 100%;
+    background: rgba(4,10,20,0.92);
     border: 1px solid rgba(255,184,0,0.55);
     border-radius: 16px;
-    padding: 36px; text-align: center;
-    box-shadow: 0 0 40px var(--glow-gold);
+    padding: 40px; text-align: center;
+    box-shadow: 0 0 50px var(--glow-gold);
     animation: popIn 0.4s ease-out;
   }
   .reality-label {
-    font-size: 11px; letter-spacing: 4px; color: var(--gold); margin-bottom: 14px;
-    text-shadow: 0 0 8px var(--glow-gold);
+    font-size: 12px; letter-spacing: 5px; color: var(--gold); margin-bottom: 16px;
+    text-shadow: 0 0 10px var(--glow-gold);
   }
   .reality-text {
-    font-size: 26px; font-weight: 700; color: var(--white); line-height: 1.4;
-    margin-bottom: 24px;
+    font-size: 28px; font-weight: 800; color: var(--white); line-height: 1.4;
+    margin-bottom: 28px;
   }
-  @keyframes popIn { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  @keyframes popIn {
+    from { transform: scale(0.92); opacity: 0; }
+    to   { transform: scale(1);    opacity: 1; }
+  }
 
+  /* ===== END OVERLAY ===== */
   .end-overlay {
     position: fixed; inset: 0; z-index: 300;
-    background: radial-gradient(ellipse at center, rgba(15,30,60,0.95), rgba(2,5,12,0.98));
+    background: radial-gradient(ellipse at center, rgba(20,30,60,0.96), rgba(2,5,12,0.99));
     display: none; place-items: center; padding: 30px;
   }
-  .end-overlay.show { display: grid; animation: fadeIn 0.4s ease-out; }
+  .end-overlay.show { display: grid; animation: fadeIn 0.5s ease-out; }
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-  .end-card { text-align: center; max-width: 700px; }
-  .end-card .end-icon { width: 110px; height: 110px; margin: 0 auto 20px; filter: drop-shadow(0 0 22px var(--glow-gold)); }
+  .end-card { text-align: center; max-width: 720px; }
+  .end-card .end-icon { width: 120px; height: 120px; margin: 0 auto 22px; filter: drop-shadow(0 0 24px var(--glow-gold)); }
   .end-card .end-title {
-    font-size: 50px; font-weight: 900; letter-spacing: 8px;
-    color: var(--gold); text-shadow: 0 0 24px var(--glow-gold);
-    margin-bottom: 16px;
+    font-size: 54px; font-weight: 900; letter-spacing: 9px;
+    color: var(--gold); text-shadow: 0 0 28px var(--glow-gold);
+    margin-bottom: 18px;
   }
   .end-card .end-sub {
-    font-size: 18px; letter-spacing: 3px; color: var(--white); margin-bottom: 30px;
+    font-size: 20px; letter-spacing: 4px; color: var(--white); margin-bottom: 32px;
     line-height: 1.6;
   }
   .end-card .end-stats {
-    display: flex; justify-content: center; gap: 30px; margin-bottom: 30px;
-    color: var(--text-dim); font-size: 13px; letter-spacing: 2px;
+    display: flex; justify-content: center; gap: 36px; margin-bottom: 32px;
+    color: var(--dim); font-size: 13px; letter-spacing: 2px;
   }
-  .end-card .end-stats strong { color: var(--cyan); display: block; font-size: 22px; margin-top: 4px; }
+  .end-card .end-stats strong {
+    color: var(--cyan); display: block; font-size: 22px; margin-top: 4px;
+  }
 
-  /* Sound banner */
+  /* ===== SOUND BANNER ===== */
   .sound-banner {
-    position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+    position: fixed; bottom: 86px; left: 50%; transform: translateX(-50%);
     z-index: 150;
-    background: rgba(7,17,31,0.95);
-    border: 1px solid rgba(255,184,0,0.55);
+    background: rgba(4,10,20,0.95);
+    border: 1px solid rgba(255,184,0,0.6);
     border-radius: 999px;
     padding: 6px 14px 6px 6px;
     display: flex; align-items: center; gap: 12px;
-    box-shadow: 0 0 22px var(--glow-gold);
-    backdrop-filter: blur(8px);
+    box-shadow: 0 0 24px var(--glow-gold);
+    backdrop-filter: blur(10px);
     animation: bannerPulse 2s ease-in-out infinite;
   }
   @keyframes bannerPulse {
@@ -877,897 +358,144 @@
   }
   .sound-banner .text { font-size: 12px; color: var(--white); }
   .sound-banner button {
-    background: var(--gold); color: #02050c;
-    border: none; padding: 5px 12px; border-radius: 999px;
+    background: var(--gold); color: #04070d;
+    border: none; padding: 6px 14px; border-radius: 999px;
     font-size: 11px; font-weight: 900; letter-spacing: 2px; cursor: pointer;
   }
   .sound-banner button:hover { box-shadow: 0 0 12px var(--glow-gold); }
 
+  /* Sound toggle (after activated) sits top-right corner */
+  .sound-toggle-btn {
+    position: fixed; top: 100px; right: 380px;
+    z-index: 90;
+    width: 38px; height: 38px; border-radius: 50%;
+    background: rgba(4,10,20,0.85);
+    border: 1px solid rgba(0,170,255,0.5);
+    color: var(--white);
+    display: none; place-items: center;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .sound-toggle-btn.shown { display: grid; }
+  .sound-toggle-btn:hover {
+    border-color: var(--cyan); box-shadow: 0 0 12px var(--glow-cyan);
+  }
+
+  /* Testmode toggle in corner */
+  .testmode {
+    position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%);
+    z-index: 90; font-size: 10px; letter-spacing: 2px; color: var(--dim);
+    display: flex; gap: 6px; align-items: center; cursor: pointer;
+    background: rgba(4,10,20,0.5); padding: 3px 10px; border-radius: 999px;
+  }
+
   .hidden { display: none !important; }
 
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: rgba(0,170,255,0.3); border-radius: 3px; }
-
-  @media (max-width: 1280px) {
-    .app { grid-template-columns: 290px 1fr 290px; }
-    .core-time { font-size: 68px; }
-    .brand-title { font-size: 24px; }
-  }
-  @media (max-width: 1024px) {
-    .app {
-      grid-template-columns: 1fr;
-      grid-template-rows: auto auto auto auto auto;
-      height: auto; min-height: 100vh;
-    }
-    .col-left, .col-right, .col-center { grid-column: 1; grid-row: auto; }
-    body, html { overflow: auto; }
+  /* Position hint for users who want to tune positions */
+  body.tune .core-overlay,
+  body.tune .mission-overlay,
+  body.tune .plan-overlay,
+  body.tune .clock-overlay {
+    outline: 1px dashed rgba(255,184,0,0.6);
   }
 </style>
 </head>
 <body>
 
-<!-- ===== BACKGROUND ===== -->
-<div class="bg-stage">
-
-  <!-- Cosmic Scene: floating rocks, crystals, mountains, light shafts -->
-  <div class="bg-scene">
-    <svg viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="bgMountFar" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#2a4880" stop-opacity="0.95"/>
-          <stop offset="100%" stop-color="#04102a" stop-opacity="1"/>
-        </linearGradient>
-        <linearGradient id="bgMountMid" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#1a3268" stop-opacity="1"/>
-          <stop offset="100%" stop-color="#040c20" stop-opacity="1"/>
-        </linearGradient>
-        <linearGradient id="bgMountNear" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#142850" stop-opacity="1"/>
-          <stop offset="100%" stop-color="#03081a" stop-opacity="1"/>
-        </linearGradient>
-        <radialGradient id="bgMoonGlow" cx="0.5" cy="0.5" r="0.5">
-          <stop offset="0%"  stop-color="#31d7ff" stop-opacity="0.55"/>
-          <stop offset="55%" stop-color="#0066cc" stop-opacity="0.12"/>
-          <stop offset="100%" stop-color="#0066cc" stop-opacity="0"/>
-        </radialGradient>
-        <linearGradient id="bgWaterfall" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#31d7ff" stop-opacity="0.9"/>
-          <stop offset="100%" stop-color="#31d7ff" stop-opacity="0"/>
-        </linearGradient>
-        <linearGradient id="bgCrystal" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%"  stop-color="#aee9ff" stop-opacity="1"/>
-          <stop offset="100%" stop-color="#0066cc" stop-opacity="0.6"/>
-        </linearGradient>
-        <linearGradient id="bgRock" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%"  stop-color="#1c2a44"/>
-          <stop offset="100%" stop-color="#050912"/>
-        </linearGradient>
-      </defs>
-
-      <!-- huge cosmic moon-glow behind core -->
-      <circle cx="960" cy="480" r="460" fill="url(#bgMoonGlow)"/>
-
-      <!-- floating rocks (left) -->
-      <g opacity="0.85">
-        <path d="M180,180 L240,170 L270,200 L250,235 L195,225 Z" fill="url(#bgRock)" stroke="#31d7ff" stroke-width="0.6" opacity="0.5"/>
-        <path d="M120,360 L180,350 L210,380 L175,410 L115,395 Z" fill="url(#bgRock)" stroke="#31d7ff" stroke-width="0.5" opacity="0.4"/>
-        <path d="M260,520 L320,510 L345,540 L310,572 L255,558 Z" fill="url(#bgRock)" stroke="#31d7ff" stroke-width="0.5" opacity="0.35"/>
-      </g>
-      <!-- floating rocks (right) -->
-      <g opacity="0.85">
-        <path d="M1700,210 L1760,200 L1788,230 L1755,260 L1690,250 Z" fill="url(#bgRock)" stroke="#31d7ff" stroke-width="0.6" opacity="0.5"/>
-        <path d="M1620,380 L1685,372 L1715,402 L1680,432 L1615,420 Z" fill="url(#bgRock)" stroke="#31d7ff" stroke-width="0.5" opacity="0.4"/>
-        <path d="M1750,540 L1810,530 L1838,565 L1800,592 L1745,575 Z" fill="url(#bgRock)" stroke="#31d7ff" stroke-width="0.5" opacity="0.35"/>
-      </g>
-
-      <!-- crystals scattered -->
-      <g opacity="0.85">
-        <polygon points="380,420 360,470 400,470" fill="url(#bgCrystal)" stroke="#31d7ff" stroke-width="0.5" opacity="0.6"/>
-        <polygon points="1530,440 1510,490 1550,490" fill="url(#bgCrystal)" stroke="#31d7ff" stroke-width="0.5" opacity="0.6"/>
-        <polygon points="500,720 480,790 520,790" fill="url(#bgCrystal)" stroke="#31d7ff" stroke-width="0.6" opacity="0.7"/>
-        <polygon points="1420,720 1400,790 1440,790" fill="url(#bgCrystal)" stroke="#31d7ff" stroke-width="0.6" opacity="0.7"/>
-      </g>
-
-      <!-- volumetric light shafts (vertical beams) -->
-      <g opacity="0.18">
-        <polygon points="700,0 720,0 870,1080 850,1080" fill="#31d7ff"/>
-        <polygon points="1180,0 1200,0 1090,1080 1070,1080" fill="#31d7ff"/>
-        <polygon points="940,0 960,0 960,1080 920,1080" fill="#aee9ff"/>
-      </g>
-
-      <!-- far mountains -->
-      <path d="M0,640 L120,560 L260,600 L380,520 L500,580 L640,490 L780,560 L900,470 L1020,540 L1160,480 L1300,560 L1440,490 L1580,570 L1720,500 L1860,560 L1920,540 L1920,1080 L0,1080 Z"
-            fill="url(#bgMountFar)"/>
-
-      <!-- mid mountains -->
-      <path d="M0,720 L100,660 L220,700 L340,600 L460,680 L580,570 L700,660 L820,560 L940,650 L1060,560 L1180,660 L1300,580 L1420,680 L1540,600 L1660,680 L1780,620 L1920,700 L1920,1080 L0,1080 Z"
-            fill="url(#bgMountMid)"/>
-
-      <!-- waterfalls (animated via CSS) -->
-      <g>
-        <rect class="wfall"   x="340"  y="600" width="3" height="100" fill="url(#bgWaterfall)"/>
-        <rect class="wfall d1" x="346" y="600" width="2" height="80"  fill="url(#bgWaterfall)"/>
-        <rect class="wfall d2" x="580" y="570" width="3" height="110" fill="url(#bgWaterfall)"/>
-        <rect class="wfall d3" x="586" y="570" width="2" height="90"  fill="url(#bgWaterfall)"/>
-        <rect class="wfall d4" x="820" y="560" width="3" height="120" fill="url(#bgWaterfall)"/>
-        <rect class="wfall"    x="826" y="560" width="2" height="90"  fill="url(#bgWaterfall)"/>
-        <rect class="wfall d2" x="1180" y="660" width="3" height="100" fill="url(#bgWaterfall)"/>
-        <rect class="wfall d5" x="1186" y="660" width="2" height="80"  fill="url(#bgWaterfall)"/>
-        <rect class="wfall d3" x="1420" y="680" width="3" height="90"  fill="url(#bgWaterfall)"/>
-        <rect class="wfall d4" x="1660" y="680" width="3" height="80"  fill="url(#bgWaterfall)"/>
-        <rect class="wfall d1" x="1666" y="680" width="2" height="70"  fill="url(#bgWaterfall)"/>
-      </g>
-
-      <!-- near mountains (foreground) -->
-      <path d="M0,840 L120,780 L260,820 L380,740 L500,800 L640,720 L780,780 L900,700 L1020,760 L1160,700 L1300,780 L1440,720 L1580,800 L1720,740 L1860,800 L1920,780 L1920,1080 L0,1080 Z"
-            fill="url(#bgMountNear)"/>
-
-      <!-- glowing rim light on far mountains -->
-      <path d="M0,640 L120,560 L260,600 L380,520 L500,580 L640,490 L780,560 L900,470 L1020,540 L1160,480 L1300,560 L1440,490 L1580,570 L1720,500 L1860,560 L1920,540"
-            fill="none" stroke="#31d7ff" stroke-width="1.8" opacity="0.6"
-            style="filter: drop-shadow(0 0 8px rgba(49,215,255,0.7));"/>
-      <!-- glowing rim light on mid mountains -->
-      <path d="M0,720 L100,660 L220,700 L340,600 L460,680 L580,570 L700,660 L820,560 L940,650 L1060,560 L1180,660 L1300,580 L1420,680 L1540,600 L1660,680 L1780,620 L1920,700"
-            fill="none" stroke="#00aaff" stroke-width="2" opacity="0.7"
-            style="filter: drop-shadow(0 0 8px rgba(0,170,255,0.7));"/>
-      <!-- glowing rim light on near mountains -->
-      <path d="M0,840 L120,780 L260,820 L380,740 L500,800 L640,720 L780,780 L900,700 L1020,760 L1160,700 L1300,780 L1440,720 L1580,800 L1720,740 L1860,800 L1920,780"
-            fill="none" stroke="#31d7ff" stroke-width="2.5" opacity="0.85"
-            style="filter: drop-shadow(0 0 10px rgba(49,215,255,0.85));"/>
-
-      <!-- energy platform under core -->
-      <ellipse cx="960" cy="900" rx="380" ry="40" fill="none" stroke="#31d7ff" stroke-width="1.5" opacity="0.7"
-               style="filter: drop-shadow(0 0 8px rgba(49,215,255,0.7));"/>
-      <ellipse cx="960" cy="930" rx="320" ry="32" fill="none" stroke="#31d7ff" stroke-width="1" opacity="0.55"/>
-      <ellipse cx="960" cy="960" rx="260" ry="22" fill="none" stroke="#31d7ff" stroke-width="0.7" opacity="0.4"/>
-    </svg>
-  </div>
-
-  <canvas id="particles"></canvas>
+<!-- Background -->
+<div class="bg"></div>
+<div class="bg-fallback"></div>
+<div class="no-bg-hint">
+  <strong>Hinweis:</strong> Lege deine Referenzdatei als <code>assets/bg.png</code> neben diese HTML.
 </div>
 
-<!-- ===== SCANLINES + VIGNETTE ===== -->
-<div class="vignette"></div>
-<div class="scanlines"></div>
-
-<style>
-  /* Waterfall animation */
-  @keyframes waterFlow {
-    0%   { transform: translateY(-20px); opacity: 0; }
-    20%  { opacity: 0.9; }
-    100% { transform: translateY(260px); opacity: 0; }
-  }
-  .bg-scene .wfall { animation: waterFlow 2.4s linear infinite; transform-origin: top; }
-  .bg-scene .wfall.d1 { animation-delay: 0.4s; }
-  .bg-scene .wfall.d2 { animation-delay: 0.8s; }
-  .bg-scene .wfall.d3 { animation-delay: 1.2s; }
-  .bg-scene .wfall.d4 { animation-delay: 1.6s; }
-  .bg-scene .wfall.d5 { animation-delay: 2.0s; }
-</style>
-
-<!-- ===== SOUND BANNER ===== -->
+<!-- Sound banner -->
 <div id="soundBanner" class="sound-banner">
   <div class="icon">
     <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3a4.5 4.5 0 00-2.5-4v8a4.5 4.5 0 002.5-4z"/></svg>
   </div>
-  <div class="text">Sound aktivieren für volle Cinematic-Erfahrung</div>
+  <div class="text">Sound aktivieren für Reminder &amp; Warnungen</div>
   <button id="soundEnableBtn">AKTIVIEREN</button>
 </div>
 
-<div class="app">
+<!-- Sound toggle (visible after activation) -->
+<button class="sound-toggle-btn" id="soundToggleBtn" title="Sound an/aus">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+</button>
 
-  <!-- ===== HEADER ===== -->
-  <header class="header">
-    <div class="brand">
-      <div class="brand-logo">
-        <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="helmGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#ffd56b"/>
-              <stop offset="100%" stop-color="#a66a00"/>
-            </linearGradient>
-            <linearGradient id="helmShine" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%"  stop-color="#fff3b8" stop-opacity="0.85"/>
-              <stop offset="50%" stop-color="#ffb800" stop-opacity="0.4"/>
-              <stop offset="100%" stop-color="#a66a00" stop-opacity="0"/>
-            </linearGradient>
-            <radialGradient id="helmEye" cx="0.5" cy="0.5" r="0.5">
-              <stop offset="0%"  stop-color="#aee9ff"/>
-              <stop offset="100%" stop-color="#00aaff" stop-opacity="0"/>
-            </radialGradient>
-          </defs>
-          <path d="M30 3 L54 12 L54 30 C54 44 44 53 30 57 C16 53 6 44 6 30 L6 12 Z"
-                fill="none" stroke="url(#helmGrad)" stroke-width="2"/>
-          <path d="M30 10 L48 17 L48 30 C48 41 40 47 30 50 C20 47 12 41 12 30 L12 17 Z"
-                fill="url(#helmGrad)" stroke="#a66a00" stroke-width="0.5"/>
-          <!-- blue glowing core inside visor -->
-          <circle cx="30" cy="27" r="6" fill="url(#helmEye)" opacity="0.95"/>
-          <circle cx="30" cy="27" r="2.5" fill="#aee9ff"/>
-          <rect x="18" y="25" width="24" height="3" fill="#04070d" rx="1"/>
-          <rect x="20" y="32" width="20" height="2" fill="#04070d" rx="1"/>
-          <path d="M28 10 L32 10 L33 15 L27 15 Z" fill="#a66a00"/>
-          <path d="M30 12 L42 18 L42 28 C42 36 36 41 30 43 L30 12 Z" fill="url(#helmShine)"/>
-        </svg>
-      </div>
-      <div>
-        <div class="brand-title">FOCUS <span class="accent">GUARDIAN</span></div>
-        <div class="brand-subtitle">MEISTERE DEINEN FOKUS. BAUE DEIN <span class="accent">LEGACY.</span></div>
-      </div>
-    </div>
+<!-- ===== CORE OVERLAY (center of ring) ===== -->
+<div class="core-overlay">
 
-    <nav class="top-nav">
-      <div class="nav-item active">
-        <div class="nav-ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm10 0h8v8h-8z"/></svg></div>
-        ÜBERSICHT
+  <!-- IDLE: Start form -->
+  <div id="startScreen">
+    <div class="core-status idle">BEREIT</div>
+    <div class="core-substatus">DEFINIERE DEINE MISSION</div>
+    <form class="start-form" id="startForm" onsubmit="return false;">
+      <div class="row">
+        <label>MISSION / PROJEKT</label>
+        <input type="text" id="inMission" placeholder="z.B. Kapitel 3 schreiben" maxlength="80" />
       </div>
-      <div class="nav-item">
-        <div class="nav-ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg></div>
-        MISSIONEN
+      <div class="row">
+        <label>ZIEL DIESER SESSION</label>
+        <input type="text" id="inGoal" placeholder="z.B. 1000 Worte" maxlength="120" />
       </div>
-      <div class="nav-item">
-        <div class="nav-ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg></div>
-        STATISTIKEN
-      </div>
-      <div class="nav-item">
-        <div class="nav-ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L2 6v6c0 5.5 4.3 10.7 10 12 5.7-1.3 10-6.5 10-12V6L12 1z"/></svg></div>
-        RITUALE
-      </div>
-      <div class="nav-item">
-        <div class="nav-ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.4 13a7.5 7.5 0 000-2l2-1.5-2-3.5-2.4 1a7.4 7.4 0 00-1.7-1L15 3.5h-4l-.3 2.5a7.4 7.4 0 00-1.7 1l-2.4-1-2 3.5L6.6 11a7.5 7.5 0 000 2l-2 1.5 2 3.5 2.4-1c.5.4 1.1.7 1.7 1l.3 2.5h4l.3-2.5c.6-.3 1.2-.6 1.7-1l2.4 1 2-3.5-2-1.5zM12 15a3 3 0 110-6 3 3 0 010 6z"/></svg></div>
-        EINSTELLUNGEN
-      </div>
-    </nav>
-
-    <div class="level">
-      <div class="level-info">
-        <div class="level-title">WÄCHTER LEVEL 7</div>
-        <div class="level-bar"><div class="fill"></div></div>
-        <div class="level-xp">1.250 / 2.000 XP</div>
-      </div>
-      <div class="level-badge">
-        <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="badgeGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%"  stop-color="#31d7ff"/>
-              <stop offset="100%" stop-color="#0066cc"/>
-            </linearGradient>
-          </defs>
-          <path d="M30 4 L52 12 L52 32 C52 45 42 53 30 56 C18 53 8 45 8 32 L8 12 Z"
-                fill="rgba(0,170,255,0.18)" stroke="url(#badgeGrad)" stroke-width="2"/>
-          <path d="M30 12 L46 18 L46 32 C46 41 39 46 30 48 C21 46 14 41 14 32 L14 18 Z"
-                fill="none" stroke="#31d7ff" stroke-width="1" opacity="0.6"/>
-          <text x="30" y="36" text-anchor="middle" fill="#ffb800" font-size="18" font-weight="900" font-family="Arial, sans-serif">7</text>
-        </svg>
-      </div>
-    </div>
-  </header>
-
-  <!-- ===== LEFT COLUMN ===== -->
-  <aside class="col-left">
-
-    <!-- Mission -->
-    <div class="panel mission-card">
-      <div class="corner-tr"></div><div class="corner-bl"></div>
-      <div class="panel-head">
-        <div class="panel-title">
-          <span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg></span>
-          AKTUELLE MISSION
+      <div class="row">
+        <label>DAUER</label>
+        <div class="time-row">
+          <input type="range" id="inMinutes" min="10" max="120" step="5" value="50" />
+          <div class="time-display"><span id="minLabel">50</span> MIN</div>
         </div>
-        <div class="panel-close">×</div>
       </div>
-      <div id="missionName" class="mission-name">KEINE MISSION</div>
-      <div id="missionGoal" class="mission-goal">Definiere deine Mission im Zentrum und starte den Fokus.</div>
-      <div class="mission-reward">BELOHNUNG: <strong>KLARHEIT &amp; STOLZ</strong></div>
-      <button class="btn ghost small">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4v16M4 12h16"/></svg>
-        MISSIONSDETAILS ANZEIGEN
+      <button type="button" class="btn" id="startBtn" style="margin-top: 6px;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        MISSION STARTEN
       </button>
+    </form>
+  </div>
 
-      <!-- Castle / Fortress illustration -->
-      <div class="mission-illustration">
-        <svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="castWall" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%"  stop-color="#3a5680"/>
-              <stop offset="100%" stop-color="#0a1426"/>
-            </linearGradient>
-            <linearGradient id="castRock" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%"  stop-color="#1c2a44"/>
-              <stop offset="100%" stop-color="#040810"/>
-            </linearGradient>
-            <radialGradient id="castGlow" cx="0.5" cy="0.4" r="0.6">
-              <stop offset="0%"  stop-color="#31d7ff" stop-opacity="0.45"/>
-              <stop offset="100%" stop-color="#31d7ff" stop-opacity="0"/>
-            </radialGradient>
-          </defs>
-          <circle cx="70" cy="55" r="58" fill="url(#castGlow)"/>
-          <!-- mountain base -->
-          <path d="M5 130 L25 100 L45 115 L65 80 L90 105 L110 90 L135 130 Z" fill="url(#castRock)"/>
-          <!-- main tower -->
-          <rect x="60" y="40" width="22" height="45" fill="url(#castWall)" stroke="#31d7ff" stroke-width="0.5"/>
-          <rect x="60" y="38" width="4" height="4" fill="#1a2a44"/>
-          <rect x="68" y="38" width="4" height="4" fill="#1a2a44"/>
-          <rect x="76" y="38" width="4" height="4" fill="#1a2a44"/>
-          <polygon points="60,42 71,18 82,42" fill="#1a3060" stroke="#31d7ff" stroke-width="0.5"/>
-          <polygon points="69,20 73,20 71,10" fill="#ffb800"/>
-          <rect x="66" y="50" width="3" height="5" fill="#31d7ff"/>
-          <rect x="73" y="50" width="3" height="5" fill="#31d7ff"/>
-          <rect x="66" y="62" width="3" height="5" fill="#ffb800"/>
-          <rect x="73" y="62" width="3" height="5" fill="#ffb800"/>
-          <rect x="69" y="74" width="4" height="8" fill="#31d7ff" opacity="0.9"/>
-          <!-- left tower -->
-          <rect x="40" y="60" width="16" height="35" fill="url(#castWall)" stroke="#31d7ff" stroke-width="0.4"/>
-          <polygon points="40,62 48,40 56,62" fill="#1a3060" stroke="#31d7ff" stroke-width="0.4"/>
-          <rect x="44" y="70" width="3" height="4" fill="#31d7ff"/>
-          <rect x="49" y="70" width="3" height="4" fill="#31d7ff"/>
-          <rect x="46" y="80" width="4" height="6" fill="#ffb800"/>
-          <!-- right tower -->
-          <rect x="86" y="55" width="18" height="40" fill="url(#castWall)" stroke="#31d7ff" stroke-width="0.4"/>
-          <polygon points="86,57 95,33 104,57" fill="#1a3060" stroke="#31d7ff" stroke-width="0.4"/>
-          <polygon points="94,35 96,35 95,28" fill="#ffb800"/>
-          <rect x="91" y="65" width="3" height="4" fill="#31d7ff"/>
-          <rect x="96" y="65" width="3" height="4" fill="#31d7ff"/>
-          <rect x="91" y="76" width="3" height="4" fill="#ffb800"/>
-          <rect x="96" y="76" width="3" height="4" fill="#ffb800"/>
-          <rect x="93" y="86" width="4" height="6" fill="#31d7ff" opacity="0.9"/>
-          <!-- castle base wall -->
-          <rect x="38" y="92" width="68" height="14" fill="#0a1830" stroke="#31d7ff" stroke-width="0.5" opacity="0.9"/>
-          <rect x="68" y="98" width="6" height="8" fill="#31d7ff" opacity="0.6"/>
-          <!-- floating sparks -->
-          <circle cx="50"  cy="30" r="1"   fill="#ffb800"/>
-          <circle cx="110" cy="40" r="1"   fill="#31d7ff"/>
-          <circle cx="120" cy="60" r="0.8" fill="#31d7ff"/>
-          <circle cx="30"  cy="50" r="1"   fill="#ffb800"/>
-        </svg>
-      </div>
+  <!-- ACTIVE: Timer -->
+  <div id="activeScreen" class="hidden">
+    <div class="core-status" id="coreStatus">FOCUS CORE AKTIV</div>
+    <div class="core-substatus">TIEFENFOKUS ENGAGIERT</div>
+    <div class="core-time" id="coreTime">50:00</div>
+    <div class="core-time-label">VERBLEIBENDE ZEIT</div>
+    <div class="core-pill" id="corePill">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="5"/></svg>
+      FOCUS SESSION AKTIV
     </div>
-
-    <!-- Statistik -->
-    <div class="panel stat-card">
-      <div class="corner-tr"></div><div class="corner-bl"></div>
-      <div class="panel-head">
-        <div class="panel-title">
-          <span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg></span>
-          FOCUS STATISTIK
-        </div>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="#6b85aa"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg>
-      </div>
-      <div class="stat-grid">
-        <!-- Brain illustration -->
-        <svg class="stat-brain" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="brainGold" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%"  stop-color="#ffb800"/>
-              <stop offset="100%" stop-color="#a66a00"/>
-            </linearGradient>
-            <radialGradient id="brainGlow" cx="0.5" cy="0.5" r="0.5">
-              <stop offset="0%"  stop-color="#31d7ff" stop-opacity="0.5"/>
-              <stop offset="100%" stop-color="#31d7ff" stop-opacity="0"/>
-            </radialGradient>
-          </defs>
-          <circle cx="40" cy="40" r="36" fill="url(#brainGlow)"/>
-          <path d="M40 18 C26 18 18 28 18 40 C18 50 24 58 32 60 C32 64 36 68 40 68
-                   C40 50 38 30 40 18 Z"
-                fill="none" stroke="url(#brainGold)" stroke-width="1.6"/>
-          <path d="M40 18 C54 18 62 28 62 40 C62 50 56 58 48 60 C48 64 44 68 40 68
-                   C40 50 42 30 40 18 Z"
-                fill="none" stroke="#31d7ff" stroke-width="1.6"/>
-          <path d="M22 32 Q28 30 30 36 Q28 42 32 46" fill="none" stroke="url(#brainGold)" stroke-width="1"/>
-          <path d="M24 48 Q30 46 32 52" fill="none" stroke="url(#brainGold)" stroke-width="1"/>
-          <path d="M28 38 Q34 36 36 42" fill="none" stroke="url(#brainGold)" stroke-width="0.8"/>
-          <path d="M58 32 Q52 30 50 36 Q52 42 48 46" fill="none" stroke="#31d7ff" stroke-width="1"/>
-          <path d="M56 48 Q50 46 48 52" fill="none" stroke="#31d7ff" stroke-width="1"/>
-          <path d="M52 38 Q46 36 44 42" fill="none" stroke="#31d7ff" stroke-width="0.8"/>
-          <circle cx="30" cy="36" r="1.5" fill="#ffb800"/>
-          <circle cx="50" cy="36" r="1.5" fill="#31d7ff"/>
-          <circle cx="32" cy="46" r="1.2" fill="#ffb800"/>
-          <circle cx="48" cy="46" r="1.2" fill="#31d7ff"/>
-          <circle cx="40" cy="40" r="2.5" fill="#fff" opacity="0.95"/>
-        </svg>
-
-        <div class="stat-circle">
-          <svg viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(0,170,255,0.18)" stroke-width="7"/>
-            <circle cx="50" cy="50" r="42" fill="none" stroke="#31d7ff" stroke-width="7"
-                    stroke-dasharray="263" stroke-dashoffset="60" stroke-linecap="round"
-                    style="filter: drop-shadow(0 0 5px rgba(49,215,255,0.7));"/>
-            <circle cx="50" cy="50" r="32" fill="none" stroke="#ffb800" stroke-width="3"
-                    stroke-dasharray="201" stroke-dashoffset="25" stroke-linecap="round"
-                    style="filter: drop-shadow(0 0 6px rgba(255,184,0,0.6));"/>
-          </svg>
-          <div class="pct"><span id="statScore">87%</span><small>FOCUS SCORE</small></div>
-        </div>
-
-        <div class="stat-list">
-          <div class="row"><span class="label">TAGE IN FOKUS</span><span class="value" id="statDays">23</span></div>
-          <div class="row"><span class="label">BESTE SESSION</span><span class="value" id="statBest">02:47:32</span></div>
-          <div class="row"><span class="label">GESAMTZEIT</span><span class="value" id="statTotal">48h 32m</span></div>
-        </div>
-      </div>
+    <div class="core-foot">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="#6cff00"><path d="M12 2L4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg>
+      Ablenkungen werden blockiert
     </div>
-
-    <!-- Motivation -->
-    <div class="panel motivation-card">
-      <div class="corner-tr"></div><div class="corner-bl"></div>
-      <!-- background crystal / waterfall illustration -->
-      <svg class="motivation-bg" viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="motCrystal" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%"  stop-color="#31d7ff" stop-opacity="1"/>
-            <stop offset="100%" stop-color="#0066cc" stop-opacity="0.6"/>
-          </linearGradient>
-        </defs>
-        <polygon points="55,12 30,90 55,82" fill="url(#motCrystal)"/>
-        <polygon points="55,12 80,90 55,82" fill="url(#motCrystal)" opacity="0.7"/>
-        <rect x="38" y="55" width="1.5" height="40" fill="#31d7ff" opacity="0.7"/>
-        <rect x="72" y="60" width="1.5" height="35" fill="#31d7ff" opacity="0.6"/>
-        <circle cx="20" cy="30" r="1" fill="#ffb800"/>
-        <circle cx="90" cy="40" r="1" fill="#31d7ff"/>
-      </svg>
-      <div class="panel-head">
-        <div class="panel-title">
-          <span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg></span>
-          MOTIVATION
-        </div>
-        <div class="panel-close">×</div>
-      </div>
-      <div id="motivationQuote" class="quote">„Disziplin ist die Brücke zwischen Zielen und Erfolg."</div>
-      <div id="motivationAuthor" class="author">– Jim Rohn</div>
-      <button class="btn ghost small" id="motivationBtn" style="margin-top:10px;">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v2m0 14v2M5.6 5.6l1.4 1.4m10 10l1.4 1.4M3 12h2m14 0h2M5.6 18.4l1.4-1.4m10-10l1.4-1.4"/></svg>
-        INSPIRATION LADEN
-      </button>
-    </div>
-  </aside>
-
-  <!-- ===== CENTER COLUMN: FOCUS CORE ===== -->
-  <main class="col-center">
-    <div class="core-stage">
-      <!-- light shaft -->
-      <div class="core-shaft"></div>
-      <!-- platform glow -->
-      <div class="core-platform"></div>
-
-      <!-- two energy auras -->
-      <div class="core-energy"></div>
-      <div class="core-energy-2"></div>
-
-      <!-- SVG mechanical rings -->
-      <svg class="core-rings-svg" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="ringGold" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#fff3b8"/>
-            <stop offset="50%" stop-color="#ffb800"/>
-            <stop offset="100%" stop-color="#a66a00"/>
-          </linearGradient>
-          <linearGradient id="ringBlue" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#aee9ff"/>
-            <stop offset="50%" stop-color="#31d7ff"/>
-            <stop offset="100%" stop-color="#0066cc"/>
-          </linearGradient>
-          <radialGradient id="coreGlow" cx="0.5" cy="0.5" r="0.5">
-            <stop offset="0%"  stop-color="#31d7ff" stop-opacity="0.5"/>
-            <stop offset="100%" stop-color="#31d7ff" stop-opacity="0"/>
-          </radialGradient>
-        </defs>
-
-        <circle cx="300" cy="300" r="290" fill="url(#coreGlow)"/>
-
-        <!-- OUTER RING (thick gold) -->
-        <g class="ring-rotate-slow">
-          <circle cx="300" cy="300" r="282" fill="none" stroke="url(#ringGold)" stroke-width="4" opacity="1"
-                  style="filter: drop-shadow(0 0 8px rgba(255,184,0,0.7));"/>
-          <circle cx="300" cy="300" r="274" fill="none" stroke="#ffb800" stroke-width="1.5" opacity="0.8"/>
-          <circle cx="300" cy="300" r="268" fill="none" stroke="#a66a00" stroke-width="1" opacity="0.7"/>
-          <g stroke="#ffb800" stroke-width="4" style="filter: drop-shadow(0 0 4px #ffb800);">
-            <line x1="300" y1="6"   x2="300" y2="40"/>
-            <line x1="300" y1="560" x2="300" y2="594"/>
-            <line x1="6"   y1="300" x2="40"  y2="300"/>
-            <line x1="560" y1="300" x2="594" y2="300"/>
-            <line x1="85"  y1="85"  x2="110" y2="110"/>
-            <line x1="490" y1="85"  x2="515" y2="110"/>
-            <line x1="85"  y1="515" x2="110" y2="490"/>
-            <line x1="490" y1="515" x2="515" y2="490"/>
-          </g>
-        </g>
-
-        <!-- RING 2 thick blue with dashed accent -->
-        <g class="ring-rotate">
-          <circle cx="300" cy="300" r="258" fill="none" stroke="#00aaff" stroke-width="3" opacity="0.9"
-                  style="filter: drop-shadow(0 0 8px rgba(0,170,255,0.6));"/>
-          <circle cx="300" cy="300" r="252" fill="none" stroke="#31d7ff" stroke-width="1.5"
-                  stroke-dasharray="8 14" opacity="0.85"/>
-          <g fill="#00aaff" opacity="1" style="filter: drop-shadow(0 0 6px #00aaff);">
-            <rect x="293" y="36"  width="14" height="18" rx="1"/>
-            <rect x="293" y="546" width="14" height="18" rx="1"/>
-            <rect x="36"  y="293" width="18" height="14" rx="1"/>
-            <rect x="546" y="293" width="18" height="14" rx="1"/>
-          </g>
-        </g>
-
-        <!-- RING 3 MAIN GOLD (thick prominent) -->
-        <g class="ring-rotate-rev">
-          <circle class="ring-glow" cx="300" cy="300" r="235" fill="none" stroke="url(#ringGold)" stroke-width="8"/>
-          <circle cx="300" cy="300" r="225" fill="none" stroke="#ffb800" stroke-width="1.5" opacity="0.85"/>
-          <circle cx="300" cy="300" r="245" fill="none" stroke="#ffb800" stroke-width="1.5" opacity="0.85"/>
-          <g fill="none" stroke="#fff3b8" stroke-width="3" opacity="1" style="filter: drop-shadow(0 0 4px #fff3b8);">
-            <path d="M 300 65  A 235 235 0 0 1 466 134" />
-            <path d="M 466 466 A 235 235 0 0 1 300 535" />
-            <path d="M 134 466 A 235 235 0 0 1 65  300" />
-            <path d="M 65  300 A 235 235 0 0 1 134 134" />
-          </g>
-          <!-- Pulsing energy nodes -->
-          <g fill="#ffb800">
-            <circle class="pulse-node"    cx="300" cy="65"  r="6" style="filter: drop-shadow(0 0 12px #ffb800);"/>
-            <circle class="pulse-node d3" cx="300" cy="535" r="6" style="filter: drop-shadow(0 0 12px #ffb800);"/>
-            <circle class="pulse-node d5" cx="65"  cy="300" r="6" style="filter: drop-shadow(0 0 12px #ffb800);"/>
-            <circle class="pulse-node d7" cx="535" cy="300" r="6" style="filter: drop-shadow(0 0 12px #ffb800);"/>
-          </g>
-          <g fill="#31d7ff">
-            <circle class="pulse-node d2" cx="466" cy="134" r="5" style="filter: drop-shadow(0 0 12px #31d7ff);"/>
-            <circle class="pulse-node d4" cx="466" cy="466" r="5" style="filter: drop-shadow(0 0 12px #31d7ff);"/>
-            <circle class="pulse-node d6" cx="134" cy="466" r="5" style="filter: drop-shadow(0 0 12px #31d7ff);"/>
-            <circle class="pulse-node d1" cx="134" cy="134" r="5" style="filter: drop-shadow(0 0 12px #31d7ff);"/>
-          </g>
-        </g>
-
-        <!-- RING 4 inner blue (thick) -->
-        <g class="ring-rotate-fast">
-          <circle cx="300" cy="300" r="210" fill="none" stroke="url(#ringBlue)" stroke-width="5"
-                  style="filter: drop-shadow(0 0 10px rgba(49,215,255,0.75));"/>
-          <circle cx="300" cy="300" r="203" fill="none" stroke="#31d7ff" stroke-width="1" opacity="0.6"/>
-          <circle cx="300" cy="300" r="217" fill="none" stroke="#31d7ff" stroke-width="1" opacity="0.6"/>
-          <g stroke="#31d7ff" stroke-width="1.3" opacity="0.9">
-            <line x1="300" y1="195" x2="300" y2="205"/>
-            <line x1="300" y1="395" x2="300" y2="405"/>
-            <line x1="195" y1="300" x2="205" y2="300"/>
-            <line x1="395" y1="300" x2="405" y2="300"/>
-            <line x1="225" y1="225" x2="232" y2="232"/>
-            <line x1="368" y1="232" x2="375" y2="225"/>
-            <line x1="225" y1="375" x2="232" y2="368"/>
-            <line x1="368" y1="368" x2="375" y2="375"/>
-            <line x1="245" y1="208" x2="248" y2="218"/>
-            <line x1="352" y1="208" x2="355" y2="218"/>
-            <line x1="245" y1="392" x2="248" y2="382"/>
-            <line x1="352" y1="392" x2="355" y2="382"/>
-            <line x1="208" y1="245" x2="218" y2="248"/>
-            <line x1="208" y1="355" x2="218" y2="352"/>
-            <line x1="392" y1="245" x2="382" y2="248"/>
-            <line x1="392" y1="355" x2="382" y2="352"/>
-          </g>
-          <g fill="#fff" opacity="0.95">
-            <circle cx="300" cy="200" r="2.5"/>
-            <circle cx="300" cy="400" r="2.5"/>
-            <circle cx="200" cy="300" r="2.5"/>
-            <circle cx="400" cy="300" r="2.5"/>
-          </g>
-        </g>
-
-        <!-- RING 5 gold innermost (thicker) -->
-        <g class="ring-rotate">
-          <circle cx="300" cy="300" r="188" fill="none" stroke="#ffb800" stroke-width="3" opacity="1"
-                  style="filter: drop-shadow(0 0 6px rgba(255,184,0,0.6));"/>
-          <circle cx="300" cy="300" r="181" fill="none" stroke="#a66a00" stroke-width="1" opacity="0.7"/>
-          <g stroke="#ffb800" stroke-width="2" fill="none" opacity="0.9">
-            <path d="M 300 178 L 300 198 M 290 188 L 310 188"/>
-            <path d="M 300 422 L 300 402 M 290 412 L 310 412"/>
-            <path d="M 178 300 L 198 300 M 188 290 L 188 310"/>
-            <path d="M 422 300 L 402 300 M 412 290 L 412 310"/>
-          </g>
-        </g>
-
-        <!-- Crossbars -->
-        <g opacity="0.35">
-          <line x1="120" y1="300" x2="480" y2="300" stroke="#31d7ff" stroke-width="0.8"/>
-          <line x1="300" y1="120" x2="300" y2="480" stroke="#31d7ff" stroke-width="0.8"/>
-        </g>
-
-        <!-- ORBITING LIGHTS -->
-        <g class="orbit orbit-outer-1"><circle cx="300" cy="20"  r="5" fill="#fff" style="filter: drop-shadow(0 0 14px #31d7ff);"/></g>
-        <g class="orbit orbit-outer-2"><circle cx="300" cy="20"  r="5" fill="#fff" style="filter: drop-shadow(0 0 14px #31d7ff);"/></g>
-        <g class="orbit orbit-outer-3"><circle cx="300" cy="20"  r="5" fill="#fff" style="filter: drop-shadow(0 0 14px #31d7ff);"/></g>
-        <g class="orbit orbit-mid-1">  <circle cx="300" cy="65"  r="6" fill="#fff3b8" style="filter: drop-shadow(0 0 14px #ffb800);"/></g>
-        <g class="orbit orbit-mid-2">  <circle cx="300" cy="65"  r="6" fill="#fff3b8" style="filter: drop-shadow(0 0 14px #ffb800);"/></g>
-        <g class="orbit orbit-inner-1"><circle cx="300" cy="90"  r="4" fill="#aee9ff" style="filter: drop-shadow(0 0 12px #31d7ff);"/></g>
-        <g class="orbit orbit-inner-2"><circle cx="300" cy="90"  r="4" fill="#aee9ff" style="filter: drop-shadow(0 0 12px #31d7ff);"/></g>
-      </svg>
-
-      <!-- Crystal pyramid at base -->
-      <svg class="core-crystal" viewBox="0 0 96 118" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="cryL" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%"  stop-color="#0066cc" stop-opacity="0.9"/>
-            <stop offset="100%" stop-color="#aee9ff" stop-opacity="0.95"/>
-          </linearGradient>
-          <linearGradient id="cryR" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%"  stop-color="#aee9ff" stop-opacity="0.95"/>
-            <stop offset="100%" stop-color="#0066cc" stop-opacity="0.9"/>
-          </linearGradient>
-          <linearGradient id="cryC" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%"  stop-color="#ffffff"/>
-            <stop offset="100%" stop-color="#31d7ff" stop-opacity="0.8"/>
-          </linearGradient>
-        </defs>
-        <polygon points="48,10 22,86 48,80" fill="url(#cryL)"/>
-        <polygon points="48,10 74,86 48,80" fill="url(#cryR)"/>
-        <polygon points="48,10 45,80 51,80" fill="url(#cryC)"/>
-        <ellipse cx="48" cy="100" rx="42" ry="7" fill="none" stroke="#31d7ff" stroke-width="1.2" opacity="0.7"/>
-        <ellipse cx="48" cy="108" rx="32" ry="5" fill="none" stroke="#31d7ff" stroke-width="0.8" opacity="0.45"/>
-      </svg>
-
-      <!-- Inner core content -->
-      <div class="core-inner">
-        <svg class="core-helmet-wm" viewBox="0 0 60 60">
-          <path d="M30 8 L48 14 L48 28 C48 38 40 44 30 47 C20 44 12 38 12 28 L12 14 Z"
-                fill="none" stroke="#ffb800" stroke-width="1.5"/>
-          <rect x="20" y="25" width="20" height="2.5" fill="#ffb800" opacity="0.85"/>
-          <rect x="22" y="31" width="16" height="2"   fill="#ffb800" opacity="0.65"/>
-        </svg>
-
-        <!-- IDLE -->
-        <div id="startScreen">
-          <div class="core-mode">FOCUS MODUS</div>
-          <div class="core-status idle">BEREIT</div>
-          <div class="core-substatus">DEFINIERE DEINE MISSION</div>
-          <form class="start-form" id="startForm" onsubmit="return false;">
-            <div class="row">
-              <label>MISSION / PROJEKT</label>
-              <input type="text" id="inMission" placeholder="z.B. Kapitel 3 schreiben" maxlength="80" />
-            </div>
-            <div class="row">
-              <label>ZIEL DIESER SESSION</label>
-              <input type="text" id="inGoal" placeholder="z.B. 1000 Worte" maxlength="120" />
-            </div>
-            <div class="row">
-              <label>DAUER</label>
-              <div class="time-row">
-                <input type="range" id="inMinutes" min="10" max="120" step="5" value="50" />
-                <div class="time-display"><span id="minLabel">50</span> MIN</div>
-              </div>
-            </div>
-            <button type="button" class="btn" id="startBtn" style="margin-top: 8px;">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-              MISSION STARTEN
-            </button>
-          </form>
-        </div>
-
-        <!-- ACTIVE -->
-        <div id="activeScreen" class="hidden">
-          <div class="core-mode">FOCUS MODUS</div>
-          <div class="core-status" id="coreStatus">FOCUS CORE AKTIV</div>
-          <div class="core-substatus">TIEFENFOKUS ENGAGIERT</div>
-          <div class="core-time" id="coreTime">50:00</div>
-          <div class="core-time-label">VERBLEIBENDE ZEIT</div>
-          <div class="core-pill" id="corePill">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="5"/></svg>
-            FOCUS SESSION AKTIV
-          </div>
-          <div class="core-foot">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="#6cff00"><path d="M12 2L4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg>
-            Ablenkungen werden blockiert
-          </div>
-          <button type="button" class="btn red small" id="cancelBtn" style="margin-top: 14px;">
-            SESSION ABBRECHEN
-          </button>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <!-- ===== RIGHT COLUMN ===== -->
-  <aside class="col-right">
-
-    <!-- Schutzsysteme -->
-    <div class="panel systems-card">
-      <div class="corner-tr"></div><div class="corner-bl"></div>
-      <div class="panel-head">
-        <div class="panel-title">
-          <span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg></span>
-          AKTIVE SCHUTZSYSTEME
-        </div>
-      </div>
-      <div class="systems-list">
-        <div class="system-row">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg></div>
-          <div class="name">Ablenkungsblocker</div>
-          <div class="state">AKTIV</div>
-        </div>
-        <div class="system-row">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="3" width="14" height="18" rx="2"/><circle cx="12" cy="17" r="1" fill="#04070d"/></svg></div>
-          <div class="name">App Blocker</div>
-          <div class="state">AKTIV</div>
-        </div>
-        <div class="system-row">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 22a2 2 0 002-2H10a2 2 0 002 2zm6-6V11a6 6 0 10-12 0v5l-2 2v1h16v-1l-2-2z"/></svg></div>
-          <div class="name">Benachrichtigungen</div>
-          <div class="state mute">STUMM</div>
-        </div>
-        <div class="system-row">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
-          <div class="name">Web Filter</div>
-          <div class="state">AKTIV</div>
-        </div>
-        <div class="system-row">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h6v2H5v4H3V3zm12 0h6v6h-2V5h-4V3zM3 15h2v4h4v2H3v-6zm16 0h2v6h-6v-2h4v-4z"/></svg></div>
-          <div class="name">Vollbild Schutz</div>
-          <div class="state">AKTIV</div>
-        </div>
-      </div>
-
-      <svg class="systems-shield" viewBox="0 0 70 78" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="shldGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%"  stop-color="#31d7ff"/>
-            <stop offset="100%" stop-color="#0066cc"/>
-          </linearGradient>
-          <radialGradient id="shldGlow" cx="0.5" cy="0.5" r="0.5">
-            <stop offset="0%"  stop-color="#31d7ff" stop-opacity="0.6"/>
-            <stop offset="100%" stop-color="#31d7ff" stop-opacity="0"/>
-          </radialGradient>
-        </defs>
-        <circle cx="35" cy="38" r="34" fill="url(#shldGlow)"/>
-        <path d="M35 5 L64 14 L64 38 C64 54 52 65 35 72 C18 65 6 54 6 38 L6 14 Z"
-              fill="rgba(0,170,255,0.28)" stroke="url(#shldGrad)" stroke-width="2"/>
-        <path d="M35 13 L58 21 L58 38 C58 50 48 58 35 63 C22 58 12 50 12 38 L12 21 Z"
-              fill="none" stroke="#31d7ff" stroke-width="1" opacity="0.85"/>
-        <path d="M35 24 L46 28 L46 40 C46 47 41 51 35 53 C29 51 24 47 24 40 L24 28 Z"
-              fill="url(#shldGrad)" opacity="0.95"/>
-        <path d="M35 30 L40 35 L35 45 L30 35 Z" fill="#fff3b8"/>
-      </svg>
-    </div>
-
-    <!-- Session Plan -->
-    <div class="panel">
-      <div class="corner-tr"></div><div class="corner-bl"></div>
-      <div class="panel-head">
-        <div class="panel-title">
-          <span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" fill="none"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" fill="none"/></svg></span>
-          SESSION PLAN
-        </div>
-        <div class="panel-close">×</div>
-      </div>
-      <div class="plan-row">
-        <div class="plan-list">
-          <div class="item">
-            <div class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" fill="none"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" fill="none"/></svg></div>
-            <div class="text">Focus Time<small id="planFocusTime">50 min</small></div>
-          </div>
-          <div class="item">
-            <div class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg></div>
-            <div class="text">Pause<small>10 min</small></div>
-          </div>
-          <div class="item">
-            <div class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg></div>
-            <div class="text">Wiederholungen<small>3x</small></div>
-          </div>
-          <div class="item">
-            <div class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg></div>
-            <div class="text">Ende<small id="planEndTime">17:30</small></div>
-          </div>
-        </div>
-        <div class="plan-circle">
-          <svg viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(108,255,0,0.15)" stroke-width="6"/>
-            <circle id="planRing" cx="50" cy="50" r="42" fill="none" stroke="#6cff00" stroke-width="6"
-                    stroke-dasharray="264" stroke-dashoffset="176" stroke-linecap="round"
-                    style="filter: drop-shadow(0 0 8px rgba(108,255,0,0.65)); transition: stroke-dashoffset 0.5s;"/>
-          </svg>
-          <div class="center"><span id="planPct">2/3</span><small>ZYKLEN</small></div>
-        </div>
-      </div>
-      <button class="btn ghost small" style="margin-top:10px; width:100%;">PLAN ANPASSEN</button>
-    </div>
-
-    <!-- Sound Atmosphäre -->
-    <div class="panel sound-card">
-      <div class="corner-tr"></div><div class="corner-bl"></div>
-      <div class="panel-head">
-        <div class="panel-title">
-          <span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3z"/></svg></span>
-          SOUND ATMOSPHÄRE
-        </div>
-        <div class="panel-close">×</div>
-      </div>
-      <div class="sound-mode">CINEMATIC FLOW</div>
-      <div class="sound-sub">EPIC AMBIENT</div>
-      <canvas id="waves" class="waves"></canvas>
-      <div class="sound-controls">
-        <button class="sound-ctrl-btn" id="testReminderBtn" title="Reminder testen">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 12l-7 7-7-7h4V3h6v9z" transform="rotate(90 12 12)"/></svg>
-        </button>
-        <button class="sound-ctrl-btn big" id="soundToggleBtn" title="Sound an/aus">
-          <svg id="soundIconOn" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
-        </button>
-        <button class="sound-ctrl-btn" id="testWarnBtn" title="Warnung testen">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 12l-7 7-7-7h4V3h6v9z" transform="rotate(-90 12 12)"/></svg>
-        </button>
-      </div>
-      <div class="sound-switch-row" id="motivationShortcut">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 18V5l12-2v13"/></svg>
-        SOUND WECHSELN
-      </div>
-      <label style="display:flex; gap:8px; align-items:center; margin-top:8px; font-size:10px; color:var(--text-dim); cursor:pointer; justify-content:center;">
-        <input type="checkbox" id="testMode" /> Testmodus (Trink-Reminder jede Minute)
-      </label>
-    </div>
-  </aside>
-
-  <!-- ===== FOOTER ===== -->
-  <footer class="footer">
-    <div class="streak">
-      <div class="streak-icon">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 1c.5 4-3 5-3 8s2 4 4 4-1 4-1 4 7-3 7-9c0-5-7-7-7-7zM7 13c-2 0-4 2-4 4s2 4 4 4 4-2 4-4-2-2-3-4l-1 4z"/></svg>
-      </div>
-      <div class="streak-info">
-        <div class="streak-text"><span class="num" id="streakNum">12</span> TAGE STREAK</div>
-        <div class="streak-sub" id="streakMsg">Weiter so, Champion!</div>
-        <div class="streak-bar"><div class="fill"></div></div>
-      </div>
-    </div>
-
-    <nav class="bottom-nav">
-      <div class="nav-item active">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 9v13h8v-7h4v7h8V9z"/></svg>
-        DASHBOARD
-      </div>
-      <div class="nav-item">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg>
-        MISSIONEN
-      </div>
-      <div class="nav-item">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg>
-        STATISTIKEN
-      </div>
-      <div class="nav-item">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L2 6v6c0 5.5 4.3 10.7 10 12 5.7-1.3 10-6.5 10-12V6L12 1z"/></svg>
-        RITUALE
-      </div>
-      <div class="nav-item">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.4 13a7.5 7.5 0 000-2l2-1.5-2-3.5-2.4 1a7.4 7.4 0 00-1.7-1L15 3.5h-4l-.3 2.5a7.4 7.4 0 00-1.7 1l-2.4-1-2 3.5L6.6 11a7.5 7.5 0 000 2l-2 1.5 2 3.5 2.4-1c.5.4 1.1.7 1.7 1l.3 2.5h4l.3-2.5c.6-.3 1.2-.6 1.7-1l2.4 1 2-3.5-2-1.5zM12 15a3 3 0 110-6 3 3 0 010 6z"/></svg>
-        EINSTELLUNGEN
-      </div>
-    </nav>
-
-    <div class="footer-right">
-      <div class="footer-quote">
-        „FOKUS IST DEIN SCHILD.<br/>DISZIPLIN DEINE WAFFE.<br/>ZIELE DEINE BESTIMMUNG."
-      </div>
-      <svg class="footer-dragon" viewBox="0 0 56 48" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="dragGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#aee9ff"/>
-            <stop offset="100%" stop-color="#0066cc"/>
-          </linearGradient>
-        </defs>
-        <!-- body -->
-        <path d="M6 30 C10 22 18 18 26 18 C32 18 36 20 40 24 L48 18 L46 30 L52 34 L40 34 C36 38 28 40 22 38 C16 37 9 34 6 30 Z"
-              fill="url(#dragGrad)" opacity="0.9"/>
-        <!-- wing -->
-        <path d="M22 18 L16 6 L28 14 L32 4 L34 18 Z" fill="url(#dragGrad)" opacity="0.75"/>
-        <!-- spikes on back -->
-        <polygon points="24,18 26,14 28,18" fill="#aee9ff"/>
-        <polygon points="30,17 32,13 34,17" fill="#aee9ff"/>
-        <!-- tail -->
-        <path d="M6 30 L1 38 L4 36 L7 40 Z" fill="url(#dragGrad)" opacity="0.75"/>
-        <!-- horn -->
-        <path d="M46 18 L48 12 L47 20 Z" fill="#aee9ff"/>
-        <path d="M50 20 L52 16 L51 22 Z" fill="#aee9ff"/>
-        <!-- eye -->
-        <circle cx="44" cy="26" r="1.8" fill="#ffb800"/>
-      </svg>
-      <div class="footer-time">
-        <div class="time" id="clockTime">--:--</div>
-        <div class="date" id="clockDate">--.--.----</div>
-      </div>
-    </div>
-  </footer>
+    <button type="button" class="btn red small core-cancel" id="cancelBtn">
+      SESSION ABBRECHEN
+    </button>
+  </div>
 </div>
 
+<!-- ===== MISSION OVERLAY (left) ===== -->
+<div class="mission-overlay">
+  <div id="missionName" class="mission-name"></div>
+  <div id="missionGoal" class="mission-goal"></div>
+</div>
+
+<!-- ===== PLAN OVERLAY (right) ===== -->
+<div class="plan-overlay">
+  <div class="item">Focus Time<span class="small" id="planFocusTime">50 min</span></div>
+  <div class="item">Pause<span class="small">10 min</span></div>
+  <div class="item">Wiederholungen<span class="small">3x</span></div>
+  <div class="item">Ende<span class="small" id="planEndTime">17:30</span></div>
+</div>
+
+<!-- ===== CLOCK ===== -->
+<div class="clock-overlay">
+  <div class="time" id="clockTime">--:--</div>
+  <div class="date" id="clockDate">--.--.----</div>
+</div>
+
+<!-- ===== TOASTS ===== -->
 <div class="toast-stack" id="toastStack"></div>
 
-<!-- Reality Reminder -->
+<!-- ===== REALITY REMINDER ===== -->
 <div class="reality" id="reality">
   <div class="reality-card">
     <div class="reality-label">REALITY REMINDER</div>
@@ -1776,14 +504,15 @@
   </div>
 </div>
 
-<!-- End Overlay -->
+<!-- ===== END OVERLAY ===== -->
 <div class="end-overlay" id="endOverlay">
   <div class="end-card">
     <div class="end-icon">
       <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
         <path d="M50 8 L86 22 L86 50 C86 70 70 84 50 90 C30 84 14 70 14 50 L14 22 Z"
               fill="none" stroke="#ffb800" stroke-width="3"/>
-        <path d="M35 50 L45 60 L65 40" fill="none" stroke="#6cff00" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M35 50 L45 60 L65 40" fill="none" stroke="#6cff00" stroke-width="5"
+              stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </div>
     <div class="end-title">SESSION BEENDET</div>
@@ -1796,9 +525,14 @@
   </div>
 </div>
 
+<!-- Testmode toggle -->
+<label class="testmode">
+  <input type="checkbox" id="testMode" /> Testmodus (Trink-Reminder jede Minute)
+</label>
+
 <script>
 // ============================================================================
-// FOCUS GUARDIAN — JavaScript Core
+// FOCUS GUARDIAN — Overlay JS Core
 // ============================================================================
 (function(){
   'use strict';
@@ -1814,85 +548,48 @@
     audioReady: false,
     soundOn: true,
     warningsTriggered: new Set(),
-    sessionsToday: 0,
-    bestSessionSec: 0,
-    totalTimeSec: 0,
-    streakDays: 12,
   };
 
-  try {
-    const saved = JSON.parse(localStorage.getItem('focus-guardian') || '{}');
-    if (saved.sessionsToday !== undefined) state.sessionsToday = saved.sessionsToday;
-    if (saved.bestSessionSec !== undefined) state.bestSessionSec = saved.bestSessionSec;
-    if (saved.totalTimeSec !== undefined) state.totalTimeSec = saved.totalTimeSec;
-    if (saved.streakDays !== undefined) state.streakDays = saved.streakDays;
-    if (saved.lastDay && saved.lastDay !== todayKey()) state.sessionsToday = 0;
-  } catch(e) {}
-
-  function todayKey(){
-    const d = new Date();
-    return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
-  }
-  function persist(){
-    try {
-      localStorage.setItem('focus-guardian', JSON.stringify({
-        sessionsToday: state.sessionsToday,
-        bestSessionSec: state.bestSessionSec,
-        totalTimeSec: state.totalTimeSec,
-        streakDays: state.streakDays,
-        lastDay: todayKey(),
-      }));
-    } catch(e) {}
-  }
-
   const $ = (id) => document.getElementById(id);
-  const startScreen = $('startScreen');
-  const activeScreen = $('activeScreen');
-  const inMission = $('inMission');
-  const inGoal = $('inGoal');
-  const inMinutes = $('inMinutes');
-  const minLabel = $('minLabel');
-  const startBtn = $('startBtn');
-  const cancelBtn = $('cancelBtn');
-  const coreTime = $('coreTime');
-  const corePill = $('corePill');
-  const coreStatus = $('coreStatus');
-  const missionName = $('missionName');
-  const missionGoal = $('missionGoal');
-  const toastStack = $('toastStack');
-  const reality = $('reality');
-  const realityText = $('realityText');
-  const realityClose = $('realityClose');
-  const endOverlay = $('endOverlay');
-  const endCloseBtn = $('endCloseBtn');
-  const endMission = $('endMission');
-  const endDuration = $('endDuration');
-  const planRing = $('planRing');
-  const planPct = $('planPct');
+  const startScreen   = $('startScreen');
+  const activeScreen  = $('activeScreen');
+  const inMission     = $('inMission');
+  const inGoal        = $('inGoal');
+  const inMinutes     = $('inMinutes');
+  const minLabel      = $('minLabel');
+  const startBtn      = $('startBtn');
+  const cancelBtn     = $('cancelBtn');
+  const coreTime      = $('coreTime');
+  const corePill      = $('corePill');
+  const coreStatus    = $('coreStatus');
+  const missionName   = $('missionName');
+  const missionGoal   = $('missionGoal');
+  const toastStack    = $('toastStack');
+  const reality       = $('reality');
+  const realityText   = $('realityText');
+  const realityClose  = $('realityClose');
+  const endOverlay    = $('endOverlay');
+  const endCloseBtn   = $('endCloseBtn');
+  const endMission    = $('endMission');
+  const endDuration   = $('endDuration');
   const planFocusTime = $('planFocusTime');
-  const planEndTime = $('planEndTime');
-  const streakNum = $('streakNum');
-  const streakMsg = $('streakMsg');
-  const soundBanner = $('soundBanner');
-  const soundEnableBtn = $('soundEnableBtn');
-  const soundToggleBtn = $('soundToggleBtn');
-  const testMode = $('testMode');
-  const testReminderBtn = $('testReminderBtn');
-  const testWarnBtn = $('testWarnBtn');
-  const motivationBtn = $('motivationBtn');
-  const motivationShortcut = $('motivationShortcut');
-  const motivationQuote = $('motivationQuote');
-  const motivationAuthor = $('motivationAuthor');
-  const clockTime = $('clockTime');
-  const clockDate = $('clockDate');
+  const planEndTime   = $('planEndTime');
+  const soundBanner   = $('soundBanner');
+  const soundEnableBtn= $('soundEnableBtn');
+  const soundToggleBtn= $('soundToggleBtn');
+  const testMode      = $('testMode');
+  const clockTime     = $('clockTime');
+  const clockDate     = $('clockDate');
 
-  document.querySelectorAll('.panel-close').forEach(el => {
-    el.addEventListener('click', () => {
-      const panel = el.closest('.panel');
-      if (panel) panel.style.display = 'none';
-    });
-  });
+  // ===== Background detection =====
+  (function detectBg(){
+    const img = new Image();
+    img.onload  = () => document.body.classList.add('has-bg');
+    img.onerror = () => {/* fallback bleibt aktiv */};
+    img.src = 'assets/bg.png';
+  })();
 
+  // ===== Helpers =====
   function fmtTime(sec){
     sec = Math.max(0, Math.round(sec));
     const m = Math.floor(sec/60);
@@ -1905,19 +602,12 @@
     if (h > 0) return h+'h '+(m%60)+'m';
     return m+' min';
   }
-  function updateStreakUI(){
-    streakNum.textContent = state.streakDays;
-    streakMsg.textContent = state.streakDays > 0
-      ? (state.streakDays >= 7 ? 'Weiter so, Champion!' : 'Bleib dran!')
-      : 'Starte deine erste Mission.';
-  }
-  updateStreakUI();
 
   function toast(title, body, variant){
     const el = document.createElement('div');
     el.className = 'toast' + (variant ? ' '+variant : '');
     const t = document.createElement('div'); t.className = 'title'; t.textContent = title;
-    const b = document.createElement('div'); b.className = 'body'; b.textContent = body;
+    const b = document.createElement('div'); b.className = 'body';  b.textContent = body;
     el.appendChild(t); el.appendChild(b);
     toastStack.appendChild(el);
     setTimeout(() => {
@@ -1949,9 +639,8 @@
       masterGain.gain.value = 0.6;
       masterGain.connect(audioCtx.destination);
       state.audioReady = true;
-    } catch(e) { console.warn('AudioContext not available', e); }
+    } catch(e) {}
   }
-
   function startAmbient(){
     if (!audioCtx || !state.soundOn) return;
     stopAmbient();
@@ -1960,8 +649,7 @@
     ambientGain.connect(masterGain);
     ambientGain.gain.linearRampToValueAtTime(0.09, audioCtx.currentTime + 2);
 
-    const freqs = [110, 165, 220.5];
-    freqs.forEach((f, i) => {
+    [110, 165, 220.5].forEach((f, i) => {
       const osc = audioCtx.createOscillator();
       osc.type = 'sine'; osc.frequency.value = f;
       const og = audioCtx.createGain(); og.gain.value = i === 0 ? 0.6 : 0.3;
@@ -1985,7 +673,6 @@
     noise.start();
     ambientNodes.push(noise);
   }
-
   function stopAmbient(){
     if (!ambientGain) return;
     try {
@@ -1999,7 +686,6 @@
       ambientGain = null;
     }, 600);
   }
-
   function playTone(opts){
     if (!audioCtx || !state.soundOn) return;
     const o = opts || {};
@@ -2014,60 +700,38 @@
     osc.connect(g).connect(masterGain);
     osc.start(start); osc.stop(start + dur + 0.05);
   }
-  function playReminder(){
-    playTone({freq: 880, dur: 0.25, type: 'sine', vol: 0.25});
-    playTone({freq: 1320, dur: 0.3, type: 'sine', vol: 0.2, delay: 0.15});
-  }
-  function playWarn(){
-    playTone({freq: 440, dur: 0.4, type: 'triangle', vol: 0.35});
-    playTone({freq: 330, dur: 0.5, type: 'triangle', vol: 0.3, delay: 0.25});
-  }
-  function playCritical(){
-    for (let i = 0; i < 3; i++){
-      playTone({freq: 220, dur: 0.18, type: 'sawtooth', vol: 0.35, delay: i*0.22});
-      playTone({freq: 440, dur: 0.18, type: 'sawtooth', vol: 0.25, delay: i*0.22 + 0.05});
-    }
-  }
+  function playReminder(){ playTone({freq:880,dur:0.25,vol:0.25}); playTone({freq:1320,dur:0.3,vol:0.2,delay:0.15}); }
+  function playWarn(){     playTone({freq:440,dur:0.4,type:'triangle',vol:0.35}); playTone({freq:330,dur:0.5,type:'triangle',vol:0.3,delay:0.25}); }
+  function playCritical(){ for (let i = 0; i < 3; i++){ playTone({freq:220,dur:0.18,type:'sawtooth',vol:0.35,delay:i*0.22}); playTone({freq:440,dur:0.18,type:'sawtooth',vol:0.25,delay:i*0.22+0.05}); } }
   function playGong(){
     [{f:110,d:4.5,v:0.4},{f:220,d:3.5,v:0.3},{f:330,d:2.5,v:0.2},{f:165,d:4.0,v:0.25}]
-      .forEach((l, i) => playTone({freq: l.f, dur: l.d, type: 'sine', vol: l.v, delay: i*0.04}));
+      .forEach((l, i) => playTone({freq:l.f,dur:l.d,type:'sine',vol:l.v,delay:i*0.04}));
   }
-
   function updateSoundIcon(){
     soundToggleBtn.innerHTML = state.soundOn
-      ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>'
-      : '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+      ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>'
+      : '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
   }
   function enableSound(){
     initAudio();
     if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
     state.soundOn = true;
     soundBanner.classList.add('hidden');
+    soundToggleBtn.classList.add('shown');
     if (state.running) startAmbient();
-    playTone({freq: 1320, dur: 0.15, vol: 0.2});
-    playTone({freq: 1760, dur: 0.2, vol: 0.18, delay: 0.1});
+    playTone({freq:1320,dur:0.15,vol:0.2});
+    playTone({freq:1760,dur:0.2,vol:0.18,delay:0.1});
     updateSoundIcon();
   }
   function disableSound(){ state.soundOn = false; stopAmbient(); updateSoundIcon(); }
 
   soundEnableBtn.addEventListener('click', enableSound);
   soundToggleBtn.addEventListener('click', () => {
-    if (!state.audioReady) { enableSound(); return; }
     if (state.soundOn) disableSound();
-    else { state.soundOn = true; if (state.running) startAmbient(); playTone({freq: 880, dur: 0.2}); updateSoundIcon(); }
-  });
-  testReminderBtn.addEventListener('click', () => {
-    if (!state.audioReady) enableSound();
-    playReminder();
-    toast('TEST: REMINDER', 'Sanfter Erinnerungston abgespielt.', 'green');
-  });
-  testWarnBtn.addEventListener('click', () => {
-    if (!state.audioReady) enableSound();
-    playWarn();
-    toast('TEST: WARNUNG', 'Warnton abgespielt.', 'gold');
+    else { state.soundOn = true; if (state.running) startAmbient(); playTone({freq:880,dur:0.2}); updateSoundIcon(); }
   });
 
-  // ===== Reality + Motivation =====
+  // ===== Reality Reminder =====
   const realityPool = [
     'Hast du genug getrunken?',
     'Hast du gegessen?',
@@ -2078,31 +742,12 @@
     'Was liegt außerhalb vom PC noch an?',
     'Realität zuerst. PC danach.',
   ];
-  function showReality(forceText){
-    realityText.textContent = forceText || realityPool[Math.floor(Math.random()*realityPool.length)];
+  function showReality(){
+    realityText.textContent = realityPool[Math.floor(Math.random()*realityPool.length)];
     reality.classList.add('show');
     playReminder();
   }
   realityClose.addEventListener('click', () => reality.classList.remove('show'));
-
-  const motivationPool = [
-    {q: 'Disziplin ist die Brücke zwischen Zielen und Erfolg.', a: '– Jim Rohn'},
-    {q: 'Du wirst nie ein guter Mann, der nicht das Schwere wählt.', a: '– Marcus Aurelius'},
-    {q: 'Fokus ist Macht. Was du nicht aufmerksam wahrnimmst, existiert nicht für dich.', a: '– Unknown'},
-    {q: 'Tue heute, was andere nicht wollen, damit du morgen lebst, was andere nicht können.', a: '– Jerry Rice'},
-    {q: 'Ein Ziel ohne Plan ist nur ein Wunsch.', a: '– Antoine de Saint-Exupéry'},
-    {q: 'Erfolg ist die Summe kleiner Anstrengungen, jeden Tag wiederholt.', a: '– Robert Collier'},
-    {q: 'Konzentriere dich auf eine Sache, bis du sie gemeistert hast.', a: '– Unknown'},
-    {q: 'Du bist nicht müde. Du bist abgelenkt. Komm zurück.', a: '– Focus Guardian'},
-  ];
-  function rollMotivation(){
-    const m = motivationPool[Math.floor(Math.random()*motivationPool.length)];
-    motivationQuote.textContent = '„'+m.q+'"';
-    motivationAuthor.textContent = m.a;
-    toast('NEUE INSPIRATION', m.q, 'blue');
-  }
-  motivationBtn.addEventListener('click', rollMotivation);
-  motivationShortcut.addEventListener('click', rollMotivation);
 
   // ===== Session Lifecycle =====
   function startSession(){
@@ -2133,20 +778,19 @@
     state.tickHandle = setInterval(tick, 1000);
     toast('MISSION GESTARTET', mission + ' · ' + min + ' Min Fokus.', 'gold');
   }
-
   function scheduleDrink(){
     if (state.drinkHandle) clearInterval(state.drinkHandle);
     const intervalMs = testMode.checked ? 60*1000 : 30*60*1000;
     state.drinkHandle = setInterval(() => {
       if (!state.running) return;
-      toast('💧 TRINK-REMINDER', 'Wasser trinken. Kurz aufstehen.', 'blue');
+      toast('💧 TRINK-REMINDER', 'Wasser trinken. Kurz aufstehen.', 'green');
       playReminder();
     }, intervalMs);
   }
   testMode.addEventListener('change', () => {
     if (state.running) {
       scheduleDrink();
-      toast('TESTMODUS', testMode.checked ? 'Trink-Reminder jetzt jede Minute.' : 'Trink-Reminder alle 30 Minuten.', 'blue');
+      toast('TESTMODUS', testMode.checked ? 'Trink-Reminder jetzt jede Minute.' : 'Trink-Reminder alle 30 Minuten.', 'green');
     }
   });
 
@@ -2154,34 +798,18 @@
     if (confirm('Mission wirklich abbrechen? Der Fortschritt wird nicht gezählt.')) {
       stopTimers();
       finalizeSession(false);
-      toast('MISSION ABGEBROCHEN', 'Kein Streak-Eintrag. Beim nächsten Mal: durchziehen.', 'red');
+      toast('MISSION ABGEBROCHEN', 'Beim nächsten Mal: durchziehen.', 'red');
     }
   });
-
   function stopTimers(){
-    if (state.tickHandle) { clearInterval(state.tickHandle); state.tickHandle = null; }
+    if (state.tickHandle)  { clearInterval(state.tickHandle);  state.tickHandle  = null; }
     if (state.drinkHandle) { clearInterval(state.drinkHandle); state.drinkHandle = null; }
     stopAmbient();
     state.running = false;
   }
-
   function finalizeSession(completed){
     const elapsed = Math.min(state.totalSec, Math.round((Date.now()-state.startTime)/1000));
     if (completed) {
-      state.sessionsToday += 1;
-      if (elapsed > state.bestSessionSec) state.bestSessionSec = elapsed;
-      state.totalTimeSec += elapsed;
-      try {
-        const saved = JSON.parse(localStorage.getItem('focus-guardian') || '{}');
-        if (saved.lastStreakDay !== todayKey()) {
-          state.streakDays = (saved.streakDays || state.streakDays || 0) + 1;
-          saved.lastStreakDay = todayKey();
-          saved.streakDays = state.streakDays;
-          localStorage.setItem('focus-guardian', JSON.stringify(saved));
-        }
-      } catch(e){}
-      persist();
-      updateStreakUI();
       endMission.textContent = state.mission || '—';
       endDuration.textContent = fmtDur(elapsed);
       endOverlay.classList.add('show');
@@ -2192,7 +820,6 @@
     coreTime.textContent = '50:00';
     coreTime.classList.remove('warn');
     corePill.classList.remove('warn');
-    coreStatus.classList.remove('idle');
   }
   endCloseBtn.addEventListener('click', () => endOverlay.classList.remove('show'));
 
@@ -2201,74 +828,45 @@
     const elapsed = Math.round((Date.now() - state.startTime)/1000);
     state.remainingSec = Math.max(0, state.totalSec - elapsed);
     updateTimerDisplay();
-    checkWarnings(elapsed);
+    checkWarnings();
     if (state.remainingSec <= 0) { stopTimers(); finalizeSession(true); }
   }
-
   function updateTimerDisplay(){
     coreTime.textContent = fmtTime(state.remainingSec);
     const isWarn = state.remainingSec <= 10*60;
     coreTime.classList.toggle('warn', isWarn);
     corePill.classList.toggle('warn', isWarn);
     if (isWarn) {
-      corePill.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L1 21h22L12 2z"/></svg> ENDSPURT — DURCHHALTEN';
+      corePill.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L1 21h22L12 2z"/></svg> ENDSPURT — DURCHHALTEN';
       coreStatus.textContent = 'KRITISCHE PHASE';
     } else {
-      corePill.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="5"/></svg> FOCUS SESSION AKTIV';
+      corePill.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="5"/></svg> FOCUS SESSION AKTIV';
       coreStatus.textContent = 'FOCUS CORE AKTIV';
     }
-    const progress = 1 - (state.remainingSec / state.totalSec);
-    const dash = 264;
-    planRing.style.strokeDashoffset = (dash * (1 - progress)).toFixed(1);
-    planPct.textContent = Math.round(progress*100) + '%';
-    planRing.style.stroke = isWarn ? '#ff2f2f' : '#6cff00';
-    planRing.style.filter = 'drop-shadow(0 0 8px ' + (isWarn ? 'rgba(255,47,47,0.7)' : 'rgba(108,255,0,0.7)') + ')';
   }
-
   function trigger(key, fn){
     if (state.warningsTriggered.has(key)) return;
     state.warningsTriggered.add(key);
     fn();
   }
-  function checkWarnings(elapsedSec){
-    const total = state.totalSec;
-    const remaining = state.remainingSec;
-    const pct = elapsedSec / total;
-
-    if (pct >= 0.5 && pct < 0.75) {
-      trigger('w50', () => {
-        toast('FOKUS-CHECK · 50%', 'Halbzeit. Bist du noch beim Ziel? Atme. Weiter.', 'blue');
-        playReminder();
-      });
-    }
-    if (pct >= 0.75 && pct < 0.9 && remaining > 10*60) {
-      trigger('w75', () => {
-        toast('KEINE NEUEN BAUSTELLEN · 75%', 'Letztes Viertel. Zu Ende bringen — nicht neu anfangen.', 'gold');
-        playWarn();
-      });
-    }
-    if (pct >= 0.9 && pct < 1.0 && !state.warningsTriggered.has('w10min')) {
-      trigger('w90', () => {
-        toast('ENDSPURT · 90%', 'Letzte Phase. Energie freisetzen. Drücken!', 'gold');
-        playWarn();
-      });
-    }
-    if (remaining <= 10*60 && remaining > 5*60) {
-      trigger('w10min', () => {
+  function checkWarnings(){
+    const r = state.remainingSec;
+    if (r <= 10*60 && r > 5*60) {
+      trigger('w10', () => {
         toast('WARNUNG: NOCH 10 MINUTEN', 'Keine neuen Baustellen mehr.', 'red');
         playWarn();
         if (Math.random() < 0.6) setTimeout(showReality, 1500);
       });
     }
-    if (remaining <= 5*60 && remaining > 1*60) {
-      trigger('w5min', () => {
+    if (r <= 5*60 && r > 1*60) {
+      trigger('w5', () => {
         toast('LETZTE 5 MINUTEN', 'Speichern. Abschließen. Pause vorbereiten.', 'red');
         playWarn();
         if (Math.random() < 0.5) setTimeout(showReality, 2000);
       });
     }
-    if (remaining <= 60 && remaining > 0) {
-      trigger('w1min', () => {
+    if (r <= 60 && r > 0) {
+      trigger('w1', () => {
         toast('LETZTE MINUTE', 'Jetzt wirklich beenden.', 'red');
         playCritical();
       });
@@ -2282,7 +880,7 @@
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
-      if (reality.classList.contains('show')) reality.classList.remove('show');
+      if (reality.classList.contains('show'))    reality.classList.remove('show');
       else if (endOverlay.classList.contains('show')) endOverlay.classList.remove('show');
     }
     if (e.key === 'Enter' && !state.running && document.activeElement && document.activeElement.tagName === 'INPUT') {
@@ -2291,100 +889,11 @@
         startBtn.click();
       }
     }
+    // Debug: T = toggle position-tuning outlines
+    if (e.key === 't' || e.key === 'T') {
+      document.body.classList.toggle('tune');
+    }
   });
-
-  // ===== Particles =====
-  const pCanvas = $('particles');
-  const pCtx = pCanvas.getContext('2d');
-  let particles = [];
-
-  function resizeCanvas(){
-    pCanvas.width = window.innerWidth;
-    pCanvas.height = window.innerHeight;
-    seedParticles();
-  }
-  function seedParticles(){
-    const count = Math.min(180, Math.floor((pCanvas.width*pCanvas.height) / 10000));
-    particles = [];
-    for (let i = 0; i < count; i++){
-      particles.push({
-        x: Math.random()*pCanvas.width,
-        y: Math.random()*pCanvas.height,
-        r: Math.random()*1.6 + 0.3,
-        vx: (Math.random()-0.5)*0.18,
-        vy: (Math.random()-0.5)*0.18 - 0.07,
-        a: Math.random()*0.7 + 0.25,
-        gold: Math.random() < 0.22,
-        twinkle: Math.random()*Math.PI*2,
-      });
-    }
-  }
-  function animParticles(){
-    pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
-    for (const p of particles){
-      p.x += p.vx; p.y += p.vy; p.twinkle += 0.025;
-      if (p.x < 0) p.x = pCanvas.width;
-      if (p.x > pCanvas.width) p.x = 0;
-      if (p.y < 0) p.y = pCanvas.height;
-      if (p.y > pCanvas.height) p.y = 0;
-      const alpha = p.a * (0.55 + 0.45 * Math.sin(p.twinkle));
-      pCtx.beginPath();
-      pCtx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-      pCtx.fillStyle = p.gold ? 'rgba(255,184,0,' + alpha.toFixed(2) + ')' : 'rgba(120,200,255,' + alpha.toFixed(2) + ')';
-      pCtx.shadowBlur = p.gold ? 10 : 6;
-      pCtx.shadowColor = p.gold ? '#ffb800' : '#31d7ff';
-      pCtx.fill();
-    }
-    pCtx.shadowBlur = 0;
-    requestAnimationFrame(animParticles);
-  }
-  resizeCanvas();
-  window.addEventListener('resize', resizeCanvas);
-  animParticles();
-
-  // ===== Audio waves visual =====
-  const wCanvas = $('waves');
-  const wCtx = wCanvas.getContext('2d');
-  function resizeWaves(){
-    wCanvas.width = wCanvas.clientWidth * (window.devicePixelRatio || 1);
-    wCanvas.height = wCanvas.clientHeight * (window.devicePixelRatio || 1);
-  }
-  resizeWaves();
-  window.addEventListener('resize', resizeWaves);
-  let waveT = 0;
-  function drawWaves(){
-    waveT += 0.045;
-    const W = wCanvas.width, H = wCanvas.height;
-    wCtx.clearRect(0, 0, W, H);
-    const active = state.running && state.soundOn;
-    const bars = 56;
-    const bw = W / bars;
-    for (let i = 0; i < bars; i++){
-      const phase = i*0.35 + waveT;
-      const amp = active
-        ? (Math.sin(phase) * 0.5 + 0.5) * (0.6 + 0.4 * Math.sin(phase*0.3))
-        : (Math.sin(phase) * 0.5 + 0.5) * 0.3;
-      const h = amp * H * 0.85;
-      const y = (H - h) / 2;
-      const isGold = (i % 6) === 0;
-      const grad = wCtx.createLinearGradient(0, y, 0, y+h);
-      if (isGold) {
-        grad.addColorStop(0, 'rgba(255,184,0,0.95)');
-        grad.addColorStop(1, 'rgba(255,184,0,0.12)');
-      } else {
-        grad.addColorStop(0, 'rgba(49,215,255,0.95)');
-        grad.addColorStop(1, 'rgba(0,170,255,0.1)');
-      }
-      wCtx.fillStyle = grad;
-      wCtx.fillRect(i*bw + 1, y, bw - 2, h);
-    }
-    requestAnimationFrame(drawWaves);
-  }
-  drawWaves();
-
-  setTimeout(() => {
-    toast('FOCUS GUARDIAN BEREIT', 'Definiere deine Mission und starte den Fokus.', 'blue');
-  }, 800);
 
   window.addEventListener('beforeunload', (e) => {
     if (state.running) {
