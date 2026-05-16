@@ -42,13 +42,12 @@
   /* ===== BACKGROUND IMAGE (Master) ===== */
   .bg {
     position: fixed; inset: 0; z-index: 0;
-    background-image: url('assets/bg.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
   }
 
-  /* Fallback wenn bg.png fehlt: dunkler Sci-Fi-Verlauf */
+  /* Fallback wenn kein Bild geladen: dunkler Sci-Fi-Verlauf */
   .bg-fallback {
     position: fixed; inset: 0; z-index: 0;
     background:
@@ -59,18 +58,80 @@
   body.has-bg .bg-fallback { display: none; }
   body:not(.has-bg) .bg { display: none; }
 
-  /* No-bg hint */
-  .no-bg-hint {
-    position: fixed; top: 12px; left: 50%; transform: translateX(-50%);
-    z-index: 200;
-    background: rgba(255,47,47,0.15);
-    border: 1px solid rgba(255,47,47,0.6);
-    color: var(--white);
-    padding: 8px 16px; border-radius: 8px;
-    font-size: 12px; letter-spacing: 1px;
+  /* ===== DROP ZONE / Bild-Picker ===== */
+  .drop-zone {
+    position: fixed; inset: 0; z-index: 80;
+    display: grid; place-items: center;
+    background: rgba(2,5,12,0.85);
     backdrop-filter: blur(6px);
+    pointer-events: auto;
   }
-  body.has-bg .no-bg-hint { display: none; }
+  body.has-bg .drop-zone { display: none; }
+  .drop-zone.drag-active {
+    background: rgba(0,170,255,0.18);
+  }
+  .drop-card {
+    background: rgba(4,10,20,0.95);
+    border: 2px dashed rgba(255,184,0,0.7);
+    border-radius: 18px;
+    padding: 50px 60px;
+    text-align: center;
+    box-shadow: 0 0 50px rgba(255,184,0,0.35);
+    max-width: 560px;
+    animation: bannerPulse 2.5s ease-in-out infinite;
+  }
+  .drop-card .title {
+    font-size: 22px; font-weight: 900; letter-spacing: 4px;
+    color: var(--gold); text-shadow: 0 0 14px var(--glow-gold);
+    margin-bottom: 12px;
+  }
+  .drop-card .sub {
+    font-size: 14px; color: var(--white); margin-bottom: 8px; line-height: 1.5;
+  }
+  .drop-card .or {
+    font-size: 11px; letter-spacing: 3px; color: var(--dim); margin: 18px 0;
+  }
+  .drop-card .pick-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 28px;
+    background: var(--gold); color: #04070d;
+    border: none; border-radius: 10px;
+    font-size: 14px; letter-spacing: 3px; font-weight: 900;
+    cursor: pointer;
+    box-shadow: 0 0 24px var(--glow-gold);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .drop-card .pick-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 36px var(--glow-gold);
+  }
+  .drop-card .skip {
+    margin-top: 18px;
+    display: block;
+    background: transparent; color: var(--dim); border: none;
+    font-size: 11px; letter-spacing: 2px; cursor: pointer; text-decoration: underline;
+  }
+  .drop-card .skip:hover { color: var(--white); }
+  .drop-card .saved-hint {
+    margin-top: 14px;
+    font-size: 10px; color: var(--cyan); letter-spacing: 2px;
+  }
+
+  /* Change-bg mini button after image is loaded */
+  .change-bg-btn {
+    position: fixed; top: 16px; right: 16px; z-index: 90;
+    background: rgba(4,10,20,0.7);
+    border: 1px solid rgba(0,170,255,0.4);
+    color: var(--white);
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 10px; letter-spacing: 2px; cursor: pointer;
+    display: none;
+    backdrop-filter: blur(6px);
+    transition: all 0.2s;
+  }
+  body.has-bg .change-bg-btn { display: block; }
+  .change-bg-btn:hover { border-color: var(--cyan); box-shadow: 0 0 10px var(--glow-cyan); }
 
   /* ===== TIMER + CORE OVERLAY (zentral) ===== */
   /* Dieses Overlay sitzt exakt dort wo im Referenzbild der innere
@@ -402,11 +463,27 @@
 <body>
 
 <!-- Background -->
-<div class="bg"></div>
+<div class="bg" id="bgEl"></div>
 <div class="bg-fallback"></div>
-<div class="no-bg-hint">
-  <strong>Hinweis:</strong> Lege deine Referenzdatei als <code>assets/bg.png</code> neben diese HTML.
+
+<!-- Drop Zone — erscheint solange kein Bild geladen ist -->
+<div class="drop-zone" id="dropZone">
+  <div class="drop-card">
+    <div class="title">REFERENZ-BILD LADEN</div>
+    <div class="sub">Zieh dein Bild (.png oder .jpg) einfach <strong>hier ins Fenster</strong>.</div>
+    <div class="sub">Es wird als Hintergrund verwendet und im Browser gespeichert.</div>
+    <div class="or">— ODER —</div>
+    <button class="pick-btn" id="pickBtn">
+      📁 BILD AUSWÄHLEN
+    </button>
+    <input type="file" id="filePicker" accept="image/*" style="display:none" />
+    <div class="saved-hint" id="savedHint" style="display:none">✓ Gespeichertes Bild gefunden — wird geladen…</div>
+    <button class="skip" id="skipBtn">Ohne Bild fortfahren →</button>
+  </div>
 </div>
+
+<!-- Mini button to change bg after one is loaded -->
+<button class="change-bg-btn" id="changeBgBtn">⟲ HINTERGRUND ÄNDERN</button>
 
 <!-- Sound banner -->
 <div id="soundBanner" class="sound-banner">
@@ -581,13 +658,102 @@
   const clockTime     = $('clockTime');
   const clockDate     = $('clockDate');
 
-  // ===== Background detection =====
-  (function detectBg(){
-    const img = new Image();
-    img.onload  = () => document.body.classList.add('has-bg');
-    img.onerror = () => {/* fallback bleibt aktiv */};
-    img.src = 'assets/bg.png';
-  })();
+  // ===== Background loading: drag&drop + picker + assets/bg.png + localStorage =====
+  const bgEl       = $('bgEl');
+  const dropZone   = $('dropZone');
+  const pickBtn    = $('pickBtn');
+  const filePicker = $('filePicker');
+  const skipBtn    = $('skipBtn');
+  const savedHint  = $('savedHint');
+  const changeBgBtn= $('changeBgBtn');
+
+  function applyBgUrl(url){
+    bgEl.style.backgroundImage = "url('" + url.replace(/'/g, "\\'") + "')";
+    document.body.classList.add('has-bg');
+  }
+
+  function loadFile(file){
+    if (!file || !file.type.startsWith('image/')) {
+      alert('Bitte eine Bilddatei (.png oder .jpg) wählen.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const dataUrl = e.target.result;
+      applyBgUrl(dataUrl);
+      // Speichern, damit beim nächsten Öffnen direkt da
+      try { localStorage.setItem('focus-guardian-bg', dataUrl); } catch(err) {
+        console.warn('Bild zu groß für localStorage — wird nur in dieser Session benutzt.', err);
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // 1) Versuche zuerst: gespeichertes Bild aus localStorage
+  try {
+    const saved = localStorage.getItem('focus-guardian-bg');
+    if (saved) {
+      savedHint.style.display = 'block';
+      applyBgUrl(saved);
+    }
+  } catch(e) {}
+
+  // 2) Versuche: assets/bg.png neben der HTML
+  if (!document.body.classList.contains('has-bg')) {
+    const tryPaths = ['assets/bg.png', 'bg.png', 'assets/bg.jpg', 'bg.jpg'];
+    let i = 0;
+    const tryNext = () => {
+      if (i >= tryPaths.length) return;
+      const img = new Image();
+      img.onload = () => applyBgUrl(tryPaths[i]);
+      img.onerror = () => { i++; tryNext(); };
+      img.src = tryPaths[i];
+    };
+    tryNext();
+  }
+
+  // Datei-Picker Button
+  pickBtn.addEventListener('click', () => filePicker.click());
+  filePicker.addEventListener('change', (e) => {
+    if (e.target.files[0]) loadFile(e.target.files[0]);
+  });
+
+  // Skip
+  skipBtn.addEventListener('click', () => {
+    dropZone.style.display = 'none';
+  });
+
+  // Hintergrund ändern
+  changeBgBtn.addEventListener('click', () => {
+    if (confirm('Anderes Hintergrundbild laden?')) {
+      try { localStorage.removeItem('focus-guardian-bg'); } catch(e) {}
+      document.body.classList.remove('has-bg');
+      bgEl.style.backgroundImage = '';
+      dropZone.style.display = 'grid';
+      savedHint.style.display = 'none';
+    }
+  });
+
+  // Drag & Drop — überall im Fenster
+  ['dragenter','dragover'].forEach(evt => {
+    window.addEventListener(evt, (e) => {
+      e.preventDefault(); e.stopPropagation();
+      dropZone.style.display = 'grid';
+      dropZone.classList.add('drag-active');
+    });
+  });
+  ['dragleave','drop'].forEach(evt => {
+    window.addEventListener(evt, (e) => {
+      e.preventDefault(); e.stopPropagation();
+      dropZone.classList.remove('drag-active');
+    });
+  });
+  window.addEventListener('drop', (e) => {
+    e.preventDefault();
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      loadFile(e.dataTransfer.files[0]);
+    }
+  });
 
   // ===== Helpers =====
   function fmtTime(sec){
