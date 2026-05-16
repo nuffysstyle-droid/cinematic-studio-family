@@ -210,7 +210,33 @@ $authUser = csf_auth_user();
 
         <section id="finalSection" class="final-section" hidden>
           <h2>Finales Video erstellen</h2>
-          <p>Alle nicht ersetzten Slots werden aus dem Originalvideo geschnitten. Ersetzte Slots verwenden dein Bild oder Video. Endergebnis: 1080p · MP4 · stumm (Audio kommt in V2).</p>
+          <p>Alle nicht ersetzten Slots werden aus dem Originalvideo geschnitten. Original-Audio wird beibehalten wenn vorhanden.</p>
+
+          <?php if ($authUser && in_array($authUser['plan'], ['starter','pro'], true)): ?>
+          <!-- Qualitäts-Umschalter nur für Starter+ / Pro -->
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+            <span style="font-size:.82rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.05em">Export-Qualität:</span>
+            <div style="display:flex;gap:6px;">
+              <button id="q720Btn" onclick="setQuality('720p')"
+                style="padding:6px 14px;border-radius:8px;border:1px solid var(--border);background:var(--card2);color:var(--muted);font-size:.82rem;font-weight:700;cursor:pointer;transition:all .15s"
+                class="q-btn q-active">720p</button>
+              <button id="q1080Btn" onclick="setQuality('1080p')"
+                style="padding:6px 14px;border-radius:8px;border:1px solid var(--border);background:var(--card2);color:var(--muted);font-size:.82rem;font-weight:700;cursor:pointer;transition:all .15s"
+                class="q-btn">1080p ✨</button>
+            </div>
+            <span id="qualityLabel" style="font-size:.78rem;color:var(--muted)">· 720p aktiv</span>
+          </div>
+          <?php else: ?>
+          <div style="font-size:.8rem;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:6px;">
+            <span>📺 720p Export</span>
+            <?php if (!$authUser): ?>
+              · <a href="login.php?tab=register&redirect=studio-demo.php" style="color:var(--purple)">Registrieren für 1080p</a>
+            <?php else: ?>
+              · <a href="https://cinematic-vision-studio.de/crystals.html" style="color:var(--purple)">Starter+ für 1080p</a>
+            <?php endif; ?>
+          </div>
+          <?php endif; ?>
+
           <button id="renderBtn" class="render-btn" type="button">🎬 Finales Video erstellen</button>
           <div id="renderStatus" class="render-status" hidden></div>
           <div id="renderError" class="render-error" hidden></div>
@@ -274,6 +300,31 @@ $authUser = csf_auth_user();
     function setStatus(text, type) { statusBox.className = "status" + (type ? " " + type : ""); statusBox.textContent = text; }
     function formatSeconds(value) { return Number(value).toFixed(2) + "s"; }
     function clearChildren(el) { while (el.firstChild) el.removeChild(el.firstChild); }
+
+    // ── Qualitäts-Toggle (Starter+ / Pro) ────────────────────────────────────
+    let currentQuality = '720p';
+    async function setQuality(q) {
+        try {
+            const res  = await fetch('/api/settings/quality.php', {
+                method:  'POST',
+                headers: {'Content-Type':'application/json'},
+                body:    JSON.stringify({quality: q}),
+            });
+            const data = await res.json();
+            if (data.status === 'ok') {
+                currentQuality = data.quality;
+                const lbl = document.getElementById('qualityLabel');
+                const b720 = document.getElementById('q720Btn');
+                const b1080 = document.getElementById('q1080Btn');
+                if (lbl)  lbl.textContent = '· ' + currentQuality + ' aktiv' + (data.capped ? ' (Plan: Free → max 720p)' : '');
+                if (b720)  { b720.style.color  = currentQuality==='720p'  ? '#f0f0ff' : ''; b720.style.borderColor  = currentQuality==='720p'  ? 'rgba(124,58,237,.6)' : ''; }
+                if (b1080) { b1080.style.color = currentQuality==='1080p' ? '#f0f0ff' : ''; b1080.style.borderColor = currentQuality==='1080p' ? 'rgba(124,58,237,.6)' : ''; }
+                if (data.capped && q==='1080p') {
+                    alert('1080p ist nur für Starter+ und Pro verfügbar. Upgrade unter cinematic-vision-studio.de/crystals.html');
+                }
+            }
+        } catch(e) { console.warn('Quality toggle failed', e); }
+    }
     function setSlotStatus(el, text, type) { el.textContent = text; el.classList.remove("ok","err"); if (type) el.classList.add(type); }
     function dbg(label, data) { try { if (data === undefined) console.log("[csf] " + label); else console.log("[csf] " + label, data); } catch(_){} }
     function networkErrorMessage(err, endpoint) {
@@ -592,9 +643,21 @@ $authUser = csf_auth_user();
     }
 
     (function boot(){
-      const fromHash=readJobIdFromHash(); const fromStorage=loadJobFromStorage();
-      const jobId=(fromHash&&isValidJobId(fromHash))?fromHash:(isValidJobId(fromStorage)?fromStorage:null);
-      if(jobId) restoreJob(jobId);
+      // Priorität: ?job_id= URL-Parameter (von dashboard.php) → #job= Hash → localStorage
+      const urlParams  = new URLSearchParams(location.search);
+      const fromUrl    = urlParams.get('job_id') || null;
+      const fromHash   = readJobIdFromHash();
+      const fromStorage = loadJobFromStorage();
+      const jobId = (isValidJobId(fromUrl)    ? fromUrl    :
+                    (isValidJobId(fromHash)   ? fromHash   :
+                    (isValidJobId(fromStorage)? fromStorage: null)));
+      if (jobId) {
+        // URL sauber halten — Query-Param zu Hash konvertieren
+        if (fromUrl && isValidJobId(fromUrl)) {
+          history.replaceState(null, '', location.pathname + '#job=' + encodeURIComponent(fromUrl));
+        }
+        restoreJob(jobId);
+      }
     })();
   </script>
   <script>(function(){var b=document.getElementById('mobBurger'),m=document.getElementById('mobMenu');if(!b||!m)return;function t(){m.style.top=document.querySelector('.nav').offsetHeight+'px';}t();window.addEventListener('resize',t);b.addEventListener('click',function(e){e.stopPropagation();var o=m.classList.toggle('open');b.classList.toggle('open',o);b.setAttribute('aria-expanded',o?'true':'false');b.setAttribute('aria-label',o?'Menü schließen':'Menü öffnen');});m.querySelectorAll('.mob-link,.mob-cta').forEach(function(l){l.addEventListener('click',function(){m.classList.remove('open');b.classList.remove('open');b.setAttribute('aria-expanded','false');b.setAttribute('aria-label','Menü öffnen');});});document.addEventListener('click',function(e){if(!b.contains(e.target)&&!m.contains(e.target)){m.classList.remove('open');b.classList.remove('open');b.setAttribute('aria-expanded','false');}});document.addEventListener('keydown',function(e){if(e.key==='Escape'){m.classList.remove('open');b.classList.remove('open');b.setAttribute('aria-expanded','false');}});})();</script>

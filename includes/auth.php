@@ -80,12 +80,19 @@ function csf_auth_register(string $email, string $password): array
 
     try {
         $pdo  = csf_db();
+        // Neuer User startet mit 50 Gratis-Kristallen (Willkommens-Bonus)
         $stmt = $pdo->prepare("
             INSERT INTO users (email, password_hash, plan, crystals_balance)
-            VALUES (:email, :hash, 'free', 0)
+            VALUES (:email, :hash, 'free', 50)
         ");
         $stmt->execute([':email' => $email, ':hash' => $hash]);
         $userId = (int) $pdo->lastInsertId();
+
+        // Willkommens-Bonus in Transaktions-Log eintragen
+        $pdo->prepare("
+            INSERT INTO crystal_transactions (user_id, amount, action, note)
+            VALUES (:uid, 50, 'welcome_bonus', 'Willkommens-Bonus für neue Mitglieder')
+        ")->execute([':uid' => $userId]);
 
         return ['ok' => true, 'user_id' => $userId];
 
