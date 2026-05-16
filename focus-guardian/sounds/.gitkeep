@@ -1,0 +1,3 @@
+# Place WAV sounds here:
+# start.wav, reminder.wav, warning.wav, critical.wav, alarm.wav, finish.wav
+# If missing, the app falls back to winsound.Beep (Windows) or terminal bell.

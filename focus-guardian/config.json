@@ -1,0 +1,59 @@
+{
+  "default_duration_minutes": 60,
+  "default_mode": "Normal",
+  "available_durations": [30, 60, 90, 120],
+  "available_modes": ["Soft", "Normal", "Hart"],
+  "pause_duration_minutes": 10,
+  "water_reminder_interval_minutes": 30,
+  "endscreen_unlock_seconds": 30,
+  "warning_thresholds": [0.0, 0.5, 0.75, 0.9, 0.95, 1.0],
+  "warning_texts": {
+    "start": "Mission gestartet. Kein neues Thema. Nur dieses Projekt.",
+    "50": "Fokus-Check. Bist du noch bei deinem Ziel?",
+    "75": "Keine neuen Baustellen. Nur noch Hauptaufgabe.",
+    "90": "Endspurt. Speichern, testen, abschliessen.",
+    "95": "Letzte Minuten. Keine neue Idee mehr anfangen.",
+    "100": "Session beendet. Pause ist jetzt Pflicht."
+  },
+  "reality_reminders": [
+    "Hast du genug getrunken?",
+    "Hast du heute Wasser getrunken?",
+    "Hast du schon Waesche gemacht?",
+    "Hast du aufgeraeumt?",
+    "Was waren deine Aufgaben heute?",
+    "Was wolltest du ausserhalb vom PC erledigen?",
+    "Hast du Zeit mit den Kindern verbracht?",
+    "Hast du deiner Frau geholfen?",
+    "Gibt es noch Haushalt?",
+    "Hast du gegessen?",
+    "Hast du dich bewegt?",
+    "Brauchst du frische Luft?",
+    "Was liegt noch wirklich an?",
+    "PC ist nicht alles. Realitaet zuerst."
+  ],
+  "hard_mode_enabled": false,
+  "blocked_processes": [
+    "chrome.exe",
+    "msedge.exe",
+    "discord.exe"
+  ],
+  "sounds": {
+    "start": "sounds/start.wav",
+    "reminder": "sounds/reminder.wav",
+    "warning": "sounds/warning.wav",
+    "critical": "sounds/critical.wav",
+    "alarm": "sounds/alarm.wav",
+    "finish": "sounds/finish.wav"
+  },
+  "theme": {
+    "background": "#050816",
+    "panel": "#0b1224",
+    "border": "#16233d",
+    "primary": "#1f6fff",
+    "glow": "#3ea6ff",
+    "gold": "#ffd84d",
+    "warning": "#ff9f1c",
+    "critical": "#ff3b3b",
+    "text": "#eef4ff"
+  }
+}
