@@ -280,32 +280,79 @@
   }
   .core-rings-svg .ring-rotate {
     transform-origin: 50% 50%;
-    animation: spin 30s linear infinite;
+    animation: spin 18s linear infinite;
   }
   .core-rings-svg .ring-rotate-rev {
     transform-origin: 50% 50%;
-    animation: spin-rev 22s linear infinite;
+    animation: spin-rev 12s linear infinite;
   }
   .core-rings-svg .ring-rotate-fast {
     transform-origin: 50% 50%;
-    animation: spin 14s linear infinite;
+    animation: spin 7s linear infinite;
   }
   .core-rings-svg .ring-rotate-slow {
     transform-origin: 50% 50%;
-    animation: spin-rev 45s linear infinite;
+    animation: spin-rev 25s linear infinite;
   }
+  .core-rings-svg .pulse-node {
+    transform-origin: center;
+    animation: nodePulse 1.6s ease-in-out infinite;
+  }
+  .core-rings-svg .pulse-node.delay-1 { animation-delay: 0.2s; }
+  .core-rings-svg .pulse-node.delay-2 { animation-delay: 0.4s; }
+  .core-rings-svg .pulse-node.delay-3 { animation-delay: 0.6s; }
+  .core-rings-svg .pulse-node.delay-4 { animation-delay: 0.8s; }
+  .core-rings-svg .pulse-node.delay-5 { animation-delay: 1.0s; }
+  .core-rings-svg .pulse-node.delay-6 { animation-delay: 1.2s; }
+  .core-rings-svg .pulse-node.delay-7 { animation-delay: 1.4s; }
+  @keyframes nodePulse {
+    0%, 100% { opacity: 0.35; r: 4; }
+    50% { opacity: 1; r: 7; }
+  }
+  .core-rings-svg .ring-glow {
+    animation: ringGlow 3s ease-in-out infinite;
+  }
+  @keyframes ringGlow {
+    0%, 100% { stroke-opacity: 0.5; filter: drop-shadow(0 0 4px rgba(245,197,66,0.4)); }
+    50% { stroke-opacity: 1; filter: drop-shadow(0 0 14px rgba(245,197,66,0.9)); }
+  }
+  /* Light orb traveling around outer ring */
+  .orbit-outer, .orbit-mid, .orbit-inner {
+    transform-origin: 50% 50%;
+  }
+  .orbit-outer { animation: spin 8s linear infinite; }
+  .orbit-outer-2 { animation: spin 8s linear infinite; animation-delay: -2.66s; transform-origin: 50% 50%; }
+  .orbit-outer-3 { animation: spin 8s linear infinite; animation-delay: -5.33s; transform-origin: 50% 50%; }
+  .orbit-mid { animation: spin-rev 6s linear infinite; }
+  .orbit-mid-2 { animation: spin-rev 6s linear infinite; animation-delay: -3s; transform-origin: 50% 50%; }
+  .orbit-inner { animation: spin 4s linear infinite; }
+  .orbit-inner-2 { animation: spin 4s linear infinite; animation-delay: -2s; transform-origin: 50% 50%; }
   .core-energy {
     position: absolute; inset: 12%;
     border-radius: 50%;
     background:
       conic-gradient(from 0deg,
         rgba(56,182,255,0.0) 0deg,
-        rgba(56,182,255,0.6) 70deg,
-        rgba(245,197,66,0.55) 180deg,
-        rgba(56,182,255,0.6) 280deg,
+        rgba(56,182,255,0.8) 70deg,
+        rgba(245,197,66,0.7) 180deg,
+        rgba(56,182,255,0.8) 280deg,
         rgba(56,182,255,0.0) 360deg);
-    filter: blur(10px) opacity(0.55);
-    animation: spin 12s linear infinite;
+    filter: blur(12px) opacity(0.65);
+    animation: spin 6s linear infinite;
+    z-index: 0;
+  }
+  .core-energy-2 {
+    position: absolute; inset: 22%;
+    border-radius: 50%;
+    background:
+      conic-gradient(from 180deg,
+        rgba(245,197,66,0.0) 0deg,
+        rgba(245,197,66,0.7) 90deg,
+        rgba(56,182,255,0.6) 180deg,
+        rgba(245,197,66,0.7) 270deg,
+        rgba(245,197,66,0.0) 360deg);
+    filter: blur(10px) opacity(0.5);
+    animation: spin-rev 9s linear infinite;
     z-index: 0;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
@@ -322,7 +369,27 @@
     filter: drop-shadow(0 0 18px var(--blue-glow));
     z-index: 1;
     pointer-events: none;
+    animation: crystalBreathe 3s ease-in-out infinite;
   }
+  @keyframes crystalBreathe {
+    0%, 100% { filter: drop-shadow(0 0 14px rgba(56,182,255,0.5)); transform: translateX(-50%) scale(1); }
+    50%      { filter: drop-shadow(0 0 28px rgba(94,216,255,0.95)); transform: translateX(-50%) scale(1.06); }
+  }
+  /* Waterfall animation in background */
+  @keyframes waterFlow {
+    0% { transform: translateY(-20px); opacity: 0; }
+    20% { opacity: 0.9; }
+    100% { transform: translateY(220px); opacity: 0; }
+  }
+  .bg-mountains .wfall {
+    animation: waterFlow 2.4s linear infinite;
+    transform-origin: top;
+  }
+  .bg-mountains .wfall.d1 { animation-delay: 0.4s; }
+  .bg-mountains .wfall.d2 { animation-delay: 0.8s; }
+  .bg-mountains .wfall.d3 { animation-delay: 1.2s; }
+  .bg-mountains .wfall.d4 { animation-delay: 1.6s; }
+  .bg-mountains .wfall.d5 { animation-delay: 2.0s; }
 
   .core-inner {
     position: relative; z-index: 3;
@@ -768,16 +835,20 @@
       <path d="M0,560 L100,500 L220,540 L340,440 L460,520 L580,410 L700,500 L820,400 L940,490 L1060,400 L1180,500 L1300,420 L1420,520 L1540,440 L1660,520 L1780,460 L1920,540 L1920,800 L0,800 Z"
             fill="url(#mountMid)"/>
 
-      <!-- waterfalls -->
-      <rect x="340" y="440" width="2" height="220" fill="url(#waterfall)" opacity="0.7"/>
-      <rect x="346" y="450" width="1" height="210" fill="url(#waterfall)" opacity="0.5"/>
-      <rect x="580" y="410" width="2" height="240" fill="url(#waterfall)" opacity="0.7"/>
-      <rect x="586" y="420" width="1" height="230" fill="url(#waterfall)" opacity="0.5"/>
-      <rect x="820" y="400" width="2" height="260" fill="url(#waterfall)" opacity="0.6"/>
-      <rect x="1180" y="500" width="2" height="200" fill="url(#waterfall)" opacity="0.7"/>
-      <rect x="1186" y="510" width="1" height="190" fill="url(#waterfall)" opacity="0.5"/>
-      <rect x="1420" y="520" width="2" height="180" fill="url(#waterfall)" opacity="0.6"/>
-      <rect x="1660" y="520" width="2" height="170" fill="url(#waterfall)" opacity="0.6"/>
+      <!-- waterfalls (animated) -->
+      <g>
+        <rect class="wfall" x="340" y="440" width="3" height="80" fill="url(#waterfall)"/>
+        <rect class="wfall d1" x="346" y="440" width="2" height="60" fill="url(#waterfall)"/>
+        <rect class="wfall d2" x="580" y="410" width="3" height="90" fill="url(#waterfall)"/>
+        <rect class="wfall d3" x="586" y="410" width="2" height="70" fill="url(#waterfall)"/>
+        <rect class="wfall d4" x="820" y="400" width="3" height="100" fill="url(#waterfall)"/>
+        <rect class="wfall" x="826" y="400" width="2" height="70" fill="url(#waterfall)"/>
+        <rect class="wfall d2" x="1180" y="500" width="3" height="80" fill="url(#waterfall)"/>
+        <rect class="wfall d5" x="1186" y="500" width="2" height="60" fill="url(#waterfall)"/>
+        <rect class="wfall d3" x="1420" y="520" width="3" height="70" fill="url(#waterfall)"/>
+        <rect class="wfall d4" x="1660" y="520" width="3" height="60" fill="url(#waterfall)"/>
+        <rect class="wfall d1" x="1666" y="520" width="2" height="50" fill="url(#waterfall)"/>
+      </g>
 
       <!-- near mountains (foreground) -->
       <path d="M0,680 L120,620 L260,660 L380,580 L500,640 L640,560 L780,620 L900,540 L1020,600 L1160,540 L1300,620 L1440,560 L1580,640 L1720,580 L1860,640 L1920,620 L1920,800 L0,800 Z"
@@ -1076,8 +1147,9 @@
   <!-- ===== CENTER COLUMN ===== -->
   <main class="col-center">
     <div class="core-stage">
-      <!-- Energy aura -->
+      <!-- Energy aura (2 Layer, gegenläufig) -->
       <div class="core-energy"></div>
+      <div class="core-energy-2"></div>
 
       <!-- Detailed mechanical core rings (SVG) -->
       <svg class="core-rings-svg" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
@@ -1133,8 +1205,7 @@
 
         <!-- RING 3: thick gold middle ring (the main one) -->
         <g class="ring-rotate-rev">
-          <circle cx="300" cy="300" r="235" fill="none" stroke="url(#ringGold)" stroke-width="4"
-                  style="filter: drop-shadow(0 0 8px rgba(245,197,66,0.5));"/>
+          <circle class="ring-glow" cx="300" cy="300" r="235" fill="none" stroke="url(#ringGold)" stroke-width="4"/>
           <!-- inner detail line -->
           <circle cx="300" cy="300" r="227" fill="none" stroke="#b8860b" stroke-width="0.5" opacity="0.7"/>
           <circle cx="300" cy="300" r="243" fill="none" stroke="#b8860b" stroke-width="0.5" opacity="0.7"/>
@@ -1145,20 +1216,34 @@
             <path d="M 134 466 A 235 235 0 0 1 65 300" />
             <path d="M 65 300 A 235 235 0 0 1 134 134" />
           </g>
-          <!-- Energy nodes around the ring -->
+          <!-- Energy nodes (pulsing) around the ring -->
           <g fill="#f5c542">
-            <circle cx="300" cy="65" r="6" style="filter: drop-shadow(0 0 6px #f5c542);"/>
-            <circle cx="300" cy="535" r="6" style="filter: drop-shadow(0 0 6px #f5c542);"/>
-            <circle cx="65" cy="300" r="6" style="filter: drop-shadow(0 0 6px #f5c542);"/>
-            <circle cx="535" cy="300" r="6" style="filter: drop-shadow(0 0 6px #f5c542);"/>
+            <circle class="pulse-node" cx="300" cy="65" r="6" style="filter: drop-shadow(0 0 10px #f5c542);"/>
+            <circle class="pulse-node delay-3" cx="300" cy="535" r="6" style="filter: drop-shadow(0 0 10px #f5c542);"/>
+            <circle class="pulse-node delay-5" cx="65" cy="300" r="6" style="filter: drop-shadow(0 0 10px #f5c542);"/>
+            <circle class="pulse-node delay-7" cx="535" cy="300" r="6" style="filter: drop-shadow(0 0 10px #f5c542);"/>
           </g>
           <g fill="#5ed8ff">
-            <circle cx="466" cy="134" r="5" style="filter: drop-shadow(0 0 6px #5ed8ff);"/>
-            <circle cx="466" cy="466" r="5" style="filter: drop-shadow(0 0 6px #5ed8ff);"/>
-            <circle cx="134" cy="466" r="5" style="filter: drop-shadow(0 0 6px #5ed8ff);"/>
-            <circle cx="134" cy="134" r="5" style="filter: drop-shadow(0 0 6px #5ed8ff);"/>
+            <circle class="pulse-node delay-2" cx="466" cy="134" r="5" style="filter: drop-shadow(0 0 10px #5ed8ff);"/>
+            <circle class="pulse-node delay-4" cx="466" cy="466" r="5" style="filter: drop-shadow(0 0 10px #5ed8ff);"/>
+            <circle class="pulse-node delay-6" cx="134" cy="466" r="5" style="filter: drop-shadow(0 0 10px #5ed8ff);"/>
+            <circle class="pulse-node delay-1" cx="134" cy="134" r="5" style="filter: drop-shadow(0 0 10px #5ed8ff);"/>
           </g>
         </g>
+
+        <!-- ORBITING LIGHT PULSES (laufen sichtbar entlang der Ringe) -->
+        <!-- Outer orbit: 3 cyan pulses on r=280 (top start, evenly spaced) -->
+        <g class="orbit-outer"><circle cx="300" cy="20" r="5" fill="#fff" style="filter: drop-shadow(0 0 12px #5ed8ff);"/></g>
+        <g class="orbit-outer-2"><circle cx="300" cy="20" r="5" fill="#fff" style="filter: drop-shadow(0 0 12px #5ed8ff);"/></g>
+        <g class="orbit-outer-3"><circle cx="300" cy="20" r="5" fill="#fff" style="filter: drop-shadow(0 0 12px #5ed8ff);"/></g>
+
+        <!-- Mid orbit: 2 gold pulses on r=235 -->
+        <g class="orbit-mid"><circle cx="300" cy="65" r="6" fill="#fff3b8" style="filter: drop-shadow(0 0 14px #f5c542);"/></g>
+        <g class="orbit-mid-2"><circle cx="300" cy="65" r="6" fill="#fff3b8" style="filter: drop-shadow(0 0 14px #f5c542);"/></g>
+
+        <!-- Inner orbit: 2 cyan pulses on r=210 -->
+        <g class="orbit-inner"><circle cx="300" cy="90" r="4" fill="#aee9ff" style="filter: drop-shadow(0 0 10px #5ed8ff);"/></g>
+        <g class="orbit-inner-2"><circle cx="300" cy="90" r="4" fill="#aee9ff" style="filter: drop-shadow(0 0 10px #5ed8ff);"/></g>
 
         <!-- RING 4: blue inner ring with ticks -->
         <g class="ring-rotate-fast">
