@@ -247,7 +247,7 @@
     .mob-burger.open span:nth-child(2){opacity:0;}
     .mob-burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
     .mob-menu{position:fixed;left:0;right:0;z-index:99;background:rgba(6,6,15,.97);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);box-shadow:0 24px 60px rgba(0,0,0,.6),0 0 50px rgba(59,130,246,.07);max-height:0;overflow:hidden;opacity:0;pointer-events:none;transition:max-height .3s cubic-bezier(.4,0,.2,1),opacity .22s;display:none;}
-    .mob-menu.open{max-height:560px;opacity:1;pointer-events:auto;}
+    .mob-menu.open{max-height:820px;opacity:1;pointer-events:auto;}
     .mob-link{display:block;padding:14px 24px;color:var(--muted);text-decoration:none;font-size:15px;font-weight:700;border-left:3px solid transparent;transition:color .15s,border-color .15s,background .15s;}
     .mob-link:active{background:rgba(255,255,255,.06);}
     .mob-link.active{color:var(--accent);border-left-color:var(--accent);}
@@ -263,32 +263,39 @@
 
   <!-- NAV -->
   <nav class="nav">
-    <div class="nav-logo">Cinematic Vision Studio<span>Premium KI-Filmstudio</span></div>
+    <a href="scene-editor-test.html" class="nav-logo">Cinematic Vision Studio<span>Premium KI-Filmstudio</span></a>
     <div class="nav-links">
-      <a href="https://cinematic-vision-studio.de/" class="nav-link">Home</a>
+      <a href="scene-editor-test.html" class="nav-link active">Home</a>
       <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="nav-link">Studio</a>
-      <a href="https://cinematic-vision-studio.de/shop.html" class="nav-link">Shop Beta</a>
-      <a href="https://cinematic-vision-studio.de/academy.html" class="nav-link">Academy</a>
-      <a href="https://cinematic-vision-studio.de/crystals.html" class="nav-link">Kristalle</a>
+      <a href="shop.html" class="nav-link">Shop</a>
+      <a href="academy.html" class="nav-link">Academy</a>
+      <a href="crystals.html" class="nav-link">Kristalle</a>
+      <a href="https://cinematic-studio-family.onrender.com/contact.php" class="nav-link">Kontakt</a>
     </div>
     <div class="nav-actions">
-      <a href="https://cinematic-studio-family.onrender.com/contact.php" class="nav-btn-ghost">Beta-Zugang</a>
+      <a href="https://cinematic-studio-family.onrender.com/login.php" class="nav-btn-ghost">Login</a>
       <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="nav-btn-gold">Studio starten</a>
-      <a href="https://cinematic-vision-studio.de/crystals.html" class="wallet-pill">💎 Free</a>
+      <a href="crystals.html" class="wallet-pill">💎 Free</a>
     </div>
     <button class="mob-burger" id="mobBurger" aria-label="Menü öffnen" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
   </nav>
 
-  <!-- MOBILE MENU -->
-  <div class="mob-menu" id="mobMenu" role="navigation" aria-label="Mobile Navigation">
-    <a href="https://cinematic-vision-studio.de/" class="mob-link active">🏠 Home</a>
+  <!-- NAVIGATION MENU (Mobile + alle Seiten) -->
+  <div class="mob-menu" id="mobMenu" role="navigation" aria-label="Navigation">
+    <a href="scene-editor-test.html" class="mob-link active">🏠 Home</a>
     <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="mob-link">🎬 Studio</a>
-    <a href="https://cinematic-vision-studio.de/shop.html" class="mob-link">🛍️ Shop Beta</a>
-    <a href="https://cinematic-vision-studio.de/academy.html" class="mob-link">🎓 Academy</a>
-    <a href="https://cinematic-vision-studio.de/crystals.html" class="mob-link">💎 Kristalle</a>
+    <a href="shop.html" class="mob-link">🛍️ Shop Beta</a>
+    <a href="academy.html" class="mob-link">🎓 Academy</a>
+    <a href="portfolio.html" class="mob-link">🎞️ Portfolio</a>
+    <a href="ki-videos.html" class="mob-link">🎥 KI Videos</a>
+    <a href="prompt-generator.html" class="mob-link">✍️ Prompts</a>
+    <a href="calendar.html" class="mob-link">📅 Kalender</a>
+    <a href="crystals.html" class="mob-link">💎 Kristalle</a>
+    <a href="https://cinematic-studio-family.onrender.com/contact.php" class="mob-link">📞 Kontakt</a>
     <div class="mob-sep"></div>
+    <a href="https://cinematic-studio-family.onrender.com/login.php" class="mob-link">🔑 Login / Registrieren</a>
     <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="mob-cta">🎬 Studio starten</a>
   </div>
 
@@ -616,13 +623,18 @@
     <div class="footer-inner">
       <div class="footer-logo">Cinematic Vision Studio</div>
       <nav class="footer-nav">
-        <a href="studio-demo.php">Studio</a>
-        <a href="shop.php">Shop</a>
-        <a href="portfolio.php">Portfolio</a>
-        <a href="crystals.php">Kristalle</a>
-        <a href="contact.php">Kontakt</a>
+        <a href="https://cinematic-studio-family.onrender.com/studio-demo.php">Studio</a>
+        <a href="shop.html">Shop</a>
+        <a href="academy.html">Academy</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="ki-videos.html">KI Videos</a>
+        <a href="prompt-generator.html">Prompts</a>
+        <a href="calendar.html">Kalender</a>
+        <a href="crystals.html">Kristalle</a>
+        <a href="https://cinematic-studio-family.onrender.com/contact.php">Kontakt</a>
+        <a href="https://cinematic-studio-family.onrender.com/login.php">Login</a>
       </nav>
-      <div class="footer-copy">© 2026 · Cinematic Vision Studio · MVP v0.1</div>
+      <div class="footer-copy">© 2026 Cinematic Vision Studio · Alle Rechte vorbehalten</div>
     </div>
   </footer>
 
