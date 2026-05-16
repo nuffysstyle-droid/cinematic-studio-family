@@ -117,9 +117,118 @@
     font-size: 10px; color: var(--cyan); letter-spacing: 2px;
   }
 
+  /* ===== MOTIVATION BANNER (big glowing reminders) ===== */
+  .moti-banner {
+    position: fixed;
+    left: 50%; bottom: 18%;
+    transform: translateX(-50%) scale(0.92);
+    z-index: 95;
+    pointer-events: none;
+    opacity: 0;
+    text-align: center;
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    max-width: 70%;
+  }
+  .moti-banner.show {
+    opacity: 1; transform: translateX(-50%) scale(1);
+  }
+  .moti-banner .moti-label {
+    font-size: 11px; letter-spacing: 5px; color: var(--cyan);
+    text-shadow: 0 0 10px var(--glow-cyan);
+    margin-bottom: 8px;
+  }
+  .moti-banner .moti-text {
+    font-size: clamp(28px, 3.5vw, 54px); font-weight: 900;
+    color: var(--gold);
+    text-shadow:
+      0 0 14px var(--glow-gold),
+      0 0 28px var(--glow-gold),
+      0 0 50px rgba(255,184,0,0.6);
+    letter-spacing: 2px;
+    line-height: 1.2;
+    animation: motiGlow 1.6s ease-in-out infinite;
+  }
+  @keyframes motiGlow {
+    0%, 100% { text-shadow: 0 0 14px var(--glow-gold), 0 0 28px var(--glow-gold); }
+    50%      { text-shadow: 0 0 22px var(--glow-gold), 0 0 50px var(--glow-gold), 0 0 80px rgba(255,184,0,0.5); }
+  }
+  .moti-banner.kids .moti-text { color: var(--green); text-shadow: 0 0 14px var(--glow-green), 0 0 28px var(--glow-green); }
+  .moti-banner.warn .moti-text { color: var(--red);   text-shadow: 0 0 14px var(--glow-red),   0 0 28px var(--glow-red); }
+  .moti-banner.blue .moti-text { color: var(--cyan);  text-shadow: 0 0 14px var(--glow-cyan),  0 0 28px var(--glow-cyan); }
+
+  /* ===== MUSIC PANEL (top right) ===== */
+  .music-panel {
+    position: fixed; top: 60px; right: 16px; z-index: 92;
+    background: rgba(4,10,20,0.92);
+    border: 1px solid rgba(0,170,255,0.45);
+    border-radius: 12px;
+    padding: 12px 14px;
+    width: 240px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 22px rgba(0,170,255,0.25);
+    display: none;
+    font-size: 11px;
+  }
+  .music-panel.shown { display: block; }
+  .music-panel .mp-head {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 10px; letter-spacing: 3px; color: var(--cyan); margin-bottom: 10px;
+    text-shadow: 0 0 6px var(--glow-cyan);
+  }
+  .music-panel .mp-now {
+    font-size: 13px; font-weight: 900; color: var(--gold);
+    text-shadow: 0 0 6px var(--glow-gold);
+    margin-bottom: 4px;
+  }
+  .music-panel .mp-state {
+    font-size: 10px; letter-spacing: 2px; color: var(--dim);
+    margin-bottom: 10px;
+  }
+  .music-panel .mp-vol-row {
+    display: grid; grid-template-columns: auto 1fr auto; gap: 8px; align-items: center;
+    margin-bottom: 10px;
+  }
+  .music-panel input[type="range"] { width: 100%; accent-color: var(--cyan); }
+  .music-panel .mp-vol-num {
+    color: var(--white); font-size: 11px; font-weight: 700; min-width: 30px; text-align: right;
+  }
+  .music-panel .mp-tracks {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4px;
+  }
+  .music-panel .mp-track {
+    padding: 6px 8px;
+    background: rgba(7,17,31,0.7);
+    border: 1px solid rgba(0,170,255,0.25);
+    border-radius: 6px;
+    color: var(--white);
+    font-size: 10px; letter-spacing: 1px;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .music-panel .mp-track:hover {
+    border-color: var(--cyan); box-shadow: 0 0 8px var(--glow-cyan);
+  }
+  .music-panel .mp-track.active {
+    background: rgba(255,184,0,0.18); border-color: var(--gold); color: var(--gold);
+    text-shadow: 0 0 6px var(--glow-gold);
+  }
+  .music-panel .mp-power {
+    display: block; width: 100%; margin-top: 10px;
+    padding: 7px;
+    background: rgba(255,47,47,0.12);
+    border: 1px solid rgba(255,47,47,0.4);
+    color: var(--red);
+    border-radius: 6px;
+    font-size: 10px; letter-spacing: 2px; cursor: pointer;
+  }
+  .music-panel .mp-power.on {
+    background: rgba(108,255,0,0.12);
+    border-color: rgba(108,255,0,0.4);
+    color: var(--green);
+  }
+
   /* Change-bg mini button after image is loaded */
   .change-bg-btn {
-    position: fixed; top: 16px; right: 16px; z-index: 90;
+    position: fixed; top: 16px; right: 270px; z-index: 90;
     background: rgba(4,10,20,0.7);
     border: 1px solid rgba(0,170,255,0.4);
     color: var(--white);
@@ -671,6 +780,34 @@
 <!-- Mini button to change bg after one is loaded -->
 <button class="change-bg-btn" id="changeBgBtn">⟲ HINTERGRUND ÄNDERN</button>
 
+<!-- ===== MUSIC PANEL ===== -->
+<div class="music-panel" id="musicPanel">
+  <div class="mp-head">
+    <span>♪ MUSIK</span>
+    <span id="mpHide" style="cursor:pointer; color:var(--dim);">×</span>
+  </div>
+  <div class="mp-now" id="mpNow">TIEFENFOKUS</div>
+  <div class="mp-state" id="mpState">RUHIG · LÄUFT</div>
+  <div class="mp-vol-row">
+    <span style="color:var(--dim); letter-spacing:1px;">VOL</span>
+    <input type="range" id="mpVolume" min="0" max="100" value="65" />
+    <span class="mp-vol-num" id="mpVolNum">65</span>
+  </div>
+  <div class="mp-tracks">
+    <button class="mp-track active" data-track="drone">Tiefenfokus</button>
+    <button class="mp-track" data-track="crystal">Kristallraum</button>
+    <button class="mp-track" data-track="earth">Erdung</button>
+    <button class="mp-track" data-track="stars">Sterne</button>
+  </div>
+  <button class="mp-power on" id="mpPower">MUSIK AUS</button>
+</div>
+
+<!-- ===== MOTIVATION BANNER ===== -->
+<div class="moti-banner" id="motiBanner">
+  <div class="moti-label">DENK DRAN</div>
+  <div class="moti-text" id="motiText">—</div>
+</div>
+
 <!-- ===== ANIMATION OVERLAYS über dem Hintergrundbild ===== -->
 <canvas id="particles"></canvas>
 <div class="scanlines"></div>
@@ -1058,16 +1195,50 @@
   // ===== Sound Engine =====
   let audioCtx = null, ambientGain = null, ambientNodes = [], masterGain = null;
   let intensityState = 'calm'; // 'calm' | 'active' | 'warning' | 'critical'
+  let currentTrack = 'drone';   // 'drone' | 'crystal' | 'earth' | 'stars'
+  let userVolume = 0.7;         // 0..1, gesetzt vom Slider
+
+  const TRACKS = {
+    drone: {   // Tiefenfokus — E-Moll Drone
+      name: 'TIEFENFOKUS',
+      calm:     { freqs: [82.4, 123.5, 164.8],        baseVol: 0.6, lfoRate: 0.08, lfoDepth: 2.5, noiseFreq: 600, noiseVol: 0.05, type: 'sine' },
+      active:   { freqs: [110, 164.8, 220.5],         baseVol: 0.65, lfoRate: 0.15, lfoDepth: 3, noiseFreq: 700, noiseVol: 0.06, type: 'sine' },
+    },
+    crystal: { // Kristallraum — hohe ätherische Töne
+      name: 'KRISTALLRAUM',
+      calm:     { freqs: [220, 329.6, 440, 659.2],    baseVol: 0.45, lfoRate: 0.12, lfoDepth: 4, noiseFreq: 2000, noiseVol: 0.03, type: 'sine' },
+      active:   { freqs: [220, 329.6, 440, 659.2],    baseVol: 0.5, lfoRate: 0.2, lfoDepth: 4.5, noiseFreq: 2000, noiseVol: 0.04, type: 'sine' },
+    },
+    earth: {   // Erdung — tiefe warme Töne
+      name: 'ERDUNG',
+      calm:     { freqs: [55, 82.4, 110, 138.6],      baseVol: 0.7, lfoRate: 0.06, lfoDepth: 2, noiseFreq: 350, noiseVol: 0.07, type: 'sine' },
+      active:   { freqs: [55, 82.4, 110, 138.6],      baseVol: 0.75, lfoRate: 0.1, lfoDepth: 2.5, noiseFreq: 400, noiseVol: 0.08, type: 'sine' },
+    },
+    stars: {   // Sterne — funkelnd
+      name: 'STERNE',
+      calm:     { freqs: [196, 293.7, 392, 587.3],    baseVol: 0.4, lfoRate: 0.18, lfoDepth: 6, noiseFreq: 3500, noiseVol: 0.025, type: 'sine' },
+      active:   { freqs: [196, 293.7, 392, 587.3],    baseVol: 0.45, lfoRate: 0.25, lfoDepth: 7, noiseFreq: 3500, noiseVol: 0.03, type: 'sine' },
+    },
+  };
+  const WARN_PRESET = {     freqs: [82.4, 123.5, 164.8, 247],         baseVol: 0.6, lfoRate: 1.2, lfoDepth: 4,   noiseFreq: 900, noiseVol: 0.08, type: 'sine' };
+  const CRITICAL_PRESET = { freqs: [55, 110, 138.6, 207.6],           baseVol: 0.35, lfoRate: 4.0, lfoDepth: 8,  noiseFreq: 1200, noiseVol: 0.12, type: 'sawtooth' };
 
   function initAudio(){
     if (audioCtx) return;
     try {
       audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       masterGain = audioCtx.createGain();
-      masterGain.gain.value = 0.65;
+      masterGain.gain.value = userVolume;
       masterGain.connect(audioCtx.destination);
       state.audioReady = true;
     } catch(e) {}
+  }
+
+  function getPreset(intensity){
+    if (intensity === 'critical') return CRITICAL_PRESET;
+    if (intensity === 'warning')  return WARN_PRESET;
+    const track = TRACKS[currentTrack] || TRACKS.drone;
+    return track[intensity] || track.calm;
   }
 
   function startAmbient(intensity){
@@ -1076,73 +1247,21 @@
     intensityState = intensity;
     stopAmbient();
 
+    const preset = getPreset(intensity);
+
     ambientGain = audioCtx.createGain();
     ambientGain.gain.value = 0;
     ambientGain.connect(masterGain);
-
-    // Different presets per intensity
-    let preset;
-    switch(intensity) {
-      case 'critical':
-        // aggressive, dissonant, pulsing fast
-        preset = {
-          freqs: [55, 110, 138.6, 207.6],  // dissonant root + tritone
-          baseVol: 0.18,
-          lfoRate: 4.0,           // fast tremolo
-          lfoDepth: 8,
-          noiseVol: 0.10,
-          noiseFreq: 1200,
-          noiseQ: 1.8,
-          targetVol: 0.16,
-        };
-        break;
-      case 'warning':
-        // tense, faster pulse, higher pitch added
-        preset = {
-          freqs: [82.4, 123.5, 164.8, 247],   // E + B perfect fifth
-          baseVol: 0.4,
-          lfoRate: 1.2,
-          lfoDepth: 4,
-          noiseVol: 0.06,
-          noiseFreq: 900,
-          noiseQ: 1.2,
-          targetVol: 0.14,
-        };
-        break;
-      case 'active':
-        // focused but calm, slightly more present than idle
-        preset = {
-          freqs: [110, 164.8, 220.5],
-          baseVol: 0.5,
-          lfoRate: 0.15,
-          lfoDepth: 2.5,
-          noiseVol: 0.05,
-          noiseFreq: 700,
-          noiseQ: 0.8,
-          targetVol: 0.11,
-        };
-        break;
-      default: // 'calm'
-        preset = {
-          freqs: [82.4, 123.5, 164.8],  // E2/B2/E3 — peaceful drone
-          baseVol: 0.45,
-          lfoRate: 0.08,
-          lfoDepth: 2,
-          noiseVol: 0.035,
-          noiseFreq: 600,
-          noiseQ: 0.7,
-          targetVol: 0.08,
-        };
-    }
-
-    ambientGain.gain.linearRampToValueAtTime(preset.targetVol, audioCtx.currentTime + 2);
+    // Stärkere Ziel-Lautstärke damit man wirklich was hört
+    const targetVol = 0.35;
+    ambientGain.gain.linearRampToValueAtTime(targetVol, audioCtx.currentTime + 1.5);
 
     preset.freqs.forEach((f, i) => {
       const osc = audioCtx.createOscillator();
-      osc.type = (intensity === 'critical') ? 'sawtooth' : 'sine';
+      osc.type = preset.type;
       osc.frequency.value = f;
       const og = audioCtx.createGain();
-      og.gain.value = preset.baseVol * (i === 0 ? 1.2 : 0.7);
+      og.gain.value = preset.baseVol * (i === 0 ? 1.0 : 0.65);
       const lfo = audioCtx.createOscillator();
       lfo.frequency.value = preset.lfoRate + i*0.03;
       const lfoGain = audioCtx.createGain();
@@ -1152,21 +1271,16 @@
       ambientNodes.push(osc, lfo);
     });
 
-    // Pulsing volume in critical mode
     if (intensity === 'critical') {
       const pulse = audioCtx.createOscillator();
-      pulse.frequency.value = 2.5; // 2.5Hz pulse
+      pulse.frequency.value = 2.5;
       const pulseGain = audioCtx.createGain();
-      pulseGain.gain.value = 0.08;
-      const pulseSink = audioCtx.createGain();
-      pulseSink.gain.value = 1;
-      pulse.connect(pulseGain).connect(pulseSink.gain);
-      pulseSink.connect(ambientGain);
+      pulseGain.gain.value = 0.12;
+      pulse.connect(pulseGain).connect(ambientGain.gain);
       pulse.start();
       ambientNodes.push(pulse);
     }
 
-    // Noise pad
     const bufferSize = audioCtx.sampleRate * 2;
     const noiseBuf = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
     const data = noiseBuf.getChannelData(0);
@@ -1174,11 +1288,13 @@
     const noise = audioCtx.createBufferSource();
     noise.buffer = noiseBuf; noise.loop = true;
     const bp = audioCtx.createBiquadFilter();
-    bp.type = 'bandpass'; bp.frequency.value = preset.noiseFreq; bp.Q.value = preset.noiseQ;
+    bp.type = 'bandpass'; bp.frequency.value = preset.noiseFreq; bp.Q.value = 0.8;
     const ng = audioCtx.createGain(); ng.gain.value = preset.noiseVol;
     noise.connect(bp).connect(ng).connect(ambientGain);
     noise.start();
     ambientNodes.push(noise);
+
+    updateMusicPanelUI();
   }
 
   function stopAmbient(){
@@ -1232,6 +1348,7 @@
     state.soundOn = true;
     soundBanner.classList.add('hidden');
     soundToggleBtn.classList.add('shown');
+    document.getElementById('musicPanel').classList.add('shown');
     // RUHIGE MUSIK direkt starten (auch ohne Session)
     startAmbient(state.running ? 'active' : 'calm');
     playTone({freq:1320,dur:0.15,vol:0.2});
@@ -1479,6 +1596,117 @@
       return e.returnValue;
     }
   });
+
+  // ============================================================================
+  // Music Panel Controls
+  // ============================================================================
+  const musicPanel  = $('musicPanel');
+  const mpHide      = $('mpHide');
+  const mpVolume    = $('mpVolume');
+  const mpVolNum    = $('mpVolNum');
+  const mpPower     = $('mpPower');
+  const mpNow       = $('mpNow');
+  const mpState     = $('mpState');
+
+  function updateMusicPanelUI(){
+    const trackName = (TRACKS[currentTrack] || TRACKS.drone).name;
+    mpNow.textContent = trackName;
+    const stateMap = {
+      calm:     'RUHIG · LÄUFT',
+      active:   'AKTIV · LÄUFT',
+      warning:  'WARNUNG · INTENSIV',
+      critical: 'KRITISCH · ALARM',
+    };
+    mpState.textContent = state.soundOn ? (stateMap[intensityState] || 'LÄUFT') : 'STUMM';
+    mpState.style.color = (intensityState === 'critical') ? 'var(--red)'
+                       : (intensityState === 'warning')  ? 'var(--gold)'
+                       : 'var(--dim)';
+    mpPower.textContent = state.soundOn ? 'MUSIK AUS' : 'MUSIK AN';
+    mpPower.classList.toggle('on', state.soundOn);
+    document.querySelectorAll('.mp-track').forEach(b => {
+      b.classList.toggle('active', b.dataset.track === currentTrack);
+    });
+  }
+
+  mpHide.addEventListener('click', () => musicPanel.classList.remove('shown'));
+
+  mpVolume.addEventListener('input', () => {
+    const v = parseInt(mpVolume.value, 10);
+    userVolume = v / 100;
+    mpVolNum.textContent = v;
+    if (masterGain) masterGain.gain.setValueAtTime(userVolume, audioCtx.currentTime);
+  });
+
+  mpPower.addEventListener('click', () => {
+    if (state.soundOn) {
+      disableSound();
+    } else {
+      if (!state.audioReady) { enableSound(); return; }
+      state.soundOn = true;
+      const intensity = state.running
+        ? (state.remainingSec <= 60 ? 'critical' : state.remainingSec <= 10*60 ? 'warning' : 'active')
+        : 'calm';
+      startAmbient(intensity);
+      updateSoundIcon();
+    }
+    updateMusicPanelUI();
+  });
+
+  document.querySelectorAll('.mp-track').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentTrack = btn.dataset.track;
+      if (state.soundOn && audioCtx) {
+        // Nur calm/active tauschen — warning/critical bleiben gleich
+        if (intensityState === 'calm' || intensityState === 'active') {
+          startAmbient(intensityState);
+        }
+      }
+      updateMusicPanelUI();
+    });
+  });
+
+  // ============================================================================
+  // Motivation Banner — periodisch große leuchtende Reminders
+  // ============================================================================
+  const MOTI_POOL = [
+    { text: 'DENK AN EMILIA',              cls: 'kids' },
+    { text: 'DENK AN LUCA',                cls: 'kids' },
+    { text: 'ZEIT MIT DEN KINDERN',        cls: 'kids' },
+    { text: 'ZEIT MIT DEINER FRAU',        cls: 'kids' },
+    { text: 'SCHLUSS VOM PC MACHEN',       cls: 'warn' },
+    { text: 'HANDY WEGLEGEN',              cls: 'warn' },
+    { text: 'WÄSCHE MACHEN',               cls: '' },
+    { text: 'AUFRÄUMEN',                   cls: '' },
+    { text: 'WASSER TRINKEN',              cls: 'blue' },
+    { text: 'NICHT ABLENKEN LASSEN',       cls: 'warn' },
+    { text: 'REALITÄT ZUERST. PC DANACH.', cls: 'warn' },
+    { text: 'KURZ AUFSTEHEN. BEWEGEN.',    cls: 'blue' },
+    { text: 'ATMEN. ZURÜCK ZUM FOKUS.',    cls: 'kids' },
+    { text: 'WAS LIEGT NOCH AN?',          cls: '' },
+    { text: 'FOKUS IST DEIN SCHILD.',      cls: '' },
+  ];
+  const motiBanner = $('motiBanner');
+  const motiText   = $('motiText');
+  let motiIndex = 0;
+
+  function showMoti(){
+    // Bei Reality-Overlay nicht doppelt anzeigen
+    if (reality.classList.contains('show') || endOverlay.classList.contains('show')) return;
+    const m = MOTI_POOL[motiIndex % MOTI_POOL.length];
+    motiIndex = (motiIndex + Math.floor(Math.random()*3) + 1) % MOTI_POOL.length;
+    motiText.textContent = m.text;
+    motiBanner.className = 'moti-banner ' + (m.cls || '');
+    motiBanner.classList.add('show');
+    setTimeout(() => motiBanner.classList.remove('show'), 5500);
+  }
+
+  // Alle 35–60 Sekunden ein Motivations-Banner
+  function scheduleMoti(){
+    const delay = 35000 + Math.random()*25000;
+    setTimeout(() => { showMoti(); scheduleMoti(); }, delay);
+  }
+  // Erstes Banner nach 12 Sekunden
+  setTimeout(() => { showMoti(); scheduleMoti(); }, 12000);
 
   // ============================================================================
   // Floating Particles (Gold + Cyan sparks)
