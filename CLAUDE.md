@@ -13,11 +13,11 @@
 |---|---|
 | **Produktname** | Cinematic Vision Studio |
 | **Repo / Codebase** | cinematic-studio-family |
-| **Version** | 0.3.1 (Auth live, E2E getestet, KI-Flow verifiziert) |
+| **Version** | 0.3.2 (Quality Audit, CSS-Fixes, Nav-Fixes) |
 | **Live-URL** | https://cinematic-studio-family.onrender.com |
 | **IONOS-URL** | https://cinematic-vision-studio.de/scene-editor-test.html |
 | **GitHub** | nuffysstyle-droid/cinematic-studio-family |
-| **Stand** | 2026-05-16 (Session 7) |
+| **Stand** | 2026-05-16 (Session 8) |
 
 ---
 
@@ -159,19 +159,17 @@ Upload test_video.mp4 (5s, 640x360)
 
 **Gesetzte Render Env-Vars:**
 - ✅ `KIE_AI_API_KEY` — gesetzt, verifiziert via health.php (`kie_key_set: true`)
-- ⬜ `CLEANUP_SECRET` — optional, für manuelles `/api/cleanup.php?key=...`
+- ✅ `CLEANUP_SECRET` — gesetzt, manuelles Cleanup via `/api/cleanup.php?key=...` aktiv
 
 ---
 
-## Aktuelle Probleme (Stand 2026-05-16, Session 7)
+## Aktuelle Probleme (Stand 2026-05-16, Session 8)
 
 | Problem | Priorität | Status |
 |---|---|---|
-| `CLEANUP_SECRET` nicht in Render | 🟢 P3 | Optional — Render Dashboard → `CLEANUP_SECRET` (20+ Zeichen) |
-| IONOS index.html noch nicht hochgeladen | 🟡 P2 | `index.html` lokal erstellt → via IONOS FTP hochladen (Root 403 fix) |
+| Render Cron-Service nicht deployed | 🟡 P2 | Render zeigt Free-Plan → Cron braucht Starter. Fallback: 1/50 probabilistisch nach Render + HTTP `/api/cleanup.php?key=CLEANUP_SECRET` |
 | Email-Verifizierung fehlt | 🟡 P2 | V0.5 Backlog — Mailgun oder PHP mail() |
 | Stripe/Payment nicht integriert | 🟡 P2 | V1.0 Backlog |
-| Cron-Service aktiv auf Render? | 🟡 P2 | render.yaml hat `type: cron` — prüfen ob Render ihn deployed hat |
 
 ---
 
@@ -280,43 +278,50 @@ cinematic-studio-family/
 
 ---
 
-## Was wurde in der letzten Session gebaut (Session 7 — 2026-05-16)
+## Was wurde in Session 8 gebaut (2026-05-16)
 
 > Dieser Block ist für jeden neuen Agenten. Lesen, dann loslegen.
 
-### Session 7 — Neue / geänderte Dateien
+### Session 8 — Geänderte Dateien
 
 | Datei | Was geändert |
 |---|---|
-| `studio-demo.php` | **Bug-Fix:** `htmlspecialchars((string)$crystals)` — int-Cast fehlte → Fatal Error. Root-Links → scene-editor-test.html (war / → 403) |
-| `index.php` | Redirect → scene-editor-test.html (war / → 403) |
-| `index.html` (NEU, IONOS) | Meta-Refresh + JS-Redirect → scene-editor-test.html (IONOS Root-Fix) |
-| `bin/cleanup-cron.php` (NEU) | CLI-Script für Render Cron-Service. Ruft csf_cleanup_old_jobs() auf, gibt Stats aus. |
-| `dashboard.php` | Neu gebaut: Kristalle, Plan, Jobs (Server-Projekte), Transaktionen, Upgrade-CTA |
-| `profile.php` | Neu gebaut: Account-Info, Passwort ändern (via API), Danger Zone |
-| `forgot-password.php` | Neu gebaut: Token-Modus + Email-Info-Seite |
-| `api/auth/change-password.php` | Neu: Rate-limited 10/h, ARGON2ID rehash, invalidiert Remember-Tokens |
-| `api/auth/forgot-password.php` | Neu: User-enum-safe, Token in DB (password_resets table) |
-| `api/settings/quality.php` | Neu: POST → 720p/1080p Session-Setting, Free capped auf 720p |
-| `includes/auth.php` | Bug-Fix: Doppelter SQL-Block entfernt (string-interpolation SQL injection). Welcome-Bonus 50 Kristalle bei Register. |
-| `api/render-final.php` | Plan-Enforcement: Free → 720p, Starter+/Pro → 1080p |
+| `assets/css/app.css` | **Bug-Fix:** `[hidden] { display: none !important; }` — CSS `display:flex/grid` überschrieb HTML-`hidden`-Attribut → Error-Boxen auf merge-clips.php, video-studio.php etc. waren sichtbar beim Seitenload |
+| `contact.php` | **Nav-Fix:** 9 relative Links → 5 absolute Links (IONOS-URLs für IONOS-Seiten, relative URLs für Render-Seiten). Login-Button hinzugefügt. |
 
-### E2E-Test Status (Session 7)
-- ✅ Upload → Analyse → KI-Bild → Render → Download — **vollständig getestet und bestätigt**
-- ✅ KIE_AI_API_KEY gesetzt und aktiv (health.php: `kie_key_set: true`)
-- ✅ Auth: Register → Login → Dashboard → Profil → Logout — alle ohne Fehler
-- ✅ Welcome-Bonus: 50 Kristalle korrekt, Transaktion sichtbar
+### Session 8 — Überprüfte Seiten (Quality Audit)
+
+| Seite | Status | Befund |
+|---|---|---|
+| `cinematic-vision-studio.de/` | ✅ | Redirect → scene-editor-test.html (IONOS index.html hochgeladen) |
+| `scene-editor-test.html` | ✅ | Alle Nav-Links korrekt (absolute IONOS-URLs + Render-URLs) |
+| `studio-demo.php` | ✅ | Login/Register-Flow, Free-Pill, Zurück-Link — alles korrekt |
+| `login.php` | ✅ | Tabs (Login/Register), Passwort-Stärke, Remember-Me |
+| `tiktok-studio.php` | ✅ | Sidebar-Nav, BYOK-Button (kein Fehler) |
+| `video-studio.php` | ✅ | Sidebar-Nav, BYOK-Button (kein Fehler) |
+| `merge-clips.php` | ✅ | Error-Box jetzt korrekt hidden (CSS-Fix!) |
+| `elements.php` | ✅ | Sidebar-Nav, Loading-State korrekt |
+| `contact.php` | ✅ | Nav gefixed (5 Links, absolute URLs) |
+| `ready-videos.php` | ✅ | 12 Videos, 8 Kategorien, Sidebar korrekt |
+| `trailer-builder.php` | ✅ | 200 OK, Funktional |
+| `api/health.php` | ✅ | ok:true, FFmpeg 7.1.3, KI-Key set, Storage writable |
+| `academy.html` (IONOS) | ✅ | 13 Guides, 11 Themen |
+| `shop.html` (IONOS) | ✅ | Premium Assets-Seite korrekt |
+
+### Render Env-Vars (verifiziert Session 8)
+- ✅ `KIE_AI_API_KEY` — gesetzt + aktiv
+- ✅ `CLEANUP_SECRET` — gesetzt + aktiv
+- ℹ️ Render Cron-Service: **nicht deployed** (Dashboard zeigt Free-Plan; Cron erfordert Starter). Fallback: probabilistischer Cleanup 1/50 nach Render + HTTP-Endpoint aktiv.
 
 ### Was NICHT geändert werden soll (Don't Touch)
 - `api/analyze.php`, `api/replace-slot.php` — Funktionieren korrekt
-- `api/cleanup.php` — Korrekt, wartet auf CLEANUP_SECRET in Render
+- `api/generate-ai.php`, `api/ai-status.php` — KI-Flow funktioniert
 - `docker/apache.conf`, `Dockerfile` — Korrekt konfiguriert
 - `data/ready-videos.json` — 12 Demo-Einträge, gut so
+- `includes/auth.php`, `includes/db.php` — Auth-System stabil
 
 ### Nächste offene Aufgaben (nach Priorität)
-1. **[User-Aktion]** `index.html` via IONOS FTP hochladen → Root-403 fixen
-2. **[User-Aktion]** `CLEANUP_SECRET` in Render-Dashboard → min. 20 Zeichen → Redeploy
-3. **[Agent]** Render Cron-Service prüfen ob aktiv (render.yaml `type: cron` deployed?)
-4. **[Agent]** Email-Verifizierung bei Register (Mailgun oder SMTP, V0.5)
-5. **[Agent]** Starter+ Plan Stripe-Integration (V0.4)
-6. **[Entscheidung]** Domain: cinematic-vision-studio.de als primäre Domain behalten?
+1. **[Agent]** Email-Verifizierung bei Register (Mailgun oder SMTP, V0.5)
+2. **[Agent]** Starter+ Plan: Stripe-Integration, 1080p-Freischaltung (V0.4)
+3. **[User-Aktion optional]** Render Cron-Service: Starter-Plan aktivieren → `csf-cleanup-cron` Service automatisch deployed
+4. **[Entscheidung]** Domain: cinematic-vision-studio.de als primäre Domain permanent behalten?
