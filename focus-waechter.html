@@ -3,216 +3,260 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>FOKUS WÄCHTER — ADHS Fokus-System</title>
+<title>FOCUS GUARDIAN — Meistere deinen Fokus</title>
 <style>
   /* =========================================================
-     FOKUS WÄCHTER — Cinematic Vision Studio Style v2
-     1:1 Nachbau des Referenz-Designs mit Inline-SVG
-     Single-file HTML/CSS/JS, keine externen Libraries
+     FOCUS GUARDIAN — AAA Sci-Fi Dashboard
+     Single HTML file. No external libs. Offline.
      ========================================================= */
 
   :root {
-    --bg-0: #02050c;
-    --bg-1: #050b18;
-    --bg-2: #081429;
-    --panel: rgba(6, 14, 30, 0.72);
-    --panel-border: rgba(80, 140, 220, 0.28);
-    --gold: #f5c542;
-    --gold-deep: #b8860b;
-    --gold-glow: rgba(245, 197, 66, 0.55);
-    --blue: #38b6ff;
-    --blue-deep: #1a6dff;
-    --blue-glow: rgba(56, 182, 255, 0.5);
-    --cyan: #5ed8ff;
-    --green: #2ee06a;
-    --green-glow: rgba(46, 224, 106, 0.55);
-    --red: #ff3a4e;
-    --red-glow: rgba(255, 58, 78, 0.6);
-    --text: #d8e6ff;
-    --text-dim: #7a8db0;
-    --text-bright: #ffffff;
+    --black:        #04070d;
+    --dark-blue:    #07111f;
+    --dark-blue-2:  #0b1a30;
+    --neon-blue:    #00aaff;
+    --cyan:         #31d7ff;
+    --gold:         #ffb800;
+    --dark-gold:    #a66a00;
+    --green:        #6cff00;
+    --green-soft:   #2ee06a;
+    --red:          #ff2f2f;
+    --white:        #eef4ff;
+    --text-dim:     #6b85aa;
+
+    --glow-blue:    rgba(0,170,255,0.55);
+    --glow-cyan:    rgba(49,215,255,0.55);
+    --glow-gold:    rgba(255,184,0,0.6);
+    --glow-green:   rgba(108,255,0,0.6);
+    --glow-red:     rgba(255,47,47,0.65);
+
+    --panel-bg:     rgba(7, 17, 31, 0.62);
+    --panel-border: rgba(0, 170, 255, 0.28);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   html, body {
     height: 100%;
-    background: var(--bg-0);
-    color: var(--text);
+    background: var(--black);
+    color: var(--white);
     font-family: "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
     overflow: hidden;
     user-select: none;
   }
 
-  /* ===== Hintergrund: Sci-Fi Berglandschaft =====
-     Verwendet bg.jpg neben der HTML, falls vorhanden.
-     Falls die Datei fehlt, übernehmen die Gradients + SVG-Mountains.   */
+  /* ====================================================
+     LAYERED BACKGROUND: Cosmic Sky → Crystals → Mountains
+     ==================================================== */
   .bg-stage {
     position: fixed; inset: 0; z-index: 0;
-    background-image:
-      radial-gradient(ellipse at 50% 65%, rgba(2,5,12,0.55), rgba(2,5,12,0.85) 70%),
-      url('bg.jpg'),
-      linear-gradient(180deg, #02050c 0%, #050d22 40%, #0a1a3a 65%, #02050c 100%);
-    background-size: cover, cover, cover;
-    background-position: center, center, center;
-    background-repeat: no-repeat;
+    background:
+      radial-gradient(ellipse at 50% 38%, rgba(49,215,255,0.18), transparent 45%),
+      radial-gradient(ellipse at 50% 65%, rgba(0,80,200,0.32), transparent 60%),
+      radial-gradient(ellipse at 20% 25%, rgba(0,170,255,0.16), transparent 55%),
+      radial-gradient(ellipse at 80% 22%, rgba(255,184,0,0.10), transparent 50%),
+      linear-gradient(180deg, #02040a 0%, #04101e 35%, #06182f 60%, #02060e 100%);
     overflow: hidden;
   }
-  /* Wenn bg.jpg geladen ist, blenden wir die SVG-Mountains aus (sie würden doppelt liegen). */
-  .bg-stage.has-bg .bg-mountains { display: none; }
-  .bg-stage.has-bg::before {
-    content: ""; position: absolute; inset: 0;
-    background: linear-gradient(180deg, rgba(2,5,12,0.35), rgba(2,5,12,0.15) 40%, rgba(2,5,12,0.55) 100%);
-    pointer-events: none;
-  }
-  #particles { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
-  .bg-mountains {
-    position: absolute; left: 0; right: 0; bottom: 0;
-    width: 100%; height: 75%;
-    pointer-events: none;
-    z-index: 0;
-  }
-  .bg-mountains svg { width: 100%; height: 100%; display: block; }
+  #particles { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; }
+  .bg-scene { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+  .bg-scene svg { width: 100%; height: 100%; display: block; }
 
-  /* ===== App Layout ===== */
+  /* Scanlines overlay over the whole screen */
+  .scanlines {
+    position: fixed; inset: 0; z-index: 50; pointer-events: none;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(0,170,255,0.025) 0px,
+      rgba(0,170,255,0.025) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    mix-blend-mode: screen;
+  }
+  /* Vignette */
+  .vignette {
+    position: fixed; inset: 0; z-index: 49; pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.75) 100%);
+  }
+
+  /* ====================================================
+     APP GRID
+     ==================================================== */
   .app {
     position: relative;
-    z-index: 2;
+    z-index: 10;
     display: grid;
     grid-template-columns: 320px 1fr 320px;
-    grid-template-rows: 86px 1fr 70px;
+    grid-template-rows: 88px 1fr 72px;
     gap: 14px;
     padding: 14px 18px;
     height: 100vh;
     min-height: 720px;
   }
 
-  /* ===== Header ===== */
+  /* ====================================================
+     HEADER
+     ==================================================== */
   .header {
     grid-column: 1 / -1;
     grid-row: 1;
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    background: linear-gradient(90deg, rgba(6,14,30,0.88), rgba(10,22,42,0.55), rgba(6,14,30,0.88));
+    background: linear-gradient(90deg, rgba(7,17,31,0.88), rgba(11,26,48,0.55), rgba(7,17,31,0.88));
     border: 1px solid var(--panel-border);
     border-radius: 14px;
     padding: 10px 22px;
-    backdrop-filter: blur(6px);
-    box-shadow: 0 0 30px rgba(56,109,255,0.12), inset 0 0 30px rgba(245,197,66,0.04);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 0 30px rgba(0,170,255,0.15), inset 0 0 20px rgba(255,184,0,0.04);
+    position: relative;
   }
-  .brand { display: flex; align-items: center; gap: 14px; }
+  .header::after {
+    content: "";
+    position: absolute; left: 16px; right: 16px; bottom: -1px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
+    opacity: 0.6;
+  }
+  .brand { display: flex; align-items: center; gap: 16px; }
   .brand-logo {
-    width: 58px; height: 58px;
+    width: 60px; height: 60px;
     display: grid; place-items: center;
-    filter: drop-shadow(0 0 10px var(--gold-glow));
+    filter: drop-shadow(0 0 12px var(--glow-gold));
+    animation: logoBreathe 4s ease-in-out infinite;
+  }
+  @keyframes logoBreathe {
+    0%, 100% { filter: drop-shadow(0 0 8px var(--glow-gold)); }
+    50%      { filter: drop-shadow(0 0 18px var(--glow-gold)) drop-shadow(0 0 4px var(--glow-cyan)); }
   }
   .brand-logo svg { width: 100%; height: 100%; }
   .brand-title {
-    font-size: 28px; font-weight: 800; letter-spacing: 4px;
-    color: var(--text-bright);
+    font-size: 28px; font-weight: 900; letter-spacing: 4px;
+    color: var(--white);
   }
-  .brand-title .accent { color: var(--gold); text-shadow: 0 0 14px var(--gold-glow); }
+  .brand-title .accent { color: var(--gold); text-shadow: 0 0 14px var(--glow-gold); }
   .brand-subtitle {
     font-size: 10px; letter-spacing: 3px; color: var(--text-dim); margin-top: 4px;
   }
   .brand-subtitle .accent { color: var(--gold); }
 
-  .top-nav { display: flex; gap: 32px; justify-content: center; }
+  .top-nav { display: flex; gap: 26px; justify-content: center; }
   .top-nav .nav-item {
     display: flex; flex-direction: column; align-items: center; gap: 5px;
     font-size: 11px; letter-spacing: 2px; color: var(--text-dim);
-    cursor: default; position: relative; padding: 6px 4px;
+    cursor: pointer; position: relative; padding: 6px 4px;
+    transition: color 0.2s ease;
   }
+  .top-nav .nav-item:hover { color: var(--cyan); }
   .top-nav .nav-item.active { color: var(--gold); }
   .top-nav .nav-item.active::after {
-    content: ""; position: absolute; bottom: -6px; left: 10%; right: 10%;
+    content: ""; position: absolute; bottom: -8px; left: 10%; right: 10%;
     height: 2px; background: var(--gold);
-    box-shadow: 0 0 8px var(--gold-glow);
+    box-shadow: 0 0 10px var(--glow-gold);
   }
   .top-nav .nav-ico {
-    width: 32px; height: 32px;
+    width: 34px; height: 34px;
     display: grid; place-items: center;
-    border: 1px solid rgba(80,140,220,0.25);
+    border: 1px solid rgba(0,170,255,0.25);
     border-radius: 8px;
-    background: rgba(8,16,32,0.6);
+    background: rgba(7,17,31,0.7);
+    transition: all 0.25s ease;
+  }
+  .top-nav .nav-item:hover .nav-ico {
+    border-color: var(--cyan);
+    box-shadow: 0 0 14px var(--glow-cyan);
+    background: rgba(0,170,255,0.08);
   }
   .top-nav .nav-item.active .nav-ico {
-    border-color: rgba(245,197,66,0.55);
-    box-shadow: 0 0 12px var(--gold-glow), inset 0 0 8px rgba(245,197,66,0.15);
+    border-color: var(--gold);
+    box-shadow: 0 0 14px var(--glow-gold), inset 0 0 8px rgba(255,184,0,0.18);
   }
   .top-nav svg { width: 18px; height: 18px; }
 
   .level { display: flex; align-items: center; gap: 14px; justify-content: flex-end; }
   .level-info { text-align: right; }
   .level-info .level-title { font-size: 11px; letter-spacing: 3px; color: var(--text-dim); }
-  .level-info .level-name { font-size: 16px; letter-spacing: 2px; color: var(--text-bright); font-weight: 600; }
+  .level-info .level-name {
+    font-size: 16px; letter-spacing: 2px; color: var(--white); font-weight: 700;
+  }
   .level-bar {
-    width: 170px; height: 6px; background: rgba(56,109,255,0.15);
+    width: 170px; height: 6px; background: rgba(0,170,255,0.18);
     border-radius: 3px; margin-top: 6px; overflow: hidden; position: relative;
+    border: 1px solid rgba(0,170,255,0.3);
   }
   .level-bar::after {
     content: ""; position: absolute; inset: 0;
-    background: repeating-linear-gradient(90deg, transparent 0, transparent 14px, rgba(0,0,0,0.4) 14px, rgba(0,0,0,0.4) 15px);
+    background: repeating-linear-gradient(90deg, transparent 0, transparent 14px, rgba(0,0,0,0.5) 14px, rgba(0,0,0,0.5) 15px);
   }
   .level-bar .fill {
     height: 100%; width: 62%;
-    background: linear-gradient(90deg, var(--blue), var(--gold));
-    box-shadow: 0 0 10px var(--blue-glow);
+    background: linear-gradient(90deg, var(--neon-blue), var(--gold));
+    box-shadow: 0 0 12px var(--glow-blue);
   }
   .level-xp { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
   .level-badge {
-    width: 52px; height: 52px;
+    width: 54px; height: 54px;
     display: grid; place-items: center;
-    filter: drop-shadow(0 0 10px var(--blue-glow));
+    filter: drop-shadow(0 0 12px var(--glow-blue));
   }
   .level-badge svg { width: 100%; height: 100%; }
 
-  /* ===== Panels ===== */
+  /* ====================================================
+     PANELS (Holographic glass)
+     ==================================================== */
   .panel {
-    background: var(--panel);
+    background: var(--panel-bg);
     border: 1px solid var(--panel-border);
     border-radius: 14px;
     padding: 14px 16px;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 0 24px rgba(56,109,255,0.10), inset 0 0 0 1px rgba(255,255,255,0.02);
+    backdrop-filter: blur(10px);
+    box-shadow:
+      0 0 30px rgba(0,170,255,0.08),
+      inset 0 1px 0 rgba(255,255,255,0.05),
+      inset 0 0 20px rgba(0,80,160,0.05);
     position: relative;
     overflow: hidden;
   }
+  /* top gradient line */
   .panel::before {
-    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(56,182,255,0.55), transparent);
+    content: ""; position: absolute; top: 0; left: 8%; right: 8%; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    opacity: 0.85;
   }
-  /* Decorative corners (like sci-fi HUD) */
-  .panel::after {
-    content: "";
-    position: absolute; top: 6px; right: 6px;
-    width: 14px; height: 14px;
-    border-top: 1.5px solid var(--gold); border-right: 1.5px solid var(--gold);
-    opacity: 0.55;
+  /* gold corner top-right */
+  .panel .corner-tr,
+  .panel .corner-bl {
+    position: absolute; width: 16px; height: 16px; pointer-events: none;
+  }
+  .panel .corner-tr {
+    top: 6px; right: 6px;
+    border-top: 2px solid var(--gold); border-right: 2px solid var(--gold);
+    box-shadow: 0 0 6px var(--glow-gold);
   }
   .panel .corner-bl {
-    position: absolute; bottom: 6px; left: 6px;
-    width: 14px; height: 14px;
-    border-bottom: 1.5px solid var(--blue); border-left: 1.5px solid var(--blue);
-    opacity: 0.55;
+    bottom: 6px; left: 6px;
+    border-bottom: 2px solid var(--neon-blue); border-left: 2px solid var(--neon-blue);
+    box-shadow: 0 0 6px var(--glow-blue);
   }
   .panel-head {
     display: flex; align-items: center; justify-content: space-between;
     margin-bottom: 10px;
   }
   .panel-title {
-    display: flex; align-items: center; gap: 8px;
-    font-size: 12px; letter-spacing: 3px; color: var(--text-bright);
-    font-weight: 600;
+    display: flex; align-items: center; gap: 9px;
+    font-size: 12px; letter-spacing: 3px; color: var(--white);
+    font-weight: 700;
   }
   .panel-title .ico {
-    width: 16px; height: 16px; color: var(--blue);
-    filter: drop-shadow(0 0 4px var(--blue-glow));
+    width: 18px; height: 18px; color: var(--cyan);
+    filter: drop-shadow(0 0 5px var(--glow-cyan));
   }
   .panel-close { color: var(--text-dim); font-size: 14px; cursor: pointer; line-height: 1; }
+  .panel-close:hover { color: var(--white); }
 
-  /* ===== Left Column ===== */
+  /* ====================================================
+     LEFT COLUMN
+     ==================================================== */
   .col-left {
     grid-column: 1; grid-row: 2;
     display: grid; grid-template-rows: 1fr 1fr 1fr; gap: 14px;
@@ -221,39 +265,49 @@
 
   .mission-card { position: relative; }
   .mission-illustration {
-    position: absolute; top: 36px; right: 6px;
-    width: 130px; height: 130px;
-    opacity: 0.95;
-    filter: drop-shadow(0 0 12px var(--blue-glow));
+    position: absolute; top: 32px; right: 4px;
+    width: 132px; height: 132px;
+    filter: drop-shadow(0 0 14px var(--glow-blue));
     pointer-events: none;
+    animation: floatY 6s ease-in-out infinite;
   }
-  .mission-card .mission-name {
-    font-size: 19px; font-weight: 800; color: var(--gold);
+  @keyframes floatY {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-6px); }
+  }
+  .mission-name {
+    font-size: 18px; font-weight: 900; color: var(--gold);
     letter-spacing: 1px; margin-bottom: 6px; max-width: 60%;
-    text-shadow: 0 0 12px var(--gold-glow);
+    text-shadow: 0 0 12px var(--glow-gold);
     word-break: break-word; line-height: 1.15;
   }
-  .mission-card .mission-goal {
-    font-size: 13px; color: var(--text); margin-bottom: 18px; max-width: 65%;
-    word-break: break-word;
+  .mission-goal {
+    font-size: 13px; color: var(--white); margin-bottom: 16px; max-width: 65%;
+    word-break: break-word; opacity: 0.92;
   }
-  .mission-card .mission-reward {
-    font-size: 10px; letter-spacing: 2px; color: var(--text-dim); margin-bottom: 12px;
+  .mission-reward {
+    font-size: 10px; letter-spacing: 2px; color: var(--text-dim); margin-bottom: 10px;
   }
-  .mission-card .mission-reward strong { color: var(--gold); font-weight: 600; }
+  .mission-reward strong { color: var(--gold); font-weight: 700; }
 
   .stat-card .stat-grid {
-    display: grid;
-    grid-template-columns: 80px 1fr 70px;
-    gap: 10px; align-items: center;
+    display: grid; grid-template-columns: 80px 1fr 80px; gap: 8px; align-items: center;
   }
-  .stat-brain { width: 80px; height: 80px; filter: drop-shadow(0 0 8px var(--gold-glow)); }
+  .stat-brain {
+    width: 80px; height: 80px;
+    filter: drop-shadow(0 0 10px var(--glow-gold));
+    animation: brainPulse 3s ease-in-out infinite;
+  }
+  @keyframes brainPulse {
+    0%, 100% { filter: drop-shadow(0 0 6px var(--glow-gold)); }
+    50%      { filter: drop-shadow(0 0 14px var(--glow-gold)) drop-shadow(0 0 4px var(--glow-cyan)); }
+  }
   .stat-circle { width: 100px; height: 100px; position: relative; margin: 0 auto; }
   .stat-circle svg { width: 100%; height: 100%; transform: rotate(-90deg); }
   .stat-circle .pct {
     position: absolute; inset: 0; display: grid; place-items: center;
-    font-size: 22px; font-weight: 800; color: var(--gold);
-    text-shadow: 0 0 8px var(--gold-glow);
+    font-size: 22px; font-weight: 900; color: var(--gold);
+    text-shadow: 0 0 10px var(--glow-gold);
   }
   .stat-circle .pct small {
     display: block; font-size: 8px; letter-spacing: 2px; color: var(--text-dim);
@@ -262,14 +316,26 @@
   .stat-list { display: flex; flex-direction: column; gap: 7px; font-size: 11px; }
   .stat-list .row { display: flex; flex-direction: column; }
   .stat-list .label { letter-spacing: 1.5px; color: var(--text-dim); font-size: 9px; }
-  .stat-list .value { color: var(--text-bright); font-weight: 700; font-size: 13px; }
+  .stat-list .value { color: var(--white); font-weight: 700; font-size: 13px; }
 
-  .motivation-card .quote {
-    font-style: italic; color: var(--text); font-size: 13px; line-height: 1.5;
+  .motivation-card { position: relative; overflow: hidden; }
+  .motivation-bg {
+    position: absolute; right: -10px; bottom: -10px;
+    width: 110px; height: 110px;
+    opacity: 0.35; filter: blur(0.3px);
+    pointer-events: none;
   }
-  .motivation-card .author { color: var(--text-dim); font-size: 11px; margin-top: 6px; }
+  .motivation-card .quote {
+    font-style: italic; color: var(--white); font-size: 13px; line-height: 1.5;
+    position: relative; z-index: 1;
+  }
+  .motivation-card .author {
+    color: var(--text-dim); font-size: 11px; margin-top: 6px; position: relative; z-index: 1;
+  }
 
-  /* ===== Center Column ===== */
+  /* ====================================================
+     CENTER: FOCUS CORE
+     ==================================================== */
   .col-center {
     grid-column: 2; grid-row: 2;
     display: grid; place-items: center;
@@ -278,129 +344,115 @@
   }
   .core-stage {
     position: relative;
-    width: min(620px, 100%);
+    width: min(660px, 100%);
     aspect-ratio: 1 / 1;
     max-height: 100%;
     display: grid; place-items: center;
   }
-  /* The detailed mechanical core rings as SVG */
+  /* Energy platform glow under core */
+  .core-platform {
+    position: absolute;
+    bottom: -2%; left: 50%; transform: translateX(-50%);
+    width: 90%; height: 18%;
+    background:
+      radial-gradient(ellipse at center, rgba(49,215,255,0.45), rgba(0,80,160,0.15) 50%, transparent 80%);
+    filter: blur(8px);
+    z-index: 0;
+    pointer-events: none;
+    animation: platformPulse 3s ease-in-out infinite;
+  }
+  @keyframes platformPulse {
+    0%, 100% { opacity: 0.65; }
+    50%      { opacity: 1; }
+  }
+  /* Vertical light shafts going up from platform */
+  .core-shaft {
+    position: absolute; left: 50%; bottom: 8%;
+    width: 4px; height: 65%;
+    transform: translateX(-50%);
+    background: linear-gradient(180deg, transparent, rgba(49,215,255,0.5) 60%, rgba(49,215,255,0.9));
+    filter: blur(3px);
+    z-index: 0;
+    opacity: 0.55;
+    pointer-events: none;
+  }
+
   .core-rings-svg {
-    position: absolute; inset: 0;
-    width: 100%; height: 100%;
-    z-index: 1;
+    position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1;
   }
-  .core-rings-svg .ring-rotate {
-    transform-origin: 50% 50%;
-    animation: spin 18s linear infinite;
-  }
-  .core-rings-svg .ring-rotate-rev {
-    transform-origin: 50% 50%;
-    animation: spin-rev 12s linear infinite;
-  }
-  .core-rings-svg .ring-rotate-fast {
-    transform-origin: 50% 50%;
-    animation: spin 7s linear infinite;
-  }
-  .core-rings-svg .ring-rotate-slow {
-    transform-origin: 50% 50%;
-    animation: spin-rev 25s linear infinite;
-  }
-  .core-rings-svg .pulse-node {
-    transform-origin: center;
-    animation: nodePulse 1.6s ease-in-out infinite;
-  }
-  .core-rings-svg .pulse-node.delay-1 { animation-delay: 0.2s; }
-  .core-rings-svg .pulse-node.delay-2 { animation-delay: 0.4s; }
-  .core-rings-svg .pulse-node.delay-3 { animation-delay: 0.6s; }
-  .core-rings-svg .pulse-node.delay-4 { animation-delay: 0.8s; }
-  .core-rings-svg .pulse-node.delay-5 { animation-delay: 1.0s; }
-  .core-rings-svg .pulse-node.delay-6 { animation-delay: 1.2s; }
-  .core-rings-svg .pulse-node.delay-7 { animation-delay: 1.4s; }
+  .core-rings-svg .ring-rotate      { transform-origin: 50% 50%; animation: spin 18s linear infinite; }
+  .core-rings-svg .ring-rotate-rev  { transform-origin: 50% 50%; animation: spinRev 12s linear infinite; }
+  .core-rings-svg .ring-rotate-fast { transform-origin: 50% 50%; animation: spin 7s linear infinite; }
+  .core-rings-svg .ring-rotate-slow { transform-origin: 50% 50%; animation: spinRev 25s linear infinite; }
+  @keyframes spin    { to { transform: rotate(360deg); } }
+  @keyframes spinRev { to { transform: rotate(-360deg); } }
+
+  .core-rings-svg .pulse-node       { transform-origin: center; animation: nodePulse 1.6s ease-in-out infinite; }
+  .core-rings-svg .pulse-node.d1 { animation-delay: 0.2s; }
+  .core-rings-svg .pulse-node.d2 { animation-delay: 0.4s; }
+  .core-rings-svg .pulse-node.d3 { animation-delay: 0.6s; }
+  .core-rings-svg .pulse-node.d4 { animation-delay: 0.8s; }
+  .core-rings-svg .pulse-node.d5 { animation-delay: 1.0s; }
+  .core-rings-svg .pulse-node.d6 { animation-delay: 1.2s; }
+  .core-rings-svg .pulse-node.d7 { animation-delay: 1.4s; }
   @keyframes nodePulse {
     0%, 100% { opacity: 0.35; r: 4; }
-    50% { opacity: 1; r: 7; }
+    50%      { opacity: 1;    r: 8; }
   }
-  .core-rings-svg .ring-glow {
-    animation: ringGlow 3s ease-in-out infinite;
-  }
+  .core-rings-svg .ring-glow { animation: ringGlow 3s ease-in-out infinite; }
   @keyframes ringGlow {
-    0%, 100% { stroke-opacity: 0.5; filter: drop-shadow(0 0 4px rgba(245,197,66,0.4)); }
-    50% { stroke-opacity: 1; filter: drop-shadow(0 0 14px rgba(245,197,66,0.9)); }
+    0%, 100% { stroke-opacity: 0.5; filter: drop-shadow(0 0 4px rgba(255,184,0,0.4)); }
+    50%      { stroke-opacity: 1;   filter: drop-shadow(0 0 14px rgba(255,184,0,0.9)); }
   }
-  /* Light orb traveling around outer ring */
-  .orbit-outer, .orbit-mid, .orbit-inner {
-    transform-origin: 50% 50%;
+
+  /* Orbital light pulses */
+  .orbit { transform-origin: 50% 50%; }
+  .orbit-outer-1 { animation: spin 8s linear infinite; }
+  .orbit-outer-2 { animation: spin 8s linear infinite; animation-delay: -2.66s; }
+  .orbit-outer-3 { animation: spin 8s linear infinite; animation-delay: -5.33s; }
+  .orbit-mid-1   { animation: spinRev 6s linear infinite; }
+  .orbit-mid-2   { animation: spinRev 6s linear infinite; animation-delay: -3s; }
+  .orbit-inner-1 { animation: spin 4s linear infinite; }
+  .orbit-inner-2 { animation: spin 4s linear infinite; animation-delay: -2s; }
+
+  /* Energy auras (conic gradients) */
+  .core-energy, .core-energy-2 {
+    position: absolute; border-radius: 50%; pointer-events: none; z-index: 0;
   }
-  .orbit-outer { animation: spin 8s linear infinite; }
-  .orbit-outer-2 { animation: spin 8s linear infinite; animation-delay: -2.66s; transform-origin: 50% 50%; }
-  .orbit-outer-3 { animation: spin 8s linear infinite; animation-delay: -5.33s; transform-origin: 50% 50%; }
-  .orbit-mid { animation: spin-rev 6s linear infinite; }
-  .orbit-mid-2 { animation: spin-rev 6s linear infinite; animation-delay: -3s; transform-origin: 50% 50%; }
-  .orbit-inner { animation: spin 4s linear infinite; }
-  .orbit-inner-2 { animation: spin 4s linear infinite; animation-delay: -2s; transform-origin: 50% 50%; }
   .core-energy {
-    position: absolute; inset: 12%;
-    border-radius: 50%;
-    background:
-      conic-gradient(from 0deg,
-        rgba(56,182,255,0.0) 0deg,
-        rgba(56,182,255,0.8) 70deg,
-        rgba(245,197,66,0.7) 180deg,
-        rgba(56,182,255,0.8) 280deg,
-        rgba(56,182,255,0.0) 360deg);
-    filter: blur(12px) opacity(0.65);
+    inset: 12%;
+    background: conic-gradient(from 0deg,
+      rgba(0,170,255,0) 0deg,
+      rgba(0,170,255,0.85) 70deg,
+      rgba(255,184,0,0.7) 180deg,
+      rgba(0,170,255,0.85) 280deg,
+      rgba(0,170,255,0) 360deg);
+    filter: blur(14px); opacity: 0.65;
     animation: spin 6s linear infinite;
-    z-index: 0;
   }
   .core-energy-2 {
-    position: absolute; inset: 22%;
-    border-radius: 50%;
-    background:
-      conic-gradient(from 180deg,
-        rgba(245,197,66,0.0) 0deg,
-        rgba(245,197,66,0.7) 90deg,
-        rgba(56,182,255,0.6) 180deg,
-        rgba(245,197,66,0.7) 270deg,
-        rgba(245,197,66,0.0) 360deg);
-    filter: blur(10px) opacity(0.5);
-    animation: spin-rev 9s linear infinite;
-    z-index: 0;
+    inset: 22%;
+    background: conic-gradient(from 180deg,
+      rgba(255,184,0,0) 0deg,
+      rgba(255,184,0,0.7) 90deg,
+      rgba(0,170,255,0.65) 180deg,
+      rgba(255,184,0,0.7) 270deg,
+      rgba(255,184,0,0) 360deg);
+    filter: blur(10px); opacity: 0.5;
+    animation: spinRev 9s linear infinite;
   }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  @keyframes spin-rev { to { transform: rotate(-360deg); } }
 
-  /* Crystal pyramid at base */
+  /* Crystal pyramid */
   .core-crystal {
     position: absolute;
-    bottom: -2%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90px;
-    height: 110px;
-    filter: drop-shadow(0 0 18px var(--blue-glow));
-    z-index: 1;
-    pointer-events: none;
+    bottom: -1%; left: 50%; transform: translateX(-50%);
+    width: 96px; height: 118px; z-index: 1; pointer-events: none;
     animation: crystalBreathe 3s ease-in-out infinite;
   }
   @keyframes crystalBreathe {
-    0%, 100% { filter: drop-shadow(0 0 14px rgba(56,182,255,0.5)); transform: translateX(-50%) scale(1); }
-    50%      { filter: drop-shadow(0 0 28px rgba(94,216,255,0.95)); transform: translateX(-50%) scale(1.06); }
+    0%, 100% { filter: drop-shadow(0 0 16px var(--glow-cyan));               transform: translateX(-50%) scale(1); }
+    50%      { filter: drop-shadow(0 0 30px var(--glow-cyan)) drop-shadow(0 0 8px var(--glow-blue)); transform: translateX(-50%) scale(1.06); }
   }
-  /* Waterfall animation in background */
-  @keyframes waterFlow {
-    0% { transform: translateY(-20px); opacity: 0; }
-    20% { opacity: 0.9; }
-    100% { transform: translateY(220px); opacity: 0; }
-  }
-  .bg-mountains .wfall {
-    animation: waterFlow 2.4s linear infinite;
-    transform-origin: top;
-  }
-  .bg-mountains .wfall.d1 { animation-delay: 0.4s; }
-  .bg-mountains .wfall.d2 { animation-delay: 0.8s; }
-  .bg-mountains .wfall.d3 { animation-delay: 1.2s; }
-  .bg-mountains .wfall.d4 { animation-delay: 1.6s; }
-  .bg-mountains .wfall.d5 { animation-delay: 2.0s; }
 
   .core-inner {
     position: relative; z-index: 3;
@@ -410,121 +462,136 @@
       radial-gradient(circle at 50% 35%, rgba(20,45,90,0.85), rgba(3,8,18,0.95) 70%);
     display: grid; place-items: center;
     text-align: center; padding: 22px;
-    border: 1px solid rgba(80,140,220,0.35);
+    border: 1px solid rgba(0,170,255,0.4);
     box-shadow:
       inset 0 0 60px rgba(0,0,0,0.7),
-      inset 0 0 20px rgba(56,109,255,0.15),
-      0 0 30px rgba(56,109,255,0.25);
+      inset 0 0 25px rgba(0,170,255,0.15),
+      0 0 40px rgba(0,170,255,0.3);
   }
   .core-helmet-wm {
     position: absolute; top: 18px; left: 50%; transform: translateX(-50%);
     width: 36px; height: 36px;
-    opacity: 0.5;
-    filter: drop-shadow(0 0 6px var(--gold-glow));
+    opacity: 0.55;
+    filter: drop-shadow(0 0 6px var(--glow-gold));
   }
   .core-mode {
-    font-size: 11px; letter-spacing: 4px; color: var(--text-dim); margin-bottom: 4px;
-    margin-top: 18px;
+    font-size: 11px; letter-spacing: 4px; color: var(--text-dim);
+    margin-top: 26px; margin-bottom: 4px;
   }
   .core-status {
-    font-size: 19px; letter-spacing: 3px; font-weight: 800;
-    color: var(--green); text-shadow: 0 0 14px var(--green-glow);
+    font-size: 19px; letter-spacing: 3px; font-weight: 900;
+    color: var(--green); text-shadow: 0 0 14px var(--glow-green);
     margin-bottom: 4px;
   }
-  .core-status.idle { color: var(--blue); text-shadow: 0 0 14px var(--blue-glow); }
+  .core-status.idle { color: var(--cyan); text-shadow: 0 0 14px var(--glow-cyan); }
   .core-substatus {
     font-size: 11px; letter-spacing: 3px; color: var(--text-dim); margin-bottom: 12px;
   }
   .core-time {
-    font-size: 76px; font-weight: 800; letter-spacing: 2px;
-    color: var(--green); text-shadow: 0 0 24px var(--green-glow);
+    font-size: 82px; font-weight: 900; letter-spacing: 2px;
+    color: var(--green); text-shadow: 0 0 26px var(--glow-green);
     font-variant-numeric: tabular-nums;
     line-height: 1;
+    font-family: "Segoe UI", "Roboto Mono", monospace;
   }
-  .core-time.warn { color: var(--red); text-shadow: 0 0 26px var(--red-glow); }
-  .core-time.idle { color: var(--blue); text-shadow: 0 0 20px var(--blue-glow); }
+  .core-time.warn  { color: var(--red);  text-shadow: 0 0 28px var(--glow-red);  animation: criticalPulse 1s ease-in-out infinite; }
+  .core-time.idle  { color: var(--cyan); text-shadow: 0 0 20px var(--glow-cyan); }
+  @keyframes criticalPulse {
+    0%, 100% { text-shadow: 0 0 18px var(--glow-red); }
+    50%      { text-shadow: 0 0 36px var(--glow-red), 0 0 60px var(--glow-red); }
+  }
   .core-time-label {
     font-size: 10px; letter-spacing: 4px; color: var(--text-dim); margin-top: 10px;
   }
   .core-pill {
     margin-top: 14px;
     display: inline-flex; align-items: center; gap: 8px;
-    padding: 8px 22px; border-radius: 999px;
-    background: rgba(46,224,106,0.10);
-    border: 1px solid rgba(46,224,106,0.45);
-    color: var(--green); font-size: 11px; letter-spacing: 2px; font-weight: 600;
-    box-shadow: 0 0 14px rgba(46,224,106,0.25);
+    padding: 9px 22px; border-radius: 999px;
+    background: rgba(108,255,0,0.12);
+    border: 1px solid rgba(108,255,0,0.5);
+    color: var(--green); font-size: 11px; letter-spacing: 2px; font-weight: 700;
+    box-shadow: 0 0 14px rgba(108,255,0,0.3), inset 0 0 10px rgba(108,255,0,0.1);
   }
   .core-pill.warn {
-    background: rgba(255,58,78,0.10);
-    border-color: rgba(255,58,78,0.5);
-    color: var(--red); box-shadow: 0 0 14px var(--red-glow);
+    background: rgba(255,47,47,0.12);
+    border-color: rgba(255,47,47,0.55);
+    color: var(--red); box-shadow: 0 0 16px var(--glow-red);
+    animation: criticalPulse 1s ease-in-out infinite;
   }
   .core-foot {
     margin-top: 12px; font-size: 11px; color: var(--text-dim);
-    display: flex; align-items: center; gap: 6px;
+    display: flex; align-items: center; gap: 6px; justify-content: center;
   }
-  .core-foot .check { color: var(--green); }
 
-  /* ===== Start Form ===== */
-  .start-form { width: 84%; display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+  /* Start form */
+  .start-form { width: 84%; display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
   .start-form .row { display: flex; flex-direction: column; gap: 4px; }
   .start-form label { font-size: 10px; letter-spacing: 3px; color: var(--text-dim); }
   .start-form input[type="text"] {
-    width: 100%; padding: 9px 12px;
+    width: 100%; padding: 10px 12px;
     background: rgba(3,8,20,0.8);
-    border: 1px solid rgba(80,140,220,0.35);
-    color: var(--text-bright);
+    border: 1px solid rgba(0,170,255,0.35);
+    color: var(--white);
     border-radius: 8px; font-size: 13px; outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
   }
   .start-form input[type="text"]:focus {
-    border-color: var(--gold); box-shadow: 0 0 10px var(--gold-glow);
+    border-color: var(--gold); box-shadow: 0 0 12px var(--glow-gold);
   }
   .start-form .time-row {
     display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center;
   }
   .start-form input[type="range"] { width: 100%; accent-color: var(--gold); }
   .time-display {
-    color: var(--gold); font-size: 18px; font-weight: 800;
+    color: var(--gold); font-size: 18px; font-weight: 900;
     letter-spacing: 1px; min-width: 80px; text-align: right;
-    text-shadow: 0 0 8px var(--gold-glow);
+    text-shadow: 0 0 8px var(--glow-gold);
     font-variant-numeric: tabular-nums;
   }
+
   .btn {
     display: inline-flex; align-items: center; justify-content: center; gap: 8px;
     padding: 11px 22px;
-    background: linear-gradient(180deg, rgba(245,197,66,0.22), rgba(245,197,66,0.06));
+    background: linear-gradient(180deg, rgba(255,184,0,0.25), rgba(255,184,0,0.08));
     color: var(--gold);
-    border: 1px solid rgba(245,197,66,0.55);
+    border: 1px solid rgba(255,184,0,0.55);
     border-radius: 8px;
     font-size: 13px; letter-spacing: 3px; font-weight: 700;
     cursor: pointer; transition: all 0.2s ease;
-    text-shadow: 0 0 8px var(--gold-glow);
-    box-shadow: 0 0 18px rgba(245,197,66,0.18), inset 0 0 12px rgba(245,197,66,0.06);
+    text-shadow: 0 0 8px var(--glow-gold);
+    box-shadow: 0 0 18px rgba(255,184,0,0.2), inset 0 0 12px rgba(255,184,0,0.08);
   }
   .btn:hover {
-    background: linear-gradient(180deg, rgba(245,197,66,0.35), rgba(245,197,66,0.12));
-    box-shadow: 0 0 26px rgba(245,197,66,0.45);
+    background: linear-gradient(180deg, rgba(255,184,0,0.4), rgba(255,184,0,0.15));
+    box-shadow: 0 0 30px var(--glow-gold);
     transform: translateY(-1px);
   }
+  .btn.green {
+    background: linear-gradient(180deg, rgba(108,255,0,0.22), rgba(108,255,0,0.08));
+    color: var(--green); border-color: rgba(108,255,0,0.55);
+    text-shadow: 0 0 8px var(--glow-green); box-shadow: 0 0 18px rgba(108,255,0,0.2);
+  }
   .btn.blue {
-    background: linear-gradient(180deg, rgba(56,182,255,0.20), rgba(56,182,255,0.06));
-    color: var(--blue); border-color: rgba(56,182,255,0.5);
-    text-shadow: 0 0 8px var(--blue-glow); box-shadow: 0 0 14px rgba(56,182,255,0.18);
+    background: linear-gradient(180deg, rgba(0,170,255,0.22), rgba(0,170,255,0.06));
+    color: var(--cyan); border-color: rgba(0,170,255,0.55);
+    text-shadow: 0 0 8px var(--glow-blue); box-shadow: 0 0 16px rgba(0,170,255,0.2);
   }
   .btn.red {
-    background: linear-gradient(180deg, rgba(255,58,78,0.18), rgba(255,58,78,0.05));
-    color: var(--red); border-color: rgba(255,58,78,0.5);
-    text-shadow: 0 0 8px var(--red-glow); box-shadow: 0 0 14px var(--red-glow);
+    background: linear-gradient(180deg, rgba(255,47,47,0.18), rgba(255,47,47,0.05));
+    color: var(--red); border-color: rgba(255,47,47,0.55);
+    text-shadow: 0 0 8px var(--glow-red); box-shadow: 0 0 16px var(--glow-red);
   }
   .btn.small { padding: 7px 14px; font-size: 11px; letter-spacing: 2px; }
   .btn.ghost {
-    background: rgba(8,16,32,0.6);
-    border: 1px solid rgba(80,140,220,0.35);
-    color: var(--text); text-shadow: none; box-shadow: none;
+    background: rgba(7,17,31,0.6);
+    border: 1px solid rgba(0,170,255,0.35);
+    color: var(--white); text-shadow: none; box-shadow: none;
   }
+  .btn.ghost:hover { border-color: var(--cyan); color: var(--cyan); box-shadow: 0 0 12px var(--glow-cyan); }
 
-  /* ===== Right Column ===== */
+  /* ====================================================
+     RIGHT COLUMN
+     ==================================================== */
   .col-right {
     grid-column: 3; grid-row: 2;
     display: grid; grid-template-rows: 1fr 1fr 1fr; gap: 14px;
@@ -532,12 +599,17 @@
   }
   .systems-card { position: relative; }
   .systems-shield {
-    position: absolute; top: 36px; right: 8px;
-    width: 64px; height: 70px;
-    filter: drop-shadow(0 0 12px var(--blue-glow));
+    position: absolute; top: 32px; right: 6px;
+    width: 70px; height: 78px;
+    filter: drop-shadow(0 0 14px var(--glow-blue));
     pointer-events: none;
+    animation: shieldPulse 4s ease-in-out infinite;
   }
-  .systems-list { display: flex; flex-direction: column; gap: 9px; padding-right: 70px; }
+  @keyframes shieldPulse {
+    0%, 100% { filter: drop-shadow(0 0 10px var(--glow-blue)); }
+    50%      { filter: drop-shadow(0 0 22px var(--glow-blue)) drop-shadow(0 0 4px var(--glow-cyan)); }
+  }
+  .systems-list { display: flex; flex-direction: column; gap: 9px; padding-right: 75px; }
   .system-row {
     display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center;
     font-size: 12px;
@@ -545,17 +617,18 @@
   .system-row .ico {
     width: 26px; height: 26px;
     display: grid; place-items: center;
-    background: rgba(56,182,255,0.08);
-    border: 1px solid rgba(56,182,255,0.3);
+    background: rgba(0,170,255,0.08);
+    border: 1px solid rgba(0,170,255,0.3);
     border-radius: 6px;
-    color: var(--blue);
+    color: var(--cyan);
   }
   .system-row .ico svg { width: 14px; height: 14px; }
-  .system-row .name { color: var(--text); letter-spacing: 0.5px; }
+  .system-row .name { color: var(--white); letter-spacing: 0.5px; }
   .system-row .state {
-    font-size: 11px; letter-spacing: 2px; color: var(--green); font-weight: 700;
-    text-shadow: 0 0 8px var(--green-glow);
+    font-size: 11px; letter-spacing: 2px; color: var(--green-soft); font-weight: 700;
+    text-shadow: 0 0 8px var(--glow-green);
   }
+  .system-row .state.mute { color: var(--gold); text-shadow: 0 0 8px var(--glow-gold); }
 
   .plan-row {
     display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center;
@@ -563,20 +636,19 @@
   .plan-list { display: flex; flex-direction: column; gap: 8px; font-size: 12px; }
   .plan-list .item { display: grid; grid-template-columns: auto 1fr; gap: 8px; }
   .plan-list .item .ico {
-    width: 20px; height: 20px; display: grid; place-items: center;
-    color: var(--blue);
+    width: 20px; height: 20px; display: grid; place-items: center; color: var(--cyan);
   }
   .plan-list .item .ico svg { width: 14px; height: 14px; }
-  .plan-list .item .text { color: var(--text); font-size: 12px; }
+  .plan-list .item .text { color: var(--white); font-size: 12px; }
   .plan-list .item .text small {
     display: block; color: var(--text-dim); font-size: 10px; letter-spacing: 1px;
   }
-  .plan-circle { width: 86px; height: 86px; position: relative; }
+  .plan-circle { width: 90px; height: 90px; position: relative; }
   .plan-circle svg { width: 100%; height: 100%; transform: rotate(-90deg); }
   .plan-circle .center {
     position: absolute; inset: 0; display: grid; place-items: center;
-    font-size: 18px; color: var(--green); font-weight: 800;
-    text-shadow: 0 0 8px var(--green-glow);
+    font-size: 18px; color: var(--green); font-weight: 900;
+    text-shadow: 0 0 8px var(--glow-green);
   }
   .plan-circle .center small {
     display: block; font-size: 8px; letter-spacing: 2px; color: var(--text-dim);
@@ -584,11 +656,11 @@
   }
 
   .sound-card .sound-mode {
-    font-size: 14px; letter-spacing: 2px; color: var(--text-bright); font-weight: 700;
+    font-size: 14px; letter-spacing: 2px; color: var(--white); font-weight: 700;
   }
   .sound-card .sound-sub {
     font-size: 10px; letter-spacing: 3px; color: var(--gold); font-weight: 700;
-    text-shadow: 0 0 6px var(--gold-glow); margin-top: 2px;
+    text-shadow: 0 0 6px var(--glow-gold); margin-top: 2px;
   }
   .waves { width: 100%; height: 52px; margin: 8px 0; display: block; }
   .sound-controls {
@@ -596,67 +668,83 @@
   }
   .sound-ctrl-btn {
     width: 38px; height: 38px; border-radius: 50%;
-    background: rgba(56,182,255,0.10);
-    border: 1px solid rgba(56,182,255,0.35);
-    color: var(--text-bright);
+    background: rgba(0,170,255,0.10);
+    border: 1px solid rgba(0,170,255,0.4);
+    color: var(--white);
     display: grid; place-items: center;
     cursor: pointer; transition: all 0.2s;
   }
   .sound-ctrl-btn.big { width: 50px; height: 50px; }
   .sound-ctrl-btn:hover {
-    background: rgba(56,182,255,0.25); box-shadow: 0 0 14px var(--blue-glow);
+    background: rgba(0,170,255,0.25); box-shadow: 0 0 14px var(--glow-blue);
+    color: var(--cyan);
   }
   .sound-switch-row {
     display: flex; justify-content: center; align-items: center; gap: 8px;
-    margin-top: 8px; font-size: 10px; letter-spacing: 2px; color: var(--gold);
+    margin-top: 10px; font-size: 10px; letter-spacing: 2px; color: var(--gold);
+    cursor: pointer;
   }
+  .sound-switch-row:hover { text-shadow: 0 0 8px var(--glow-gold); }
   .sound-switch-row svg { width: 12px; height: 12px; }
 
-  /* ===== Footer ===== */
+  /* ====================================================
+     FOOTER
+     ==================================================== */
   .footer {
     grid-column: 1 / -1;
     grid-row: 3;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     align-items: center;
-    background: linear-gradient(90deg, rgba(6,14,30,0.88), rgba(10,22,42,0.55), rgba(6,14,30,0.88));
+    background: linear-gradient(90deg, rgba(7,17,31,0.88), rgba(11,26,48,0.55), rgba(7,17,31,0.88));
     border: 1px solid var(--panel-border);
     border-radius: 14px;
     padding: 10px 22px;
-    backdrop-filter: blur(6px);
+    backdrop-filter: blur(8px);
+    position: relative;
+  }
+  .footer::before {
+    content: ""; position: absolute; top: -1px; left: 16px; right: 16px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    opacity: 0.6;
   }
   .streak { display: flex; align-items: center; gap: 14px; }
   .streak-icon {
     width: 40px; height: 40px;
     display: grid; place-items: center;
     color: var(--gold);
-    filter: drop-shadow(0 0 8px var(--gold-glow));
+    filter: drop-shadow(0 0 10px var(--glow-gold));
+    animation: flamePulse 1.6s ease-in-out infinite;
   }
-  .streak-info .streak-text {
-    font-size: 17px; font-weight: 800; color: var(--text-bright);
+  @keyframes flamePulse {
+    0%, 100% { transform: scale(1); filter: drop-shadow(0 0 8px var(--glow-gold)); }
+    50%      { transform: scale(1.08); filter: drop-shadow(0 0 16px var(--glow-gold)) drop-shadow(0 0 4px var(--red)); }
   }
+  .streak-info .streak-text { font-size: 17px; font-weight: 900; color: var(--white); }
   .streak-info .streak-text .num { color: var(--gold); font-size: 19px; }
   .streak-info .streak-sub { font-size: 11px; color: var(--text-dim); margin-top: 1px; }
   .streak-bar {
-    width: 120px; height: 4px; background: rgba(245,197,66,0.15);
+    width: 120px; height: 4px; background: rgba(255,184,0,0.18);
     border-radius: 2px; margin-top: 4px; overflow: hidden;
   }
   .streak-bar .fill {
     height: 100%; width: 70%;
-    background: linear-gradient(90deg, var(--gold-deep), var(--gold));
-    box-shadow: 0 0 8px var(--gold-glow);
+    background: linear-gradient(90deg, var(--dark-gold), var(--gold));
+    box-shadow: 0 0 8px var(--glow-gold);
   }
 
   .bottom-nav { display: flex; justify-content: center; gap: 36px; }
   .bottom-nav .nav-item {
     display: flex; flex-direction: column; align-items: center; gap: 4px;
     font-size: 10px; letter-spacing: 2px; color: var(--text-dim);
-    cursor: default; padding: 4px; position: relative;
+    cursor: pointer; padding: 4px; position: relative;
+    transition: color 0.2s;
   }
+  .bottom-nav .nav-item:hover { color: var(--cyan); }
   .bottom-nav .nav-item.active { color: var(--gold); }
   .bottom-nav .nav-item.active::before {
     content: ""; position: absolute; top: -10px; left: 30%; right: 30%; height: 2px;
-    background: var(--gold); box-shadow: 0 0 8px var(--gold-glow);
+    background: var(--gold); box-shadow: 0 0 8px var(--glow-gold);
   }
   .bottom-nav svg { width: 20px; height: 20px; }
 
@@ -666,49 +754,54 @@
     text-align: right; max-width: 240px; line-height: 1.55;
   }
   .footer-dragon {
-    width: 50px; height: 44px;
-    color: var(--blue);
-    filter: drop-shadow(0 0 8px var(--blue-glow));
+    width: 56px; height: 48px;
+    color: var(--cyan);
+    filter: drop-shadow(0 0 10px var(--glow-cyan));
+    animation: dragonFloat 5s ease-in-out infinite;
+  }
+  @keyframes dragonFloat {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-3px); }
   }
   .footer-time { text-align: right; min-width: 80px; }
   .footer-time .time {
-    font-size: 20px; color: var(--blue); font-weight: 800;
-    text-shadow: 0 0 10px var(--blue-glow);
+    font-size: 22px; color: var(--cyan); font-weight: 900;
+    text-shadow: 0 0 10px var(--glow-cyan);
     font-variant-numeric: tabular-nums;
   }
   .footer-time .date { font-size: 11px; color: var(--text-dim); }
 
-  /* ===== Toast / Warnings ===== */
+  /* ====================================================
+     TOASTS, REALITY OVERLAY, END OVERLAY
+     ==================================================== */
   .toast-stack {
-    position: fixed; top: 100px; right: 20px; z-index: 100;
+    position: fixed; top: 110px; right: 20px; z-index: 100;
     display: flex; flex-direction: column; gap: 10px;
     max-width: 360px;
   }
   .toast {
-    background: rgba(6,14,30,0.95);
-    border: 1px solid rgba(56,182,255,0.5);
-    border-left: 4px solid var(--blue);
-    border-radius: 8px;
-    padding: 12px 16px;
-    color: var(--text);
-    box-shadow: 0 0 20px rgba(56,182,255,0.25);
-    animation: toast-in 0.3s ease-out;
+    background: rgba(7,17,31,0.95);
+    border: 1px solid rgba(0,170,255,0.5);
+    border-left: 4px solid var(--neon-blue);
+    border-radius: 8px; padding: 12px 16px;
+    color: var(--white);
+    box-shadow: 0 0 22px rgba(0,170,255,0.3);
+    animation: toastIn 0.3s ease-out;
     backdrop-filter: blur(8px);
   }
-  .toast.gold { border-color: rgba(245,197,66,0.6); border-left-color: var(--gold); box-shadow: 0 0 20px var(--gold-glow); }
-  .toast.red { border-color: rgba(255,58,78,0.6); border-left-color: var(--red); box-shadow: 0 0 20px var(--red-glow); }
-  .toast.green { border-color: rgba(46,224,106,0.6); border-left-color: var(--green); box-shadow: 0 0 20px var(--green-glow); }
+  .toast.gold  { border-color: rgba(255,184,0,0.6); border-left-color: var(--gold);  box-shadow: 0 0 22px var(--glow-gold); }
+  .toast.red   { border-color: rgba(255,47,47,0.6); border-left-color: var(--red);   box-shadow: 0 0 22px var(--glow-red); }
+  .toast.green { border-color: rgba(108,255,0,0.6); border-left-color: var(--green); box-shadow: 0 0 22px var(--glow-green); }
   .toast .title {
-    font-size: 12px; letter-spacing: 2px; font-weight: 700; margin-bottom: 4px;
-    color: var(--text-bright);
+    font-size: 12px; letter-spacing: 2px; font-weight: 800; margin-bottom: 4px;
+    color: var(--white);
   }
   .toast .body { font-size: 13px; line-height: 1.4; }
-  @keyframes toast-in {
+  @keyframes toastIn {
     from { transform: translateX(40px); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
+    to   { transform: translateX(0);    opacity: 1; }
   }
 
-  /* ===== Reality Reminder Overlay ===== */
   .reality {
     position: fixed; inset: 0; z-index: 200;
     background: rgba(2,5,12,0.92); backdrop-filter: blur(8px);
@@ -717,81 +810,87 @@
   .reality.show { display: grid; }
   .reality-card {
     max-width: 600px; width: 100%;
-    background: var(--panel);
-    border: 1px solid rgba(245,197,66,0.55);
+    background: var(--panel-bg);
+    border: 1px solid rgba(255,184,0,0.55);
     border-radius: 16px;
     padding: 36px; text-align: center;
-    box-shadow: 0 0 40px var(--gold-glow);
-    animation: pop-in 0.4s ease-out;
+    box-shadow: 0 0 40px var(--glow-gold);
+    animation: popIn 0.4s ease-out;
   }
   .reality-label {
     font-size: 11px; letter-spacing: 4px; color: var(--gold); margin-bottom: 14px;
-    text-shadow: 0 0 8px var(--gold-glow);
+    text-shadow: 0 0 8px var(--glow-gold);
   }
   .reality-text {
-    font-size: 26px; font-weight: 700; color: var(--text-bright); line-height: 1.4;
+    font-size: 26px; font-weight: 700; color: var(--white); line-height: 1.4;
     margin-bottom: 24px;
   }
-  @keyframes pop-in { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  @keyframes popIn { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
   .end-overlay {
     position: fixed; inset: 0; z-index: 300;
     background: radial-gradient(ellipse at center, rgba(15,30,60,0.95), rgba(2,5,12,0.98));
     display: none; place-items: center; padding: 30px;
   }
-  .end-overlay.show { display: grid; animation: fade-in 0.4s ease-out; }
-  @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+  .end-overlay.show { display: grid; animation: fadeIn 0.4s ease-out; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
   .end-card { text-align: center; max-width: 700px; }
-  .end-card .end-icon { width: 100px; height: 100px; margin: 0 auto 20px; filter: drop-shadow(0 0 20px var(--gold-glow)); }
+  .end-card .end-icon { width: 110px; height: 110px; margin: 0 auto 20px; filter: drop-shadow(0 0 22px var(--glow-gold)); }
   .end-card .end-title {
-    font-size: 48px; font-weight: 800; letter-spacing: 8px;
-    color: var(--gold); text-shadow: 0 0 24px var(--gold-glow);
+    font-size: 50px; font-weight: 900; letter-spacing: 8px;
+    color: var(--gold); text-shadow: 0 0 24px var(--glow-gold);
     margin-bottom: 16px;
   }
   .end-card .end-sub {
-    font-size: 18px; letter-spacing: 3px; color: var(--text); margin-bottom: 30px;
+    font-size: 18px; letter-spacing: 3px; color: var(--white); margin-bottom: 30px;
     line-height: 1.6;
   }
   .end-card .end-stats {
     display: flex; justify-content: center; gap: 30px; margin-bottom: 30px;
     color: var(--text-dim); font-size: 13px; letter-spacing: 2px;
   }
-  .end-card .end-stats strong { color: var(--blue); display: block; font-size: 22px; margin-top: 4px; }
+  .end-card .end-stats strong { color: var(--cyan); display: block; font-size: 22px; margin-top: 4px; }
 
+  /* Sound banner */
   .sound-banner {
     position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
     z-index: 150;
-    background: rgba(6,14,30,0.95);
-    border: 1px solid rgba(245,197,66,0.55);
+    background: rgba(7,17,31,0.95);
+    border: 1px solid rgba(255,184,0,0.55);
     border-radius: 999px;
     padding: 6px 14px 6px 6px;
     display: flex; align-items: center; gap: 12px;
-    box-shadow: 0 0 20px var(--gold-glow);
+    box-shadow: 0 0 22px var(--glow-gold);
     backdrop-filter: blur(8px);
+    animation: bannerPulse 2s ease-in-out infinite;
+  }
+  @keyframes bannerPulse {
+    0%, 100% { box-shadow: 0 0 14px var(--glow-gold); }
+    50%      { box-shadow: 0 0 28px var(--glow-gold); }
   }
   .sound-banner.hidden { display: none; }
   .sound-banner .icon {
     width: 30px; height: 30px; border-radius: 50%;
-    background: rgba(245,197,66,0.2);
+    background: rgba(255,184,0,0.2);
     display: grid; place-items: center; color: var(--gold);
   }
-  .sound-banner .text { font-size: 12px; color: var(--text); }
+  .sound-banner .text { font-size: 12px; color: var(--white); }
   .sound-banner button {
     background: var(--gold); color: #02050c;
     border: none; padding: 5px 12px; border-radius: 999px;
-    font-size: 11px; font-weight: 800; letter-spacing: 2px; cursor: pointer;
+    font-size: 11px; font-weight: 900; letter-spacing: 2px; cursor: pointer;
   }
-  .sound-banner button:hover { box-shadow: 0 0 12px var(--gold-glow); }
+  .sound-banner button:hover { box-shadow: 0 0 12px var(--glow-gold); }
 
   .hidden { display: none !important; }
 
   ::-webkit-scrollbar { width: 6px; height: 6px; }
   ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: rgba(56,182,255,0.3); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb { background: rgba(0,170,255,0.3); border-radius: 3px; }
 
   @media (max-width: 1280px) {
     .app { grid-template-columns: 290px 1fr 290px; }
-    .core-time { font-size: 64px; }
+    .core-time { font-size: 68px; }
     .brand-title { font-size: 24px; }
   }
   @media (max-width: 1024px) {
@@ -807,80 +906,136 @@
 </head>
 <body>
 
-<!-- ===== HINTERGRUND ===== -->
+<!-- ===== BACKGROUND ===== -->
 <div class="bg-stage">
-  <div class="bg-mountains">
-    <svg viewBox="0 0 1920 800" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Cosmic Scene: floating rocks, crystals, mountains, light shafts -->
+  <div class="bg-scene">
+    <svg viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <linearGradient id="mountFar" x1="0" y1="0" x2="0" y2="1">
+        <linearGradient id="bgMountFar" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stop-color="#1a3060" stop-opacity="0.7"/>
           <stop offset="100%" stop-color="#020812" stop-opacity="1"/>
         </linearGradient>
-        <linearGradient id="mountMid" x1="0" y1="0" x2="0" y2="1">
+        <linearGradient id="bgMountMid" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stop-color="#0e2148" stop-opacity="0.9"/>
           <stop offset="100%" stop-color="#020610" stop-opacity="1"/>
         </linearGradient>
-        <linearGradient id="mountNear" x1="0" y1="0" x2="0" y2="1">
+        <linearGradient id="bgMountNear" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stop-color="#0a1830" stop-opacity="1"/>
           <stop offset="100%" stop-color="#01040a" stop-opacity="1"/>
         </linearGradient>
-        <radialGradient id="moonGlow" cx="0.5" cy="0.5" r="0.5">
-          <stop offset="0%" stop-color="#5ed8ff" stop-opacity="0.55"/>
-          <stop offset="60%" stop-color="#1a6dff" stop-opacity="0.1"/>
-          <stop offset="100%" stop-color="#1a6dff" stop-opacity="0"/>
+        <radialGradient id="bgMoonGlow" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0%"  stop-color="#31d7ff" stop-opacity="0.55"/>
+          <stop offset="55%" stop-color="#0066cc" stop-opacity="0.12"/>
+          <stop offset="100%" stop-color="#0066cc" stop-opacity="0"/>
         </radialGradient>
-        <linearGradient id="waterfall" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#5ed8ff" stop-opacity="0.9"/>
-          <stop offset="100%" stop-color="#5ed8ff" stop-opacity="0"/>
+        <linearGradient id="bgWaterfall" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#31d7ff" stop-opacity="0.9"/>
+          <stop offset="100%" stop-color="#31d7ff" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="bgCrystal" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"  stop-color="#aee9ff" stop-opacity="1"/>
+          <stop offset="100%" stop-color="#0066cc" stop-opacity="0.6"/>
+        </linearGradient>
+        <linearGradient id="bgRock" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"  stop-color="#1c2a44"/>
+          <stop offset="100%" stop-color="#050912"/>
         </linearGradient>
       </defs>
 
-      <!-- distant moon glow behind core -->
-      <circle cx="960" cy="380" r="320" fill="url(#moonGlow)"/>
+      <!-- huge cosmic moon-glow behind core -->
+      <circle cx="960" cy="480" r="460" fill="url(#bgMoonGlow)"/>
+
+      <!-- floating rocks (left) -->
+      <g opacity="0.85">
+        <path d="M180,180 L240,170 L270,200 L250,235 L195,225 Z" fill="url(#bgRock)" stroke="#31d7ff" stroke-width="0.6" opacity="0.5"/>
+        <path d="M120,360 L180,350 L210,380 L175,410 L115,395 Z" fill="url(#bgRock)" stroke="#31d7ff" stroke-width="0.5" opacity="0.4"/>
+        <path d="M260,520 L320,510 L345,540 L310,572 L255,558 Z" fill="url(#bgRock)" stroke="#31d7ff" stroke-width="0.5" opacity="0.35"/>
+      </g>
+      <!-- floating rocks (right) -->
+      <g opacity="0.85">
+        <path d="M1700,210 L1760,200 L1788,230 L1755,260 L1690,250 Z" fill="url(#bgRock)" stroke="#31d7ff" stroke-width="0.6" opacity="0.5"/>
+        <path d="M1620,380 L1685,372 L1715,402 L1680,432 L1615,420 Z" fill="url(#bgRock)" stroke="#31d7ff" stroke-width="0.5" opacity="0.4"/>
+        <path d="M1750,540 L1810,530 L1838,565 L1800,592 L1745,575 Z" fill="url(#bgRock)" stroke="#31d7ff" stroke-width="0.5" opacity="0.35"/>
+      </g>
+
+      <!-- crystals scattered -->
+      <g opacity="0.85">
+        <polygon points="380,420 360,470 400,470" fill="url(#bgCrystal)" stroke="#31d7ff" stroke-width="0.5" opacity="0.6"/>
+        <polygon points="1530,440 1510,490 1550,490" fill="url(#bgCrystal)" stroke="#31d7ff" stroke-width="0.5" opacity="0.6"/>
+        <polygon points="500,720 480,790 520,790" fill="url(#bgCrystal)" stroke="#31d7ff" stroke-width="0.6" opacity="0.7"/>
+        <polygon points="1420,720 1400,790 1440,790" fill="url(#bgCrystal)" stroke="#31d7ff" stroke-width="0.6" opacity="0.7"/>
+      </g>
+
+      <!-- volumetric light shafts (vertical beams) -->
+      <g opacity="0.18">
+        <polygon points="700,0 720,0 870,1080 850,1080" fill="#31d7ff"/>
+        <polygon points="1180,0 1200,0 1090,1080 1070,1080" fill="#31d7ff"/>
+        <polygon points="940,0 960,0 960,1080 920,1080" fill="#aee9ff"/>
+      </g>
 
       <!-- far mountains -->
-      <path d="M0,500 L120,420 L260,460 L380,380 L500,440 L640,350 L780,420 L900,330 L1020,400 L1160,340 L1300,420 L1440,350 L1580,430 L1720,360 L1860,420 L1920,400 L1920,800 L0,800 Z"
-            fill="url(#mountFar)"/>
+      <path d="M0,640 L120,560 L260,600 L380,520 L500,580 L640,490 L780,560 L900,470 L1020,540 L1160,480 L1300,560 L1440,490 L1580,570 L1720,500 L1860,560 L1920,540 L1920,1080 L0,1080 Z"
+            fill="url(#bgMountFar)"/>
 
-      <!-- mid mountains with waterfalls -->
-      <path d="M0,560 L100,500 L220,540 L340,440 L460,520 L580,410 L700,500 L820,400 L940,490 L1060,400 L1180,500 L1300,420 L1420,520 L1540,440 L1660,520 L1780,460 L1920,540 L1920,800 L0,800 Z"
-            fill="url(#mountMid)"/>
+      <!-- mid mountains -->
+      <path d="M0,720 L100,660 L220,700 L340,600 L460,680 L580,570 L700,660 L820,560 L940,650 L1060,560 L1180,660 L1300,580 L1420,680 L1540,600 L1660,680 L1780,620 L1920,700 L1920,1080 L0,1080 Z"
+            fill="url(#bgMountMid)"/>
 
-      <!-- waterfalls (animated) -->
+      <!-- waterfalls (animated via CSS) -->
       <g>
-        <rect class="wfall" x="340" y="440" width="3" height="80" fill="url(#waterfall)"/>
-        <rect class="wfall d1" x="346" y="440" width="2" height="60" fill="url(#waterfall)"/>
-        <rect class="wfall d2" x="580" y="410" width="3" height="90" fill="url(#waterfall)"/>
-        <rect class="wfall d3" x="586" y="410" width="2" height="70" fill="url(#waterfall)"/>
-        <rect class="wfall d4" x="820" y="400" width="3" height="100" fill="url(#waterfall)"/>
-        <rect class="wfall" x="826" y="400" width="2" height="70" fill="url(#waterfall)"/>
-        <rect class="wfall d2" x="1180" y="500" width="3" height="80" fill="url(#waterfall)"/>
-        <rect class="wfall d5" x="1186" y="500" width="2" height="60" fill="url(#waterfall)"/>
-        <rect class="wfall d3" x="1420" y="520" width="3" height="70" fill="url(#waterfall)"/>
-        <rect class="wfall d4" x="1660" y="520" width="3" height="60" fill="url(#waterfall)"/>
-        <rect class="wfall d1" x="1666" y="520" width="2" height="50" fill="url(#waterfall)"/>
+        <rect class="wfall"   x="340"  y="600" width="3" height="100" fill="url(#bgWaterfall)"/>
+        <rect class="wfall d1" x="346" y="600" width="2" height="80"  fill="url(#bgWaterfall)"/>
+        <rect class="wfall d2" x="580" y="570" width="3" height="110" fill="url(#bgWaterfall)"/>
+        <rect class="wfall d3" x="586" y="570" width="2" height="90"  fill="url(#bgWaterfall)"/>
+        <rect class="wfall d4" x="820" y="560" width="3" height="120" fill="url(#bgWaterfall)"/>
+        <rect class="wfall"    x="826" y="560" width="2" height="90"  fill="url(#bgWaterfall)"/>
+        <rect class="wfall d2" x="1180" y="660" width="3" height="100" fill="url(#bgWaterfall)"/>
+        <rect class="wfall d5" x="1186" y="660" width="2" height="80"  fill="url(#bgWaterfall)"/>
+        <rect class="wfall d3" x="1420" y="680" width="3" height="90"  fill="url(#bgWaterfall)"/>
+        <rect class="wfall d4" x="1660" y="680" width="3" height="80"  fill="url(#bgWaterfall)"/>
+        <rect class="wfall d1" x="1666" y="680" width="2" height="70"  fill="url(#bgWaterfall)"/>
       </g>
 
       <!-- near mountains (foreground) -->
-      <path d="M0,680 L120,620 L260,660 L380,580 L500,640 L640,560 L780,620 L900,540 L1020,600 L1160,540 L1300,620 L1440,560 L1580,640 L1720,580 L1860,640 L1920,620 L1920,800 L0,800 Z"
-            fill="url(#mountNear)"/>
+      <path d="M0,840 L120,780 L260,820 L380,740 L500,800 L640,720 L780,780 L900,700 L1020,760 L1160,700 L1300,780 L1440,720 L1580,800 L1720,740 L1860,800 L1920,780 L1920,1080 L0,1080 Z"
+            fill="url(#bgMountNear)"/>
 
-      <!-- glowing edge highlights (rim light) -->
-      <path d="M0,680 L120,620 L260,660 L380,580 L500,640 L640,560 L780,620 L900,540 L1020,600 L1160,540 L1300,620 L1440,560 L1580,640 L1720,580 L1860,640 L1920,620"
-            fill="none" stroke="#1a6dff" stroke-width="1.5" opacity="0.4"/>
+      <!-- glowing rim light on near mountains -->
+      <path d="M0,840 L120,780 L260,820 L380,740 L500,800 L640,720 L780,780 L900,700 L1020,760 L1160,700 L1300,780 L1440,720 L1580,800 L1720,740 L1860,800 L1920,780"
+            fill="none" stroke="#00aaff" stroke-width="2" opacity="0.55"
+            style="filter: drop-shadow(0 0 6px rgba(0,170,255,0.6));"/>
 
-      <!-- floating energy specs near base -->
-      <g opacity="0.7">
-        <circle cx="450" cy="600" r="2" fill="#5ed8ff"/>
-        <circle cx="700" cy="580" r="1.5" fill="#f5c542"/>
-        <circle cx="1250" cy="610" r="2" fill="#5ed8ff"/>
-        <circle cx="1500" cy="590" r="1.5" fill="#f5c542"/>
-        <circle cx="1700" cy="600" r="2" fill="#5ed8ff"/>
-      </g>
+      <!-- energy platform under core -->
+      <ellipse cx="960" cy="900" rx="380" ry="40" fill="none" stroke="#31d7ff" stroke-width="1.5" opacity="0.7"
+               style="filter: drop-shadow(0 0 8px rgba(49,215,255,0.7));"/>
+      <ellipse cx="960" cy="930" rx="320" ry="32" fill="none" stroke="#31d7ff" stroke-width="1" opacity="0.55"/>
+      <ellipse cx="960" cy="960" rx="260" ry="22" fill="none" stroke="#31d7ff" stroke-width="0.7" opacity="0.4"/>
     </svg>
   </div>
+
   <canvas id="particles"></canvas>
 </div>
+
+<!-- ===== SCANLINES + VIGNETTE ===== -->
+<div class="vignette"></div>
+<div class="scanlines"></div>
+
+<style>
+  /* Waterfall animation */
+  @keyframes waterFlow {
+    0%   { transform: translateY(-20px); opacity: 0; }
+    20%  { opacity: 0.9; }
+    100% { transform: translateY(260px); opacity: 0; }
+  }
+  .bg-scene .wfall { animation: waterFlow 2.4s linear infinite; transform-origin: top; }
+  .bg-scene .wfall.d1 { animation-delay: 0.4s; }
+  .bg-scene .wfall.d2 { animation-delay: 0.8s; }
+  .bg-scene .wfall.d3 { animation-delay: 1.2s; }
+  .bg-scene .wfall.d4 { animation-delay: 1.6s; }
+  .bg-scene .wfall.d5 { animation-delay: 2.0s; }
+</style>
 
 <!-- ===== SOUND BANNER ===== -->
 <div id="soundBanner" class="sound-banner">
@@ -900,33 +1055,35 @@
         <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="helmGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#f5c542"/>
-              <stop offset="100%" stop-color="#b8860b"/>
+              <stop offset="0%" stop-color="#ffd56b"/>
+              <stop offset="100%" stop-color="#a66a00"/>
             </linearGradient>
             <linearGradient id="helmShine" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#fff3b8" stop-opacity="0.8"/>
-              <stop offset="50%" stop-color="#f5c542" stop-opacity="0.4"/>
-              <stop offset="100%" stop-color="#b8860b" stop-opacity="0"/>
+              <stop offset="0%"  stop-color="#fff3b8" stop-opacity="0.85"/>
+              <stop offset="50%" stop-color="#ffb800" stop-opacity="0.4"/>
+              <stop offset="100%" stop-color="#a66a00" stop-opacity="0"/>
             </linearGradient>
+            <radialGradient id="helmEye" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0%"  stop-color="#aee9ff"/>
+              <stop offset="100%" stop-color="#00aaff" stop-opacity="0"/>
+            </radialGradient>
           </defs>
-          <!-- Outer shield -->
           <path d="M30 3 L54 12 L54 30 C54 44 44 53 30 57 C16 53 6 44 6 30 L6 12 Z"
                 fill="none" stroke="url(#helmGrad)" stroke-width="2"/>
-          <!-- Inner helmet plate -->
           <path d="M30 10 L48 17 L48 30 C48 41 40 47 30 50 C20 47 12 41 12 30 L12 17 Z"
-                fill="url(#helmGrad)" stroke="#b8860b" stroke-width="0.5"/>
-          <!-- Visor slit -->
-          <rect x="18" y="25" width="24" height="3" fill="#02050c" rx="1"/>
-          <rect x="20" y="32" width="20" height="2" fill="#02050c" rx="1"/>
-          <!-- Helmet crest -->
-          <path d="M28 10 L32 10 L33 15 L27 15 Z" fill="#b8860b"/>
-          <!-- Shine -->
+                fill="url(#helmGrad)" stroke="#a66a00" stroke-width="0.5"/>
+          <!-- blue glowing core inside visor -->
+          <circle cx="30" cy="27" r="6" fill="url(#helmEye)" opacity="0.95"/>
+          <circle cx="30" cy="27" r="2.5" fill="#aee9ff"/>
+          <rect x="18" y="25" width="24" height="3" fill="#04070d" rx="1"/>
+          <rect x="20" y="32" width="20" height="2" fill="#04070d" rx="1"/>
+          <path d="M28 10 L32 10 L33 15 L27 15 Z" fill="#a66a00"/>
           <path d="M30 12 L42 18 L42 28 C42 36 36 41 30 43 L30 12 Z" fill="url(#helmShine)"/>
         </svg>
       </div>
       <div>
-        <div class="brand-title">FOKUS <span class="accent">WÄCHTER</span></div>
-        <div class="brand-subtitle">MEISTER DEINEN FOKUS. BAUE DEINE <span class="accent">LEGACY.</span></div>
+        <div class="brand-title">FOCUS <span class="accent">GUARDIAN</span></div>
+        <div class="brand-subtitle">MEISTERE DEINEN FOKUS. BAUE DEIN <span class="accent">LEGACY.</span></div>
       </div>
     </div>
 
@@ -963,15 +1120,15 @@
         <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="badgeGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#5ed8ff"/>
-              <stop offset="100%" stop-color="#1a6dff"/>
+              <stop offset="0%"  stop-color="#31d7ff"/>
+              <stop offset="100%" stop-color="#0066cc"/>
             </linearGradient>
           </defs>
           <path d="M30 4 L52 12 L52 32 C52 45 42 53 30 56 C18 53 8 45 8 32 L8 12 Z"
-                fill="rgba(56,109,255,0.18)" stroke="url(#badgeGrad)" stroke-width="2"/>
+                fill="rgba(0,170,255,0.18)" stroke="url(#badgeGrad)" stroke-width="2"/>
           <path d="M30 12 L46 18 L46 32 C46 41 39 46 30 48 C21 46 14 41 14 32 L14 18 Z"
-                fill="none" stroke="#5ed8ff" stroke-width="1" opacity="0.6"/>
-          <text x="30" y="36" text-anchor="middle" fill="#f5c542" font-size="16" font-weight="900" font-family="Arial, sans-serif">7</text>
+                fill="none" stroke="#31d7ff" stroke-width="1" opacity="0.6"/>
+          <text x="30" y="36" text-anchor="middle" fill="#ffb800" font-size="18" font-weight="900" font-family="Arial, sans-serif">7</text>
         </svg>
       </div>
     </div>
@@ -982,12 +1139,10 @@
 
     <!-- Mission -->
     <div class="panel mission-card">
-      <div class="corner-bl"></div>
+      <div class="corner-tr"></div><div class="corner-bl"></div>
       <div class="panel-head">
         <div class="panel-title">
-          <span class="ico">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg>
-          </span>
+          <span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg></span>
           AKTUELLE MISSION
         </div>
         <div class="panel-close">×</div>
@@ -1000,128 +1155,117 @@
         MISSIONSDETAILS ANZEIGEN
       </button>
 
-      <!-- Castle illustration -->
+      <!-- Castle / Fortress illustration -->
       <div class="mission-illustration">
         <svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <linearGradient id="castGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#3a5680"/>
+            <linearGradient id="castWall" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%"  stop-color="#3a5680"/>
               <stop offset="100%" stop-color="#0a1426"/>
             </linearGradient>
-            <linearGradient id="rockGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#1c2a44"/>
+            <linearGradient id="castRock" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%"  stop-color="#1c2a44"/>
               <stop offset="100%" stop-color="#040810"/>
             </linearGradient>
             <radialGradient id="castGlow" cx="0.5" cy="0.4" r="0.6">
-              <stop offset="0%" stop-color="#5ed8ff" stop-opacity="0.4"/>
-              <stop offset="100%" stop-color="#5ed8ff" stop-opacity="0"/>
+              <stop offset="0%"  stop-color="#31d7ff" stop-opacity="0.45"/>
+              <stop offset="100%" stop-color="#31d7ff" stop-opacity="0"/>
             </radialGradient>
           </defs>
-          <!-- glow halo -->
-          <circle cx="70" cy="55" r="55" fill="url(#castGlow)"/>
+          <circle cx="70" cy="55" r="58" fill="url(#castGlow)"/>
           <!-- mountain base -->
-          <path d="M10 130 L30 100 L50 115 L70 80 L95 105 L115 90 L130 130 Z" fill="url(#rockGrad)"/>
-          <!-- castle main tower -->
-          <rect x="60" y="40" width="22" height="45" fill="url(#castGrad)" stroke="#5ed8ff" stroke-width="0.5" opacity="0.95"/>
-          <!-- crenellations -->
+          <path d="M5 130 L25 100 L45 115 L65 80 L90 105 L110 90 L135 130 Z" fill="url(#castRock)"/>
+          <!-- main tower -->
+          <rect x="60" y="40" width="22" height="45" fill="url(#castWall)" stroke="#31d7ff" stroke-width="0.5"/>
           <rect x="60" y="38" width="4" height="4" fill="#1a2a44"/>
           <rect x="68" y="38" width="4" height="4" fill="#1a2a44"/>
           <rect x="76" y="38" width="4" height="4" fill="#1a2a44"/>
-          <!-- main tower roof spike -->
-          <polygon points="60,42 71,20 82,42" fill="#1a3060" stroke="#5ed8ff" stroke-width="0.5"/>
-          <polygon points="69,22 73,22 71,12" fill="#f5c542"/>
-          <!-- windows glowing -->
-          <rect x="66" y="50" width="3" height="5" fill="#5ed8ff"/>
-          <rect x="73" y="50" width="3" height="5" fill="#5ed8ff"/>
-          <rect x="66" y="62" width="3" height="5" fill="#f5c542"/>
-          <rect x="73" y="62" width="3" height="5" fill="#f5c542"/>
-          <rect x="69" y="74" width="4" height="8" fill="#5ed8ff" opacity="0.9"/>
+          <polygon points="60,42 71,18 82,42" fill="#1a3060" stroke="#31d7ff" stroke-width="0.5"/>
+          <polygon points="69,20 73,20 71,10" fill="#ffb800"/>
+          <rect x="66" y="50" width="3" height="5" fill="#31d7ff"/>
+          <rect x="73" y="50" width="3" height="5" fill="#31d7ff"/>
+          <rect x="66" y="62" width="3" height="5" fill="#ffb800"/>
+          <rect x="73" y="62" width="3" height="5" fill="#ffb800"/>
+          <rect x="69" y="74" width="4" height="8" fill="#31d7ff" opacity="0.9"/>
           <!-- left tower -->
-          <rect x="40" y="60" width="16" height="35" fill="url(#castGrad)" stroke="#5ed8ff" stroke-width="0.4"/>
-          <polygon points="40,62 48,42 56,62" fill="#1a3060" stroke="#5ed8ff" stroke-width="0.4"/>
-          <rect x="44" y="70" width="3" height="4" fill="#5ed8ff"/>
-          <rect x="49" y="70" width="3" height="4" fill="#5ed8ff"/>
-          <rect x="46" y="80" width="4" height="6" fill="#f5c542"/>
+          <rect x="40" y="60" width="16" height="35" fill="url(#castWall)" stroke="#31d7ff" stroke-width="0.4"/>
+          <polygon points="40,62 48,40 56,62" fill="#1a3060" stroke="#31d7ff" stroke-width="0.4"/>
+          <rect x="44" y="70" width="3" height="4" fill="#31d7ff"/>
+          <rect x="49" y="70" width="3" height="4" fill="#31d7ff"/>
+          <rect x="46" y="80" width="4" height="6" fill="#ffb800"/>
           <!-- right tower -->
-          <rect x="86" y="55" width="18" height="40" fill="url(#castGrad)" stroke="#5ed8ff" stroke-width="0.4"/>
-          <polygon points="86,57 95,35 104,57" fill="#1a3060" stroke="#5ed8ff" stroke-width="0.4"/>
-          <polygon points="94,37 96,37 95,30" fill="#f5c542"/>
-          <rect x="91" y="65" width="3" height="4" fill="#5ed8ff"/>
-          <rect x="96" y="65" width="3" height="4" fill="#5ed8ff"/>
-          <rect x="91" y="76" width="3" height="4" fill="#f5c542"/>
-          <rect x="96" y="76" width="3" height="4" fill="#f5c542"/>
-          <rect x="93" y="86" width="4" height="6" fill="#5ed8ff" opacity="0.9"/>
+          <rect x="86" y="55" width="18" height="40" fill="url(#castWall)" stroke="#31d7ff" stroke-width="0.4"/>
+          <polygon points="86,57 95,33 104,57" fill="#1a3060" stroke="#31d7ff" stroke-width="0.4"/>
+          <polygon points="94,35 96,35 95,28" fill="#ffb800"/>
+          <rect x="91" y="65" width="3" height="4" fill="#31d7ff"/>
+          <rect x="96" y="65" width="3" height="4" fill="#31d7ff"/>
+          <rect x="91" y="76" width="3" height="4" fill="#ffb800"/>
+          <rect x="96" y="76" width="3" height="4" fill="#ffb800"/>
+          <rect x="93" y="86" width="4" height="6" fill="#31d7ff" opacity="0.9"/>
           <!-- castle base wall -->
-          <rect x="38" y="92" width="68" height="14" fill="#0a1830" stroke="#5ed8ff" stroke-width="0.5" opacity="0.9"/>
-          <rect x="68" y="98" width="6" height="8" fill="#5ed8ff" opacity="0.6"/>
-          <!-- floating particles -->
-          <circle cx="50" cy="30" r="1" fill="#f5c542"/>
-          <circle cx="110" cy="40" r="1" fill="#5ed8ff"/>
-          <circle cx="120" cy="60" r="0.8" fill="#5ed8ff"/>
-          <circle cx="30" cy="50" r="1" fill="#f5c542"/>
+          <rect x="38" y="92" width="68" height="14" fill="#0a1830" stroke="#31d7ff" stroke-width="0.5" opacity="0.9"/>
+          <rect x="68" y="98" width="6" height="8" fill="#31d7ff" opacity="0.6"/>
+          <!-- floating sparks -->
+          <circle cx="50"  cy="30" r="1"   fill="#ffb800"/>
+          <circle cx="110" cy="40" r="1"   fill="#31d7ff"/>
+          <circle cx="120" cy="60" r="0.8" fill="#31d7ff"/>
+          <circle cx="30"  cy="50" r="1"   fill="#ffb800"/>
         </svg>
       </div>
     </div>
 
     <!-- Statistik -->
     <div class="panel stat-card">
-      <div class="corner-bl"></div>
+      <div class="corner-tr"></div><div class="corner-bl"></div>
       <div class="panel-head">
         <div class="panel-title">
-          <span class="ico">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg>
-          </span>
+          <span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg></span>
           FOCUS STATISTIK
         </div>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="#7a8db0"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="#6b85aa"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg>
       </div>
       <div class="stat-grid">
         <!-- Brain illustration -->
         <svg class="stat-brain" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <linearGradient id="brainGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#f5c542"/>
-              <stop offset="100%" stop-color="#b8860b"/>
+            <linearGradient id="brainGold" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%"  stop-color="#ffb800"/>
+              <stop offset="100%" stop-color="#a66a00"/>
             </linearGradient>
             <radialGradient id="brainGlow" cx="0.5" cy="0.5" r="0.5">
-              <stop offset="0%" stop-color="#5ed8ff" stop-opacity="0.4"/>
-              <stop offset="100%" stop-color="#5ed8ff" stop-opacity="0"/>
+              <stop offset="0%"  stop-color="#31d7ff" stop-opacity="0.5"/>
+              <stop offset="100%" stop-color="#31d7ff" stop-opacity="0"/>
             </radialGradient>
           </defs>
-          <circle cx="40" cy="40" r="35" fill="url(#brainGlow)"/>
-          <!-- Brain shape - left hemisphere -->
+          <circle cx="40" cy="40" r="36" fill="url(#brainGlow)"/>
           <path d="M40 18 C26 18 18 28 18 40 C18 50 24 58 32 60 C32 64 36 68 40 68
                    C40 50 38 30 40 18 Z"
-                fill="none" stroke="url(#brainGrad)" stroke-width="1.5"/>
-          <!-- Brain shape - right hemisphere -->
+                fill="none" stroke="url(#brainGold)" stroke-width="1.6"/>
           <path d="M40 18 C54 18 62 28 62 40 C62 50 56 58 48 60 C48 64 44 68 40 68
                    C40 50 42 30 40 18 Z"
-                fill="none" stroke="#5ed8ff" stroke-width="1.5"/>
-          <!-- Neural curves left -->
-          <path d="M22 32 Q28 30 30 36 Q28 42 32 46" fill="none" stroke="url(#brainGrad)" stroke-width="1"/>
-          <path d="M24 48 Q30 46 32 52" fill="none" stroke="url(#brainGrad)" stroke-width="1"/>
-          <path d="M28 38 Q34 36 36 42" fill="none" stroke="url(#brainGrad)" stroke-width="0.8"/>
-          <!-- Neural curves right -->
-          <path d="M58 32 Q52 30 50 36 Q52 42 48 46" fill="none" stroke="#5ed8ff" stroke-width="1"/>
-          <path d="M56 48 Q50 46 48 52" fill="none" stroke="#5ed8ff" stroke-width="1"/>
-          <path d="M52 38 Q46 36 44 42" fill="none" stroke="#5ed8ff" stroke-width="0.8"/>
-          <!-- Spark nodes -->
-          <circle cx="30" cy="36" r="1.5" fill="#f5c542"/>
-          <circle cx="50" cy="36" r="1.5" fill="#5ed8ff"/>
-          <circle cx="32" cy="46" r="1.2" fill="#f5c542"/>
-          <circle cx="48" cy="46" r="1.2" fill="#5ed8ff"/>
-          <circle cx="40" cy="40" r="2" fill="#fff" opacity="0.8"/>
+                fill="none" stroke="#31d7ff" stroke-width="1.6"/>
+          <path d="M22 32 Q28 30 30 36 Q28 42 32 46" fill="none" stroke="url(#brainGold)" stroke-width="1"/>
+          <path d="M24 48 Q30 46 32 52" fill="none" stroke="url(#brainGold)" stroke-width="1"/>
+          <path d="M28 38 Q34 36 36 42" fill="none" stroke="url(#brainGold)" stroke-width="0.8"/>
+          <path d="M58 32 Q52 30 50 36 Q52 42 48 46" fill="none" stroke="#31d7ff" stroke-width="1"/>
+          <path d="M56 48 Q50 46 48 52" fill="none" stroke="#31d7ff" stroke-width="1"/>
+          <path d="M52 38 Q46 36 44 42" fill="none" stroke="#31d7ff" stroke-width="0.8"/>
+          <circle cx="30" cy="36" r="1.5" fill="#ffb800"/>
+          <circle cx="50" cy="36" r="1.5" fill="#31d7ff"/>
+          <circle cx="32" cy="46" r="1.2" fill="#ffb800"/>
+          <circle cx="48" cy="46" r="1.2" fill="#31d7ff"/>
+          <circle cx="40" cy="40" r="2.5" fill="#fff" opacity="0.95"/>
         </svg>
 
         <div class="stat-circle">
           <svg viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(56,182,255,0.18)" stroke-width="7"/>
-            <circle cx="50" cy="50" r="42" fill="none" stroke="#5ed8ff" stroke-width="7"
+            <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(0,170,255,0.18)" stroke-width="7"/>
+            <circle cx="50" cy="50" r="42" fill="none" stroke="#31d7ff" stroke-width="7"
                     stroke-dasharray="263" stroke-dashoffset="60" stroke-linecap="round"
-                    style="filter: drop-shadow(0 0 4px rgba(94,216,255,0.6));"/>
-            <circle cx="50" cy="50" r="32" fill="none" stroke="#f5c542" stroke-width="3"
+                    style="filter: drop-shadow(0 0 5px rgba(49,215,255,0.7));"/>
+            <circle cx="50" cy="50" r="32" fill="none" stroke="#ffb800" stroke-width="3"
                     stroke-dasharray="201" stroke-dashoffset="25" stroke-linecap="round"
-                    style="filter: drop-shadow(0 0 6px rgba(245,197,66,0.6));"/>
+                    style="filter: drop-shadow(0 0 6px rgba(255,184,0,0.6));"/>
           </svg>
           <div class="pct"><span id="statScore">87%</span><small>FOCUS SCORE</small></div>
         </div>
@@ -1136,12 +1280,25 @@
 
     <!-- Motivation -->
     <div class="panel motivation-card">
-      <div class="corner-bl"></div>
+      <div class="corner-tr"></div><div class="corner-bl"></div>
+      <!-- background crystal / waterfall illustration -->
+      <svg class="motivation-bg" viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="motCrystal" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%"  stop-color="#31d7ff" stop-opacity="1"/>
+            <stop offset="100%" stop-color="#0066cc" stop-opacity="0.6"/>
+          </linearGradient>
+        </defs>
+        <polygon points="55,12 30,90 55,82" fill="url(#motCrystal)"/>
+        <polygon points="55,12 80,90 55,82" fill="url(#motCrystal)" opacity="0.7"/>
+        <rect x="38" y="55" width="1.5" height="40" fill="#31d7ff" opacity="0.7"/>
+        <rect x="72" y="60" width="1.5" height="35" fill="#31d7ff" opacity="0.6"/>
+        <circle cx="20" cy="30" r="1" fill="#ffb800"/>
+        <circle cx="90" cy="40" r="1" fill="#31d7ff"/>
+      </svg>
       <div class="panel-head">
         <div class="panel-title">
-          <span class="ico">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
-          </span>
+          <span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg></span>
           MOTIVATION
         </div>
         <div class="panel-close">×</div>
@@ -1155,118 +1312,102 @@
     </div>
   </aside>
 
-  <!-- ===== CENTER COLUMN ===== -->
+  <!-- ===== CENTER COLUMN: FOCUS CORE ===== -->
   <main class="col-center">
     <div class="core-stage">
-      <!-- Energy aura (2 Layer, gegenläufig) -->
+      <!-- light shaft -->
+      <div class="core-shaft"></div>
+      <!-- platform glow -->
+      <div class="core-platform"></div>
+
+      <!-- two energy auras -->
       <div class="core-energy"></div>
       <div class="core-energy-2"></div>
 
-      <!-- Detailed mechanical core rings (SVG) -->
+      <!-- SVG mechanical rings -->
       <svg class="core-rings-svg" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="ringGold" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stop-color="#fff3b8"/>
-            <stop offset="50%" stop-color="#f5c542"/>
-            <stop offset="100%" stop-color="#b8860b"/>
+            <stop offset="50%" stop-color="#ffb800"/>
+            <stop offset="100%" stop-color="#a66a00"/>
           </linearGradient>
           <linearGradient id="ringBlue" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stop-color="#aee9ff"/>
-            <stop offset="50%" stop-color="#5ed8ff"/>
-            <stop offset="100%" stop-color="#1a6dff"/>
+            <stop offset="50%" stop-color="#31d7ff"/>
+            <stop offset="100%" stop-color="#0066cc"/>
           </linearGradient>
           <radialGradient id="coreGlow" cx="0.5" cy="0.5" r="0.5">
-            <stop offset="0%" stop-color="#5ed8ff" stop-opacity="0.5"/>
-            <stop offset="100%" stop-color="#5ed8ff" stop-opacity="0"/>
+            <stop offset="0%"  stop-color="#31d7ff" stop-opacity="0.5"/>
+            <stop offset="100%" stop-color="#31d7ff" stop-opacity="0"/>
           </radialGradient>
         </defs>
 
-        <!-- Outer glow -->
         <circle cx="300" cy="300" r="290" fill="url(#coreGlow)"/>
 
-        <!-- OUTER RING 1: thick gold ring with notches -->
+        <!-- OUTER RING -->
         <g class="ring-rotate-slow">
-          <circle cx="300" cy="300" r="280" fill="none" stroke="url(#ringGold)" stroke-width="2" opacity="0.85"/>
-          <circle cx="300" cy="300" r="272" fill="none" stroke="#b8860b" stroke-width="0.8" opacity="0.6"/>
-          <!-- Notches around outer ring -->
-          <g stroke="#f5c542" stroke-width="2.5">
-            <line x1="300" y1="14" x2="300" y2="32"/>
+          <circle cx="300" cy="300" r="280" fill="none" stroke="url(#ringGold)" stroke-width="2" opacity="0.9"/>
+          <circle cx="300" cy="300" r="272" fill="none" stroke="#a66a00" stroke-width="0.8" opacity="0.6"/>
+          <g stroke="#ffb800" stroke-width="2.5">
+            <line x1="300" y1="14"  x2="300" y2="32"/>
             <line x1="300" y1="568" x2="300" y2="586"/>
-            <line x1="14" y1="300" x2="32" y2="300"/>
+            <line x1="14"  y1="300" x2="32"  y2="300"/>
             <line x1="568" y1="300" x2="586" y2="300"/>
-            <line x1="92" y1="92" x2="105" y2="105"/>
-            <line x1="495" y1="92" x2="508" y2="105"/>
-            <line x1="92" y1="508" x2="105" y2="495"/>
+            <line x1="92"  y1="92"  x2="105" y2="105"/>
+            <line x1="495" y1="92"  x2="508" y2="105"/>
+            <line x1="92"  y1="508" x2="105" y2="495"/>
             <line x1="495" y1="508" x2="508" y2="495"/>
           </g>
         </g>
 
-        <!-- RING 2: blue dashed -->
+        <!-- RING 2 blue dashed -->
         <g class="ring-rotate">
-          <circle cx="300" cy="300" r="255" fill="none" stroke="#5ed8ff" stroke-width="1.5"
-                  stroke-dasharray="6 14" opacity="0.7"/>
-          <!-- corner blocks -->
-          <g fill="#1a6dff" opacity="0.8">
-            <rect x="295" y="40" width="10" height="14" rx="1"/>
+          <circle cx="300" cy="300" r="255" fill="none" stroke="#31d7ff" stroke-width="1.5"
+                  stroke-dasharray="6 14" opacity="0.75"/>
+          <g fill="#00aaff" opacity="0.85">
+            <rect x="295" y="40"  width="10" height="14" rx="1"/>
             <rect x="295" y="546" width="10" height="14" rx="1"/>
-            <rect x="40" y="295" width="14" height="10" rx="1"/>
+            <rect x="40"  y="295" width="14" height="10" rx="1"/>
             <rect x="546" y="295" width="14" height="10" rx="1"/>
           </g>
         </g>
 
-        <!-- RING 3: thick gold middle ring (the main one) -->
+        <!-- RING 3 main gold -->
         <g class="ring-rotate-rev">
           <circle class="ring-glow" cx="300" cy="300" r="235" fill="none" stroke="url(#ringGold)" stroke-width="4"/>
-          <!-- inner detail line -->
-          <circle cx="300" cy="300" r="227" fill="none" stroke="#b8860b" stroke-width="0.5" opacity="0.7"/>
-          <circle cx="300" cy="300" r="243" fill="none" stroke="#b8860b" stroke-width="0.5" opacity="0.7"/>
-          <!-- Gold ring segments / panels (8 around) -->
+          <circle cx="300" cy="300" r="227" fill="none" stroke="#a66a00" stroke-width="0.5" opacity="0.7"/>
+          <circle cx="300" cy="300" r="243" fill="none" stroke="#a66a00" stroke-width="0.5" opacity="0.7"/>
           <g fill="none" stroke="#fff3b8" stroke-width="2" opacity="0.9">
-            <path d="M 300 65 A 235 235 0 0 1 466 134" />
+            <path d="M 300 65  A 235 235 0 0 1 466 134" />
             <path d="M 466 466 A 235 235 0 0 1 300 535" />
-            <path d="M 134 466 A 235 235 0 0 1 65 300" />
-            <path d="M 65 300 A 235 235 0 0 1 134 134" />
+            <path d="M 134 466 A 235 235 0 0 1 65  300" />
+            <path d="M 65  300 A 235 235 0 0 1 134 134" />
           </g>
-          <!-- Energy nodes (pulsing) around the ring -->
-          <g fill="#f5c542">
-            <circle class="pulse-node" cx="300" cy="65" r="6" style="filter: drop-shadow(0 0 10px #f5c542);"/>
-            <circle class="pulse-node delay-3" cx="300" cy="535" r="6" style="filter: drop-shadow(0 0 10px #f5c542);"/>
-            <circle class="pulse-node delay-5" cx="65" cy="300" r="6" style="filter: drop-shadow(0 0 10px #f5c542);"/>
-            <circle class="pulse-node delay-7" cx="535" cy="300" r="6" style="filter: drop-shadow(0 0 10px #f5c542);"/>
+          <!-- Pulsing energy nodes -->
+          <g fill="#ffb800">
+            <circle class="pulse-node"    cx="300" cy="65"  r="6" style="filter: drop-shadow(0 0 12px #ffb800);"/>
+            <circle class="pulse-node d3" cx="300" cy="535" r="6" style="filter: drop-shadow(0 0 12px #ffb800);"/>
+            <circle class="pulse-node d5" cx="65"  cy="300" r="6" style="filter: drop-shadow(0 0 12px #ffb800);"/>
+            <circle class="pulse-node d7" cx="535" cy="300" r="6" style="filter: drop-shadow(0 0 12px #ffb800);"/>
           </g>
-          <g fill="#5ed8ff">
-            <circle class="pulse-node delay-2" cx="466" cy="134" r="5" style="filter: drop-shadow(0 0 10px #5ed8ff);"/>
-            <circle class="pulse-node delay-4" cx="466" cy="466" r="5" style="filter: drop-shadow(0 0 10px #5ed8ff);"/>
-            <circle class="pulse-node delay-6" cx="134" cy="466" r="5" style="filter: drop-shadow(0 0 10px #5ed8ff);"/>
-            <circle class="pulse-node delay-1" cx="134" cy="134" r="5" style="filter: drop-shadow(0 0 10px #5ed8ff);"/>
+          <g fill="#31d7ff">
+            <circle class="pulse-node d2" cx="466" cy="134" r="5" style="filter: drop-shadow(0 0 12px #31d7ff);"/>
+            <circle class="pulse-node d4" cx="466" cy="466" r="5" style="filter: drop-shadow(0 0 12px #31d7ff);"/>
+            <circle class="pulse-node d6" cx="134" cy="466" r="5" style="filter: drop-shadow(0 0 12px #31d7ff);"/>
+            <circle class="pulse-node d1" cx="134" cy="134" r="5" style="filter: drop-shadow(0 0 12px #31d7ff);"/>
           </g>
         </g>
 
-        <!-- ORBITING LIGHT PULSES (laufen sichtbar entlang der Ringe) -->
-        <!-- Outer orbit: 3 cyan pulses on r=280 (top start, evenly spaced) -->
-        <g class="orbit-outer"><circle cx="300" cy="20" r="5" fill="#fff" style="filter: drop-shadow(0 0 12px #5ed8ff);"/></g>
-        <g class="orbit-outer-2"><circle cx="300" cy="20" r="5" fill="#fff" style="filter: drop-shadow(0 0 12px #5ed8ff);"/></g>
-        <g class="orbit-outer-3"><circle cx="300" cy="20" r="5" fill="#fff" style="filter: drop-shadow(0 0 12px #5ed8ff);"/></g>
-
-        <!-- Mid orbit: 2 gold pulses on r=235 -->
-        <g class="orbit-mid"><circle cx="300" cy="65" r="6" fill="#fff3b8" style="filter: drop-shadow(0 0 14px #f5c542);"/></g>
-        <g class="orbit-mid-2"><circle cx="300" cy="65" r="6" fill="#fff3b8" style="filter: drop-shadow(0 0 14px #f5c542);"/></g>
-
-        <!-- Inner orbit: 2 cyan pulses on r=210 -->
-        <g class="orbit-inner"><circle cx="300" cy="90" r="4" fill="#aee9ff" style="filter: drop-shadow(0 0 10px #5ed8ff);"/></g>
-        <g class="orbit-inner-2"><circle cx="300" cy="90" r="4" fill="#aee9ff" style="filter: drop-shadow(0 0 10px #5ed8ff);"/></g>
-
-        <!-- RING 4: blue inner ring with ticks -->
+        <!-- RING 4 inner blue -->
         <g class="ring-rotate-fast">
           <circle cx="300" cy="300" r="210" fill="none" stroke="url(#ringBlue)" stroke-width="2.5"
-                  style="filter: drop-shadow(0 0 6px rgba(94,216,255,0.5));"/>
-          <!-- 48 tick marks around -->
-          <g stroke="#5ed8ff" stroke-width="1.2" opacity="0.85">
+                  style="filter: drop-shadow(0 0 7px rgba(49,215,255,0.55));"/>
+          <g stroke="#31d7ff" stroke-width="1.3" opacity="0.9">
             <line x1="300" y1="195" x2="300" y2="205"/>
             <line x1="300" y1="395" x2="300" y2="405"/>
             <line x1="195" y1="300" x2="205" y2="300"/>
             <line x1="395" y1="300" x2="405" y2="300"/>
-            <!-- diagonal ticks -->
             <line x1="225" y1="225" x2="232" y2="232"/>
             <line x1="368" y1="232" x2="375" y2="225"/>
             <line x1="225" y1="375" x2="232" y2="368"/>
@@ -1280,7 +1421,6 @@
             <line x1="392" y1="245" x2="382" y2="248"/>
             <line x1="392" y1="355" x2="382" y2="352"/>
           </g>
-          <!-- Bright accent dots -->
           <g fill="#fff" opacity="0.95">
             <circle cx="300" cy="200" r="2.5"/>
             <circle cx="300" cy="400" r="2.5"/>
@@ -1289,12 +1429,11 @@
           </g>
         </g>
 
-        <!-- RING 5: thin gold ring innermost -->
+        <!-- RING 5 thin gold innermost -->
         <g class="ring-rotate">
-          <circle cx="300" cy="300" r="188" fill="none" stroke="#f5c542" stroke-width="1.5" opacity="0.75"/>
-          <circle cx="300" cy="300" r="183" fill="none" stroke="#b8860b" stroke-width="0.5" opacity="0.5"/>
-          <!-- Bracket marks around -->
-          <g stroke="#f5c542" stroke-width="2" fill="none" opacity="0.9">
+          <circle cx="300" cy="300" r="188" fill="none" stroke="#ffb800" stroke-width="1.5" opacity="0.8"/>
+          <circle cx="300" cy="300" r="183" fill="none" stroke="#a66a00" stroke-width="0.5" opacity="0.55"/>
+          <g stroke="#ffb800" stroke-width="2" fill="none" opacity="0.9">
             <path d="M 300 178 L 300 198 M 290 188 L 310 188"/>
             <path d="M 300 422 L 300 402 M 290 412 L 310 412"/>
             <path d="M 178 300 L 198 300 M 188 290 L 188 310"/>
@@ -1302,57 +1441,59 @@
           </g>
         </g>
 
-        <!-- Energy beam crossbars in center (static) -->
+        <!-- Crossbars -->
         <g opacity="0.35">
-          <line x1="120" y1="300" x2="480" y2="300" stroke="#5ed8ff" stroke-width="0.8"/>
-          <line x1="300" y1="120" x2="300" y2="480" stroke="#5ed8ff" stroke-width="0.8"/>
+          <line x1="120" y1="300" x2="480" y2="300" stroke="#31d7ff" stroke-width="0.8"/>
+          <line x1="300" y1="120" x2="300" y2="480" stroke="#31d7ff" stroke-width="0.8"/>
         </g>
 
+        <!-- ORBITING LIGHTS -->
+        <g class="orbit orbit-outer-1"><circle cx="300" cy="20"  r="5" fill="#fff" style="filter: drop-shadow(0 0 14px #31d7ff);"/></g>
+        <g class="orbit orbit-outer-2"><circle cx="300" cy="20"  r="5" fill="#fff" style="filter: drop-shadow(0 0 14px #31d7ff);"/></g>
+        <g class="orbit orbit-outer-3"><circle cx="300" cy="20"  r="5" fill="#fff" style="filter: drop-shadow(0 0 14px #31d7ff);"/></g>
+        <g class="orbit orbit-mid-1">  <circle cx="300" cy="65"  r="6" fill="#fff3b8" style="filter: drop-shadow(0 0 14px #ffb800);"/></g>
+        <g class="orbit orbit-mid-2">  <circle cx="300" cy="65"  r="6" fill="#fff3b8" style="filter: drop-shadow(0 0 14px #ffb800);"/></g>
+        <g class="orbit orbit-inner-1"><circle cx="300" cy="90"  r="4" fill="#aee9ff" style="filter: drop-shadow(0 0 12px #31d7ff);"/></g>
+        <g class="orbit orbit-inner-2"><circle cx="300" cy="90"  r="4" fill="#aee9ff" style="filter: drop-shadow(0 0 12px #31d7ff);"/></g>
       </svg>
 
       <!-- Crystal pyramid at base -->
-      <svg class="core-crystal" viewBox="0 0 90 110" xmlns="http://www.w3.org/2000/svg">
+      <svg class="core-crystal" viewBox="0 0 96 118" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <linearGradient id="crystalLeft" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stop-color="#1a6dff" stop-opacity="0.9"/>
+          <linearGradient id="cryL" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%"  stop-color="#0066cc" stop-opacity="0.9"/>
             <stop offset="100%" stop-color="#aee9ff" stop-opacity="0.95"/>
           </linearGradient>
-          <linearGradient id="crystalRight" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stop-color="#aee9ff" stop-opacity="0.95"/>
-            <stop offset="100%" stop-color="#1a6dff" stop-opacity="0.9"/>
+          <linearGradient id="cryR" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%"  stop-color="#aee9ff" stop-opacity="0.95"/>
+            <stop offset="100%" stop-color="#0066cc" stop-opacity="0.9"/>
           </linearGradient>
-          <linearGradient id="crystalCenter" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
-            <stop offset="100%" stop-color="#5ed8ff" stop-opacity="0.8"/>
+          <linearGradient id="cryC" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%"  stop-color="#ffffff"/>
+            <stop offset="100%" stop-color="#31d7ff" stop-opacity="0.8"/>
           </linearGradient>
         </defs>
-        <!-- left face -->
-        <polygon points="45,10 20,80 45,75" fill="url(#crystalLeft)"/>
-        <!-- right face -->
-        <polygon points="45,10 70,80 45,75" fill="url(#crystalRight)"/>
-        <!-- highlight -->
-        <polygon points="45,10 42,75 48,75" fill="url(#crystalCenter)"/>
-        <!-- base reflection ring -->
-        <ellipse cx="45" cy="95" rx="40" ry="6" fill="none" stroke="#5ed8ff" stroke-width="1" opacity="0.6"/>
-        <ellipse cx="45" cy="100" rx="32" ry="4" fill="none" stroke="#5ed8ff" stroke-width="0.7" opacity="0.4"/>
+        <polygon points="48,10 22,86 48,80" fill="url(#cryL)"/>
+        <polygon points="48,10 74,86 48,80" fill="url(#cryR)"/>
+        <polygon points="48,10 45,80 51,80" fill="url(#cryC)"/>
+        <ellipse cx="48" cy="100" rx="42" ry="7" fill="none" stroke="#31d7ff" stroke-width="1.2" opacity="0.7"/>
+        <ellipse cx="48" cy="108" rx="32" ry="5" fill="none" stroke="#31d7ff" stroke-width="0.8" opacity="0.45"/>
       </svg>
 
       <!-- Inner core content -->
       <div class="core-inner">
-        <!-- Wächter Helm Watermark inside core -->
         <svg class="core-helmet-wm" viewBox="0 0 60 60">
           <path d="M30 8 L48 14 L48 28 C48 38 40 44 30 47 C20 44 12 38 12 28 L12 14 Z"
-                fill="none" stroke="#f5c542" stroke-width="1.5"/>
-          <rect x="20" y="25" width="20" height="2.5" fill="#f5c542" opacity="0.8"/>
-          <rect x="22" y="31" width="16" height="2" fill="#f5c542" opacity="0.6"/>
+                fill="none" stroke="#ffb800" stroke-width="1.5"/>
+          <rect x="20" y="25" width="20" height="2.5" fill="#ffb800" opacity="0.85"/>
+          <rect x="22" y="31" width="16" height="2"   fill="#ffb800" opacity="0.65"/>
         </svg>
 
-        <!-- IDLE: Form to start -->
+        <!-- IDLE -->
         <div id="startScreen">
           <div class="core-mode">FOCUS MODUS</div>
           <div class="core-status idle">BEREIT</div>
           <div class="core-substatus">DEFINIERE DEINE MISSION</div>
-
           <form class="start-form" id="startForm" onsubmit="return false;">
             <div class="row">
               <label>MISSION / PROJEKT</label>
@@ -1369,14 +1510,14 @@
                 <div class="time-display"><span id="minLabel">50</span> MIN</div>
               </div>
             </div>
-            <button type="button" class="btn" id="startBtn" style="margin-top: 6px;">
+            <button type="button" class="btn" id="startBtn" style="margin-top: 8px;">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
               MISSION STARTEN
             </button>
           </form>
         </div>
 
-        <!-- ACTIVE: Timer display -->
+        <!-- ACTIVE -->
         <div id="activeScreen" class="hidden">
           <div class="core-mode">FOCUS MODUS</div>
           <div class="core-status" id="coreStatus">FOCUS CORE AKTIV</div>
@@ -1388,7 +1529,7 @@
             FOCUS SESSION AKTIV
           </div>
           <div class="core-foot">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="#2ee06a"><path d="M12 2L4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="#6cff00"><path d="M12 2L4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg>
             Ablenkungen werden blockiert
           </div>
           <button type="button" class="btn red small" id="cancelBtn" style="margin-top: 14px;">
@@ -1402,72 +1543,71 @@
   <!-- ===== RIGHT COLUMN ===== -->
   <aside class="col-right">
 
-    <!-- Aktive Schutzsysteme -->
+    <!-- Schutzsysteme -->
     <div class="panel systems-card">
-      <div class="corner-bl"></div>
+      <div class="corner-tr"></div><div class="corner-bl"></div>
       <div class="panel-head">
         <div class="panel-title">
-          <span class="ico">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg>
-          </span>
+          <span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg></span>
           AKTIVE SCHUTZSYSTEME
         </div>
       </div>
       <div class="systems-list">
         <div class="system-row">
           <div class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg></div>
-          <div class="name">Ablenkungsalarm</div>
+          <div class="name">Ablenkungsblocker</div>
           <div class="state">AKTIV</div>
         </div>
         <div class="system-row">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7zm0 9a2 2 0 110-4 2 2 0 010 4z"/></svg></div>
-          <div class="name">Trink-Erinnerung</div>
+          <div class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="3" width="14" height="18" rx="2"/><circle cx="12" cy="17" r="1" fill="#04070d"/></svg></div>
+          <div class="name">App Blocker</div>
           <div class="state">AKTIV</div>
         </div>
         <div class="system-row">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" fill="none"/><path d="M12 7v5l3 2"/></svg></div>
-          <div class="name">Reality Reminder</div>
+          <div class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 22a2 2 0 002-2H10a2 2 0 002 2zm6-6V11a6 6 0 10-12 0v5l-2 2v1h16v-1l-2-2z"/></svg></div>
+          <div class="name">Benachrichtigungen</div>
+          <div class="state mute">STUMM</div>
+        </div>
+        <div class="system-row">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
+          <div class="name">Web Filter</div>
           <div class="state">AKTIV</div>
         </div>
         <div class="system-row">
           <div class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h6v2H5v4H3V3zm12 0h6v6h-2V5h-4V3zM3 15h2v4h4v2H3v-6zm16 0h2v6h-6v-2h4v-4z"/></svg></div>
-          <div class="name">Vollbild-Warnung</div>
+          <div class="name">Vollbild Schutz</div>
           <div class="state">AKTIV</div>
         </div>
       </div>
 
-      <!-- Shield illustration -->
-      <svg class="systems-shield" viewBox="0 0 64 70" xmlns="http://www.w3.org/2000/svg">
+      <svg class="systems-shield" viewBox="0 0 70 78" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="shldGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#5ed8ff"/>
-            <stop offset="100%" stop-color="#1a6dff"/>
+            <stop offset="0%"  stop-color="#31d7ff"/>
+            <stop offset="100%" stop-color="#0066cc"/>
           </linearGradient>
           <radialGradient id="shldGlow" cx="0.5" cy="0.5" r="0.5">
-            <stop offset="0%" stop-color="#5ed8ff" stop-opacity="0.5"/>
-            <stop offset="100%" stop-color="#5ed8ff" stop-opacity="0"/>
+            <stop offset="0%"  stop-color="#31d7ff" stop-opacity="0.6"/>
+            <stop offset="100%" stop-color="#31d7ff" stop-opacity="0"/>
           </radialGradient>
         </defs>
-        <circle cx="32" cy="35" r="32" fill="url(#shldGlow)"/>
-        <path d="M32 4 L58 12 L58 35 C58 50 47 60 32 66 C17 60 6 50 6 35 L6 12 Z"
-              fill="rgba(56,109,255,0.25)" stroke="url(#shldGrad)" stroke-width="2"/>
-        <path d="M32 12 L52 18 L52 35 C52 47 43 55 32 60 C21 55 12 47 12 35 L12 18 Z"
-              fill="none" stroke="#5ed8ff" stroke-width="1" opacity="0.8"/>
-        <!-- inner crest -->
-        <path d="M32 22 L42 26 L42 36 C42 42 37 46 32 48 C27 46 22 42 22 36 L22 26 Z"
-              fill="url(#shldGrad)" opacity="0.9"/>
-        <path d="M32 28 L36 32 L32 40 L28 32 Z" fill="#fff3b8"/>
+        <circle cx="35" cy="38" r="34" fill="url(#shldGlow)"/>
+        <path d="M35 5 L64 14 L64 38 C64 54 52 65 35 72 C18 65 6 54 6 38 L6 14 Z"
+              fill="rgba(0,170,255,0.28)" stroke="url(#shldGrad)" stroke-width="2"/>
+        <path d="M35 13 L58 21 L58 38 C58 50 48 58 35 63 C22 58 12 50 12 38 L12 21 Z"
+              fill="none" stroke="#31d7ff" stroke-width="1" opacity="0.85"/>
+        <path d="M35 24 L46 28 L46 40 C46 47 41 51 35 53 C29 51 24 47 24 40 L24 28 Z"
+              fill="url(#shldGrad)" opacity="0.95"/>
+        <path d="M35 30 L40 35 L35 45 L30 35 Z" fill="#fff3b8"/>
       </svg>
     </div>
 
     <!-- Session Plan -->
     <div class="panel">
-      <div class="corner-bl"></div>
+      <div class="corner-tr"></div><div class="corner-bl"></div>
       <div class="panel-head">
         <div class="panel-title">
-          <span class="ico">
-            <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" fill="none"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" fill="none"/></svg>
-          </span>
+          <span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" fill="none"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" fill="none"/></svg></span>
           SESSION PLAN
         </div>
         <div class="panel-close">×</div>
@@ -1493,10 +1633,10 @@
         </div>
         <div class="plan-circle">
           <svg viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(46,224,106,0.15)" stroke-width="6"/>
-            <circle id="planRing" cx="50" cy="50" r="42" fill="none" stroke="#2ee06a" stroke-width="6"
+            <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(108,255,0,0.15)" stroke-width="6"/>
+            <circle id="planRing" cx="50" cy="50" r="42" fill="none" stroke="#6cff00" stroke-width="6"
                     stroke-dasharray="264" stroke-dashoffset="176" stroke-linecap="round"
-                    style="filter: drop-shadow(0 0 6px rgba(46,224,106,0.6)); transition: stroke-dashoffset 0.5s;"/>
+                    style="filter: drop-shadow(0 0 8px rgba(108,255,0,0.65)); transition: stroke-dashoffset 0.5s;"/>
           </svg>
           <div class="center"><span id="planPct">2/3</span><small>ZYKLEN</small></div>
         </div>
@@ -1506,35 +1646,29 @@
 
     <!-- Sound Atmosphäre -->
     <div class="panel sound-card">
-      <div class="corner-bl"></div>
+      <div class="corner-tr"></div><div class="corner-bl"></div>
       <div class="panel-head">
         <div class="panel-title">
-          <span class="ico">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3z"/></svg>
-          </span>
+          <span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3z"/></svg></span>
           SOUND ATMOSPHÄRE
         </div>
-        <div style="display:flex; gap:10px; align-items:center;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="#7a8db0" style="cursor:pointer;"><path d="M17 1l4 4-4 4M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4M21 13v2a4 4 0 01-4 4H3"/></svg>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="#7a8db0" style="cursor:pointer;"><circle cx="12" cy="12" r="3"/></svg>
-          <div class="panel-close">×</div>
-        </div>
+        <div class="panel-close">×</div>
       </div>
       <div class="sound-mode">CINEMATIC FLOW</div>
       <div class="sound-sub">EPIC AMBIENT</div>
       <canvas id="waves" class="waves"></canvas>
       <div class="sound-controls">
         <button class="sound-ctrl-btn" id="testReminderBtn" title="Reminder testen">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l-4-4 12-12 4 4z"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 12l-7 7-7-7h4V3h6v9z" transform="rotate(90 12 12)"/></svg>
         </button>
         <button class="sound-ctrl-btn big" id="soundToggleBtn" title="Sound an/aus">
-          <svg id="soundIconOn" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>
+          <svg id="soundIconOn" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
         </button>
         <button class="sound-ctrl-btn" id="testWarnBtn" title="Warnung testen">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18 6l-12 12M18 18l-12-12"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 12l-7 7-7-7h4V3h6v9z" transform="rotate(-90 12 12)"/></svg>
         </button>
       </div>
-      <div class="sound-switch-row">
+      <div class="sound-switch-row" id="motivationShortcut">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 18V5l12-2v13"/></svg>
         SOUND WECHSELN
       </div>
@@ -1584,25 +1718,28 @@
       <div class="footer-quote">
         „FOKUS IST DEIN SCHILD.<br/>DISZIPLIN DEINE WAFFE.<br/>ZIELE DEINE BESTIMMUNG."
       </div>
-      <!-- Dragon -->
-      <svg class="footer-dragon" viewBox="0 0 50 44" xmlns="http://www.w3.org/2000/svg">
+      <svg class="footer-dragon" viewBox="0 0 56 48" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="dragGrad" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stop-color="#aee9ff"/>
-            <stop offset="100%" stop-color="#1a6dff"/>
+            <stop offset="100%" stop-color="#0066cc"/>
           </linearGradient>
         </defs>
-        <!-- Body -->
-        <path d="M5 28 C8 22 14 18 22 18 C28 18 32 20 36 24 L42 20 L40 28 L44 32 L36 32 C32 36 26 38 20 36 C14 35 8 32 5 28 Z"
-              fill="url(#dragGrad)" opacity="0.85"/>
-        <!-- Wing -->
-        <path d="M18 18 L14 8 L24 14 L28 6 L30 16 Z" fill="url(#dragGrad)" opacity="0.7"/>
-        <!-- Tail -->
-        <path d="M5 28 L1 34 L4 32 L6 36 Z" fill="url(#dragGrad)" opacity="0.7"/>
-        <!-- Eye -->
-        <circle cx="40" cy="26" r="1.5" fill="#f5c542"/>
-        <!-- Horn -->
-        <path d="M42 20 L44 16 L43 22 Z" fill="#5ed8ff"/>
+        <!-- body -->
+        <path d="M6 30 C10 22 18 18 26 18 C32 18 36 20 40 24 L48 18 L46 30 L52 34 L40 34 C36 38 28 40 22 38 C16 37 9 34 6 30 Z"
+              fill="url(#dragGrad)" opacity="0.9"/>
+        <!-- wing -->
+        <path d="M22 18 L16 6 L28 14 L32 4 L34 18 Z" fill="url(#dragGrad)" opacity="0.75"/>
+        <!-- spikes on back -->
+        <polygon points="24,18 26,14 28,18" fill="#aee9ff"/>
+        <polygon points="30,17 32,13 34,17" fill="#aee9ff"/>
+        <!-- tail -->
+        <path d="M6 30 L1 38 L4 36 L7 40 Z" fill="url(#dragGrad)" opacity="0.75"/>
+        <!-- horn -->
+        <path d="M46 18 L48 12 L47 20 Z" fill="#aee9ff"/>
+        <path d="M50 20 L52 16 L51 22 Z" fill="#aee9ff"/>
+        <!-- eye -->
+        <circle cx="44" cy="26" r="1.8" fill="#ffb800"/>
       </svg>
       <div class="footer-time">
         <div class="time" id="clockTime">--:--</div>
@@ -1612,10 +1749,9 @@
   </footer>
 </div>
 
-<!-- ===== Toast Stack ===== -->
 <div class="toast-stack" id="toastStack"></div>
 
-<!-- ===== Reality Reminder ===== -->
+<!-- Reality Reminder -->
 <div class="reality" id="reality">
   <div class="reality-card">
     <div class="reality-label">REALITY REMINDER</div>
@@ -1624,18 +1760,18 @@
   </div>
 </div>
 
-<!-- ===== End Overlay ===== -->
+<!-- End Overlay -->
 <div class="end-overlay" id="endOverlay">
   <div class="end-card">
     <div class="end-icon">
       <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
         <path d="M50 8 L86 22 L86 50 C86 70 70 84 50 90 C30 84 14 70 14 50 L14 22 Z"
-              fill="none" stroke="#f5c542" stroke-width="3"/>
-        <path d="M35 50 L45 60 L65 40" fill="none" stroke="#2ee06a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+              fill="none" stroke="#ffb800" stroke-width="3"/>
+        <path d="M35 50 L45 60 L65 40" fill="none" stroke="#6cff00" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </div>
     <div class="end-title">SESSION BEENDET</div>
-    <div class="end-sub">SPEICHERN. SCHLIEẞEN. PAUSE.</div>
+    <div class="end-sub">SPEICHERN. SCHLIEẞEN. PAUSE IST PFLICHT.</div>
     <div class="end-stats">
       <div>MISSION<strong id="endMission">—</strong></div>
       <div>FOCUS-ZEIT<strong id="endDuration">—</strong></div>
@@ -1646,10 +1782,8 @@
 
 <script>
 // ============================================================================
-// FOKUS WÄCHTER — JavaScript Core
-// Single file. No dependencies. No network. No tracking.
+// FOCUS GUARDIAN — JavaScript Core
 // ============================================================================
-
 (function(){
   'use strict';
 
@@ -1658,8 +1792,7 @@
     totalSec: 0,
     remainingSec: 0,
     startTime: null,
-    mission: '',
-    goal: '',
+    mission: '', goal: '',
     tickHandle: null,
     drinkHandle: null,
     audioReady: false,
@@ -1672,7 +1805,7 @@
   };
 
   try {
-    const saved = JSON.parse(localStorage.getItem('focus-waechter') || '{}');
+    const saved = JSON.parse(localStorage.getItem('focus-guardian') || '{}');
     if (saved.sessionsToday !== undefined) state.sessionsToday = saved.sessionsToday;
     if (saved.bestSessionSec !== undefined) state.bestSessionSec = saved.bestSessionSec;
     if (saved.totalTimeSec !== undefined) state.totalTimeSec = saved.totalTimeSec;
@@ -1686,7 +1819,7 @@
   }
   function persist(){
     try {
-      localStorage.setItem('focus-waechter', JSON.stringify({
+      localStorage.setItem('focus-guardian', JSON.stringify({
         sessionsToday: state.sessionsToday,
         bestSessionSec: state.bestSessionSec,
         totalTimeSec: state.totalTimeSec,
@@ -1731,6 +1864,7 @@
   const testReminderBtn = $('testReminderBtn');
   const testWarnBtn = $('testWarnBtn');
   const motivationBtn = $('motivationBtn');
+  const motivationShortcut = $('motivationShortcut');
   const motivationQuote = $('motivationQuote');
   const motivationAuthor = $('motivationAuthor');
   const clockTime = $('clockTime');
@@ -1766,10 +1900,8 @@
   function toast(title, body, variant){
     const el = document.createElement('div');
     el.className = 'toast' + (variant ? ' '+variant : '');
-    const t = document.createElement('div');
-    t.className = 'title'; t.textContent = title;
-    const b = document.createElement('div');
-    b.className = 'body'; b.textContent = body;
+    const t = document.createElement('div'); t.className = 'title'; t.textContent = title;
+    const b = document.createElement('div'); b.className = 'body'; b.textContent = body;
     el.appendChild(t); el.appendChild(b);
     toastStack.appendChild(el);
     setTimeout(() => {
@@ -1777,28 +1909,21 @@
       el.style.opacity = '0';
       el.style.transform = 'translateX(40px)';
       setTimeout(() => el.remove(), 400);
-    }, 6000);
+    }, 6500);
   }
 
   function tickClock(){
     const d = new Date();
     clockTime.textContent = String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
-    clockDate.textContent =
-      String(d.getDate()).padStart(2,'0')+'.'+
-      String(d.getMonth()+1).padStart(2,'0')+'.'+ d.getFullYear();
+    clockDate.textContent = String(d.getDate()).padStart(2,'0')+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+ d.getFullYear();
   }
   tickClock();
   setInterval(tickClock, 1000*30);
 
-  inMinutes.addEventListener('input', () => {
-    minLabel.textContent = inMinutes.value;
-  });
+  inMinutes.addEventListener('input', () => { minLabel.textContent = inMinutes.value; });
 
-  // ---------- Sound Engine (Web Audio API) ----------
-  let audioCtx = null;
-  let ambientGain = null;
-  let ambientNodes = [];
-  let masterGain = null;
+  // ===== Sound Engine =====
+  let audioCtx = null, ambientGain = null, ambientNodes = [], masterGain = null;
 
   function initAudio(){
     if (audioCtx) return;
@@ -1817,22 +1942,17 @@
     ambientGain = audioCtx.createGain();
     ambientGain.gain.value = 0;
     ambientGain.connect(masterGain);
-    ambientGain.gain.linearRampToValueAtTime(0.08, audioCtx.currentTime + 2);
+    ambientGain.gain.linearRampToValueAtTime(0.09, audioCtx.currentTime + 2);
 
     const freqs = [110, 165, 220.5];
     freqs.forEach((f, i) => {
       const osc = audioCtx.createOscillator();
       osc.type = 'sine'; osc.frequency.value = f;
-      const og = audioCtx.createGain();
-      og.gain.value = i === 0 ? 0.6 : 0.3;
-      const lfo = audioCtx.createOscillator();
-      lfo.frequency.value = 0.08 + i*0.05;
-      const lfoGain = audioCtx.createGain();
-      lfoGain.gain.value = 1.5 + i;
-      lfo.connect(lfoGain).connect(osc.frequency);
-      lfo.start();
-      osc.connect(og).connect(ambientGain);
-      osc.start();
+      const og = audioCtx.createGain(); og.gain.value = i === 0 ? 0.6 : 0.3;
+      const lfo = audioCtx.createOscillator(); lfo.frequency.value = 0.08 + i*0.05;
+      const lfoGain = audioCtx.createGain(); lfoGain.gain.value = 1.5 + i;
+      lfo.connect(lfoGain).connect(osc.frequency); lfo.start();
+      osc.connect(og).connect(ambientGain); osc.start();
       ambientNodes.push(osc, lfo);
     });
 
@@ -1867,12 +1987,8 @@
   function playTone(opts){
     if (!audioCtx || !state.soundOn) return;
     const o = opts || {};
-    const freq = o.freq || 660;
-    const dur = o.dur || 0.4;
-    const type = o.type || 'sine';
-    const vol = o.vol || 0.3;
+    const freq = o.freq || 660, dur = o.dur || 0.4, type = o.type || 'sine', vol = o.vol || 0.3;
     const start = o.delay ? audioCtx.currentTime + o.delay : audioCtx.currentTime;
-
     const osc = audioCtx.createOscillator();
     osc.type = type; osc.frequency.value = freq;
     const g = audioCtx.createGain();
@@ -1882,7 +1998,6 @@
     osc.connect(g).connect(masterGain);
     osc.start(start); osc.stop(start + dur + 0.05);
   }
-
   function playReminder(){
     playTone({freq: 880, dur: 0.25, type: 'sine', vol: 0.25});
     playTone({freq: 1320, dur: 0.3, type: 'sine', vol: 0.2, delay: 0.15});
@@ -1898,13 +2013,15 @@
     }
   }
   function playGong(){
-    const layers = [
-      {f: 110, d: 4.5, v: 0.4}, {f: 220, d: 3.5, v: 0.3},
-      {f: 330, d: 2.5, v: 0.2}, {f: 165, d: 4.0, v: 0.25},
-    ];
-    layers.forEach((l, i) => playTone({freq: l.f, dur: l.d, type: 'sine', vol: l.v, delay: i*0.04}));
+    [{f:110,d:4.5,v:0.4},{f:220,d:3.5,v:0.3},{f:330,d:2.5,v:0.2},{f:165,d:4.0,v:0.25}]
+      .forEach((l, i) => playTone({freq: l.f, dur: l.d, type: 'sine', vol: l.v, delay: i*0.04}));
   }
 
+  function updateSoundIcon(){
+    soundToggleBtn.innerHTML = state.soundOn
+      ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>'
+      : '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+  }
   function enableSound(){
     initAudio();
     if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
@@ -1916,11 +2033,6 @@
     updateSoundIcon();
   }
   function disableSound(){ state.soundOn = false; stopAmbient(); updateSoundIcon(); }
-  function updateSoundIcon(){
-    soundToggleBtn.innerHTML = state.soundOn
-      ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>'
-      : '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
-  }
 
   soundEnableBtn.addEventListener('click', enableSound);
   soundToggleBtn.addEventListener('click', () => {
@@ -1939,6 +2051,7 @@
     toast('TEST: WARNUNG', 'Warnton abgespielt.', 'gold');
   });
 
+  // ===== Reality + Motivation =====
   const realityPool = [
     'Hast du genug getrunken?',
     'Hast du gegessen?',
@@ -1949,10 +2062,8 @@
     'Was liegt außerhalb vom PC noch an?',
     'Realität zuerst. PC danach.',
   ];
-
   function showReality(forceText){
-    const text = forceText || realityPool[Math.floor(Math.random()*realityPool.length)];
-    realityText.textContent = text;
+    realityText.textContent = forceText || realityPool[Math.floor(Math.random()*realityPool.length)];
     reality.classList.add('show');
     playReminder();
   }
@@ -1966,15 +2077,18 @@
     {q: 'Ein Ziel ohne Plan ist nur ein Wunsch.', a: '– Antoine de Saint-Exupéry'},
     {q: 'Erfolg ist die Summe kleiner Anstrengungen, jeden Tag wiederholt.', a: '– Robert Collier'},
     {q: 'Konzentriere dich auf eine Sache, bis du sie gemeistert hast.', a: '– Unknown'},
-    {q: 'Du bist nicht müde. Du bist abgelenkt. Komm zurück.', a: '– Fokus Wächter'},
+    {q: 'Du bist nicht müde. Du bist abgelenkt. Komm zurück.', a: '– Focus Guardian'},
   ];
-  motivationBtn.addEventListener('click', () => {
+  function rollMotivation(){
     const m = motivationPool[Math.floor(Math.random()*motivationPool.length)];
     motivationQuote.textContent = '„'+m.q+'"';
     motivationAuthor.textContent = m.a;
     toast('NEUE INSPIRATION', m.q, 'blue');
-  });
+  }
+  motivationBtn.addEventListener('click', rollMotivation);
+  motivationShortcut.addEventListener('click', rollMotivation);
 
+  // ===== Session Lifecycle =====
   function startSession(){
     const min = parseInt(inMinutes.value, 10);
     const mission = inMission.value.trim() || 'TIEFENFOKUS';
@@ -2009,7 +2123,7 @@
     const intervalMs = testMode.checked ? 60*1000 : 30*60*1000;
     state.drinkHandle = setInterval(() => {
       if (!state.running) return;
-      toast('💧 TRINK-ERINNERUNG', 'Wasser trinken. Kurz aufstehen.', 'blue');
+      toast('💧 TRINK-REMINDER', 'Wasser trinken. Kurz aufstehen.', 'blue');
       playReminder();
     }, intervalMs);
   }
@@ -2020,14 +2134,10 @@
     }
   });
 
-  function cancelSession(){
-    if (!state.running) return;
-    stopTimers();
-    finalizeSession(false);
-  }
   cancelBtn.addEventListener('click', () => {
     if (confirm('Mission wirklich abbrechen? Der Fortschritt wird nicht gezählt.')) {
-      cancelSession();
+      stopTimers();
+      finalizeSession(false);
       toast('MISSION ABGEBROCHEN', 'Kein Streak-Eintrag. Beim nächsten Mal: durchziehen.', 'red');
     }
   });
@@ -2046,12 +2156,12 @@
       if (elapsed > state.bestSessionSec) state.bestSessionSec = elapsed;
       state.totalTimeSec += elapsed;
       try {
-        const saved = JSON.parse(localStorage.getItem('focus-waechter') || '{}');
+        const saved = JSON.parse(localStorage.getItem('focus-guardian') || '{}');
         if (saved.lastStreakDay !== todayKey()) {
           state.streakDays = (saved.streakDays || state.streakDays || 0) + 1;
           saved.lastStreakDay = todayKey();
           saved.streakDays = state.streakDays;
-          localStorage.setItem('focus-waechter', JSON.stringify(saved));
+          localStorage.setItem('focus-guardian', JSON.stringify(saved));
         }
       } catch(e){}
       persist();
@@ -2076,10 +2186,7 @@
     state.remainingSec = Math.max(0, state.totalSec - elapsed);
     updateTimerDisplay();
     checkWarnings(elapsed);
-    if (state.remainingSec <= 0) {
-      stopTimers();
-      finalizeSession(true);
-    }
+    if (state.remainingSec <= 0) { stopTimers(); finalizeSession(true); }
   }
 
   function updateTimerDisplay(){
@@ -2094,13 +2201,12 @@
       corePill.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="5"/></svg> FOCUS SESSION AKTIV';
       coreStatus.textContent = 'FOCUS CORE AKTIV';
     }
-
     const progress = 1 - (state.remainingSec / state.totalSec);
     const dash = 264;
     planRing.style.strokeDashoffset = (dash * (1 - progress)).toFixed(1);
     planPct.textContent = Math.round(progress*100) + '%';
-    planRing.style.stroke = isWarn ? '#ff3a4e' : '#2ee06a';
-    planRing.style.filter = 'drop-shadow(0 0 6px ' + (isWarn ? 'rgba(255,58,78,0.6)' : 'rgba(46,224,106,0.6)') + ')';
+    planRing.style.stroke = isWarn ? '#ff2f2f' : '#6cff00';
+    planRing.style.filter = 'drop-shadow(0 0 8px ' + (isWarn ? 'rgba(255,47,47,0.7)' : 'rgba(108,255,0,0.7)') + ')';
   }
 
   function trigger(key, fn){
@@ -2133,21 +2239,21 @@
     }
     if (remaining <= 10*60 && remaining > 5*60) {
       trigger('w10min', () => {
-        toast('NOCH 10 MINUTEN', 'Achtung — letzte 10 Minuten. Zu Ende bringen.', 'red');
+        toast('WARNUNG: NOCH 10 MINUTEN', 'Keine neuen Baustellen mehr.', 'red');
         playWarn();
         if (Math.random() < 0.6) setTimeout(showReality, 1500);
       });
     }
     if (remaining <= 5*60 && remaining > 1*60) {
       trigger('w5min', () => {
-        toast('NOCH 5 MINUTEN', 'Speichern und abschließen. Keine neuen Files mehr öffnen.', 'red');
+        toast('LETZTE 5 MINUTEN', 'Speichern. Abschließen. Pause vorbereiten.', 'red');
         playWarn();
         if (Math.random() < 0.5) setTimeout(showReality, 2000);
       });
     }
     if (remaining <= 60 && remaining > 0) {
       trigger('w1min', () => {
-        toast('LETZTE MINUTE', 'Final speichern. Cursor parken. Hände weg.', 'red');
+        toast('LETZTE MINUTE', 'Jetzt wirklich beenden.', 'red');
         playCritical();
       });
     }
@@ -2171,9 +2277,7 @@
     }
   });
 
-  // ============================================================================
-  // Background Particles
-  // ============================================================================
+  // ===== Particles =====
   const pCanvas = $('particles');
   const pCtx = pCanvas.getContext('2d');
   let particles = [];
@@ -2184,16 +2288,16 @@
     seedParticles();
   }
   function seedParticles(){
-    const count = Math.min(160, Math.floor((pCanvas.width*pCanvas.height) / 11000));
+    const count = Math.min(180, Math.floor((pCanvas.width*pCanvas.height) / 10000));
     particles = [];
     for (let i = 0; i < count; i++){
       particles.push({
         x: Math.random()*pCanvas.width,
         y: Math.random()*pCanvas.height,
-        r: Math.random()*1.5 + 0.3,
+        r: Math.random()*1.6 + 0.3,
         vx: (Math.random()-0.5)*0.18,
-        vy: (Math.random()-0.5)*0.18 - 0.06,
-        a: Math.random()*0.65 + 0.25,
+        vy: (Math.random()-0.5)*0.18 - 0.07,
+        a: Math.random()*0.7 + 0.25,
         gold: Math.random() < 0.22,
         twinkle: Math.random()*Math.PI*2,
       });
@@ -2202,8 +2306,7 @@
   function animParticles(){
     pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
     for (const p of particles){
-      p.x += p.vx; p.y += p.vy;
-      p.twinkle += 0.025;
+      p.x += p.vx; p.y += p.vy; p.twinkle += 0.025;
       if (p.x < 0) p.x = pCanvas.width;
       if (p.x > pCanvas.width) p.x = 0;
       if (p.y < 0) p.y = pCanvas.height;
@@ -2211,11 +2314,9 @@
       const alpha = p.a * (0.55 + 0.45 * Math.sin(p.twinkle));
       pCtx.beginPath();
       pCtx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-      pCtx.fillStyle = p.gold
-        ? 'rgba(245,197,66,' + alpha.toFixed(2) + ')'
-        : 'rgba(120,200,255,' + alpha.toFixed(2) + ')';
-      pCtx.shadowBlur = p.gold ? 8 : 5;
-      pCtx.shadowColor = p.gold ? '#f5c542' : '#5ed8ff';
+      pCtx.fillStyle = p.gold ? 'rgba(255,184,0,' + alpha.toFixed(2) + ')' : 'rgba(120,200,255,' + alpha.toFixed(2) + ')';
+      pCtx.shadowBlur = p.gold ? 10 : 6;
+      pCtx.shadowColor = p.gold ? '#ffb800' : '#31d7ff';
       pCtx.fill();
     }
     pCtx.shadowBlur = 0;
@@ -2225,9 +2326,7 @@
   window.addEventListener('resize', resizeCanvas);
   animParticles();
 
-  // ============================================================================
-  // Audio waveform visual
-  // ============================================================================
+  // ===== Audio waves visual =====
   const wCanvas = $('waves');
   const wCtx = wCanvas.getContext('2d');
   function resizeWaves(){
@@ -2236,10 +2335,9 @@
   }
   resizeWaves();
   window.addEventListener('resize', resizeWaves);
-
   let waveT = 0;
   function drawWaves(){
-    waveT += 0.04;
+    waveT += 0.045;
     const W = wCanvas.width, H = wCanvas.height;
     wCtx.clearRect(0, 0, W, H);
     const active = state.running && state.soundOn;
@@ -2255,11 +2353,11 @@
       const isGold = (i % 6) === 0;
       const grad = wCtx.createLinearGradient(0, y, 0, y+h);
       if (isGold) {
-        grad.addColorStop(0, 'rgba(245,197,66,0.95)');
-        grad.addColorStop(1, 'rgba(245,197,66,0.15)');
+        grad.addColorStop(0, 'rgba(255,184,0,0.95)');
+        grad.addColorStop(1, 'rgba(255,184,0,0.12)');
       } else {
-        grad.addColorStop(0, 'rgba(94,216,255,0.95)');
-        grad.addColorStop(1, 'rgba(56,109,255,0.1)');
+        grad.addColorStop(0, 'rgba(49,215,255,0.95)');
+        grad.addColorStop(1, 'rgba(0,170,255,0.1)');
       }
       wCtx.fillStyle = grad;
       wCtx.fillRect(i*bw + 1, y, bw - 2, h);
@@ -2268,20 +2366,8 @@
   }
   drawWaves();
 
-  // ---------- bg.jpg Detection ----------
-  // Wenn ein Bild "bg.jpg" neben der HTML liegt, wird es als Hintergrund verwendet
-  // und die SVG-Berge werden ausgeblendet (sie sind nur Fallback).
-  (function detectBg(){
-    const img = new Image();
-    img.onload = () => {
-      document.querySelector('.bg-stage').classList.add('has-bg');
-    };
-    img.onerror = () => { /* kein bg.jpg vorhanden — SVG-Berge bleiben */ };
-    img.src = 'bg.jpg';
-  })();
-
   setTimeout(() => {
-    toast('FOKUS WÄCHTER BEREIT', 'Definiere deine Mission und starte den Fokus.', 'blue');
+    toast('FOCUS GUARDIAN BEREIT', 'Definiere deine Mission und starte den Fokus.', 'blue');
   }, 800);
 
   window.addEventListener('beforeunload', (e) => {
