@@ -146,10 +146,16 @@ if ($user) {
         VALUES (:uid, :th, :exp)
     ")->execute([':uid' => $user['id'], ':th' => $tokenHash, ':exp' => $expires]);
 
-    // TODO V0.5: E-Mail senden mit Link:
-    // forgot-password.php?token={$rawToken}
-    // Aktuell: Token nur in DB — Admin kann es auslesen für manuelle Unterstützung
-    // error_log("Password reset token for {$email}: {$rawToken}");
+    // Reset-Email senden (best-effort — blockiert Response nicht)
+    require_once __DIR__ . '/../../includes/mailer.php';
+    $_appUrl   = csf_app_url();
+    $_resetUrl = "{$_appUrl}/forgot-password.php?token={$rawToken}";
+    csf_mail_send(
+        $email,
+        'Passwort zurücksetzen — Cinematic Vision Studio',
+        "Klicke diesen Link, um dein Passwort zurückzusetzen (gültig 1 Stunde):\n\n{$_resetUrl}\n\nFalls du kein Reset angefordert hast, ignoriere diese E-Mail.\n\n— Cinematic Vision Studio",
+        csf_mail_html_reset($_resetUrl)
+    );
 }
 
 echo json_encode($success, JSON_UNESCAPED_UNICODE);

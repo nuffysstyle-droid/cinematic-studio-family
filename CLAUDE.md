@@ -13,11 +13,11 @@
 |---|---|
 | **Produktname** | Cinematic Vision Studio |
 | **Repo / Codebase** | cinematic-studio-family |
-| **Version** | 0.3.2 (Quality Audit, CSS-Fixes, Nav-Fixes) |
+| **Version** | 0.4.0 (Prompt Generator, Auto-Transitions, Mailgun, Stripe) |
 | **Live-URL** | https://cinematic-studio-family.onrender.com |
 | **IONOS-URL** | https://cinematic-vision-studio.de/scene-editor-test.html |
 | **GitHub** | nuffysstyle-droid/cinematic-studio-family |
-| **Stand** | 2026-05-16 (Session 8) |
+| **Stand** | 2026-05-16 (Session 10) |
 
 ---
 
@@ -275,6 +275,59 @@ cinematic-studio-family/
 6. **htmlspecialchars immer mit (string)-Cast:** `htmlspecialchars((string)$var)`.
 7. **Playwright für Browser-Tests** — kein Claude_in_Chrome, kein zweites Fenster.
 8. **Council-Trigger:** Bei Entscheidungen mit mehreren validen Optionen → vorschlagen.
+
+---
+
+## Was wurde in Session 10 gebaut (2026-05-16)
+
+> Dieser Block ist für jeden neuen Agenten. Lesen, dann loslegen.
+
+### Session 10 — Geänderte / neue Dateien
+
+| Datei | Was geändert |
+|---|---|
+| `studio-demo.php` | **Prompt Generator:** 5 Kategorien (Urlaub/Geburtstag/Natur/Cinematic/Winter), Template-Prompts per Slot → klicken füllt Textarea. CSS + JS komplett inline. |
+| `studio-demo.php` | **Auto-Transitions Toggle:** Checkbox "✨ Cinematic Übergänge" im Final-Section. Sendet `transitions=1` an render-final.php (+ reAnalyzeAndRender). |
+| `api/render-final.php` | **xfade-Transitions:** `csf_render_xfade()` Funktion. Liest `$_POST['transitions']`, führt FFmpeg filter_complex mit xfade+acrossfade (0.3s) statt -c copy concat aus. Automatischer Fallback auf Concat wenn Clip zu kurz oder xfade-Fehler. Response enthält `transitions: bool`. |
+| `includes/mailer.php` | **Neu erstellt.** Mailgun REST API (file_get_contents, kein cURL). `csf_mail_send()`, `csf_app_url()`, `csf_mail_html_welcome()`, `csf_mail_html_reset()`. Silent skip wenn MAILGUN_API_KEY nicht gesetzt. |
+| `api/auth/register.php` | Welcome-Email nach erfolgreicher Registrierung (best-effort). |
+| `api/auth/forgot-password.php` | Reset-Email ersetzt TODO-Kommentar. Echter Link per Mailgun. |
+| `api/stripe/create-checkout.php` | **Neu erstellt.** Stripe Checkout Session (subscription, Starter+ Plan). Erfordert STRIPE_SECRET_KEY + STRIPE_PRICE_ID_STARTER. |
+| `api/stripe/webhook.php` | **Neu erstellt.** HMAC-SHA256 Signatur-Verifikation. `checkout.session.completed` → Plan upgraden + 50 Bonus-Kristalle. `customer.subscription.deleted` → Plan auf Free zurücksetzen. |
+| `dashboard.php` | Upgrade-Button → `startCheckout()` JS → Stripe Checkout. Success-Banner bei `?upgraded=1`. |
+| `docker/apache.conf` | PassEnv für MAILGUN_API_KEY, MAILGUN_DOMAIN, APP_FROM_EMAIL, APP_URL, STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, STRIPE_PRICE_ID_STARTER. |
+
+### Neue Render Env-Vars (User muss eintragen)
+
+| Variable | Wert | Quelle |
+|---|---|---|
+| `MAILGUN_API_KEY` | key-... | Mailgun Dashboard → API Keys |
+| `MAILGUN_DOMAIN` | mg.cinematic-vision-studio.de | Mailgun Sending Domain |
+| `APP_FROM_EMAIL` | Cinematic Vision Studio \<noreply@mg...> | Freier Text |
+| `APP_URL` | https://cinematic-studio-family.onrender.com | Fix |
+| `STRIPE_SECRET_KEY` | sk_live_... oder sk_test_... | Stripe Dashboard |
+| `STRIPE_WEBHOOK_SECRET` | whsec_... | Stripe Dashboard → Webhooks |
+| `STRIPE_PRICE_ID_STARTER` | price_... | Stripe Dashboard → Products |
+
+### Stripe Webhook URL (in Stripe eintragen)
+```
+https://cinematic-studio-family.onrender.com/api/stripe/webhook.php
+```
+Events: `checkout.session.completed`, `customer.subscription.deleted`
+
+### Was NICHT geändert werden soll (Don't Touch)
+- `api/analyze.php`, `api/replace-slot.php` — Funktionieren korrekt
+- `api/generate-ai.php`, `api/ai-status.php` — KI-Flow funktioniert
+- `includes/auth.php`, `includes/db.php` — Auth-System stabil
+- `docker/apache.conf` Bestehende Einträge — nur neue PassEnv hinzugefügt
+
+### Nächste offene Aufgaben (nach Priorität)
+1. **[User-Aktion]** Mailgun + Stripe Env-Vars in Render Dashboard eintragen → Redeploy
+2. **[User-Aktion]** Stripe Product + Price anlegen ($7–9/mo) → STRIPE_PRICE_ID_STARTER
+3. **[User-Aktion]** Stripe Webhook registrieren (URL oben)
+4. **[Agent]** KI-Video-Workflow: Kie.ai Video-Endpoints (V0.5)
+5. **[Agent]** Email-Verifizierung bei Register (Mailgun, V0.5)
+6. **[Entscheidung]** Domain: cinematic-vision-studio.de permanent als primäre Domain?
 
 ---
 

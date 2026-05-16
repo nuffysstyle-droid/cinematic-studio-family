@@ -178,6 +178,12 @@ $plan = $planMeta[$user['plan']] ?? $planMeta['free'];
 
 <div class="page">
 
+    <?php if (!empty($_GET['upgraded'])): ?>
+    <div style="margin-bottom:20px;padding:14px 18px;background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.3);border-radius:12px;color:#4ade80;font-weight:700;font-size:14px;">
+        ✓ Upgrade erfolgreich! Dein Starter+-Plan ist jetzt aktiv.
+    </div>
+    <?php endif; ?>
+
     <div class="page-header">
         <h1>Dashboard</h1>
         <p><?= htmlspecialchars($user['email']) ?> · <?= htmlspecialchars($plan['label']) ?>-Plan</p>
@@ -235,7 +241,7 @@ $plan = $planMeta[$user['plan']] ?? $planMeta['free'];
             </div>
             <div class="plan-actions">
                 <?php if ($user['plan'] === 'free'): ?>
-                    <a href="https://cinematic-vision-studio.de/crystals.html" class="btn-upgrade">⬆️ Auf Starter+ upgraden</a>
+                    <button onclick="startCheckout()" class="btn-upgrade" id="upgradeBtn">⬆️ Auf Starter+ upgraden</button>
                 <?php elseif ($user['plan'] === 'starter'): ?>
                     <a href="https://cinematic-vision-studio.de/crystals.html" class="btn-upgrade">⬆️ Auf Pro upgraden</a>
                 <?php else: ?>
@@ -306,5 +312,26 @@ $plan = $planMeta[$user['plan']] ?? $planMeta['free'];
     </div>
 
 </div>
+
+<script>
+async function startCheckout() {
+  var btn = document.getElementById('upgradeBtn');
+  if (!btn) return;
+  btn.disabled = true; btn.textContent = 'Weiterleitung zu Stripe…';
+  try {
+    var r = await fetch('/api/stripe/create-checkout.php', {method: 'POST'});
+    var d = await r.json();
+    if (d.status === 'ok' && d.url) {
+      window.location.href = d.url;
+    } else {
+      alert(d.message || 'Fehler beim Erstellen der Checkout-Session.');
+      btn.disabled = false; btn.textContent = '⬆️ Auf Starter+ upgraden';
+    }
+  } catch(e) {
+    alert('Verbindungsfehler. Bitte erneut versuchen.');
+    btn.disabled = false; btn.textContent = '⬆️ Auf Starter+ upgraden';
+  }
+}
+</script>
 </body>
 </html>

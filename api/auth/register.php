@@ -66,6 +66,16 @@ if (!$result['ok']) {
     exit;
 }
 
+// Welcome-Email (best-effort — blockiert Registration nicht)
+require_once __DIR__ . '/../../includes/mailer.php';
+$_appUrl = csf_app_url();
+csf_mail_send(
+    $email,
+    'Willkommen bei Cinematic Vision Studio! 🎬',
+    "Hallo!\n\nDein Account ist bereit. Du hast 50 Kristalle als Willkommensbonus erhalten.\n\nStudio öffnen: {$_appUrl}/studio-demo.php\n\nViel Spaß beim Filmen!\n\n— Cinematic Vision Studio",
+    csf_mail_html_welcome("{$_appUrl}/studio-demo.php")
+);
+
 http_response_code(201);
 echo json_encode([
     'status'  => 'ok',

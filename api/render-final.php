@@ -167,6 +167,7 @@ $jobId = trim((string)($_POST['job_id'] ?? ''));
 if (!preg_match('/^job_\d{8}_\d{6}_[a-f0-9]{8}$/', $jobId)) {
     render_fail(400, 'Ungültige job_id.');
 }
+$useTransitions = isset($_POST['transitions']) && $_POST['transitions'] === '1';
 
 // ── FFmpeg verfügbar? ───────────────────────────────────────────────────────
 $ff = checkFfmpegAvailable();
@@ -285,8 +286,9 @@ $resolveReplacement = function (string $url) use ($storageRoot): ?string {
 };
 
 // ── Slot-Clips erzeugen ─────────────────────────────────────────────────────
-$clipPaths = [];
-$debug     = [];
+$clipPaths     = [];
+$clipDurations = [];
+$debug         = [];
 render_log('job=' . $jobId . ' slots=' . $slotCount
     . ' quality=' . $_exportQuality . ' (' . $RENDER_OUT_W . 'x' . $RENDER_OUT_H . ')'
     . ' — start slot encoding loop');
@@ -530,60 +532,143 @@ foreach ($slots as $idx => $slot) {
     }
 
     render_log("Slot {$slotNum} encode OK ({$clipSize} bytes)");
-    $clipPaths[] = $clipOut;
-}
-
-// ── Concat-Liste schreiben ──────────────────────────────────────────────────
-$concatList = $tempDir . '/concat_' . $jobId . '_' . bin2hex(random_bytes(4)) . '.txt';
-
-$lines = [];
-foreach ($clipPaths as $cp) {
-    // Single-Quote-Escape im FFmpeg-Filelist-Format
-    $escaped = str_replace("'", "'\\''", $cp);
-    $lines[] = "file '" . $escaped . "'";
-}
-
-if (file_put_contents($concatList, implode("\n", $lines)) === false) {
-    render_fail(500, 'Concat-Liste konnte nicht geschrieben werden.', ['debug' => $debug]);
+    $clipPaths[]     = $clipOut;
+    $clipDurations[] = round($duration, 3);
 }
 
 // ── Final-Output-Pfad ───────────────────────────────────────────────────────
 $finalName = $jobId . '_final_' . bin2hex(random_bytes(3)) . '.mp4';
 $finalPath = $exportsDir . '/' . $finalName;
 
-$concatArgs = [
-    '-f',         'concat',
-    '-safe',      '0',
-    '-i',         $concatList,
-    '-c',         'copy',
-    '-movflags',  '+faststart',
-    '-y',
-    $finalPath,
-];
+// ── Xfade-Renderer: cinematic crossfade zwischen Szenen ─────────────────────
+/**
+ * Rendert N Clips mit weichem xfade-Crossfade (0.3s).
+ * Falls ein Clip zu kurz ist oder FFmpeg versagt → false, Caller fällt auf Concat zurück.
+ *
+ * Offset-Formel: offset(i) = Σ dur[0..i] − (i+1)×td  (für chained xfade).
+ *
+ * @return array{ok:bool, stderr:string}
+ */
+function csf_render_xfade(
+    array $clips,
+    array $durations,
+    string $output,
+    int $crf,
+    string $preset,
+    int $timeout
+): array {
+    $n  = count($clips);
+    $td = 0.3;
 
-render_log('Concat start (' . count($clipPaths) . ' clips → ' . basename($finalPath) . ')');
+    if ($n < 2) {
+        return ['ok' => false, 'stderr' => 'single clip — xfade skipped'];
+    }
+    foreach ($durations as $d) {
+        if ($d <= $td + 0.1) {
+            return ['ok' => false, 'stderr' => "clip {$d}s too short for {$td}s xfade"];
+        }
+    }
 
-$concatResult = csf_ffmpeg_run($concatArgs, RENDER_CONCAT_TO);
-@unlink($concatList);
+    $vF = [];
+    $aF = [];
+    $cumOffset = 0.0;
 
-// Race-Override analog zum Slot-Encode.
-$finalSizeProbe = is_file($finalPath) ? (int)@filesize($finalPath) : 0;
-if (empty($concatResult['success']) && empty($concatResult['timed_out']) && $finalSizeProbe > 0) {
-    $concatResult['success'] = true;
+    for ($i = 0; $i < $n - 1; $i++) {
+        $isLast = ($i === $n - 2);
+        $vOut   = $isLast ? 'vout' : 'v' . $i;
+        $aOut   = $isLast ? 'aout' : 'a' . $i;
+        $vIn1   = $i === 0 ? '[0:v]'               : '[v' . ($i - 1) . ']';
+        $aIn1   = $i === 0 ? '[0:a]'               : '[a' . ($i - 1) . ']';
+        $vIn2   = '[' . ($i + 1) . ':v]';
+        $aIn2   = '[' . ($i + 1) . ':a]';
+
+        $cumOffset = ($i === 0) ? $durations[0] : ($cumOffset + $durations[$i] - $td);
+        $xOffset   = max(0.05, $cumOffset - $td);
+
+        $vF[] = sprintf('%s%sxfade=transition=fade:duration=%.2f:offset=%.3f[%s]',
+            $vIn1, $vIn2, $td, $xOffset, $vOut);
+        $aF[] = sprintf('%s%sacrossfade=d=%.2f[%s]',
+            $aIn1, $aIn2, $td, $aOut);
+    }
+
+    $filterStr = implode(';', array_merge($vF, $aF));
+    $args      = [];
+    foreach ($clips as $cp) {
+        $args[] = '-i';
+        $args[] = $cp;
+    }
+    array_push(
+        $args,
+        '-filter_complex', $filterStr,
+        '-map', '[vout]', '-map', '[aout]',
+        '-c:v', 'libx264', '-crf', (string) $crf, '-preset', $preset,
+        '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '96k',
+        '-movflags', '+faststart', '-y', $output
+    );
+
+    $res  = csf_ffmpeg_run($args, $timeout);
+    $size = is_file($output) ? (int) @filesize($output) : 0;
+    if (empty($res['success']) && empty($res['timed_out']) && $size > 0) {
+        $res['success'] = true;
+    }
+    return [
+        'ok'     => (bool) ($res['success'] ?? false) && $size > 0,
+        'stderr' => substr(trim((string) ($res['stderr'] ?? '')), -RENDER_STDERR_TAIL),
+    ];
 }
 
-if (!$concatResult['success'] || $finalSizeProbe <= 0) {
-    render_log("Concat FAIL exit={$concatResult['exit_code']} bytes={$finalSizeProbe}");
-    render_fail(500, 'Concat fehlgeschlagen.', [
-        'stderr'    => substr(trim((string)$concatResult['stderr']), -RENDER_STDERR_TAIL),
-        'timed_out' => (bool)$concatResult['timed_out'],
-        'exit_code' => (int)$concatResult['exit_code'],
-        'final_bytes' => $finalSizeProbe,
-        'debug'     => $debug,
-    ]);
+// ── Rendern: Xfade (wenn gewünscht) → Concat Fallback ───────────────────────
+$didXfade = false;
+
+if ($useTransitions && count($clipPaths) >= 2) {
+    render_log('Xfade start (' . count($clipPaths) . ' clips → ' . basename($finalPath) . ')');
+    $xr = csf_render_xfade(
+        $clipPaths, $clipDurations, $finalPath,
+        RENDER_CRF, RENDER_PRESET, RENDER_CONCAT_TO
+    );
+    if ($xr['ok']) {
+        $didXfade = true;
+        render_log('Xfade OK (' . (int) @filesize($finalPath) . ' bytes)');
+    } else {
+        render_log('Xfade FAIL — fallback to concat. Reason: ' . $xr['stderr']);
+        if (is_file($finalPath)) @unlink($finalPath);
+    }
 }
 
-render_log("Concat OK ({$finalSizeProbe} bytes)");
+if (!$didXfade) {
+    $concatList = $tempDir . '/concat_' . $jobId . '_' . bin2hex(random_bytes(4)) . '.txt';
+    $lines = [];
+    foreach ($clipPaths as $cp) {
+        $escaped = str_replace("'", "'\\''", $cp);
+        $lines[] = "file '" . $escaped . "'";
+    }
+    if (file_put_contents($concatList, implode("\n", $lines)) === false) {
+        render_fail(500, 'Concat-Liste konnte nicht geschrieben werden.', ['debug' => $debug]);
+    }
+
+    render_log('Concat start (' . count($clipPaths) . ' clips → ' . basename($finalPath) . ')');
+    $concatResult = csf_ffmpeg_run([
+        '-f', 'concat', '-safe', '0', '-i', $concatList,
+        '-c', 'copy', '-movflags', '+faststart', '-y', $finalPath,
+    ], RENDER_CONCAT_TO);
+    @unlink($concatList);
+
+    $finalSizeProbe = is_file($finalPath) ? (int) @filesize($finalPath) : 0;
+    if (empty($concatResult['success']) && empty($concatResult['timed_out']) && $finalSizeProbe > 0) {
+        $concatResult['success'] = true;
+    }
+    if (!$concatResult['success'] || $finalSizeProbe <= 0) {
+        render_log("Concat FAIL exit={$concatResult['exit_code']} bytes={$finalSizeProbe}");
+        render_fail(500, 'Concat fehlgeschlagen.', [
+            'stderr'      => substr(trim((string) $concatResult['stderr']), -RENDER_STDERR_TAIL),
+            'timed_out'   => (bool) $concatResult['timed_out'],
+            'exit_code'   => (int) $concatResult['exit_code'],
+            'final_bytes' => $finalSizeProbe,
+            'debug'       => $debug,
+        ]);
+    }
+    render_log("Concat OK ({$finalSizeProbe} bytes)");
+}
 
 // ── Cleanup Slot-Clips (nur bei Erfolg) ─────────────────────────────────────
 foreach ($clipPaths as $cp) {
@@ -660,6 +745,7 @@ echo json_encode([
     'rendered_at'      => $nowIso,
     'quality'          => $_exportQuality,          // '720p' | '1080p'
     'resolution'       => $RENDER_OUT_W . 'x' . $RENDER_OUT_H,
-    'quality_capped'   => ($_sessionQuality === '1080p' && !$_canHD), // true wenn Free-User 1080p wollte
+    'quality_capped'   => ($_sessionQuality === '1080p' && !$_canHD),
     'plan'             => $_userPlan,
+    'transitions'      => $didXfade,
 ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);

@@ -129,6 +129,22 @@ $authUser = csf_auth_user();
     .footer-copy{font-size:12px;color:var(--muted2);}
     @media(max-width:900px){.slots{grid-template-columns:repeat(3,1fr);}.meta{grid-template-columns:repeat(2,1fr);}}
     @media(max-width:560px){.slots{grid-template-columns:repeat(2,1fr);}.meta{grid-template-columns:1fr;}}
+    /* Prompt Generator */
+    .prompt-gen{margin-top:7px;}
+    .prompt-gen-toggle{background:transparent;border:1px dashed rgba(147,51,234,.35);color:rgba(167,139,250,.75);font-size:10px;font-weight:700;padding:5px 9px;border-radius:7px;cursor:pointer;width:100%;text-align:left;transition:border-color .15s,color .15s;}
+    .prompt-gen-toggle:hover{border-color:rgba(147,51,234,.6);color:#a78bfa;}
+    .prompt-gen-panel{margin-top:6px;background:rgba(147,51,234,.04);border:1px solid rgba(147,51,234,.15);border-radius:10px;padding:9px;}
+    .prompt-cats{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:7px;}
+    .pcat{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:10px;font-weight:700;padding:4px 8px;border-radius:6px;cursor:pointer;transition:all .12s;}
+    .pcat.active,.pcat:hover{background:rgba(147,51,234,.18);border-color:rgba(147,51,234,.45);color:#a78bfa;}
+    .prompt-items{display:flex;flex-direction:column;gap:4px;}
+    .ptpl{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:7px;padding:6px 8px;cursor:pointer;font-size:10px;color:var(--muted);text-align:left;transition:all .12s;line-height:1.4;}
+    .ptpl:hover{background:rgba(147,51,234,.1);border-color:rgba(147,51,234,.3);color:#d8b4fe;}
+    /* Cinematic transitions toggle */
+    .trans-toggle-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;background:rgba(59,130,246,.04);border:1px solid rgba(59,130,246,.12);border-radius:10px;padding:10px 14px;}
+    .trans-toggle-row label{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;font-weight:700;color:var(--text);}
+    .trans-toggle-row input[type=checkbox]{width:15px;height:15px;accent-color:#7c3aed;cursor:pointer;}
+    .trans-info{font-size:11px;color:var(--muted);}
   </style>
 </head>
 <body>
@@ -237,6 +253,10 @@ $authUser = csf_auth_user();
           </div>
           <?php endif; ?>
 
+          <div class="trans-toggle-row">
+            <label><input type="checkbox" id="transitionsToggle"> ✨ Cinematic Übergänge</label>
+            <span class="trans-info">Weiches Crossfade (0.3s) zwischen Szenen</span>
+          </div>
           <button id="renderBtn" class="render-btn" type="button">🎬 Finales Video erstellen</button>
           <div id="renderStatus" class="render-status" hidden></div>
           <div id="renderError" class="render-error" hidden></div>
@@ -344,6 +364,53 @@ $authUser = csf_auth_user();
         }
       }
     }
+    // ── Prompt-Generator ─────────────────────────────────────────────────────
+    const PROMPT_TEMPLATES = {
+      urlaub:      { label: '✈️ Urlaub',      prompts: [
+        'cinematic beach sunset, turquoise water, golden hour light, film grain',
+        'mountain landscape at dawn, dramatic clouds, epic scale, 4K cinematic',
+        'tropical rainforest waterfall, lush green, mist, magical atmosphere',
+        'aerial travel city view, vibrant streets, warm bokeh, golden hour',
+      ]},
+      geburtstag:  { label: '🎂 Geburtstag',  prompts: [
+        'birthday celebration, colorful confetti falling, warm bokeh lights',
+        'birthday cake with glowing candles, cinematic close-up, warm tones',
+        'happy family gathering, smiling faces, cozy home, golden light',
+        'children birthday party, balloons floating, joyful cheerful atmosphere',
+      ]},
+      natur:       { label: '🌿 Natur',        prompts: [
+        'misty forest morning, sunbeams through trees, ethereal cinematic light',
+        'wildflower meadow, aerial drone view, golden hour, cinematic',
+        'stormy ocean waves on coastal rocks, dramatic sky, raw power',
+        'cherry blossom trees, soft pink petals falling, springtime magic',
+      ]},
+      cinematic:   { label: '🎬 Cinematic',    prompts: [
+        'cinematic wide shot, dramatic lens flare, film grain, anamorphic look',
+        'noir city rain-soaked street at night, neon reflections on pavement',
+        'slow motion smoke rising, dark studio background, dramatic lighting',
+        'aerial cityscape at twilight, city lights sparkling, cinematic blue hour',
+      ]},
+      winter:      { label: '❄️ Winter',       prompts: [
+        'cozy christmas living room, fireplace glow, snow outside window, warm',
+        'snowy village at night, christmas lights twinkling, magical atmosphere',
+        'christmas market scene, warm lights and steam, festive bokeh',
+        'family gathering by christmas tree, warm candlelight, joyful smiles',
+      ]},
+    };
+    function renderPromptItems(catKey, container, targetTextarea) {
+      while (container.firstChild) container.removeChild(container.firstChild);
+      var cat = PROMPT_TEMPLATES[catKey]; if (!cat) return;
+      cat.prompts.forEach(function(p) {
+        var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'ptpl';
+        btn.textContent = p;
+        btn.addEventListener('click', function() {
+          targetTextarea.value = p;
+          targetTextarea.dispatchEvent(new Event('input'));
+        });
+        container.appendChild(btn);
+      });
+    }
+
     function createSlotCard(jobId, slot) {
       const card = document.createElement("div"); card.className = "slot"; card.dataset.jobId = jobId; card.dataset.slotNumber = String(slot.slot);
       if (slot.replaced) card.classList.add("is-replaced");
@@ -366,6 +433,30 @@ $authUser = csf_auth_user();
       const aiPrompt = document.createElement("textarea"); aiPrompt.className = "ai-prompt"; aiPrompt.rows = 2; aiPrompt.placeholder = "KI-Prompt: z.B. cinematic forest scene, golden hour…"; aiPrompt.maxLength = 500;
       if (slot.ai_prompt) aiPrompt.value = String(slot.ai_prompt);
       body.appendChild(aiPrompt);
+      // Prompt Generator (Kategorie-Chips → Template-Prompts)
+      const promptGen = document.createElement("div"); promptGen.className = "prompt-gen";
+      const pgToggle = document.createElement("button"); pgToggle.type = "button"; pgToggle.className = "prompt-gen-toggle"; pgToggle.textContent = "💡 Prompt-Vorschläge";
+      const pgPanel = document.createElement("div"); pgPanel.className = "prompt-gen-panel"; pgPanel.hidden = true;
+      const pgCats = document.createElement("div"); pgCats.className = "prompt-cats";
+      const pgItems = document.createElement("div"); pgItems.className = "prompt-items";
+      Object.entries(PROMPT_TEMPLATES).forEach(function(entry, idx) {
+        var key = entry[0]; var cat = entry[1];
+        var cb = document.createElement("button"); cb.type = "button";
+        cb.className = "pcat" + (idx === 0 ? " active" : ""); cb.textContent = cat.label; cb.dataset.cat = key;
+        cb.addEventListener("click", function() {
+          pgCats.querySelectorAll(".pcat").forEach(function(b){ b.classList.remove("active"); });
+          cb.classList.add("active"); renderPromptItems(key, pgItems, aiPrompt);
+        });
+        pgCats.appendChild(cb);
+      });
+      renderPromptItems(Object.keys(PROMPT_TEMPLATES)[0], pgItems, aiPrompt);
+      pgPanel.appendChild(pgCats); pgPanel.appendChild(pgItems);
+      promptGen.appendChild(pgToggle); promptGen.appendChild(pgPanel);
+      body.appendChild(promptGen);
+      pgToggle.addEventListener("click", function() {
+        pgPanel.hidden = !pgPanel.hidden;
+        pgToggle.textContent = pgPanel.hidden ? "💡 Prompt-Vorschläge" : "▲ Schließen";
+      });
       const aiBtn = document.createElement("button"); aiBtn.type = "button"; aiBtn.className = "ai-btn"; aiBtn.textContent = "✨ KI-Bild generieren"; body.appendChild(aiBtn);
       const aiStatusEl = document.createElement("div"); aiStatusEl.className = "ai-status"; body.appendChild(aiStatusEl);
 
@@ -501,6 +592,7 @@ $authUser = csf_auth_user();
         renderSlots({job_id:newJobId,slots:aData.slots||[]});
         renderStatus.textContent="Analyse fertig. Starte Render ("+aData.slot_count+" Slots)…";
         var rf=new FormData(); rf.append("job_id",newJobId);
+        var _transRe=document.getElementById('transitionsToggle'); if(_transRe&&_transRe.checked) rf.append('transitions','1');
         var rResp=await fetchWithRetry(RENDER_API,{method:"POST",body:rf},function(n){renderStatus.textContent="Render: Versuch "+n+" in 35s…";});
         var rText=await rResp.text(); var rData; try{rData=JSON.parse(rText);}catch(e){throw new Error("Render-Antwort kein JSON:\n"+rText);}
         if(!rResp.ok||rData.status!=="ok") throw new Error(rData.message||"Render fehlgeschlagen");
@@ -528,6 +620,7 @@ $authUser = csf_auth_user();
         }
         renderStatus.textContent="Rendere … 30–120 Sekunden. Bitte Tab offen lassen.";
         var formData=new FormData(); formData.append("job_id",jobId);
+        var _trans=document.getElementById('transitionsToggle'); if(_trans&&_trans.checked) formData.append('transitions','1');
         var response=await fetchWithRetry(RENDER_API,{method:"POST",body:formData},function(n){renderStatus.textContent="Render: Cold Start — Versuch "+n+" in 35s…";});
         var text=await response.text(); var data; try{data=JSON.parse(text);}catch(e){throw new Error("Antwort war kein JSON:\n"+text);}
         if(!response.ok||data.status!=="ok") throw new Error(data.message||"Render fehlgeschlagen");
