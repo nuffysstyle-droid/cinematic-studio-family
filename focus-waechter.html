@@ -44,15 +44,26 @@
     user-select: none;
   }
 
-  /* ===== Hintergrund: Sci-Fi Berglandschaft ===== */
+  /* ===== Hintergrund: Sci-Fi Berglandschaft =====
+     Verwendet bg.jpg neben der HTML, falls vorhanden.
+     Falls die Datei fehlt, übernehmen die Gradients + SVG-Mountains.   */
   .bg-stage {
     position: fixed; inset: 0; z-index: 0;
-    background:
-      radial-gradient(ellipse at 50% 65%, rgba(26,80,180,0.35), transparent 55%),
-      radial-gradient(ellipse at 25% 30%, rgba(56,109,255,0.18), transparent 60%),
-      radial-gradient(ellipse at 75% 25%, rgba(245,197,66,0.10), transparent 55%),
+    background-image:
+      radial-gradient(ellipse at 50% 65%, rgba(2,5,12,0.55), rgba(2,5,12,0.85) 70%),
+      url('bg.jpg'),
       linear-gradient(180deg, #02050c 0%, #050d22 40%, #0a1a3a 65%, #02050c 100%);
+    background-size: cover, cover, cover;
+    background-position: center, center, center;
+    background-repeat: no-repeat;
     overflow: hidden;
+  }
+  /* Wenn bg.jpg geladen ist, blenden wir die SVG-Mountains aus (sie würden doppelt liegen). */
+  .bg-stage.has-bg .bg-mountains { display: none; }
+  .bg-stage.has-bg::before {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(2,5,12,0.35), rgba(2,5,12,0.15) 40%, rgba(2,5,12,0.55) 100%);
+    pointer-events: none;
   }
   #particles { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
   .bg-mountains {
@@ -2256,6 +2267,18 @@
     requestAnimationFrame(drawWaves);
   }
   drawWaves();
+
+  // ---------- bg.jpg Detection ----------
+  // Wenn ein Bild "bg.jpg" neben der HTML liegt, wird es als Hintergrund verwendet
+  // und die SVG-Berge werden ausgeblendet (sie sind nur Fallback).
+  (function detectBg(){
+    const img = new Image();
+    img.onload = () => {
+      document.querySelector('.bg-stage').classList.add('has-bg');
+    };
+    img.onerror = () => { /* kein bg.jpg vorhanden — SVG-Berge bleiben */ };
+    img.src = 'bg.jpg';
+  })();
 
   setTimeout(() => {
     toast('FOKUS WÄCHTER BEREIT', 'Definiere deine Mission und starte den Fokus.', 'blue');
