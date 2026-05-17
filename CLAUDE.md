@@ -17,7 +17,7 @@
 | **Live-URL** | https://cinematic-studio-family.onrender.com |
 | **IONOS-URL** | https://cinematic-vision-studio.de/scene-editor-test.html |
 | **GitHub** | nuffysstyle-droid/cinematic-studio-family |
-| **Stand** | 2026-05-16 (Session 10) |
+| **Stand** | 2026-05-17 (Session 11) |
 
 ---
 
@@ -378,3 +378,77 @@ Events: `checkout.session.completed`, `customer.subscription.deleted`
 2. **[Agent]** Starter+ Plan: Stripe-Integration, 1080p-Freischaltung (V0.4)
 3. **[User-Aktion optional]** Render Cron-Service: Starter-Plan aktivieren → `csf-cleanup-cron` Service automatisch deployed
 4. **[Entscheidung]** Domain: cinematic-vision-studio.de als primäre Domain permanent behalten?
+
+---
+
+## Was wurde in Session 11 gebaut (2026-05-17)
+
+> Dieser Block ist für jeden neuen Agenten. Lesen, dann loslegen.
+
+### Session 11 — Link-Audit & Produktionsfinalisierung
+
+**Commit:** `fc920f2` auf Branch `claude/amazing-kapitsa-68b643`
+
+### Geänderte Dateien
+
+| Datei | Was geändert |
+|---|---|
+| `scene-editor-test.html` | **17 Link-Fixes:** Alle Hub-Card-Links von relativen `.php` → korrekte absolute URLs. IONOS-Seiten (academy, shop, portfolio, ki-videos, prompt-generator, crystals) → relative `.html`. Render-Seiten (studio-demo, trailer-builder, tiktok-studio/animation/sticker, ready-videos, merge-clips, dashboard, contact) → absolute `onrender.com`-URLs. Hero-Buttons gefixed. Mobile Menü "Shop Beta" → "Shop". |
+
+### Produktions-Audit (Session 11) — alle 14 URLs getestet via Playwright
+
+| URL | Status |
+|---|---|
+| `cinematic-vision-studio.de/` | ✅ → redirect scene-editor-test.html |
+| `scene-editor-test.html` | ✅ 200 |
+| `academy.html` | ✅ 200 |
+| `crystals.html` | ✅ 200 |
+| `calendar.html` | ✅ 200 |
+| `shop.html` | ✅ 200 |
+| `portfolio.html` | ✅ 200 |
+| `ki-videos.html` | ✅ 200 |
+| `prompt-generator.html` | ✅ 200 |
+| `availability.html` | ✅ 200 |
+| `impressum/datenschutz/agb/widerruf/cookies.html` | ✅ alle 200 |
+| `studio-demo.php` (Render) | ✅ 200 |
+| `dashboard.php` (Render) | ✅ → Login-Redirect (korrekt) |
+| `contact.php` (Render) | ✅ 200 |
+| `login.php` (Render) | ✅ 200 |
+| `api/health.php` | ✅ ok, PHP 8.2.31, FFmpeg 7.1.3, KI-Key set, storage writable |
+
+### Footer-Audit ✅
+
+| Check | Ergebnis |
+|---|---|
+| Footer-Legal (Impressum, Datenschutz, AGB, Widerruf, Cookies) | ✅ alle 5 Links korrekt |
+| Footer Kontakt | ✅ `mailto:info@cinematic-vision-studio.de` |
+| Footer-Nav (Studio, Shop, Academy, Portfolio, KI Videos, Prompts, Kalender, Kristalle, Login) | ✅ alle korrekt |
+
+### Offener Punkt nach Session 11
+
+| | Problem | Fix |
+|---|---|---|
+| ⚠️ | Mobile Menü live noch **"Shop Beta"** | Korrigierte Datei liegt in Worktree `amazing-kapitsa-68b643/scene-editor-test.html` — einmal hochladen auf IONOS |
+
+### Render Env-Vars Status (muss User eintragen für v0.4.0 Features)
+
+| Variable | Status |
+|---|---|
+| `KIE_AI_API_KEY` | ✅ gesetzt + aktiv |
+| `CLEANUP_SECRET` | ✅ gesetzt + aktiv |
+| `MAILGUN_API_KEY` | ⬜ noch nicht eingetragen |
+| `MAILGUN_DOMAIN` | ⬜ noch nicht eingetragen |
+| `APP_FROM_EMAIL` | ⬜ noch nicht eingetragen |
+| `APP_URL` | ⬜ noch nicht eingetragen |
+| `STRIPE_SECRET_KEY` | ⬜ noch nicht eingetragen |
+| `STRIPE_WEBHOOK_SECRET` | ⬜ noch nicht eingetragen |
+| `STRIPE_PRICE_ID_STARTER` | ⬜ noch nicht eingetragen |
+
+### Nächste offene Aufgaben (nach Priorität)
+
+1. **[User-Aktion]** `scene-editor-test.html` aus Worktree `amazing-kapitsa-68b643` auf IONOS hochladen → "Shop Beta" → "Shop" Fix
+2. **[User-Aktion]** PR `claude/amazing-kapitsa-68b643` → `main` mergen → Render Auto-Deploy v0.4.0
+3. **[User-Aktion]** 7 Render Env-Vars eintragen (Mailgun + Stripe + APP_URL)
+4. **[User-Aktion]** Stripe Product ($7–9/mo) + Webhook anlegen
+5. **[Agent V0.5]** Email-Verifizierung bei Register
+6. **[Agent V0.5]** KI-Video-Workflow (Kie.ai Video-Endpoints)

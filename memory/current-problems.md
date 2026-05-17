@@ -1,33 +1,45 @@
 # memory/current-problems.md — Aktuelle Probleme & Tech Debt
 
-> Letzte Aktualisierung: 2026-05-14 (Session 5)
+> Letzte Aktualisierung: 2026-05-17 (Session 11)
 > Priorität: P0 = Kritisch blockierend · P1 = Feature-blockierend · P2 = Wichtig · P3 = Nice-to-fix
 
 ---
 
 ## 🔴 P0 — Kritische Blocker
 
-### KIE_AI_API_KEY nicht in Render eingetragen
-- **Symptom:** `health.php` zeigt `kie_key_set: false` / `generate-ai.php` liefert 503
-- **Ursache:** Nutzer muss Key manuell im Render-Dashboard eintragen
-- **Deployed Fix:** `PassEnv KIE_AI_API_KEY` in `docker/apache.conf`, `a2enmod env` in `Dockerfile`
-- **Verbleibender Blocker:** **User-Aktion nötig:** Render Dashboard → Environment Variables → `KIE_AI_API_KEY` eintragen → Redeploy
-- **Diagnose:** `curl https://cinematic-studio-family.onrender.com/api/health.php` → `ai.kie_key_set` prüfen
-- **Datei:** `docker/apache.conf`, `api/generate-ai.php`, `api/ai-status.php`
-
-### AI E2E-Test nicht abgeschlossen
-- **Symptom:** Kein echter Kie.ai Generierungs-Test durchgeführt
-- **Ursache:** Abhängig von KIE_AI_API_KEY (s. oben)
-- **Nächster Schritt:** Nach Key-Eintragung: Upload → Analyse → generate-ai → ai-status → render-final
+*(Keine aktuellen P0-Blocker — KIE_AI_API_KEY ist gesetzt und aktiv, health.php bestätigt.)*
 
 ---
 
+## 🟡 P1 — Feature-blockierend (User-Aktionen ausstehend)
+
+### v0.4.0 Env-Vars nicht in Render eingetragen
+- **Symptom:** Mailgun-Emails (Welcome, Reset) werden nicht gesendet. Stripe-Checkout nicht verfügbar.
+- **Fix:** Render Dashboard → Environment → folgende 7 Vars eintragen → Redeploy:
+  - `MAILGUN_API_KEY` — key-... (Mailgun Dashboard)
+  - `MAILGUN_DOMAIN` — mg.cinematic-vision-studio.de
+  - `APP_FROM_EMAIL` — Cinematic Vision Studio <noreply@mg...>
+  - `APP_URL` — https://cinematic-studio-family.onrender.com
+  - `STRIPE_SECRET_KEY` — sk_live_... oder sk_test_...
+  - `STRIPE_WEBHOOK_SECRET` — whsec_... (nach Webhook-Anlage)
+  - `STRIPE_PRICE_ID_STARTER` — price_... (nach Product-Anlage)
+- **Stripe Webhook URL:** `https://cinematic-studio-family.onrender.com/api/stripe/webhook.php`
+- **Events:** `checkout.session.completed`, `customer.subscription.deleted`
+
+### PR noch nicht gemergt (v0.4.0 nicht auf main)
+- **Branch:** `claude/amazing-kapitsa-68b643` → muss in `main` gemergt werden
+- **Commits:** e36f877 (v0.4.0 Features) + fc920f2 (Link-Fixes)
+- **Wirkung:** Nach Merge → Render Auto-Deploy → v0.4.0 live
+
 ## 🟡 P2 — Technische Schulden
 
-### CLEANUP_SECRET nicht in Render eingetragen
-- **Symptom:** `api/cleanup.php?key=...` liefert 403
-- **Fix:** **User-Aktion:** Render Dashboard → `CLEANUP_SECRET` (min. 20 Zeichen) → Redeploy
-- **Datei:** `api/cleanup.php`, `docker/apache.conf` (`PassEnv CLEANUP_SECRET` bereits gesetzt)
+### scene-editor-test.html Mobile Menü "Shop Beta"
+- **Symptom:** Live-Seite zeigt "🛍️ Shop Beta" im Mobile Menü statt "🛍️ Shop"
+- **Fix:** Datei aus Worktree `amazing-kapitsa-68b643/scene-editor-test.html` auf IONOS hochladen
+- **Status:** Fix committed (fc920f2), noch nicht deployed
+
+### CLEANUP_SECRET eingetragen ✅
+- **Status:** Gesetzt und aktiv (Session 8 bestätigt)
 
 ---
 
