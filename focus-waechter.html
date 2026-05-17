@@ -245,21 +245,20 @@
     color: var(--green);
   }
 
-  /* Change-bg mini button after image is loaded */
+  /* Change-bg mini button — IMMER sichtbar oben rechts */
   .change-bg-btn {
-    position: fixed; top: 16px; right: 270px; z-index: 90;
+    position: fixed; top: 16px; right: 270px; z-index: 95;
     background: rgba(4,10,20,0.7);
     border: 1px solid rgba(0,170,255,0.4);
     color: var(--white);
-    padding: 6px 12px;
+    padding: 7px 14px;
     border-radius: 999px;
-    font-size: 10px; letter-spacing: 2px; cursor: pointer;
-    display: none;
+    font-size: 11px; letter-spacing: 2px; cursor: pointer;
+    display: block;
     backdrop-filter: blur(6px);
     transition: all 0.2s;
   }
-  body.has-bg .change-bg-btn { display: block; }
-  .change-bg-btn:hover { border-color: var(--cyan); box-shadow: 0 0 10px var(--glow-cyan); }
+  .change-bg-btn:hover { border-color: var(--cyan); box-shadow: 0 0 12px var(--glow-cyan); color: var(--cyan); }
 
   /* ===== TIMER + CORE OVERLAY (zentral) =====
      Komplett transparent — keine Maske, das Bild bleibt sichtbar.
@@ -872,17 +871,18 @@
     <div class="sub">Zieh dein Bild (.png oder .jpg) einfach <strong>hier ins Fenster</strong>.</div>
     <div class="sub">Es wird als Hintergrund verwendet und im Browser gespeichert.</div>
     <div class="or">— ODER —</div>
-    <button class="pick-btn" id="pickBtn">
+    <label class="pick-btn" for="filePicker">
       📁 BILD AUSWÄHLEN
-    </button>
-    <input type="file" id="filePicker" accept="image/*" style="display:none" />
+    </label>
+    <input type="file" id="filePicker" accept="image/*"
+           style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;" />
     <div class="saved-hint" id="savedHint" style="display:none">✓ Gespeichertes Bild gefunden — wird geladen…</div>
     <button class="skip" id="skipBtn">Ohne Bild fortfahren →</button>
   </div>
 </div>
 
-<!-- Mini button to change bg after one is loaded -->
-<button class="change-bg-btn" id="changeBgBtn">⟲ HINTERGRUND ÄNDERN</button>
+<!-- Always-visible bg loader button (Label triggert nativen File-Picker) -->
+<label class="change-bg-btn" for="filePicker" id="changeBgBtn">📁 HINTERGRUND LADEN</label>
 
 <!-- ===== MUSIC PANEL ===== -->
 <div class="music-panel" id="musicPanel">
@@ -1164,11 +1164,10 @@
   // ===== Background loading: drag&drop + picker + assets/bg.png + localStorage =====
   const bgEl       = document.getElementById('main-bg');
   const dropZone   = $('dropZone');
-  const pickBtn    = $('pickBtn');
   const filePicker = $('filePicker');
   const skipBtn    = $('skipBtn');
   const savedHint  = $('savedHint');
-  const changeBgBtn= $('changeBgBtn');
+  // changeBgBtn ist jetzt ein Label, kein JS-Handler nötig
 
   function applyBgUrl(url){
     bgEl.style.backgroundImage = "url('" + url.replace(/'/g, "\\'") + "')";
@@ -1246,10 +1245,12 @@
     tryNext();
   }
 
-  // Datei-Picker Button
-  pickBtn.addEventListener('click', () => filePicker.click());
+  // Datei-Picker (label öffnet nativ den Dialog)
   filePicker.addEventListener('change', (e) => {
-    if (e.target.files[0]) loadFile(e.target.files[0]);
+    if (e.target.files && e.target.files[0]) {
+      loadFile(e.target.files[0]);
+      e.target.value = ''; // reset, damit gleiche Datei wieder gewählt werden kann
+    }
   });
 
   // Skip — drop zone permanent ausblenden in dieser Session
@@ -1257,16 +1258,8 @@
     dropZone.style.display = 'none';
   });
 
-  // Hintergrund ändern
-  changeBgBtn.addEventListener('click', () => {
-    if (confirm('Anderes Hintergrundbild laden?')) {
-      try { localStorage.removeItem('focus-guardian-bg'); } catch(e) {}
-      document.body.classList.remove('has-bg');
-      bgEl.style.backgroundImage = '';
-      dropZone.style.display = '';
-      savedHint.style.display = 'none';
-    }
-  });
+  // changeBgBtn ist jetzt ein <label for="filePicker"> — öffnet nativ Dialog
+  // Beim Auswählen eines NEUEN Bildes ersetzt loadFile automatisch den Hintergrund
 
   // Drag & Drop — überall im Fenster, aber NUR drop-zone-anzeige wenn Datei reingezogen
   ['dragenter','dragover'].forEach(evt => {
