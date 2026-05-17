@@ -112,58 +112,80 @@
   body.has-bg .bg-fallback { display: none; }
   body:not(.has-bg) #main-bg { display: none; }
 
-  /* ===== DROP ZONE — kleiner Banner unten statt Vollbild-Blocker ===== */
+  /* ===== DROP ZONE — riesig und unübersehbar in der Mitte ===== */
   .drop-zone {
     position: fixed;
-    bottom: 130px; left: 50%; transform: translateX(-50%);
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
     z-index: 80;
-    display: flex; align-items: center; gap: 14px;
+    display: flex; flex-direction: column; align-items: center; gap: 0;
     background: rgba(2,5,12,0.92);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,184,0,0.55);
-    border-radius: 14px;
-    padding: 12px 20px;
-    box-shadow: 0 0 28px rgba(255,184,0,0.3);
+    backdrop-filter: blur(12px);
+    border: 3px dashed var(--gold);
+    border-radius: 24px;
+    padding: 40px 60px;
+    box-shadow: 0 0 60px var(--glow-gold), inset 0 0 30px rgba(255,184,0,0.1);
     max-width: 90vw;
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    animation: bigPulse 1.8s ease-in-out infinite;
+  }
+  @keyframes bigPulse {
+    0%, 100% { box-shadow: 0 0 40px var(--glow-gold), inset 0 0 20px rgba(255,184,0,0.1); }
+    50%      { box-shadow: 0 0 80px var(--glow-gold), 0 0 120px rgba(255,184,0,0.4), inset 0 0 40px rgba(255,184,0,0.2); }
   }
   body.has-bg .drop-zone { display: none; }
   body.bg-hidden .drop-zone { display: none; }
   .drop-zone.drag-active {
     background: rgba(0,170,255,0.20);
     border-color: var(--cyan);
-    box-shadow: 0 0 40px var(--glow-cyan);
+    transform: translate(-50%, -50%) scale(1.05);
   }
   .drop-card {
-    display: flex; align-items: center; gap: 14px;
+    text-align: center;
   }
   .drop-card .title {
-    font-size: 12px; font-weight: 800; letter-spacing: 3px;
-    color: var(--gold); text-shadow: 0 0 8px var(--glow-gold);
+    font-size: 28px; font-weight: 900; letter-spacing: 4px;
+    color: var(--gold); text-shadow: 0 0 18px var(--glow-gold);
+    margin-bottom: 14px;
   }
-  .drop-card .sub { display: none; }
-  .drop-card .or  { display: none; }
+  .drop-card .sub {
+    font-size: 15px; color: var(--white); margin-bottom: 8px; line-height: 1.5;
+  }
+  .drop-card .sub strong { color: var(--cyan); }
+  .drop-card .or {
+    font-size: 11px; letter-spacing: 4px; color: var(--dim); margin: 18px 0 14px;
+  }
   .drop-card .pick-btn {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 8px 16px;
-    background: var(--gold); color: #04070d;
-    border: none; border-radius: 8px;
-    font-size: 11px; letter-spacing: 2px; font-weight: 900;
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 16px 32px;
+    background: linear-gradient(180deg, var(--gold), #cc9500);
+    color: #04070d;
+    border: none; border-radius: 12px;
+    font-size: 15px; letter-spacing: 3px; font-weight: 900;
     cursor: pointer;
-    box-shadow: 0 0 14px var(--glow-gold);
+    box-shadow: 0 0 30px var(--glow-gold);
     transition: transform 0.2s, box-shadow 0.2s;
   }
   .drop-card .pick-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 0 22px var(--glow-gold);
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 0 50px var(--glow-gold);
   }
   .drop-card .skip {
+    display: block; margin: 18px auto 0;
     background: transparent; color: var(--dim); border: none;
-    font-size: 10px; letter-spacing: 1px; cursor: pointer; text-decoration: underline;
+    font-size: 11px; letter-spacing: 2px; cursor: pointer; text-decoration: underline;
   }
   .drop-card .skip:hover { color: var(--white); }
   .drop-card .saved-hint {
-    font-size: 10px; color: var(--cyan); letter-spacing: 1px;
+    margin-top: 14px;
+    font-size: 11px; color: var(--cyan); letter-spacing: 2px;
+  }
+  .drop-card .arrow {
+    font-size: 36px; color: var(--gold);
+    animation: arrowBounce 1.2s ease-in-out infinite;
+    margin: 8px 0;
+  }
+  @keyframes arrowBounce {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(10px); }
   }
 
   /* ===== MOTIVATION BANNER (big glowing reminders) ===== */
@@ -1207,15 +1229,16 @@
 <!-- Drop Zone — erscheint solange kein Bild geladen ist -->
 <div class="drop-zone" id="dropZone">
   <div class="drop-card">
-    <div class="title">REFERENZ-BILD LADEN</div>
-    <div class="sub"><strong>3 Wege zum Hintergrund:</strong></div>
-    <div class="sub">• Bild ins Fenster ziehen</div>
-    <div class="sub">• Bild kopieren &amp; <strong>Strg+V</strong> drücken</div>
-    <div class="sub">• Oder klick auf den Button:</div>
-    <div class="or"></div>
+    <div class="title">HINTERGRUND-BILD LADEN</div>
+    <div class="sub">Zieh dein <strong>focus-bg.png</strong> aus dem Datei-Explorer</div>
+    <div class="sub"><strong>direkt in dieses Fenster</strong></div>
+    <div class="arrow">⬇</div>
+    <div class="sub" style="font-size:12px; color:var(--dim);">— ODER —</div>
     <label class="pick-btn" for="filePicker">
       📁 BILD AUSWÄHLEN
     </label>
+    <div class="sub" style="font-size:11px; color:var(--dim); margin-top:14px;">
+      Tipp: Auch <strong style="color:var(--cyan)">Strg+V</strong> funktioniert wenn Bild im Zwischenspeicher</div>
     <input type="file" id="filePicker" accept="image/*"
            style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;" />
     <div class="saved-hint" id="savedHint" style="display:none">✓ Gespeichertes Bild gefunden — wird geladen…</div>
