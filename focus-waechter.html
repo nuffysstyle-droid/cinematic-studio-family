@@ -112,63 +112,58 @@
   body.has-bg .bg-fallback { display: none; }
   body:not(.has-bg) #main-bg { display: none; }
 
-  /* ===== DROP ZONE / Bild-Picker ===== */
+  /* ===== DROP ZONE — kleiner Banner unten statt Vollbild-Blocker ===== */
   .drop-zone {
-    position: fixed; inset: 0; z-index: 80;
-    display: grid; place-items: center;
-    background: rgba(2,5,12,0.85);
-    backdrop-filter: blur(6px);
-    pointer-events: auto;
+    position: fixed;
+    bottom: 130px; left: 50%; transform: translateX(-50%);
+    z-index: 80;
+    display: flex; align-items: center; gap: 14px;
+    background: rgba(2,5,12,0.92);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,184,0,0.55);
+    border-radius: 14px;
+    padding: 12px 20px;
+    box-shadow: 0 0 28px rgba(255,184,0,0.3);
+    max-width: 90vw;
+    transition: opacity 0.3s ease, transform 0.3s ease;
   }
   body.has-bg .drop-zone { display: none; }
+  body.bg-hidden .drop-zone { display: none; }
   .drop-zone.drag-active {
-    background: rgba(0,170,255,0.18);
+    background: rgba(0,170,255,0.20);
+    border-color: var(--cyan);
+    box-shadow: 0 0 40px var(--glow-cyan);
   }
   .drop-card {
-    background: rgba(4,10,20,0.95);
-    border: 2px dashed rgba(255,184,0,0.7);
-    border-radius: 18px;
-    padding: 50px 60px;
-    text-align: center;
-    box-shadow: 0 0 50px rgba(255,184,0,0.35);
-    max-width: 560px;
-    animation: bannerPulse 2.5s ease-in-out infinite;
+    display: flex; align-items: center; gap: 14px;
   }
   .drop-card .title {
-    font-size: 22px; font-weight: 900; letter-spacing: 4px;
-    color: var(--gold); text-shadow: 0 0 14px var(--glow-gold);
-    margin-bottom: 12px;
+    font-size: 12px; font-weight: 800; letter-spacing: 3px;
+    color: var(--gold); text-shadow: 0 0 8px var(--glow-gold);
   }
-  .drop-card .sub {
-    font-size: 14px; color: var(--white); margin-bottom: 8px; line-height: 1.5;
-  }
-  .drop-card .or {
-    font-size: 11px; letter-spacing: 3px; color: var(--dim); margin: 18px 0;
-  }
+  .drop-card .sub { display: none; }
+  .drop-card .or  { display: none; }
   .drop-card .pick-btn {
-    display: inline-flex; align-items: center; gap: 10px;
-    padding: 14px 28px;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 16px;
     background: var(--gold); color: #04070d;
-    border: none; border-radius: 10px;
-    font-size: 14px; letter-spacing: 3px; font-weight: 900;
+    border: none; border-radius: 8px;
+    font-size: 11px; letter-spacing: 2px; font-weight: 900;
     cursor: pointer;
-    box-shadow: 0 0 24px var(--glow-gold);
+    box-shadow: 0 0 14px var(--glow-gold);
     transition: transform 0.2s, box-shadow 0.2s;
   }
   .drop-card .pick-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0 36px var(--glow-gold);
+    transform: translateY(-1px);
+    box-shadow: 0 0 22px var(--glow-gold);
   }
   .drop-card .skip {
-    margin-top: 18px;
-    display: block;
     background: transparent; color: var(--dim); border: none;
-    font-size: 11px; letter-spacing: 2px; cursor: pointer; text-decoration: underline;
+    font-size: 10px; letter-spacing: 1px; cursor: pointer; text-decoration: underline;
   }
   .drop-card .skip:hover { color: var(--white); }
   .drop-card .saved-hint {
-    margin-top: 14px;
-    font-size: 10px; color: var(--cyan); letter-spacing: 2px;
+    font-size: 10px; color: var(--cyan); letter-spacing: 1px;
   }
 
   /* ===== MOTIVATION BANNER (big glowing reminders) ===== */
@@ -1630,16 +1625,21 @@
     }
   } catch(e) {}
 
-  // 2) Versuche: assets/focus-bg.png oder andere Standardpfade
+  // 2) Versuche: focus-bg.png und Variationen
   if (!document.body.classList.contains('has-bg')) {
     const tryPaths = [
+      'focus-bg.png',
       'assets/focus-bg.png',
       './assets/focus-bg.png',
+      './focus-bg.png',
+      'images/focus-bg.png',
+      'img/focus-bg.png',
       'assets/bg.png',
       'bg.png',
-      'focus-bg.png',
+      'focus-bg.jpg',
+      'assets/focus-bg.jpg',
       'assets/bg.jpg',
-      'bg.jpg'
+      'bg.jpg',
     ];
     let i = 0;
     const tryNext = () => {
@@ -1678,7 +1678,7 @@
 
   // Skip — drop zone permanent ausblenden in dieser Session
   skipBtn.addEventListener('click', () => {
-    dropZone.style.display = 'none';
+    document.body.classList.add('bg-hidden');
   });
 
   // changeBgBtn ist jetzt ein <label for="filePicker"> — öffnet nativ Dialog
