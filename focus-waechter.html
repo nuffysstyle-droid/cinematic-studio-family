@@ -279,6 +279,22 @@
     border-color: rgba(108,255,0,0.4);
     color: var(--green);
   }
+  .music-panel .mp-mini {
+    width: 34px; height: 30px;
+    background: rgba(7,17,31,0.7);
+    border: 1px solid rgba(0,170,255,0.35);
+    color: var(--white);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s;
+  }
+  .music-panel .mp-mini:hover {
+    border-color: var(--cyan);
+    box-shadow: 0 0 8px var(--glow-cyan);
+    color: var(--cyan);
+  }
+  .music-panel .mp-track .miss { color: var(--red); font-size: 9px; }
 
   /* Change-bg mini button — IMMER sichtbar oben rechts */
   .change-bg-btn {
@@ -882,6 +898,105 @@
     border: 1px solid rgba(0,170,255,0.3);
   }
 
+  /* ===== KLICKZONEN über Bild-Panels =====
+     Unsichtbare Buttons über den statischen Panels im Hintergrundbild.
+     Hover zeigt subtilen Cyan-Glow, Klick triggert Toast/Aktion. */
+  .click-zone {
+    position: fixed;
+    z-index: 8;
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 14px;
+    transition: all 0.2s ease;
+  }
+  .click-zone:hover {
+    background: rgba(49,215,255,0.08);
+    border-color: rgba(49,215,255,0.35);
+    box-shadow: 0 0 18px rgba(49,215,255,0.25), inset 0 0 12px rgba(49,215,255,0.1);
+  }
+  .click-zone:active { transform: scale(0.99); }
+
+  /* Settings Overlay */
+  .settings-overlay {
+    position: fixed; inset: 0; z-index: 250;
+    background: rgba(2,5,12,0.94);
+    backdrop-filter: blur(12px);
+    display: none; place-items: center; padding: 30px;
+  }
+  .settings-overlay.show { display: grid; }
+  .settings-card {
+    max-width: 560px; width: 100%;
+    background: rgba(7,17,31,0.95);
+    border: 1px solid rgba(0,170,255,0.55);
+    border-radius: 16px;
+    padding: 32px; max-height: 90vh; overflow: auto;
+    box-shadow: 0 0 50px rgba(0,170,255,0.4);
+    animation: popIn 0.3s ease-out;
+  }
+  .settings-card h2 {
+    color: var(--gold); font-size: 18px; letter-spacing: 4px;
+    margin-bottom: 20px; text-align: center;
+    text-shadow: 0 0 10px var(--glow-gold);
+  }
+  .settings-row {
+    display: grid; grid-template-columns: 1fr auto;
+    align-items: center; gap: 14px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0,170,255,0.15);
+  }
+  .settings-row label {
+    color: var(--white); font-size: 13px; letter-spacing: 1px; font-weight: 600;
+  }
+  .settings-row label small {
+    display: block; color: var(--dim); font-size: 11px; letter-spacing: 0; margin-top: 2px; font-weight: 400;
+  }
+  .settings-row input[type="range"] { width: 180px; accent-color: var(--cyan); }
+  .settings-row input[type="number"] {
+    width: 80px; padding: 6px 10px;
+    background: rgba(3,8,20,0.85);
+    border: 1px solid rgba(0,170,255,0.4);
+    color: var(--white);
+    border-radius: 6px; font-size: 13px; text-align: center;
+  }
+  .settings-row .toggle {
+    width: 44px; height: 22px; border-radius: 11px;
+    background: rgba(0,0,0,0.5); border: 1px solid rgba(0,170,255,0.3);
+    position: relative; cursor: pointer; transition: all 0.2s;
+  }
+  .settings-row .toggle::after {
+    content: ""; position: absolute;
+    top: 1px; left: 1px;
+    width: 18px; height: 18px;
+    background: var(--dim); border-radius: 50%;
+    transition: all 0.2s;
+  }
+  .settings-row .toggle.on {
+    background: rgba(108,255,0,0.25); border-color: rgba(108,255,0,0.7);
+    box-shadow: 0 0 10px rgba(108,255,0,0.4);
+  }
+  .settings-row .toggle.on::after {
+    left: 23px; background: var(--green); box-shadow: 0 0 8px var(--green);
+  }
+  .settings-actions {
+    display: flex; gap: 10px; justify-content: center; margin-top: 20px;
+  }
+  /* Settings-Button (Zahnrad, oben rechts) */
+  .settings-btn {
+    position: fixed; top: 16px; right: 16px; z-index: 91;
+    width: 40px; height: 40px; border-radius: 50%;
+    background: rgba(4,10,20,0.75);
+    border: 1px solid rgba(0,170,255,0.45);
+    color: var(--white);
+    display: grid; place-items: center;
+    cursor: pointer; transition: all 0.2s;
+    backdrop-filter: blur(6px);
+  }
+  .settings-btn:hover {
+    border-color: var(--cyan); box-shadow: 0 0 14px var(--glow-cyan);
+    color: var(--cyan); transform: rotate(45deg);
+  }
+
   .hidden { display: none !important; }
 
   /* Position hint for users who want to tune positions */
@@ -1116,6 +1231,66 @@
 <!-- Always-visible bg loader button (Label triggert nativen File-Picker) -->
 <label class="change-bg-btn" for="filePicker" id="changeBgBtn">📁 HINTERGRUND LADEN</label>
 
+<!-- Settings Button (Zahnrad) -->
+<button class="settings-btn" id="settingsBtn" title="Einstellungen">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.4 13a7.5 7.5 0 000-2l2-1.5-2-3.5-2.4 1a7.4 7.4 0 00-1.7-1L15 3.5h-4l-.3 2.5a7.4 7.4 0 00-1.7 1l-2.4-1-2 3.5L6.6 11a7.5 7.5 0 000 2l-2 1.5 2 3.5 2.4-1c.5.4 1.1.7 1.7 1l.3 2.5h4l.3-2.5c.6-.3 1.2-.6 1.7-1l2.4 1 2-3.5-2-1.5zM12 15a3 3 0 110-6 3 3 0 010 6z"/></svg>
+</button>
+
+<!-- Klickzonen über den Bild-Panels -->
+<div class="click-zone" data-zone="mission"    style="top: 11%; left: 0.5%; width: 25%; height: 26%;"  title="Aktuelle Mission"></div>
+<div class="click-zone" data-zone="stats"      style="top: 38%; left: 0.5%; width: 25%; height: 22%;"  title="Focus Statistik"></div>
+<div class="click-zone" data-zone="moti"       style="top: 61%; left: 0.5%; width: 25%; height: 22%;"  title="Motivation · Inspiration laden"></div>
+<div class="click-zone" data-zone="systems"    style="top: 11%; right: 0.5%; width: 25%; height: 30%;" title="Aktive Schutzsysteme"></div>
+<div class="click-zone" data-zone="plan"       style="top: 41%; right: 0.5%; width: 25%; height: 24%;" title="Session Plan · Anpassen"></div>
+<div class="click-zone" data-zone="sound-prev" style="bottom: 18%; right: 13.5%; width: 4%; height: 5%;" title="Vorheriger Track"></div>
+<div class="click-zone" data-zone="sound-play" style="bottom: 18%; right: 9%;   width: 4%; height: 5%;"  title="Play/Pause"></div>
+<div class="click-zone" data-zone="sound-next" style="bottom: 18%; right: 4.5%; width: 4%; height: 5%;"  title="Nächster Track"></div>
+<div class="click-zone" data-zone="sound-switch" style="bottom: 11%; right: 1.5%; width: 22%; height: 5%;" title="Sound wechseln"></div>
+<div class="click-zone" data-zone="streak"     style="bottom: 0.5%; left: 0.5%; width: 16%; height: 12%;" title="Streak"></div>
+<div class="click-zone" data-zone="brand"      style="top: 0.5%; left: 0.5%; width: 26%; height: 10%;"   title="Focus Guardian"></div>
+<div class="click-zone" data-zone="level"      style="top: 0.5%; right: 0.5%; width: 22%; height: 10%;"  title="Wächter Level"></div>
+<div class="click-zone" data-zone="topnav"     style="top: 0.5%; left: 31%; width: 38%; height: 10%;"    title="Hauptnavigation"></div>
+<div class="click-zone" data-zone="bottomnav"  style="bottom: 0.5%; left: 31%; width: 38%; height: 12%;" title="Dashboard-Navigation"></div>
+<div class="click-zone" data-zone="dragon"     style="bottom: 1%; right: 10%; width: 6%; height: 11%;"   title="Wächter-Drache"></div>
+
+<!-- Settings Overlay -->
+<div class="settings-overlay" id="settingsOverlay">
+  <div class="settings-card">
+    <h2>⚙ EINSTELLUNGEN</h2>
+    <div class="settings-row">
+      <label>Musik-Lautstärke<small>0-100%</small></label>
+      <input type="range" id="setMusicVol" min="0" max="100" value="50" />
+    </div>
+    <div class="settings-row">
+      <label>Warn-Lautstärke<small>0-100%</small></label>
+      <input type="range" id="setWarnVol" min="0" max="100" value="70" />
+    </div>
+    <div class="settings-row">
+      <label>Trink-Erinnerung<small>Alle 30 Min „Wasser trinken"</small></label>
+      <div class="toggle on" id="setDrink"></div>
+    </div>
+    <div class="settings-row">
+      <label>Reality Reminder<small>Familie, Aufgaben kurz vor Session-Ende</small></label>
+      <div class="toggle on" id="setReality"></div>
+    </div>
+    <div class="settings-row">
+      <label>Testmodus<small>Trink-Reminder jede Minute</small></label>
+      <div class="toggle" id="setTest"></div>
+    </div>
+    <div class="settings-row">
+      <label>Standard-Dauer<small>Minuten pro Session</small></label>
+      <input type="number" id="setDuration" min="10" max="120" step="5" value="50" />
+    </div>
+    <div class="settings-row">
+      <label>Pause-Dauer<small>Minuten zwischen Sessions</small></label>
+      <input type="number" id="setPause" min="1" max="60" value="10" />
+    </div>
+    <div class="settings-actions">
+      <button class="btn small" id="settingsClose">SCHLIEẞEN</button>
+    </div>
+  </div>
+</div>
+
 <!-- ===== MUSIC PANEL ===== -->
 <div class="music-panel" id="musicPanel">
   <div class="mp-head">
@@ -1123,18 +1298,18 @@
     <span id="mpHide" style="cursor:pointer; color:var(--dim);">×</span>
   </div>
   <div class="mp-now" id="mpNow">TIEFENFOKUS</div>
-  <div class="mp-state" id="mpState">RUHIG · LÄUFT</div>
+  <div class="mp-state" id="mpState">DEEP DRONE · BEREIT</div>
   <div class="mp-vol-row">
     <span style="color:var(--dim); letter-spacing:1px;">VOL</span>
-    <input type="range" id="mpVolume" min="0" max="100" value="65" />
-    <span class="mp-vol-num" id="mpVolNum">65</span>
+    <input type="range" id="mpVolume" min="0" max="100" value="50" />
+    <span class="mp-vol-num" id="mpVolNum">50</span>
   </div>
-  <div class="mp-tracks">
-    <button class="mp-track active" data-track="drone">Tiefenfokus</button>
-    <button class="mp-track" data-track="crystal">Kristallraum</button>
-    <button class="mp-track" data-track="earth">Erdung</button>
-    <button class="mp-track" data-track="stars">Sterne</button>
+  <div style="display:flex; gap:6px; justify-content:center; margin-bottom:8px;">
+    <button class="mp-mini" id="mpPrev" title="Vorheriger Track">⏮</button>
+    <button class="mp-mini" id="mpPlay" title="Play/Pause">▶</button>
+    <button class="mp-mini" id="mpNext" title="Nächster Track">⏭</button>
   </div>
+  <div class="mp-tracks" id="mpTracks"></div>
   <button class="mp-power on" id="mpPower">MUSIK AUS</button>
 </div>
 
@@ -1577,215 +1752,232 @@
   inMinutes.addEventListener('input', () => { minLabel.textContent = inMinutes.value; });
 
   // ===== Sound Engine =====
-  let audioCtx = null, ambientGain = null, ambientNodes = [], masterGain = null;
-  let intensityState = 'calm'; // 'calm' | 'active' | 'warning' | 'critical'
-  let currentTrack = 'drone';   // 'drone' | 'crystal' | 'earth' | 'stars'
-  let userVolume = 0.7;         // 0..1, gesetzt vom Slider
+  // 2-Schichten-System: HTML5 Audio für Musik (lädt aus assets/audio/),
+  // Web Audio für Warnsounds (immer generiert, unabhängig).
 
-  // Schöne harmonische Tracks — proper Akkorde + Melodien
-  const TRACKS = {
-    drone: {   // Tiefenfokus — C-Dur warm pad
-      name: 'TIEFENFOKUS',
-      // C2, G2, C3, E3, G3 — C-Dur Quinte gestapelt (warm, harmonisch)
-      calm:     { freqs: [65.4, 98.0, 130.8, 164.8, 196.0], baseVol: 0.35, lfoRate: 0.07, lfoDepth: 0.8, noiseFreq: 0, noiseVol: 0, type: 'sine' },
-      active:   { freqs: [65.4, 98.0, 130.8, 164.8, 196.0], baseVol: 0.4,  lfoRate: 0.10, lfoDepth: 1.0, noiseFreq: 0, noiseVol: 0, type: 'sine' },
-      melody:   [261.6, 329.6, 392.0, 329.6, 261.6, 196.0, 261.6, 329.6], // C-E-G-E-C-G-C-E
-    },
-    crystal: { // Kristallraum — D-Dur hohe ätherische Töne (D, F#, A, D-octave)
-      name: 'KRISTALLRAUM',
-      calm:     { freqs: [146.8, 220.0, 277.2, 329.6, 440.0], baseVol: 0.28, lfoRate: 0.10, lfoDepth: 1.5, noiseFreq: 0, noiseVol: 0, type: 'sine' },
-      active:   { freqs: [146.8, 220.0, 277.2, 329.6, 440.0], baseVol: 0.32, lfoRate: 0.15, lfoDepth: 1.8, noiseFreq: 0, noiseVol: 0, type: 'sine' },
-      melody:   [587.3, 698.5, 880.0, 698.5, 587.3, 440.0, 587.3, 698.5], // hohe Glöckchen-Melodie
-    },
-    earth: {   // Erdung — A-Moll tiefe warme Töne (A1, E2, A2, C3, E3)
-      name: 'ERDUNG',
-      calm:     { freqs: [55.0, 82.4, 110.0, 130.8, 164.8],  baseVol: 0.45, lfoRate: 0.05, lfoDepth: 0.5, noiseFreq: 0, noiseVol: 0, type: 'sine' },
-      active:   { freqs: [55.0, 82.4, 110.0, 130.8, 164.8],  baseVol: 0.5,  lfoRate: 0.08, lfoDepth: 0.7, noiseFreq: 0, noiseVol: 0, type: 'sine' },
-      melody:   [220.0, 261.6, 329.6, 261.6, 220.0, 164.8, 220.0, 261.6], // A-C-E-C-A-E-A-C
-    },
-    stars: {   // Sterne — F-Dur funkelnd (F, A, C, F-octave)
-      name: 'STERNE',
-      calm:     { freqs: [87.3, 130.8, 174.6, 220.0, 261.6], baseVol: 0.28, lfoRate: 0.12, lfoDepth: 2.0, noiseFreq: 0, noiseVol: 0, type: 'sine' },
-      active:   { freqs: [87.3, 130.8, 174.6, 220.0, 261.6], baseVol: 0.32, lfoRate: 0.18, lfoDepth: 2.5, noiseFreq: 0, noiseVol: 0, type: 'sine' },
-      melody:   [523.3, 698.5, 1046.5, 698.5, 523.3, 392.0, 523.3, 698.5], // hoch funkelnd
-    },
-  };
-  // Warning + Critical bleiben dissonant für die Wirkung
-  const WARN_PRESET = {     freqs: [82.4, 123.5, 164.8, 247],   baseVol: 0.4, lfoRate: 1.2, lfoDepth: 4,  noiseFreq: 900,  noiseVol: 0.05, type: 'sine' };
-  const CRITICAL_PRESET = { freqs: [55, 110, 138.6, 207.6],     baseVol: 0.3, lfoRate: 4.0, lfoDepth: 8, noiseFreq: 1200, noiseVol: 0.08, type: 'sawtooth' };
-  let melodyHandle = null;
+  // ----- HTML5 Audio (Musik) -----
+  const TRACKS = [
+    { id: 'tiefenfokus', name: 'TIEFENFOKUS', sub: 'DEEP DRONE',     file: 'assets/audio/tiefenfokus.mp3' },
+    { id: 'entspannung', name: 'ENTSPANNUNG', sub: 'CALM AMBIENT',   file: 'assets/audio/entspannung.mp3' },
+    { id: 'regen',       name: 'REGEN',       sub: 'RAIN ATMOSPHERE',file: 'assets/audio/regen.mp3' },
+    { id: 'raumklang',   name: 'RAUMKLANG',   sub: 'SPATIAL ECHO',   file: 'assets/audio/raumklang.mp3' },
+  ];
+  const trackElements = {};   // id → HTMLAudioElement
+  const trackAvailable = {};  // id → boolean
+  let currentTrackIdx = 0;
+  let musicPlaying = false;
+  let musicVolume = 0.5;
+  let warnVolume = 0.7;
+
+  // ----- Web Audio (Warnsounds + Fallback-Ambient) -----
+  let audioCtx = null;
+  let warnGain = null;
+  let fbAmbientGain = null;
+  let fbAmbientNodes = [];
 
   function initAudio(){
     if (audioCtx) return;
     try {
       audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      masterGain = audioCtx.createGain();
-      masterGain.gain.value = userVolume;
-      masterGain.connect(audioCtx.destination);
+      warnGain = audioCtx.createGain();
+      warnGain.gain.value = warnVolume;
+      warnGain.connect(audioCtx.destination);
       state.audioReady = true;
-    } catch(e) {}
+    } catch(e) { console.warn('AudioContext failed', e); }
   }
 
-  function getPreset(intensity){
-    if (intensity === 'critical') return CRITICAL_PRESET;
-    if (intensity === 'warning')  return WARN_PRESET;
-    const track = TRACKS[currentTrack] || TRACKS.drone;
-    return track[intensity] || track.calm;
-  }
-
-  function startAmbient(intensity){
-    if (!audioCtx || !state.soundOn) return;
-    intensity = intensity || 'calm';
-    intensityState = intensity;
-    stopAmbient();
-
-    const preset = getPreset(intensity);
-
-    ambientGain = audioCtx.createGain();
-    ambientGain.gain.value = 0;
-    ambientGain.connect(masterGain);
-    // Stärkere Ziel-Lautstärke damit man wirklich was hört
-    const targetVol = 0.35;
-    ambientGain.gain.linearRampToValueAtTime(targetVol, audioCtx.currentTime + 1.5);
-
-    preset.freqs.forEach((f, i) => {
-      const osc = audioCtx.createOscillator();
-      osc.type = preset.type;
-      osc.frequency.value = f;
-      const og = audioCtx.createGain();
-      og.gain.value = preset.baseVol * (i === 0 ? 1.0 : 0.65);
-      const lfo = audioCtx.createOscillator();
-      lfo.frequency.value = preset.lfoRate + i*0.03;
-      const lfoGain = audioCtx.createGain();
-      lfoGain.gain.value = preset.lfoDepth + i;
-      lfo.connect(lfoGain).connect(osc.frequency); lfo.start();
-      osc.connect(og).connect(ambientGain); osc.start();
-      ambientNodes.push(osc, lfo);
+  // ===== Track Loading mit Fallback =====
+  function preloadTracks(){
+    TRACKS.forEach(t => {
+      const a = new Audio();
+      a.preload = 'auto';
+      a.loop = true;
+      a.volume = musicVolume;
+      a.addEventListener('canplaythrough', () => {
+        trackAvailable[t.id] = true;
+        updateMusicPanelUI();
+      }, { once: true });
+      a.addEventListener('error', () => {
+        trackAvailable[t.id] = false;
+        updateMusicPanelUI();
+      }, { once: true });
+      a.src = t.file;
+      trackElements[t.id] = a;
+      trackAvailable[t.id] = null; // loading
     });
+  }
+  preloadTracks();
 
-    if (intensity === 'critical') {
-      const pulse = audioCtx.createOscillator();
-      pulse.frequency.value = 2.5;
-      const pulseGain = audioCtx.createGain();
-      pulseGain.gain.value = 0.12;
-      pulse.connect(pulseGain).connect(ambientGain.gain);
-      pulse.start();
-      ambientNodes.push(pulse);
+  function getCurrentTrack(){ return TRACKS[currentTrackIdx]; }
+
+  function playCurrentTrack(){
+    const t = getCurrentTrack();
+    // Alle anderen Tracks stoppen
+    Object.entries(trackElements).forEach(([id, a]) => {
+      if (id !== t.id) { a.pause(); a.currentTime = 0; }
+    });
+    const a = trackElements[t.id];
+    if (trackAvailable[t.id]) {
+      a.volume = musicVolume;
+      a.play().then(() => {
+        musicPlaying = true;
+        stopFallbackAmbient();
+        updateMusicPanelUI();
+      }).catch(err => {
+        console.warn('Play failed', err);
+        startFallbackAmbient();
+      });
+    } else {
+      // MP3 nicht verfügbar → leiser Web-Audio-Fallback
+      startFallbackAmbient();
+      musicPlaying = true;
+      updateMusicPanelUI();
     }
+  }
 
-    const bufferSize = audioCtx.sampleRate * 2;
-    const noiseBuf = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-    const data = noiseBuf.getChannelData(0);
-    for (let i = 0; i < bufferSize; i++) data[i] = (Math.random()*2 - 1) * 0.5;
-    const noise = audioCtx.createBufferSource();
-    noise.buffer = noiseBuf; noise.loop = true;
-    const bp = audioCtx.createBiquadFilter();
-    bp.type = 'bandpass'; bp.frequency.value = preset.noiseFreq; bp.Q.value = 0.8;
-    const ng = audioCtx.createGain(); ng.gain.value = preset.noiseVol;
-    noise.connect(bp).connect(ng).connect(ambientGain);
-    noise.start();
-    ambientNodes.push(noise);
-
-    // Sanfte Melodie-Noten alle paar Sekunden (nur calm/active)
-    stopMelody();
-    if (intensity === 'calm' || intensity === 'active') {
-      startMelody();
-    }
-
+  function pauseCurrentTrack(){
+    const t = getCurrentTrack();
+    const a = trackElements[t.id];
+    if (a) a.pause();
+    stopFallbackAmbient();
+    musicPlaying = false;
     updateMusicPanelUI();
   }
 
-  function playMelodyNote(freq){
-    if (!audioCtx || !state.soundOn || !ambientGain) return;
-    const now = audioCtx.currentTime;
-    const dur = 2.8;
-    const osc = audioCtx.createOscillator();
-    osc.type = 'sine';
-    osc.frequency.value = freq;
-    const g = audioCtx.createGain();
-    g.gain.setValueAtTime(0, now);
-    g.gain.linearRampToValueAtTime(0.07, now + 0.4);
-    g.gain.linearRampToValueAtTime(0.04, now + 1.5);
-    g.gain.exponentialRampToValueAtTime(0.0001, now + dur);
-    // Sanftes Echo durch Delay
-    const delay = audioCtx.createDelay();
-    delay.delayTime.value = 0.4;
-    const delayGain = audioCtx.createGain();
-    delayGain.gain.value = 0.35;
-    osc.connect(g);
-    g.connect(ambientGain);
-    g.connect(delay);
-    delay.connect(delayGain).connect(ambientGain);
-    osc.start(now);
-    osc.stop(now + dur + 0.1);
+  function nextTrack(){
+    currentTrackIdx = (currentTrackIdx + 1) % TRACKS.length;
+    if (musicPlaying) playCurrentTrack();
+    else updateMusicPanelUI();
+  }
+  function prevTrack(){
+    currentTrackIdx = (currentTrackIdx - 1 + TRACKS.length) % TRACKS.length;
+    if (musicPlaying) playCurrentTrack();
+    else updateMusicPanelUI();
   }
 
-  function startMelody(){
-    const track = TRACKS[currentTrack] || TRACKS.drone;
-    const melody = track.melody;
-    if (!melody) return;
-    let i = 0;
-    const playNext = () => {
-      if (!ambientGain || !state.soundOn) return;
-      if (intensityState !== 'calm' && intensityState !== 'active') return;
-      playMelodyNote(melody[i % melody.length]);
-      i++;
-      const gap = 3500 + Math.random()*2500; // 3.5-6 Sek zwischen Noten
-      melodyHandle = setTimeout(playNext, gap);
-    };
-    melodyHandle = setTimeout(playNext, 4000);
+  function setMusicVolume(v){
+    musicVolume = Math.max(0, Math.min(1, v));
+    Object.values(trackElements).forEach(a => a.volume = musicVolume);
+    if (fbAmbientGain && audioCtx) {
+      fbAmbientGain.gain.setValueAtTime(musicVolume * 0.3, audioCtx.currentTime);
+    }
+    saveSettings();
+  }
+  function setWarnVolume(v){
+    warnVolume = Math.max(0, Math.min(1, v));
+    if (warnGain && audioCtx) warnGain.gain.setValueAtTime(warnVolume, audioCtx.currentTime);
+    saveSettings();
   }
 
-  function stopMelody(){
-    if (melodyHandle) { clearTimeout(melodyHandle); melodyHandle = null; }
-  }
+  // ----- Fallback Ambient (falls keine MP3) -----
+  function startFallbackAmbient(){
+    if (!audioCtx) return;
+    stopFallbackAmbient();
+    fbAmbientGain = audioCtx.createGain();
+    fbAmbientGain.gain.value = 0;
+    fbAmbientGain.connect(audioCtx.destination);
+    fbAmbientGain.gain.linearRampToValueAtTime(musicVolume * 0.3, audioCtx.currentTime + 2);
 
-  function stopAmbient(){
-    stopMelody();
-    if (!ambientGain) return;
+    // Sehr ruhiger C-Dur Pad (5 Sine-Oszillatoren)
+    [65.4, 98.0, 130.8, 164.8, 196.0].forEach((f, i) => {
+      const osc = audioCtx.createOscillator();
+      osc.type = 'sine'; osc.frequency.value = f;
+      const og = audioCtx.createGain(); og.gain.value = i === 0 ? 0.5 : 0.3;
+      const lfo = audioCtx.createOscillator(); lfo.frequency.value = 0.08 + i*0.02;
+      const lfoGain = audioCtx.createGain(); lfoGain.gain.value = 0.6 + i*0.2;
+      lfo.connect(lfoGain).connect(osc.frequency); lfo.start();
+      osc.connect(og).connect(fbAmbientGain); osc.start();
+      fbAmbientNodes.push(osc, lfo);
+    });
+  }
+  function stopFallbackAmbient(){
+    if (!fbAmbientGain) return;
     try {
-      ambientGain.gain.cancelScheduledValues(audioCtx.currentTime);
-      ambientGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.5);
+      fbAmbientGain.gain.cancelScheduledValues(audioCtx.currentTime);
+      fbAmbientGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.4);
     } catch(e) {}
     setTimeout(() => {
-      ambientNodes.forEach(n => { try { n.stop && n.stop(); } catch(e){} });
-      ambientNodes = [];
-      try { ambientGain.disconnect(); } catch(e) {}
-      ambientGain = null;
-    }, 600);
+      fbAmbientNodes.forEach(n => { try { n.stop && n.stop(); } catch(e){} });
+      fbAmbientNodes = [];
+      try { fbAmbientGain.disconnect(); } catch(e) {}
+      fbAmbientGain = null;
+    }, 500);
   }
 
-  function transitionAmbient(newIntensity){
-    if (!audioCtx || !state.soundOn) return;
-    if (intensityState === newIntensity) return;
-    startAmbient(newIntensity);
-  }
-  function playTone(opts){
-    if (!audioCtx || !state.soundOn) return;
+  // ===== Warnsounds (immer via Web Audio) =====
+  function playWarnTone(opts){
+    if (!audioCtx) return;
     const o = opts || {};
-    const freq = o.freq || 660, dur = o.dur || 0.4, type = o.type || 'sine', vol = o.vol || 0.3;
-    const start = o.delay ? audioCtx.currentTime + o.delay : audioCtx.currentTime;
+    const freq = o.freq || 660, dur = o.dur || 0.4, type = o.type || 'sine', vol = (o.vol || 0.5) * warnVolume;
+    const start = (o.delay ? audioCtx.currentTime + o.delay : audioCtx.currentTime);
     const osc = audioCtx.createOscillator();
     osc.type = type; osc.frequency.value = freq;
     const g = audioCtx.createGain();
     g.gain.setValueAtTime(0, start);
     g.gain.linearRampToValueAtTime(vol, start + 0.02);
     g.gain.exponentialRampToValueAtTime(0.0001, start + dur);
-    osc.connect(g).connect(masterGain);
+    osc.connect(g).connect(audioCtx.destination);
     osc.start(start); osc.stop(start + dur + 0.05);
   }
-  function playReminder(){ playTone({freq:880,dur:0.25,vol:0.25}); playTone({freq:1320,dur:0.3,vol:0.2,delay:0.15}); }
-  function playWarn(){     playTone({freq:440,dur:0.4,type:'triangle',vol:0.35}); playTone({freq:330,dur:0.5,type:'triangle',vol:0.3,delay:0.25}); }
-  function playCritical(){ for (let i = 0; i < 3; i++){ playTone({freq:220,dur:0.18,type:'sawtooth',vol:0.35,delay:i*0.22}); playTone({freq:440,dur:0.18,type:'sawtooth',vol:0.25,delay:i*0.22+0.05}); } }
+  function playWarn10(){    // weich
+    playWarnTone({freq: 660, dur: 0.5, vol: 0.4});
+    playWarnTone({freq: 880, dur: 0.6, vol: 0.35, delay: 0.3});
+  }
+  function playWarn5(){     // stärker
+    playWarnTone({freq: 440, dur: 0.45, type: 'triangle', vol: 0.55});
+    playWarnTone({freq: 330, dur: 0.55, type: 'triangle', vol: 0.5, delay: 0.28});
+    playWarnTone({freq: 220, dur: 0.7,  type: 'triangle', vol: 0.45, delay: 0.6});
+  }
+  function playWarn1(){     // kritisch
+    for (let i = 0; i < 4; i++){
+      playWarnTone({freq: 220, dur: 0.2, type: 'sawtooth', vol: 0.55, delay: i*0.22});
+      playWarnTone({freq: 440, dur: 0.2, type: 'sawtooth', vol: 0.4,  delay: i*0.22 + 0.05});
+    }
+  }
   function playGong(){
-    [{f:110,d:4.5,v:0.4},{f:220,d:3.5,v:0.3},{f:330,d:2.5,v:0.2},{f:165,d:4.0,v:0.25}]
-      .forEach((l, i) => playTone({freq:l.f,dur:l.d,type:'sine',vol:l.v,delay:i*0.04}));
+    [{f:110,d:5,v:0.6},{f:220,d:4,v:0.5},{f:330,d:3,v:0.4},{f:165,d:4.5,v:0.45}]
+      .forEach((l, i) => playWarnTone({freq:l.f,dur:l.d,type:'sine',vol:l.v,delay:i*0.04}));
   }
-  function updateSoundIcon(){
-    soundToggleBtn.innerHTML = state.soundOn
-      ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>'
-      : '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+  function playReminderTone(){
+    playWarnTone({freq:880, dur:0.25, vol:0.4});
+    playWarnTone({freq:1320, dur:0.3, vol:0.35, delay:0.15});
   }
+
+  // Legacy-Funktions-Namen
+  const playReminder = playReminderTone;
+  const playWarn = playWarn5;
+  const playCritical = playWarn1;
+  function playTone(opts){ playWarnTone(opts); }
+  function startAmbient(){}
+  function stopAmbient(){}
+  function transitionAmbient(){}
+
+  // ===== Settings =====
+  const SETTINGS = {
+    musicVolume: 0.5,
+    warnVolume: 0.7,
+    drinkReminder: true,
+    realityReminder: true,
+    testMode: false,
+    defaultDuration: 50,
+    pauseDuration: 10,
+  };
+  function loadSettings(){
+    try {
+      const s = JSON.parse(localStorage.getItem('focus-guardian-settings') || '{}');
+      Object.assign(SETTINGS, s);
+      musicVolume = SETTINGS.musicVolume;
+      warnVolume = SETTINGS.warnVolume;
+    } catch(e) {}
+  }
+  function saveSettings(){
+    SETTINGS.musicVolume = musicVolume;
+    SETTINGS.warnVolume = warnVolume;
+    try { localStorage.setItem('focus-guardian-settings', JSON.stringify(SETTINGS)); } catch(e) {}
+  }
+  loadSettings();
+
+  // ===== Sound On/Off =====
   function enableSound(){
     initAudio();
     if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
@@ -1793,23 +1985,28 @@
     soundBanner.classList.add('hidden');
     soundToggleBtn.classList.add('shown');
     document.getElementById('musicPanel').classList.add('shown');
-    // RUHIGE MUSIK direkt starten (auch ohne Session)
-    startAmbient(state.running ? 'active' : 'calm');
-    playTone({freq:1320,dur:0.15,vol:0.2});
-    playTone({freq:1760,dur:0.2,vol:0.18,delay:0.1});
+    playCurrentTrack();
+    playWarnTone({freq:1320,dur:0.15,vol:0.2});
+    playWarnTone({freq:1760,dur:0.2,vol:0.18,delay:0.1});
+    updateSoundIcon();
+    updateMusicPanelUI();
+  }
+  function disableSound(){
+    state.soundOn = false;
+    pauseCurrentTrack();
     updateSoundIcon();
   }
-  function disableSound(){ state.soundOn = false; stopAmbient(); updateSoundIcon(); }
-
+  function updateSoundIcon(){
+    soundToggleBtn.innerHTML = musicPlaying
+      ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>'
+      : '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+  }
   soundEnableBtn.addEventListener('click', enableSound);
   soundToggleBtn.addEventListener('click', () => {
-    if (state.soundOn) disableSound();
-    else {
-      state.soundOn = true;
-      startAmbient(state.running ? (state.remainingSec <= 60 ? 'critical' : state.remainingSec <= 10*60 ? 'warning' : 'active') : 'calm');
-      playTone({freq:880,dur:0.2});
-      updateSoundIcon();
-    }
+    if (!state.audioReady) { enableSound(); return; }
+    if (musicPlaying) pauseCurrentTrack();
+    else { playCurrentTrack(); }
+    updateSoundIcon();
   });
 
   // ===== Reality Reminder =====
@@ -1824,6 +2021,7 @@
     'Realität zuerst. PC danach.',
   ];
   function showReality(){
+    if (!SETTINGS.realityReminder) return;
     realityText.textContent = realityPool[Math.floor(Math.random()*realityPool.length)];
     reality.classList.add('show');
     playReminder();
@@ -1865,7 +2063,8 @@
   }
   function scheduleDrink(){
     if (state.drinkHandle) clearInterval(state.drinkHandle);
-    const intervalMs = testMode.checked ? 60*1000 : 30*60*1000;
+    if (!SETTINGS.drinkReminder) return;
+    const intervalMs = (testMode.checked || SETTINGS.testMode) ? 60*1000 : 30*60*1000;
     state.drinkHandle = setInterval(() => {
       if (!state.running) return;
       toast('💧 TRINK-REMINDER', 'Wasser trinken. Kurz aufstehen.', 'green');
@@ -1873,6 +2072,8 @@
     }, intervalMs);
   }
   testMode.addEventListener('change', () => {
+    SETTINGS.testMode = testMode.checked;
+    saveSettings();
     if (state.running) {
       scheduleDrink();
       toast('TESTMODUS', testMode.checked ? 'Trink-Reminder jetzt jede Minute.' : 'Trink-Reminder alle 30 Minuten.', 'green');
@@ -1995,21 +2196,21 @@
     if (r <= 10*60 && r > 5*60) {
       trigger('w10', () => {
         toast('WARNUNG: NOCH 10 MINUTEN', 'Keine neuen Baustellen mehr.', 'red');
-        playWarn();
+        playWarn10();
         if (Math.random() < 0.6) setTimeout(showReality, 1500);
       });
     }
     if (r <= 5*60 && r > 1*60) {
       trigger('w5', () => {
         toast('LETZTE 5 MINUTEN', 'Speichern. Abschließen. Pause vorbereiten.', 'red');
-        playWarn();
+        playWarn5();
         if (Math.random() < 0.5) setTimeout(showReality, 2000);
       });
     }
     if (r <= 60 && r > 0) {
       trigger('w1', () => {
         toast('LETZTE MINUTE', 'Jetzt wirklich beenden.', 'red');
-        playCritical();
+        playWarn1();
       });
     }
   }
@@ -2054,62 +2255,71 @@
   const mpPower     = $('mpPower');
   const mpNow       = $('mpNow');
   const mpState     = $('mpState');
+  const mpPrev      = $('mpPrev');
+  const mpPlay      = $('mpPlay');
+  const mpNext      = $('mpNext');
+  const mpTracks    = $('mpTracks');
 
-  function updateMusicPanelUI(){
-    const trackName = (TRACKS[currentTrack] || TRACKS.drone).name;
-    mpNow.textContent = trackName;
-    const stateMap = {
-      calm:     'RUHIG · LÄUFT',
-      active:   'AKTIV · LÄUFT',
-      warning:  'WARNUNG · INTENSIV',
-      critical: 'KRITISCH · ALARM',
-    };
-    mpState.textContent = state.soundOn ? (stateMap[intensityState] || 'LÄUFT') : 'STUMM';
-    mpState.style.color = (intensityState === 'critical') ? 'var(--red)'
-                       : (intensityState === 'warning')  ? 'var(--gold)'
-                       : 'var(--dim)';
-    mpPower.textContent = state.soundOn ? 'MUSIK AUS' : 'MUSIK AN';
-    mpPower.classList.toggle('on', state.soundOn);
-    document.querySelectorAll('.mp-track').forEach(b => {
-      b.classList.toggle('active', b.dataset.track === currentTrack);
+  function renderTracks(){
+    mpTracks.innerHTML = '';
+    TRACKS.forEach((t, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'mp-track' + (i === currentTrackIdx ? ' active' : '');
+      const avail = trackAvailable[t.id];
+      btn.innerHTML = t.name + (avail === false ? '<span class="miss"> ✕</span>' : '');
+      btn.title = avail === false ? 'Datei fehlt: ' + t.file : t.sub;
+      btn.addEventListener('click', () => {
+        currentTrackIdx = i;
+        if (musicPlaying) playCurrentTrack();
+        else updateMusicPanelUI();
+      });
+      mpTracks.appendChild(btn);
     });
   }
 
-  mpHide.addEventListener('click', () => musicPanel.classList.remove('shown'));
+  function updateMusicPanelUI(){
+    const t = getCurrentTrack();
+    mpNow.textContent = t.name;
+    const avail = trackAvailable[t.id];
+    let stateText = t.sub;
+    if (musicPlaying)        stateText += ' · LÄUFT';
+    else if (avail === false) stateText += ' · DATEI FEHLT (FALLBACK)';
+    else                     stateText += ' · BEREIT';
+    mpState.textContent = stateText;
+    mpState.style.color = avail === false ? 'var(--gold)' : 'var(--cyan)';
+    mpPower.textContent = musicPlaying ? 'MUSIK AUS' : 'MUSIK AN';
+    mpPower.classList.toggle('on', musicPlaying);
+    mpPlay.textContent = musicPlaying ? '⏸' : '▶';
+    renderTracks();
+  }
+  renderTracks();
+  updateMusicPanelUI();
 
+  mpHide.addEventListener('click', () => musicPanel.classList.remove('shown'));
+  mpVolume.value = Math.round(musicVolume * 100);
+  mpVolNum.textContent = Math.round(musicVolume * 100);
   mpVolume.addEventListener('input', () => {
     const v = parseInt(mpVolume.value, 10);
-    userVolume = v / 100;
     mpVolNum.textContent = v;
-    if (masterGain) masterGain.gain.setValueAtTime(userVolume, audioCtx.currentTime);
+    setMusicVolume(v / 100);
   });
-
+  mpPlay.addEventListener('click', () => {
+    if (!state.audioReady) { enableSound(); return; }
+    if (musicPlaying) pauseCurrentTrack();
+    else playCurrentTrack();
+  });
+  mpPrev.addEventListener('click', () => {
+    if (!state.audioReady) enableSound();
+    prevTrack();
+  });
+  mpNext.addEventListener('click', () => {
+    if (!state.audioReady) enableSound();
+    nextTrack();
+  });
   mpPower.addEventListener('click', () => {
-    if (state.soundOn) {
-      disableSound();
-    } else {
-      if (!state.audioReady) { enableSound(); return; }
-      state.soundOn = true;
-      const intensity = state.running
-        ? (state.remainingSec <= 60 ? 'critical' : state.remainingSec <= 10*60 ? 'warning' : 'active')
-        : 'calm';
-      startAmbient(intensity);
-      updateSoundIcon();
-    }
-    updateMusicPanelUI();
-  });
-
-  document.querySelectorAll('.mp-track').forEach(btn => {
-    btn.addEventListener('click', () => {
-      currentTrack = btn.dataset.track;
-      if (state.soundOn && audioCtx) {
-        // Nur calm/active tauschen — warning/critical bleiben gleich
-        if (intensityState === 'calm' || intensityState === 'active') {
-          startAmbient(intensityState);
-        }
-      }
-      updateMusicPanelUI();
-    });
+    if (!state.audioReady) { enableSound(); return; }
+    if (musicPlaying) pauseCurrentTrack();
+    else playCurrentTrack();
   });
 
   // ============================================================================
@@ -2247,6 +2457,125 @@
     requestAnimationFrame(drawWaves);
   }
   drawWaves();
+
+  // ============================================================================
+  // Click Zones — alle Bild-Panels interaktiv
+  // ============================================================================
+  const zoneActions = {
+    mission:      () => toast('AKTUELLE MISSION', state.running ? state.mission : 'Keine Mission aktiv — Konsole unten benutzen.', 'gold'),
+    stats:        () => toast('FOCUS STATISTIK', 'Sessions heute: ' + state.sessionsToday + ' · Beste: ' + (state.bestSessionSec ? fmtDur(state.bestSessionSec) : '–'), 'blue'),
+    moti:         () => rollMotivation(),
+    systems:      () => toast('AKTIVE SCHUTZSYSTEME', 'Ablenkungsblocker, App Blocker, Web Filter & Vollbild-Schutz aktiv.', 'green'),
+    plan:         () => toast('SESSION PLAN', state.running ? ('Focus '+Math.round(state.totalSec/60)+' min, Ende '+planEndTime.textContent) : 'Plan: 50 Min Focus, 10 Min Pause, 3× Zyklen', 'blue'),
+    'sound-prev': () => { if (!state.audioReady) enableSound(); prevTrack(); toast('SOUND', '← ' + getCurrentTrack().name, 'blue'); },
+    'sound-play': () => { if (!state.audioReady) { enableSound(); return; } if (musicPlaying) pauseCurrentTrack(); else playCurrentTrack(); toast('SOUND', musicPlaying ? 'WIEDERGABE' : 'PAUSE', 'blue'); },
+    'sound-next': () => { if (!state.audioReady) enableSound(); nextTrack(); toast('SOUND', '→ ' + getCurrentTrack().name, 'blue'); },
+    'sound-switch': () => { if (!state.audioReady) enableSound(); nextTrack(); toast('SOUND WECHSELN', 'Jetzt: ' + getCurrentTrack().name, 'gold'); },
+    streak:       () => toast('STREAK', state.streakDays + ' Tage in Folge. Weiter so!', 'gold'),
+    brand:        () => toast('FOCUS GUARDIAN', 'Meister deinen Fokus. Bau dein Legacy.', 'gold'),
+    level:        () => toast('WÄCHTER LEVEL 7', '1.250 / 2.000 XP', 'blue'),
+    topnav:       () => toast('NAVIGATION', 'Übersicht · Missionen · Statistiken · Rituale · Einstellungen (⚙ oben rechts)', 'blue'),
+    bottomnav:    () => toast('DASHBOARD', 'Du bist im Hauptdashboard. Mission unten starten.', 'blue'),
+    dragon:       () => toast('WÄCHTER-DRACHE', '„Fokus ist dein Schild. Disziplin deine Waffe."', 'gold'),
+  };
+  document.querySelectorAll('.click-zone').forEach(el => {
+    el.addEventListener('click', () => {
+      const action = zoneActions[el.dataset.zone];
+      if (action) action();
+    });
+  });
+
+  // ============================================================================
+  // Settings Overlay
+  // ============================================================================
+  const settingsBtn     = $('settingsBtn');
+  const settingsOverlay = $('settingsOverlay');
+  const settingsClose   = $('settingsClose');
+  const setMusicVol     = $('setMusicVol');
+  const setWarnVol      = $('setWarnVol');
+  const setDrink        = $('setDrink');
+  const setReality      = $('setReality');
+  const setTest         = $('setTest');
+  const setDuration     = $('setDuration');
+  const setPause        = $('setPause');
+
+  function syncSettingsUI(){
+    setMusicVol.value = Math.round(SETTINGS.musicVolume * 100);
+    setWarnVol.value = Math.round(SETTINGS.warnVolume * 100);
+    setDrink.classList.toggle('on', SETTINGS.drinkReminder);
+    setReality.classList.toggle('on', SETTINGS.realityReminder);
+    setTest.classList.toggle('on', SETTINGS.testMode);
+    setDuration.value = SETTINGS.defaultDuration;
+    setPause.value = SETTINGS.pauseDuration;
+    // Auch testMode-Checkbox unten links synchron
+    testMode.checked = SETTINGS.testMode;
+    // Default-Dauer im Slider übernehmen wenn keine aktive Session
+    if (!state.running) {
+      inMinutes.value = SETTINGS.defaultDuration;
+      minLabel.textContent = SETTINGS.defaultDuration;
+    }
+  }
+
+  settingsBtn.addEventListener('click', () => {
+    syncSettingsUI();
+    settingsOverlay.classList.add('show');
+  });
+  settingsClose.addEventListener('click', () => settingsOverlay.classList.remove('show'));
+  settingsOverlay.addEventListener('click', (e) => {
+    if (e.target === settingsOverlay) settingsOverlay.classList.remove('show');
+  });
+
+  setMusicVol.addEventListener('input', () => {
+    setMusicVolume(parseInt(setMusicVol.value, 10) / 100);
+    mpVolume.value = setMusicVol.value;
+    mpVolNum.textContent = setMusicVol.value;
+  });
+  setWarnVol.addEventListener('input', () => {
+    setWarnVolume(parseInt(setWarnVol.value, 10) / 100);
+  });
+  setDrink.addEventListener('click', () => {
+    SETTINGS.drinkReminder = !SETTINGS.drinkReminder;
+    setDrink.classList.toggle('on', SETTINGS.drinkReminder);
+    saveSettings();
+  });
+  setReality.addEventListener('click', () => {
+    SETTINGS.realityReminder = !SETTINGS.realityReminder;
+    setReality.classList.toggle('on', SETTINGS.realityReminder);
+    saveSettings();
+  });
+  setTest.addEventListener('click', () => {
+    SETTINGS.testMode = !SETTINGS.testMode;
+    setTest.classList.toggle('on', SETTINGS.testMode);
+    testMode.checked = SETTINGS.testMode;
+    saveSettings();
+    if (state.running) scheduleDrink();
+  });
+  setDuration.addEventListener('change', () => {
+    const v = Math.max(10, Math.min(120, parseInt(setDuration.value, 10) || 50));
+    SETTINGS.defaultDuration = v;
+    setDuration.value = v;
+    if (!state.running) {
+      inMinutes.value = v;
+      minLabel.textContent = v;
+    }
+    saveSettings();
+  });
+  setPause.addEventListener('change', () => {
+    const v = Math.max(1, Math.min(60, parseInt(setPause.value, 10) || 10));
+    SETTINGS.pauseDuration = v;
+    setPause.value = v;
+    saveSettings();
+  });
+
+  // Apply loaded settings to UI on start
+  if (SETTINGS.defaultDuration) {
+    inMinutes.value = SETTINGS.defaultDuration;
+    minLabel.textContent = SETTINGS.defaultDuration;
+  }
+  testMode.checked = SETTINGS.testMode;
+  mpVolume.value = Math.round(SETTINGS.musicVolume * 100);
+  mpVolNum.textContent = Math.round(SETTINGS.musicVolume * 100);
+  setMusicVolume(SETTINGS.musicVolume);
 
 })();
 </script>
