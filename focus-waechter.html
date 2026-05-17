@@ -40,11 +40,30 @@
   }
 
   /* ===== BACKGROUND IMAGE (Master) ===== */
-  .bg {
-    position: fixed; inset: 0; z-index: 0;
-    background-size: 100% 100%;
+  #main-bg {
+    position: fixed; inset: 0;
+    width: 100%; height: 100%;
+    background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    z-index: -20;
+    animation: bgBreath 14s ease-in-out infinite;
+    transform-origin: center;
+  }
+  #main-bg::after {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(circle at center,
+        rgba(0,170,255,0.10) 0%,
+        rgba(0,0,0,0.30) 60%,
+        rgba(0,0,0,0.65) 100%);
+    pointer-events: none;
+  }
+  @keyframes bgBreath {
+    0%   { transform: scale(1);    filter: brightness(1) saturate(1.05); }
+    50%  { transform: scale(1.035); filter: brightness(1.08) saturate(1.15); }
+    100% { transform: scale(1);    filter: brightness(1) saturate(1.05); }
   }
 
   /* Fallback wenn kein Bild geladen: dunkler Sci-Fi-Verlauf */
@@ -56,7 +75,7 @@
       linear-gradient(180deg, #04081a 0%, #07182f 50%, #050d20 100%);
   }
   body.has-bg .bg-fallback { display: none; }
-  body:not(.has-bg) .bg { display: none; }
+  body:not(.has-bg) #main-bg { display: none; }
 
   /* ===== DROP ZONE / Bild-Picker ===== */
   .drop-zone {
@@ -242,7 +261,9 @@
   body.has-bg .change-bg-btn { display: block; }
   .change-bg-btn:hover { border-color: var(--cyan); box-shadow: 0 0 10px var(--glow-cyan); }
 
-  /* ===== TIMER + CORE OVERLAY (zentral) ===== */
+  /* ===== TIMER + CORE OVERLAY (zentral) =====
+     Komplett transparent — keine Maske, das Bild bleibt sichtbar.
+     Der Timer/Status sitzt nur als Text mit Glow & Text-Shadow drauf. */
   .core-overlay {
     position: fixed; left: 50%; top: 44%; transform: translate(-50%, -50%);
     z-index: 10;
@@ -252,11 +273,17 @@
     display: grid; place-items: center;
     text-align: center;
     padding: 20px;
-    /* Soft mask — lässt Core-Glow durchscheinen */
-    background: radial-gradient(circle at 50% 50%,
-      rgba(2,5,12,0.78) 0%,
-      rgba(2,5,12,0.55) 50%,
-      rgba(2,5,12,0.0) 85%);
+    background: transparent;
+    pointer-events: none;
+  }
+  .core-overlay > * { pointer-events: auto; }
+  .core-overlay .core-status,
+  .core-overlay .core-substatus,
+  .core-overlay .core-time,
+  .core-overlay .core-time-label,
+  .core-overlay .core-foot {
+    /* Starker Text-Shadow gegen das Bild dahinter */
+    filter: drop-shadow(0 0 8px rgba(2,5,12,0.95)) drop-shadow(0 0 4px rgba(2,5,12,0.95));
   }
 
   /* ===== ANIMATION OVERLAY über dem Core-Bild ===== */
@@ -487,15 +514,15 @@
     transform: translateX(-50%);
     z-index: 12;
     width: min(640px, 50vw);
-    background: rgba(2,5,12,0.88);
-    border: 1px solid rgba(0,170,255,0.5);
+    background: rgba(2,5,12,0.62);
+    border: 1px solid rgba(0,170,255,0.55);
     border-radius: 12px;
     padding: 16px 22px;
-    backdrop-filter: blur(14px);
+    backdrop-filter: blur(18px) saturate(1.2);
     box-shadow:
-      0 0 30px rgba(0,170,255,0.25),
-      inset 0 1px 0 rgba(255,255,255,0.06),
-      inset 0 0 25px rgba(0,80,160,0.15);
+      0 0 40px rgba(0,170,255,0.35),
+      inset 0 1px 0 rgba(255,255,255,0.08),
+      inset 0 0 30px rgba(0,80,160,0.18);
     transition: opacity 0.4s ease, transform 0.4s ease;
   }
   .command-panel::before {
@@ -643,18 +670,18 @@
   .mission-overlay { display: none; }
   .mission-overlay.show { display: block; }
 
-  /* ===== CLOCK OVERLAY (bottom right) — mit Mask gegen Bild-Uhr ===== */
+  /* ===== CLOCK OVERLAY (bottom right) — minimale Mask ===== */
   .clock-overlay {
     position: fixed; right: 1.5%; bottom: 2.5%;
     z-index: 9; text-align: right;
     pointer-events: none;
-    padding: 8px 14px;
+    padding: 6px 12px;
     background: radial-gradient(ellipse at right bottom,
-      rgba(2,5,12,0.92) 0%,
-      rgba(2,5,12,0.75) 70%,
+      rgba(2,5,12,0.55) 0%,
+      rgba(2,5,12,0.30) 60%,
       rgba(2,5,12,0) 100%);
-    border-radius: 12px;
-    min-width: 130px;
+    border-radius: 10px;
+    min-width: 120px;
   }
   .clock-overlay .time {
     font-size: clamp(18px, 1.6vw, 26px); font-weight: 900;
@@ -834,8 +861,8 @@
 </head>
 <body>
 
-<!-- Background -->
-<div class="bg" id="bgEl"></div>
+<!-- Background (Fullscreen Master Image) -->
+<div id="main-bg"></div>
 <div class="bg-fallback"></div>
 
 <!-- Drop Zone — erscheint solange kein Bild geladen ist -->
@@ -1135,7 +1162,7 @@
   const clockDate     = $('clockDate');
 
   // ===== Background loading: drag&drop + picker + assets/bg.png + localStorage =====
-  const bgEl       = $('bgEl');
+  const bgEl       = document.getElementById('main-bg');
   const dropZone   = $('dropZone');
   const pickBtn    = $('pickBtn');
   const filePicker = $('filePicker');
@@ -1174,9 +1201,17 @@
     }
   } catch(e) {}
 
-  // 2) Versuche: assets/bg.png neben der HTML
+  // 2) Versuche: assets/focus-bg.png oder andere Standardpfade
   if (!document.body.classList.contains('has-bg')) {
-    const tryPaths = ['assets/bg.png', 'bg.png', 'assets/bg.jpg', 'bg.jpg'];
+    const tryPaths = [
+      'assets/focus-bg.png',
+      './assets/focus-bg.png',
+      'assets/bg.png',
+      'bg.png',
+      'focus-bg.png',
+      'assets/bg.jpg',
+      'bg.jpg'
+    ];
     let i = 0;
     const tryNext = () => {
       if (i >= tryPaths.length) return;
