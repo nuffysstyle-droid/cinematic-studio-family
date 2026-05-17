@@ -66,13 +66,48 @@
     100% { transform: scale(1);    filter: brightness(1) saturate(1.05); }
   }
 
-  /* Fallback wenn kein Bild geladen: dunkler Sci-Fi-Verlauf */
+  /* Fallback wenn kein Bild geladen: Cinematic SVG-Szene */
   .bg-fallback {
-    position: fixed; inset: 0; z-index: 0;
+    position: fixed; inset: 0; z-index: -19;
     background:
-      radial-gradient(ellipse at 50% 40%, rgba(49,215,255,0.25), transparent 50%),
-      radial-gradient(ellipse at 50% 65%, rgba(0,120,230,0.40), transparent 65%),
-      linear-gradient(180deg, #04081a 0%, #07182f 50%, #050d20 100%);
+      radial-gradient(ellipse at 50% 35%, rgba(49,215,255,0.30) 0%, transparent 45%),
+      radial-gradient(ellipse at 50% 65%, rgba(0,120,230,0.45) 0%, transparent 60%),
+      radial-gradient(ellipse at 20% 25%, rgba(0,170,255,0.22) 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 22%, rgba(255,184,0,0.15) 0%, transparent 50%),
+      linear-gradient(180deg, #04081a 0%, #07182f 35%, #0a2548 60%, #050d20 100%);
+    overflow: hidden;
+  }
+  .bg-fallback svg { width: 100%; height: 100%; display: block; }
+  .bg-fallback .fb-rotate-slow { transform-origin: center; animation: spinSlow 60s linear infinite; }
+  .bg-fallback .fb-rotate-mid  { transform-origin: center; animation: spinSlow 38s linear infinite reverse; }
+  .bg-fallback .fb-rotate-fast { transform-origin: center; animation: spinSlow 22s linear infinite; }
+  @keyframes spinSlow { to { transform: rotate(360deg); } }
+
+  /* SVG-Ring Pulse */
+  .bg-fallback .pulse-node { transform-origin: center; animation: nodePulse2 1.8s ease-in-out infinite; }
+  .bg-fallback .pulse-node.d1 { animation-delay: 0.3s; }
+  .bg-fallback .pulse-node.d2 { animation-delay: 0.6s; }
+  .bg-fallback .pulse-node.d3 { animation-delay: 0.9s; }
+  .bg-fallback .pulse-node.d4 { animation-delay: 1.2s; }
+  .bg-fallback .pulse-node.d5 { animation-delay: 1.5s; }
+  @keyframes nodePulse2 {
+    0%,100% { opacity: 0.35; }
+    50%     { opacity: 1; }
+  }
+
+  /* Waterfalls */
+  .bg-fallback .wfall {
+    animation: wflow 3s linear infinite;
+    transform-origin: top;
+  }
+  .bg-fallback .wfall.d1 { animation-delay: 0.5s; }
+  .bg-fallback .wfall.d2 { animation-delay: 1s; }
+  .bg-fallback .wfall.d3 { animation-delay: 1.5s; }
+  .bg-fallback .wfall.d4 { animation-delay: 2s; }
+  @keyframes wflow {
+    0%   { transform: translateY(-30px); opacity: 0; }
+    25%  { opacity: 0.9; }
+    100% { transform: translateY(280px); opacity: 0; }
   }
   body.has-bg .bg-fallback { display: none; }
   body:not(.has-bg) #main-bg { display: none; }
@@ -862,15 +897,212 @@
 
 <!-- Background (Fullscreen Master Image) -->
 <div id="main-bg"></div>
-<div class="bg-fallback"></div>
+<div class="bg-fallback">
+  <svg viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="fbMountFar" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#2a4880" stop-opacity="0.9"/>
+        <stop offset="100%" stop-color="#04102a" stop-opacity="1"/>
+      </linearGradient>
+      <linearGradient id="fbMountMid" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#1a3268" stop-opacity="1"/>
+        <stop offset="100%" stop-color="#040c20" stop-opacity="1"/>
+      </linearGradient>
+      <linearGradient id="fbMountNear" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#142850" stop-opacity="1"/>
+        <stop offset="100%" stop-color="#03081a" stop-opacity="1"/>
+      </linearGradient>
+      <radialGradient id="fbMoon" cx="0.5" cy="0.5" r="0.5">
+        <stop offset="0%" stop-color="#31d7ff" stop-opacity="0.55"/>
+        <stop offset="60%" stop-color="#1a6dff" stop-opacity="0.12"/>
+        <stop offset="100%" stop-color="#1a6dff" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="fbWfall" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#31d7ff" stop-opacity="0.9"/>
+        <stop offset="100%" stop-color="#31d7ff" stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="fbCrystalL" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#0066cc" stop-opacity="0.9"/>
+        <stop offset="100%" stop-color="#aee9ff" stop-opacity="0.95"/>
+      </linearGradient>
+      <linearGradient id="fbCrystalR" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#aee9ff" stop-opacity="0.95"/>
+        <stop offset="100%" stop-color="#0066cc" stop-opacity="0.9"/>
+      </linearGradient>
+      <linearGradient id="fbRingGold" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#fff3b8"/>
+        <stop offset="50%" stop-color="#ffb800"/>
+        <stop offset="100%" stop-color="#a66a00"/>
+      </linearGradient>
+      <linearGradient id="fbRingBlue" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#aee9ff"/>
+        <stop offset="50%" stop-color="#31d7ff"/>
+        <stop offset="100%" stop-color="#0066cc"/>
+      </linearGradient>
+    </defs>
+
+    <!-- Cosmic moon glow behind core -->
+    <circle cx="960" cy="475" r="500" fill="url(#fbMoon)"/>
+
+    <!-- Stars/sparkles in sky -->
+    <g fill="#ffffff" opacity="0.8">
+      <circle cx="150" cy="80" r="1.5"/><circle cx="320" cy="140" r="1"/>
+      <circle cx="480" cy="60" r="1.2"/><circle cx="680" cy="120" r="1"/>
+      <circle cx="850" cy="50" r="1.5"/><circle cx="1100" cy="90" r="1"/>
+      <circle cx="1250" cy="40" r="1.2"/><circle cx="1450" cy="100" r="1.5"/>
+      <circle cx="1650" cy="60" r="1"/><circle cx="1820" cy="120" r="1.3"/>
+      <circle cx="240" cy="200" r="1"/><circle cx="560" cy="180" r="1.5"/>
+      <circle cx="1180" cy="170" r="1.3"/><circle cx="1500" cy="220" r="1"/>
+      <circle cx="1730" cy="180" r="1.4"/>
+    </g>
+    <g fill="#ffb800" opacity="0.7">
+      <circle cx="380" cy="180" r="1.2"/><circle cx="780" cy="220" r="1"/>
+      <circle cx="1320" cy="170" r="1.2"/><circle cx="1580" cy="240" r="1"/>
+    </g>
+
+    <!-- Floating rocks -->
+    <g opacity="0.8">
+      <path d="M180,260 L240,250 L270,280 L250,315 L195,305 Z" fill="#1c2a44" stroke="#31d7ff" stroke-width="0.6" opacity="0.55"/>
+      <path d="M120,420 L180,410 L210,440 L175,470 L115,455 Z" fill="#1c2a44" stroke="#31d7ff" stroke-width="0.5" opacity="0.45"/>
+      <path d="M1700,280 L1760,270 L1788,300 L1755,330 L1690,320 Z" fill="#1c2a44" stroke="#31d7ff" stroke-width="0.6" opacity="0.55"/>
+      <path d="M1620,440 L1685,432 L1715,462 L1680,492 L1615,480 Z" fill="#1c2a44" stroke="#31d7ff" stroke-width="0.5" opacity="0.45"/>
+    </g>
+
+    <!-- Crystals scattered -->
+    <g opacity="0.85">
+      <polygon points="380,420 360,470 400,470" fill="url(#fbCrystalL)" stroke="#31d7ff" stroke-width="0.5"/>
+      <polygon points="1530,440 1510,490 1550,490" fill="url(#fbCrystalR)" stroke="#31d7ff" stroke-width="0.5"/>
+    </g>
+
+    <!-- Volumetric light shafts -->
+    <g opacity="0.18">
+      <polygon points="700,0 720,0 870,1080 850,1080" fill="#31d7ff"/>
+      <polygon points="1180,0 1200,0 1090,1080 1070,1080" fill="#31d7ff"/>
+      <polygon points="940,0 960,0 960,1080 920,1080" fill="#aee9ff"/>
+    </g>
+
+    <!-- CORE RING (großer mechanischer Ring im Zentrum) -->
+    <g transform="translate(960 475)">
+      <!-- Outer ring rotating -->
+      <g class="fb-rotate-slow">
+        <circle cx="0" cy="0" r="320" fill="none" stroke="url(#fbRingGold)" stroke-width="3" opacity="0.9"/>
+        <circle cx="0" cy="0" r="312" fill="none" stroke="#ffb800" stroke-width="1" opacity="0.6"/>
+        <g stroke="#ffb800" stroke-width="3">
+          <line x1="0" y1="-330" x2="0" y2="-300"/>
+          <line x1="0" y1="330" x2="0" y2="300"/>
+          <line x1="-330" y1="0" x2="-300" y2="0"/>
+          <line x1="330" y1="0" x2="300" y2="0"/>
+        </g>
+      </g>
+
+      <!-- Middle ring with arcs + pulse nodes -->
+      <g class="fb-rotate-mid">
+        <circle cx="0" cy="0" r="265" fill="none" stroke="url(#fbRingGold)" stroke-width="6"
+                style="filter: drop-shadow(0 0 10px rgba(255,184,0,0.6));"/>
+        <g fill="none" stroke="#fff3b8" stroke-width="2" opacity="0.9">
+          <path d="M 0 -265 A 265 265 0 0 1 188 -188"/>
+          <path d="M 188 188 A 265 265 0 0 1 0 265"/>
+          <path d="M -188 188 A 265 265 0 0 1 -265 0"/>
+          <path d="M -265 0 A 265 265 0 0 1 -188 -188"/>
+        </g>
+        <g fill="#ffb800" style="filter: drop-shadow(0 0 10px #ffb800);">
+          <circle class="pulse-node"    cx="0"    cy="-265" r="6"/>
+          <circle class="pulse-node d3" cx="0"    cy="265"  r="6"/>
+          <circle class="pulse-node d2" cx="-265" cy="0"    r="6"/>
+          <circle class="pulse-node d4" cx="265"  cy="0"    r="6"/>
+        </g>
+        <g fill="#31d7ff" style="filter: drop-shadow(0 0 10px #31d7ff);">
+          <circle class="pulse-node d1" cx="188"  cy="-188" r="5"/>
+          <circle class="pulse-node d3" cx="188"  cy="188"  r="5"/>
+          <circle class="pulse-node d5" cx="-188" cy="188"  r="5"/>
+          <circle class="pulse-node d2" cx="-188" cy="-188" r="5"/>
+        </g>
+      </g>
+
+      <!-- Inner ring blue with ticks -->
+      <g class="fb-rotate-fast">
+        <circle cx="0" cy="0" r="225" fill="none" stroke="url(#fbRingBlue)" stroke-width="4"
+                style="filter: drop-shadow(0 0 10px rgba(49,215,255,0.7));"/>
+        <g stroke="#31d7ff" stroke-width="1.5" opacity="0.85">
+          <line x1="0" y1="-235" x2="0" y2="-215"/>
+          <line x1="0" y1="235" x2="0" y2="215"/>
+          <line x1="-235" y1="0" x2="-215" y2="0"/>
+          <line x1="235" y1="0" x2="215" y2="0"/>
+          <line x1="-166" y1="-166" x2="-152" y2="-152"/>
+          <line x1="166" y1="166" x2="152" y2="152"/>
+          <line x1="-166" y1="166" x2="-152" y2="152"/>
+          <line x1="166" y1="-166" x2="152" y2="-152"/>
+        </g>
+      </g>
+
+      <!-- Innermost gold ring -->
+      <g class="fb-rotate-mid">
+        <circle cx="0" cy="0" r="190" fill="none" stroke="#ffb800" stroke-width="2" opacity="0.8"
+                style="filter: drop-shadow(0 0 6px #ffb800);"/>
+      </g>
+
+      <!-- Crossbars -->
+      <g opacity="0.35">
+        <line x1="-180" y1="0" x2="180" y2="0" stroke="#31d7ff" stroke-width="0.8"/>
+        <line x1="0" y1="-180" x2="0" y2="180" stroke="#31d7ff" stroke-width="0.8"/>
+      </g>
+    </g>
+
+    <!-- Far mountains -->
+    <path d="M0,640 L120,560 L260,600 L380,520 L500,580 L640,490 L780,560 L900,470 L1020,540 L1160,480 L1300,560 L1440,490 L1580,570 L1720,500 L1860,560 L1920,540 L1920,1080 L0,1080 Z"
+          fill="url(#fbMountFar)"/>
+
+    <!-- Mid mountains -->
+    <path d="M0,720 L100,660 L220,700 L340,600 L460,680 L580,570 L700,660 L820,560 L940,650 L1060,560 L1180,660 L1300,580 L1420,680 L1540,600 L1660,680 L1780,620 L1920,700 L1920,1080 L0,1080 Z"
+          fill="url(#fbMountMid)"/>
+
+    <!-- Glowing rim -->
+    <path d="M0,720 L100,660 L220,700 L340,600 L460,680 L580,570 L700,660 L820,560 L940,650 L1060,560 L1180,660 L1300,580 L1420,680 L1540,600 L1660,680 L1780,620 L1920,700"
+          fill="none" stroke="#00aaff" stroke-width="2" opacity="0.7"
+          style="filter: drop-shadow(0 0 8px rgba(0,170,255,0.7));"/>
+
+    <!-- Waterfalls (animated) -->
+    <g>
+      <rect class="wfall"    x="340"  y="600" width="3" height="100" fill="url(#fbWfall)"/>
+      <rect class="wfall d1" x="580"  y="570" width="3" height="110" fill="url(#fbWfall)"/>
+      <rect class="wfall d2" x="820"  y="560" width="3" height="120" fill="url(#fbWfall)"/>
+      <rect class="wfall d3" x="1180" y="660" width="3" height="100" fill="url(#fbWfall)"/>
+      <rect class="wfall d4" x="1420" y="680" width="3" height="90"  fill="url(#fbWfall)"/>
+    </g>
+
+    <!-- Near mountains -->
+    <path d="M0,840 L120,780 L260,820 L380,740 L500,800 L640,720 L780,780 L900,700 L1020,760 L1160,700 L1300,780 L1440,720 L1580,800 L1720,740 L1860,800 L1920,780 L1920,1080 L0,1080 Z"
+          fill="url(#fbMountNear)"/>
+    <path d="M0,840 L120,780 L260,820 L380,740 L500,800 L640,720 L780,780 L900,700 L1020,760 L1160,700 L1300,780 L1440,720 L1580,800 L1720,740 L1860,800 L1920,780"
+          fill="none" stroke="#31d7ff" stroke-width="2.5" opacity="0.85"
+          style="filter: drop-shadow(0 0 10px rgba(49,215,255,0.85));"/>
+
+    <!-- Crystal pyramid at base of core -->
+    <g transform="translate(960 800)">
+      <polygon points="0,-40 -45,80 0,72" fill="url(#fbCrystalL)" style="filter: drop-shadow(0 0 16px #31d7ff);"/>
+      <polygon points="0,-40 45,80 0,72" fill="url(#fbCrystalR)"/>
+      <polygon points="0,-40 -5,72 5,72" fill="#ffffff" opacity="0.8"/>
+      <ellipse cx="0" cy="100" rx="80" ry="10" fill="none" stroke="#31d7ff" stroke-width="1.2" opacity="0.7"/>
+      <ellipse cx="0" cy="115" rx="60" ry="6" fill="none" stroke="#31d7ff" stroke-width="0.8" opacity="0.45"/>
+    </g>
+
+    <!-- Energy platform under crystal -->
+    <ellipse cx="960" cy="930" rx="380" ry="40" fill="none" stroke="#31d7ff" stroke-width="1.5" opacity="0.7"
+             style="filter: drop-shadow(0 0 8px rgba(49,215,255,0.7));"/>
+    <ellipse cx="960" cy="960" rx="320" ry="32" fill="none" stroke="#31d7ff" stroke-width="1" opacity="0.55"/>
+    <ellipse cx="960" cy="990" rx="260" ry="22" fill="none" stroke="#31d7ff" stroke-width="0.7" opacity="0.4"/>
+  </svg>
+</div>
 
 <!-- Drop Zone — erscheint solange kein Bild geladen ist -->
 <div class="drop-zone" id="dropZone">
   <div class="drop-card">
     <div class="title">REFERENZ-BILD LADEN</div>
-    <div class="sub">Zieh dein Bild (.png oder .jpg) einfach <strong>hier ins Fenster</strong>.</div>
-    <div class="sub">Es wird als Hintergrund verwendet und im Browser gespeichert.</div>
-    <div class="or">— ODER —</div>
+    <div class="sub"><strong>3 Wege zum Hintergrund:</strong></div>
+    <div class="sub">• Bild ins Fenster ziehen</div>
+    <div class="sub">• Bild kopieren &amp; <strong>Strg+V</strong> drücken</div>
+    <div class="sub">• Oder klick auf den Button:</div>
+    <div class="or"></div>
     <label class="pick-btn" for="filePicker">
       📁 BILD AUSWÄHLEN
     </label>
@@ -1250,6 +1482,22 @@
     if (e.target.files && e.target.files[0]) {
       loadFile(e.target.files[0]);
       e.target.value = ''; // reset, damit gleiche Datei wieder gewählt werden kann
+    }
+  });
+
+  // Paste-Support: Strg+V mit Bild aus Zwischenablage
+  document.addEventListener('paste', (e) => {
+    const items = (e.clipboardData || e.originalEvent?.clipboardData)?.items;
+    if (!items) return;
+    for (const item of items) {
+      if (item.type && item.type.startsWith('image/')) {
+        const file = item.getAsFile();
+        if (file) {
+          loadFile(file);
+          e.preventDefault();
+          return;
+        }
+      }
     }
   });
 
