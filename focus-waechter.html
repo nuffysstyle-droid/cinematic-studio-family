@@ -1173,21 +1173,44 @@
   function applyBgUrl(url){
     bgEl.style.backgroundImage = "url('" + url.replace(/'/g, "\\'") + "')";
     document.body.classList.add('has-bg');
+    // Inline-Style löschen, damit CSS .has-bg .drop-zone { display: none } greift
+    dropZone.style.display = '';
+    dropZone.classList.remove('drag-active');
+    savedHint.style.display = 'none';
   }
 
   function loadFile(file){
-    if (!file || !file.type.startsWith('image/')) {
-      alert('Bitte eine Bilddatei (.png oder .jpg) wählen.');
+    if (!file) { alert('Keine Datei ausgewählt.'); return; }
+    if (!file.type.startsWith('image/')) {
+      alert('Bitte eine Bilddatei (.png/.jpg/.webp) wählen.\nGewählt: ' + (file.type || 'unbekannt'));
       return;
     }
+    // Visuelles Feedback
+    savedHint.style.display = 'block';
+    savedHint.textContent = '⏳ Lade Bild …';
+    savedHint.style.color = 'var(--gold)';
+
     const reader = new FileReader();
     reader.onload = (e) => {
       const dataUrl = e.target.result;
       applyBgUrl(dataUrl);
       // Speichern, damit beim nächsten Öffnen direkt da
-      try { localStorage.setItem('focus-guardian-bg', dataUrl); } catch(err) {
-        console.warn('Bild zu groß für localStorage — wird nur in dieser Session benutzt.', err);
+      try {
+        localStorage.setItem('focus-guardian-bg', dataUrl);
+      } catch(err) {
+        console.warn('LocalStorage voll — Bild läuft nur in dieser Session.', err);
+        // Quota voll? Alte Daten löschen und nochmal versuchen
+        try {
+          localStorage.clear();
+          localStorage.setItem('focus-guardian-bg', dataUrl);
+        } catch(e2) {
+          alert('Bild ist zu groß für dauerhafte Speicherung (max ~5 MB).\nEs wird nur in dieser Session benutzt — bei erneutem Öffnen musst du es wieder reinziehen.');
+        }
       }
+    };
+    reader.onerror = () => {
+      alert('Fehler beim Lesen der Datei. Versuche eine andere Bilddatei.');
+      savedHint.style.display = 'none';
     };
     reader.readAsDataURL(file);
   }
@@ -1229,7 +1252,7 @@
     if (e.target.files[0]) loadFile(e.target.files[0]);
   });
 
-  // Skip
+  // Skip — drop zone permanent ausblenden in dieser Session
   skipBtn.addEventListener('click', () => {
     dropZone.style.display = 'none';
   });
@@ -1240,28 +1263,35 @@
       try { localStorage.removeItem('focus-guardian-bg'); } catch(e) {}
       document.body.classList.remove('has-bg');
       bgEl.style.backgroundImage = '';
-      dropZone.style.display = 'grid';
+      dropZone.style.display = '';
       savedHint.style.display = 'none';
     }
   });
 
-  // Drag & Drop — überall im Fenster
+  // Drag & Drop — überall im Fenster, aber NUR drop-zone-anzeige wenn Datei reingezogen
   ['dragenter','dragover'].forEach(evt => {
     window.addEventListener(evt, (e) => {
+      // Nur reagieren wenn echt eine Datei reingezogen wird
+      if (!e.dataTransfer || !e.dataTransfer.types || !e.dataTransfer.types.includes('Files')) return;
       e.preventDefault(); e.stopPropagation();
-      dropZone.style.display = 'grid';
+      // Nur Drop-Zone öffnen wenn noch kein Bild da ist ODER User explizit Bild wechseln will
+      if (!document.body.classList.contains('has-bg')) {
+        dropZone.style.display = '';  // CSS-default benutzen
+      }
       dropZone.classList.add('drag-active');
     });
   });
   ['dragleave','drop'].forEach(evt => {
     window.addEventListener(evt, (e) => {
+      if (evt === 'dragleave' && e.relatedTarget) return; // ignore inner moves
       e.preventDefault(); e.stopPropagation();
       dropZone.classList.remove('drag-active');
     });
   });
   window.addEventListener('drop', (e) => {
     e.preventDefault();
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+    dropZone.classList.remove('drag-active');
+    if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) {
       loadFile(e.dataTransfer.files[0]);
     }
   });
