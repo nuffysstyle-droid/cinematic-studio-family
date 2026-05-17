@@ -109,7 +109,7 @@
     25%  { opacity: 0.9; }
     100% { transform: translateY(280px); opacity: 0; }
   }
-  body.has-bg .bg-fallback { display: none; }
+  body.has-bg .bg-fallback { /* immer sichtbar lassen als Backdrop */ }
   body:not(.has-bg) #main-bg { display: none; }
 
   /* Drop zone: standardmäßig AUS, nur beim Drag-Over oder Klick einblenden */
@@ -1600,6 +1600,19 @@
     dropZone.classList.remove('shown', 'drag-active');
     dropZone.style.display = '';
     savedHint.style.display = 'none';
+    // Bild-Größe prüfen — warnen wenn zu klein
+    const checkImg = new Image();
+    checkImg.onload = () => {
+      if (checkImg.naturalWidth < 800 || checkImg.naturalHeight < 400) {
+        const n = document.createElement('div');
+        n.style.cssText = 'position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:200; background:rgba(255,184,0,0.95); color:#04070d; padding:10px 18px; border-radius:12px; font-size:12px; font-weight:700; letter-spacing:1px; box-shadow:0 0 20px rgba(255,184,0,0.6); cursor:pointer;';
+        n.textContent = '⚠ Bild ist klein (' + checkImg.naturalWidth + '×' + checkImg.naturalHeight + ') — größeres Bild empfohlen. Klick zum Schließen.';
+        n.addEventListener('click', () => n.remove());
+        document.body.appendChild(n);
+        setTimeout(() => n.remove(), 8000);
+      }
+    };
+    checkImg.src = url;
   }
 
   function loadFile(file){
