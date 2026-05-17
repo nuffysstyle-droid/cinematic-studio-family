@@ -73,7 +73,36 @@ fi
 # Berechtigungen final sicherstellen (Symlink-Targets folgen automatisch)
 chown -R www-data:www-data /var/www/html/storage /var/www/html/data 2>/dev/null || true
 
-# ── 3) Befehl ausführen ───────────────────────────────────────────────────────
+# ── 3) SMTP via msmtp konfigurieren (wenn Env-Vars gesetzt) ──────────────────
+# Render Env-Vars: SMTP_HOST, SMTP_PORT (default 587), SMTP_USER, SMTP_PASS
+# Optional: MAIL_FROM (default noreply@cinematic-vision-studio.de)
+if [ -n "${SMTP_HOST}" ] && [ -n "${SMTP_USER}" ] && [ -n "${SMTP_PASS}" ]; then
+    SMTP_PORT="${SMTP_PORT:-587}"
+    MAIL_FROM="${MAIL_FROM:-noreply@cinematic-vision-studio.de}"
+    cat > /etc/msmtprc << MSMTPEOF
+defaults
+auth           on
+tls            on
+tls_trust_file /etc/ssl/certs/ca-certificates.crt
+logfile        /var/log/msmtp.log
+
+account        default
+host           ${SMTP_HOST}
+port           ${SMTP_PORT}
+from           ${MAIL_FROM}
+user           ${SMTP_USER}
+password       ${SMTP_PASS}
+MSMTPEOF
+    chmod 600 /etc/msmtprc
+    chown www-data:www-data /etc/msmtprc
+    touch /var/log/msmtp.log
+    chown www-data:www-data /var/log/msmtp.log
+    echo "[entrypoint] SMTP konfiguriert: ${SMTP_HOST}:${SMTP_PORT} als ${SMTP_USER}"
+else
+    echo "[entrypoint] SMTP nicht konfiguriert — PHP mail() ohne SMTP (funktioniert auf IONOS, nicht auf Render)"
+fi
+
+# ── 4) Befehl ausführen ───────────────────────────────────────────────────────
 # CMD oder startCommand-Override wird als Argumente an dieses Skript übergeben:
 #   $# > 0 → exec "$@"  — z. B. "php /var/www/html/bin/cleanup-cron.php" (Cron)
 #              oder "apache2-foreground" (CMD-Default des Web-Service)

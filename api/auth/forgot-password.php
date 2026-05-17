@@ -23,6 +23,7 @@ require_once __DIR__ . '/../../includes/functions.php';
 require_once __DIR__ . '/../../includes/rate_limit.php';
 require_once __DIR__ . '/../../includes/auth.php';
 require_once __DIR__ . '/../../includes/db.php';
+require_once __DIR__ . '/../../includes/mailer.php';
 
 header('Content-Type: application/json');
 
@@ -146,10 +147,9 @@ if ($user) {
         VALUES (:uid, :th, :exp)
     ")->execute([':uid' => $user['id'], ':th' => $tokenHash, ':exp' => $expires]);
 
-    // TODO V0.5: E-Mail senden mit Link:
-    // forgot-password.php?token={$rawToken}
-    // Aktuell: Token nur in DB — Admin kann es auslesen für manuelle Unterstützung
-    // error_log("Password reset token for {$email}: {$rawToken}");
+    // Reset-Link per E-Mail senden
+    $resetUrl = 'https://cinematic-studio-family.onrender.com/forgot-password.php?token=' . $rawToken;
+    csf_mail_password_reset($email, $resetUrl);
 }
 
 echo json_encode($success, JSON_UNESCAPED_UNICODE);

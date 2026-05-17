@@ -266,7 +266,7 @@ if (str_starts_with($redirect, '//') || str_contains($redirect, ':')) {
 </head>
 <body>
 
-<a href="scene-editor-test.html" class="auth-logo">
+<a href="https://cinematic-vision-studio.de/scene-editor-test.html" class="auth-logo">
     <div class="auth-logo-icon">🎬</div>
     <div class="auth-logo-text">Cinematic <span>Vision</span> Studio</div>
 </a>
@@ -356,9 +356,9 @@ if (str_starts_with($redirect, '//') || str_contains($redirect, ':')) {
 </div>
 
 <div class="auth-footer">
-    <a href="crystals.html">Pläne & Preise</a> ·
-    <a href="contact.html">Support</a> ·
-    <a href="scene-editor-test.html">Ohne Login testen</a>
+    <a href="https://cinematic-vision-studio.de/crystals.html">Pläne & Preise</a> ·
+    <a href="https://cinematic-vision-studio.de/contact.php">Support</a> ·
+    <a href="https://cinematic-vision-studio.de/scene-editor-test.html">Ohne Login testen</a>
 </div>
 
 <script>

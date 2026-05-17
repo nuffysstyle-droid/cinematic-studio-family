@@ -19,6 +19,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
         libpng-dev \
+        msmtp \
+        ca-certificates \
     && docker-php-ext-configure gd \
         --with-freetype \
         --with-jpeg \
@@ -32,6 +34,7 @@ RUN { \
         echo 'max_execution_time = 360'; \
         echo 'memory_limit = 512M'; \
         echo 'session.gc_maxlifetime = 3600'; \
+        echo 'sendmail_path = /usr/bin/msmtp -t'; \
     } > /usr/local/etc/php/conf.d/csf.ini
 
 # ── Apache-Konfiguration ──────────────────────────────────────────────────────

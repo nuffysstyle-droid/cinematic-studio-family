@@ -101,15 +101,7 @@ $tokenMode = $token !== '' && preg_match('/^[a-f0-9]{64}$/', $token);
         <!-- ── E-Mail-Anfrage-Modus ── -->
         <div class="card-title">Passwort vergessen?</div>
         <div class="card-sub">
-            Gib deine E-Mail ein — wir senden dir einen Reset-Link.<br>
-            <strong style="color:var(--text)">Hinweis:</strong> E-Mail-Versand ist in der aktuellen Beta-Version noch nicht aktiv.
-            Bei Bedarf bitte direkt an
-            <a href="mailto:support@cinematic-vision-studio.de" style="color:var(--primary)">support@cinematic-vision-studio.de</a>
-            schreiben.
-        </div>
-
-        <div class="msg info show">
-            📧 E-Mail-Reset kommt in V0.4. Aktuell bitte Support kontaktieren.
+            Gib deine E-Mail ein — wir senden dir einen Reset-Link (gültig 1 Stunde).
         </div>
 
         <div class="msg" id="forgotMsg"></div>
