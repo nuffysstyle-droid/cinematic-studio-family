@@ -1625,27 +1625,44 @@
     }
   } catch(e) {}
 
-  // 2) Versuche: focus-bg.png und Variationen
+  // 2) Versuche viele mögliche Pfade
   if (!document.body.classList.contains('has-bg')) {
     const tryPaths = [
-      'focus-bg.png',
-      'assets/focus-bg.png',
-      './assets/focus-bg.png',
-      './focus-bg.png',
-      'images/focus-bg.png',
-      'img/focus-bg.png',
-      'assets/bg.png',
-      'bg.png',
-      'focus-bg.jpg',
-      'assets/focus-bg.jpg',
-      'assets/bg.jpg',
-      'bg.jpg',
+      // Gleicher Ordner
+      'focus-bg.png',  'focus-bg.jpg',  'focus-bg.jpeg',
+      'bg.png',        'bg.jpg',
+      // assets/ Unterordner
+      'assets/focus-bg.png',  'assets/focus-bg.jpg',
+      'assets/bg.png',        'assets/bg.jpg',
+      // Mit ./
+      './focus-bg.png',       './assets/focus-bg.png',
+      // Wenn HTML in Downloads liegt aber Bild in Focuswaechter/assets/
+      'Focuswaechter/assets/focus-bg.png',
+      'Focuswaechter/focus-bg.png',
+      'focuswaechter/assets/focus-bg.png',
+      'focuswaechter/focus-bg.png',
+      // Andere Unterordner-Namen
+      'images/focus-bg.png',  'img/focus-bg.png',
+      'background/focus-bg.png',
+      // Falls Bild im Eltern-Ordner
+      '../focus-bg.png',  '../assets/focus-bg.png',
+      // Verschiedene Schreibweisen
+      'Focus-bg.png', 'FOCUS-BG.PNG', 'focusbg.png',
     ];
     let i = 0;
     const tryNext = () => {
-      if (i >= tryPaths.length) return;
+      if (i >= tryPaths.length) {
+        // Kein Bild gefunden — zeige nach 1 Sek den Hinweis
+        setTimeout(() => {
+          if (!document.body.classList.contains('has-bg') && !document.body.classList.contains('bg-hidden')) {
+            // Drop-Zone ist sowieso sichtbar. Zusätzlich auto-pulsen.
+            dropZone.style.animation = 'bannerPulse 1.4s ease-in-out infinite';
+          }
+        }, 800);
+        return;
+      }
       const img = new Image();
-      img.onload = () => applyBgUrl(tryPaths[i]);
+      img.onload  = () => applyBgUrl(tryPaths[i]);
       img.onerror = () => { i++; tryNext(); };
       img.src = tryPaths[i];
     };
