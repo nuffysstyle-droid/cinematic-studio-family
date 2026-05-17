@@ -1650,37 +1650,28 @@
   // 2) Versuche viele mögliche Pfade
   if (!document.body.classList.contains('has-bg')) {
     const tryPaths = [
-      // Gleicher Ordner
       'focus-bg.png',  'focus-bg.jpg',  'focus-bg.jpeg',
       'bg.png',        'bg.jpg',
-      // assets/ Unterordner
       'assets/focus-bg.png',  'assets/focus-bg.jpg',
       'assets/bg.png',        'assets/bg.jpg',
-      // Mit ./
       './focus-bg.png',       './assets/focus-bg.png',
-      // Wenn HTML in Downloads liegt aber Bild in Focuswaechter/assets/
       'Focuswaechter/assets/focus-bg.png',
       'Focuswaechter/focus-bg.png',
       'focuswaechter/assets/focus-bg.png',
-      'focuswaechter/focus-bg.png',
-      // Andere Unterordner-Namen
+      'FocusWaechter/assets/focus-bg.png',
+      'Focus Waechter/assets/focus-bg.png',
+      'Focus%20Waechter/assets/focus-bg.png',
+      'fokuswaechter/assets/focus-bg.png',
       'images/focus-bg.png',  'img/focus-bg.png',
-      'background/focus-bg.png',
-      // Falls Bild im Eltern-Ordner
       '../focus-bg.png',  '../assets/focus-bg.png',
-      // Verschiedene Schreibweisen
+      '../Focuswaechter/assets/focus-bg.png',
       'Focus-bg.png', 'FOCUS-BG.PNG', 'focusbg.png',
     ];
     let i = 0;
     const tryNext = () => {
       if (i >= tryPaths.length) {
-        // Kein Bild gefunden — zeige nach 1 Sek den Hinweis
-        setTimeout(() => {
-          if (!document.body.classList.contains('has-bg') && !document.body.classList.contains('bg-hidden')) {
-            // Drop-Zone ist sowieso sichtbar. Zusätzlich auto-pulsen.
-            dropZone.style.animation = 'bannerPulse 1.4s ease-in-out infinite';
-          }
-        }, 800);
+        // Kein Bild gefunden → kleine Notification unten anzeigen
+        showBgNotFoundNotice();
         return;
       }
       const img = new Image();
@@ -1689,6 +1680,20 @@
       img.src = tryPaths[i];
     };
     tryNext();
+  }
+
+  // Notification wenn auto-detect scheitert
+  function showBgNotFoundNotice(){
+    if (document.body.classList.contains('has-bg')) return;
+    const n = document.createElement('div');
+    n.id = 'bgNotFoundNotice';
+    n.style.cssText = 'position:fixed; bottom:80px; left:50%; transform:translateX(-50%); z-index:85; background:rgba(2,5,12,0.95); border:1px solid rgba(255,184,0,0.6); border-radius:999px; padding:8px 16px 8px 10px; display:flex; align-items:center; gap:10px; box-shadow:0 0 22px rgba(255,184,0,0.4); backdrop-filter:blur(10px); cursor:pointer; animation:bannerPulse 1.6s ease-in-out infinite; font-size:12px;';
+    n.innerHTML = '<span style="color:#ffb800; font-weight:900; letter-spacing:1px;">🖼 BILD NICHT GEFUNDEN</span><span style="color:#eef4ff;">→ Klick hier oder zieh Bild rein</span>';
+    n.addEventListener('click', () => {
+      dropZone.classList.add('shown');
+      n.remove();
+    });
+    document.body.appendChild(n);
   }
 
   // Datei-Picker (label öffnet nativ den Dialog)
@@ -1824,20 +1829,22 @@
   function preloadTracks(){
     TRACKS.forEach(t => {
       const a = new Audio();
-      a.preload = 'auto';
+      a.preload = 'metadata';   // weniger Bandbreite
       a.loop = true;
       a.volume = musicVolume;
       a.addEventListener('canplaythrough', () => {
         trackAvailable[t.id] = true;
-        updateMusicPanelUI();
+        updateMusicPanelUI && updateMusicPanelUI();
       }, { once: true });
       a.addEventListener('error', () => {
         trackAvailable[t.id] = false;
-        updateMusicPanelUI();
+        updateMusicPanelUI && updateMusicPanelUI();
       }, { once: true });
-      a.src = t.file;
+      // Nur laden wenn Datei existiert (HEAD-check via fetch ist auf file:// nicht möglich,
+      // daher direkt versuchen — Fehler ist harmlos, Fallback greift)
+      try { a.src = t.file; } catch(e) {}
       trackElements[t.id] = a;
-      trackAvailable[t.id] = null; // loading
+      trackAvailable[t.id] = null;
     });
   }
   preloadTracks();
