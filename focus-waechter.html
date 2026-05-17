@@ -112,31 +112,27 @@
   body.has-bg .bg-fallback { display: none; }
   body:not(.has-bg) #main-bg { display: none; }
 
-  /* ===== DROP ZONE — riesig und unübersehbar in der Mitte ===== */
+  /* Drop zone: standardmäßig AUS, nur beim Drag-Over oder Klick einblenden */
   .drop-zone {
     position: fixed;
     top: 50%; left: 50%; transform: translate(-50%, -50%);
     z-index: 80;
-    display: flex; flex-direction: column; align-items: center; gap: 0;
-    background: rgba(2,5,12,0.92);
-    backdrop-filter: blur(12px);
+    display: none;
+    flex-direction: column; align-items: center; gap: 0;
+    background: rgba(2,5,12,0.95);
+    backdrop-filter: blur(14px);
     border: 3px dashed var(--gold);
     border-radius: 24px;
     padding: 40px 60px;
     box-shadow: 0 0 60px var(--glow-gold), inset 0 0 30px rgba(255,184,0,0.1);
     max-width: 90vw;
-    animation: bigPulse 1.8s ease-in-out infinite;
   }
-  @keyframes bigPulse {
-    0%, 100% { box-shadow: 0 0 40px var(--glow-gold), inset 0 0 20px rgba(255,184,0,0.1); }
-    50%      { box-shadow: 0 0 80px var(--glow-gold), 0 0 120px rgba(255,184,0,0.4), inset 0 0 40px rgba(255,184,0,0.2); }
-  }
-  body.has-bg .drop-zone { display: none; }
-  body.bg-hidden .drop-zone { display: none; }
+  .drop-zone.shown { display: flex; }
   .drop-zone.drag-active {
     background: rgba(0,170,255,0.20);
     border-color: var(--cyan);
     transform: translate(-50%, -50%) scale(1.05);
+    display: flex !important;
   }
   .drop-card {
     text-align: center;
@@ -1246,8 +1242,8 @@
   </div>
 </div>
 
-<!-- Always-visible bg loader button (Label triggert nativen File-Picker) -->
-<label class="change-bg-btn" for="filePicker" id="changeBgBtn">📁 HINTERGRUND LADEN</label>
+<!-- Always-visible bg loader button -->
+<button class="change-bg-btn" id="changeBgBtn">🖼 HINTERGRUND LADEN</button>
 
 <!-- Settings Button (Zahnrad) -->
 <button class="settings-btn" id="settingsBtn" title="Einstellungen">
@@ -1592,14 +1588,17 @@
   const filePicker = $('filePicker');
   const skipBtn    = $('skipBtn');
   const savedHint  = $('savedHint');
-  // changeBgBtn ist jetzt ein Label, kein JS-Handler nötig
+  const changeBgBtn = document.getElementById('changeBgBtn');
+  changeBgBtn.addEventListener('click', () => {
+    dropZone.classList.add('shown');
+    document.body.classList.remove('bg-hidden');
+  });
 
   function applyBgUrl(url){
     bgEl.style.backgroundImage = "url('" + url.replace(/'/g, "\\'") + "')";
     document.body.classList.add('has-bg');
-    // Inline-Style löschen, damit CSS .has-bg .drop-zone { display: none } greift
+    dropZone.classList.remove('shown', 'drag-active');
     dropZone.style.display = '';
-    dropZone.classList.remove('drag-active');
     savedHint.style.display = 'none';
   }
 
@@ -1716,24 +1715,19 @@
     }
   });
 
-  // Skip — drop zone permanent ausblenden in dieser Session
+  // Skip — drop zone schließen
   skipBtn.addEventListener('click', () => {
-    document.body.classList.add('bg-hidden');
+    dropZone.classList.remove('shown', 'drag-active');
   });
 
   // changeBgBtn ist jetzt ein <label for="filePicker"> — öffnet nativ Dialog
   // Beim Auswählen eines NEUEN Bildes ersetzt loadFile automatisch den Hintergrund
 
-  // Drag & Drop — überall im Fenster, aber NUR drop-zone-anzeige wenn Datei reingezogen
+  // Drag & Drop — überall im Fenster, drop-zone NUR während Drag aktiv
   ['dragenter','dragover'].forEach(evt => {
     window.addEventListener(evt, (e) => {
-      // Nur reagieren wenn echt eine Datei reingezogen wird
       if (!e.dataTransfer || !e.dataTransfer.types || !e.dataTransfer.types.includes('Files')) return;
       e.preventDefault(); e.stopPropagation();
-      // Nur Drop-Zone öffnen wenn noch kein Bild da ist ODER User explizit Bild wechseln will
-      if (!document.body.classList.contains('has-bg')) {
-        dropZone.style.display = '';  // CSS-default benutzen
-      }
       dropZone.classList.add('drag-active');
     });
   });
@@ -1746,7 +1740,7 @@
   });
   window.addEventListener('drop', (e) => {
     e.preventDefault();
-    dropZone.classList.remove('drag-active');
+    dropZone.classList.remove('drag-active', 'shown');
     if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) {
       loadFile(e.dataTransfer.files[0]);
     }
