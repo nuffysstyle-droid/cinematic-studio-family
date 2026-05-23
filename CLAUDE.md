@@ -66,6 +66,7 @@ Neue User bekommen automatisch 50 Welcome-Kristalle. Echte Transaktion in V2.
 | **Static Hosting** | IONOS (cinematic-vision-studio.de) | Landing Page, Shop, Academy, Portfolio |
 | **Storage** | JSON-Dateien + LOCK_EX + SQLite | Kein DB-Setup nötig |
 | **Fonts** | Liberation Sans (fonts-liberation) | FFmpeg drawtext, Linux-native |
+| **Ruflo (claude-flow)** | npx ruflo@3.6.30 (MCP) | Multi-Agent Swarm (Coder+Reviewer+Tester+Security+Docs) |
 
 ### Harte Don'ts
 
