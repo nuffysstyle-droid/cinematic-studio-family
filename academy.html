@@ -1,0 +1,507 @@
+﻿<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Cinematic Vision Studio Academy — Lerne KI-Filmproduktion, Prompting, Editing und Visual Storytelling.">
+<link rel="icon" type="image/png" href="assets/cvs-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<title>Academy – Cinematic Vision Studio</title>
+<style>
+/* ── Marketing-page variables ── */
+:root{
+  --bg:#020205;--card:#0f0f1e;--card2:#161628;--text:#f0f0ff;--muted:#8888aa;--muted2:#5a5a7a;
+  --accent:#f5c542;--accent2:#ff8c00;--blue:#3b82f6;--blue-bright:#1872ff;--purple:#9333ea;--ok:#4ade80;--danger:#ff5c7a;
+  --border:rgba(255,255,255,.09);--gold:linear-gradient(135deg,#f5c542,#ff8c00);--radius-page:18px;
+  /* App-css variables (used by academy styles) */
+  --bg-main:#0d0f14;--bg-panel:#161a22;--bg-elevated:#1e2330;--bg-hover:#252b3a;
+  --text-primary:#e8eaf0;--text-secondary:#8b93a8;--text-muted:#505870;
+  --accent-blue:#3d8ef5;--accent-blue-glow:rgba(61,142,245,0.2);
+  --accent-orange:#f5833d;--accent-orange-glow:rgba(245,131,61,0.2);
+  --border-color:#252b3a;--border-subtle:#1e2330;
+  --radius:8px;--radius-sm:4px;--radius-lg:12px;
+  --shadow:0 4px 24px rgba(0,0,0,0.4);--shadow-sm:0 2px 8px rgba(0,0,0,0.3);
+  --transition:150ms ease;
+}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+/* ── CINEMATIC FILM GRAIN ── */
+body::before{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.028'/%3E%3C/svg%3E");opacity:.5;}
+/* ── Nav ── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 28px;background:rgba(6,6,15,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.nav-logo{font-size:13px;font-weight:900;letter-spacing:2px;background:var(--gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-transform:uppercase;flex-shrink:0;text-decoration:none;}
+.nav-logo span{font-size:10px;display:block;letter-spacing:4px;font-weight:400;opacity:.6;margin-top:1px;}
+.nav-links{display:flex;align-items:center;gap:2px;flex:1;justify-content:center;}
+.nav-link{color:var(--muted);text-decoration:none;font-size:12px;font-weight:600;padding:6px 8px;border-radius:9px;transition:color .15s,background .15s;white-space:nowrap;}
+.nav-link:hover,.nav-link.active{color:var(--text);background:rgba(255,255,255,.06);}
+.nav-actions{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.nav-btn-ghost{color:var(--muted);text-decoration:none;font-size:13px;font-weight:700;padding:8px 13px;border-radius:10px;border:1px solid var(--border);transition:color .15s,border-color .15s;}
+.nav-btn-ghost:hover{color:var(--text);border-color:rgba(255,255,255,.25);}
+.nav-btn-gold{background:var(--gold);color:#1a0e00;text-decoration:none;font-size:13px;font-weight:800;padding:9px 16px;border-radius:10px;transition:opacity .15s;}
+.nav-btn-gold:hover{opacity:.88;}
+.wallet-pill{display:flex;align-items:center;gap:6px;background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.3);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:800;color:var(--accent);cursor:pointer;text-decoration:none;}
+@media(max-width:1280px){.nav-links{display:none;}}
+@media(max-width:640px){.nav{padding:12px 16px;gap:8px;}.nav-logo{font-size:11px;letter-spacing:1.5px;min-width:0;flex-shrink:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}.nav-logo span{display:none;}.nav-btn-ghost{display:none;}.nav-btn-gold{display:none;}.wallet-pill{display:none;}}
+.mob-burger{display:none;flex-direction:column;justify-content:center;gap:5px;width:40px;height:40px;padding:8px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:10px;cursor:pointer;flex-shrink:0;}
+.mob-burger span{display:block;height:2px;border-radius:2px;background:var(--text);transition:transform .22s,opacity .22s;}
+.mob-burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.mob-burger.open span:nth-child(2){opacity:0;}
+.mob-burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.mob-menu{position:fixed;left:0;right:0;z-index:99;background:rgba(6,6,15,.97);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);box-shadow:0 24px 60px rgba(0,0,0,.6),0 0 50px rgba(59,130,246,.07);max-height:0;overflow:hidden;opacity:0;pointer-events:none;transition:max-height .3s cubic-bezier(.4,0,.2,1),opacity .22s;display:none;}
+.mob-menu.open{max-height:820px;opacity:1;pointer-events:auto;}
+.mob-link{display:block;padding:14px 24px;color:var(--muted);text-decoration:none;font-size:15px;font-weight:700;border-left:3px solid transparent;transition:color .15s,border-color .15s,background .15s;}
+.mob-link:active{background:rgba(255,255,255,.06);}
+.mob-link.active{color:var(--accent);border-left-color:var(--accent);}
+.mob-sep{height:1px;background:var(--border);margin:10px 20px;}
+.mob-cta{display:block;margin:12px 20px 8px;padding:15px;background:var(--gold);color:#1a0e00;text-decoration:none;font-size:15px;font-weight:900;border-radius:13px;text-align:center;}
+@media(max-width:900px){.mob-burger{display:flex;}.mob-menu{display:block;}}
+/* ── Page layout ── */
+.page{padding:90px 0 60px;position:relative;}
+.page::before{content:"";position:absolute;top:0;left:0;right:0;height:380px;background:radial-gradient(ellipse 70% 120% at 15% 0%,rgba(59,130,246,.07) 0%,transparent 60%),radial-gradient(ellipse 50% 80% at 85% 20%,rgba(147,51,234,.05) 0%,transparent 55%);pointer-events:none;z-index:0;}
+.wrap{width:min(960px,calc(100% - 48px));margin:0 auto;position:relative;z-index:1;}
+/* ── Footer ── */
+.footer{border-top:1px solid var(--border);padding:36px 0;margin-top:60px;}
+.footer-inner{width:min(960px,calc(100% - 48px));margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+.footer-logo{font-size:13px;font-weight:900;letter-spacing:2px;background:var(--gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.footer-nav{display:flex;gap:18px;flex-wrap:wrap;}
+.footer-nav a{color:var(--muted);text-decoration:none;font-size:12px;font-weight:600;transition:color .15s;}
+.footer-nav a:hover{color:var(--text);}
+.footer-copy{font-size:12px;color:var(--muted2);}
+.footer-legal{display:flex;gap:16px;flex-wrap:wrap;width:100%;padding-top:12px;border-top:1px solid var(--border);}
+.footer-legal a{color:var(--muted2);text-decoration:none;font-size:11px;font-weight:600;transition:color .15s;}
+.footer-legal a:hover{color:var(--text);}
+/* ── Shared util ── */
+.text-muted{color:var(--text-muted);}
+.text-sm{font-size:0.8rem;}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--radius);font-size:0.85rem;font-weight:600;cursor:pointer;text-decoration:none;border:none;transition:background var(--transition),opacity var(--transition);}
+.btn-primary{background:var(--accent-blue);color:#fff;}
+.btn-primary:hover{opacity:.88;}
+.btn-secondary{background:var(--bg-elevated);color:var(--text-secondary);border:1px solid var(--border-color);}
+.btn-secondary:hover{background:var(--bg-hover);}
+.btn-sm{padding:6px 12px;font-size:0.8rem;}
+/* ── Academy ── */
+.ac-page{color:var(--text-primary);}
+.ac-hero{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin-bottom:32px;flex-wrap:wrap;}
+.ac-hero__eyebrow{font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent-blue);margin-bottom:8px;}
+.ac-hero__title{font-size:2rem;font-weight:800;color:var(--text-primary);margin-bottom:10px;}
+.ac-hero__sub{font-size:0.95rem;line-height:1.7;}
+.ac-hero__stats{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-start;padding-top:4px;}
+.ac-stat{background:var(--bg-panel);border:1px solid var(--border-color);border-radius:var(--radius);padding:14px 20px;text-align:center;min-width:90px;}
+.ac-stat__num{font-size:1.5rem;font-weight:800;color:var(--accent-blue);line-height:1;margin-bottom:4px;}
+.ac-stat__label{font-size:0.7rem;color:var(--text-muted);font-weight:500;}
+.ac-filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+.ac-filter-btn{padding:6px 13px;background:var(--bg-panel);border:1px solid var(--border-color);border-radius:999px;font-size:0.8rem;font-weight:500;color:var(--text-secondary);cursor:pointer;white-space:nowrap;transition:background var(--transition),border-color var(--transition),color var(--transition);}
+.ac-filter-btn:hover{background:var(--bg-elevated);border-color:var(--accent-blue);color:var(--text-primary);}
+.ac-filter-btn--active{background:var(--accent-blue-glow);border-color:var(--accent-blue);color:var(--accent-blue);font-weight:600;}
+.ac-results-bar{display:flex;align-items:center;gap:12px;margin-bottom:16px;min-height:20px;}
+.ac-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
+.ac-empty{display:flex;flex-direction:column;align-items:center;gap:12px;padding:60px 24px;text-align:center;color:var(--text-muted);}
+.ac-empty__icon{font-size:3rem;opacity:0.4;}
+.ac-card{background:var(--bg-panel);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:20px;display:flex;flex-direction:column;gap:10px;transition:border-color var(--transition),transform var(--transition),box-shadow var(--transition);cursor:default;}
+.ac-card:hover{border-color:rgba(61,142,245,0.4);transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,0,0,0.35);}
+.ac-card__top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
+.ac-card__icon{font-size:1.8rem;line-height:1;}
+.ac-card__badges{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;}
+.ac-card__cat-badge{font-size:0.65rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;background:var(--bg-elevated);border:1px solid var(--border-color);color:var(--text-muted);border-radius:var(--radius-sm);padding:2px 7px;}
+.ac-card__diff-badge{font-size:0.65rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;border-radius:var(--radius-sm);padding:2px 7px;}
+.ac-card__diff-badge[data-diff="basic"]{background:rgba(72,199,116,0.15);color:#48c774;border:1px solid rgba(72,199,116,0.3);}
+.ac-card__diff-badge[data-diff="creator"]{background:var(--accent-blue-glow);color:var(--accent-blue);border:1px solid rgba(61,142,245,0.3);}
+.ac-card__diff-badge[data-diff="pro"]{background:rgba(245,131,61,0.15);color:var(--accent-orange);border:1px solid rgba(245,131,61,0.3);}
+.ac-card__title{font-size:0.9rem;font-weight:700;color:var(--text-primary);line-height:1.4;}
+.ac-card__short{line-height:1.55;flex:1;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.ac-card__footer{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px;}
+.ac-card__read-time::before{content:'⏱ ';}
+/* Modal */
+.modal{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;}
+.modal[hidden]{display:none;}
+.modal-backdrop{position:absolute;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);cursor:pointer;}
+.modal-box{position:relative;background:var(--bg-panel);border:1px solid var(--border-color);border-radius:var(--radius-lg);width:100%;max-width:560px;max-height:85vh;overflow-y:auto;box-shadow:var(--shadow);z-index:1;}
+.ac-modal-box{max-width:580px;}
+.modal-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:20px 24px 16px;border-bottom:1px solid var(--border-color);position:sticky;top:0;background:var(--bg-panel);z-index:1;}
+.ac-modal-header-inner{display:flex;align-items:flex-start;gap:14px;}
+.ac-modal-icon{font-size:2rem;line-height:1;flex-shrink:0;padding-top:2px;}
+.ac-modal-meta{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap;}
+.modal-title{font-size:1rem;font-weight:700;color:var(--text-primary);line-height:1.4;}
+.modal-close{font-size:1rem;color:var(--text-muted);background:none;border:none;cursor:pointer;padding:4px 8px;border-radius:var(--radius-sm);line-height:1;flex-shrink:0;transition:color var(--transition),background var(--transition);}
+.modal-close:hover{color:var(--text-primary);background:var(--bg-elevated);}
+.modal-body{padding:20px 24px;}
+.modal-footer{padding:16px 24px 20px;display:flex;gap:12px;border-top:1px solid var(--border-color);}
+.ac-steps{display:flex;flex-direction:column;gap:12px;padding:0;list-style:none;counter-reset:step-counter;}
+.ac-step{display:grid;grid-template-columns:32px 1fr;gap:12px;align-items:start;counter-increment:step-counter;}
+.ac-step__num{width:32px;height:32px;border-radius:50%;background:var(--accent-blue-glow);border:1px solid rgba(61,142,245,0.3);color:var(--accent-blue);font-size:0.78rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ac-step__num::before{content:counter(step-counter);}
+.ac-step__text{font-size:0.875rem;color:var(--text-secondary);line-height:1.6;padding-top:6px;}
+@media(max-width:768px){.ac-hero{flex-direction:column;}.ac-hero__title{font-size:1.5rem;}.ac-grid{grid-template-columns:1fr;}.ac-modal-box{max-width:100%;}}
+@media(max-width:480px){.ac-hero__stats{width:100%;}.ac-stat{flex:1;min-width:80px;}.modal-footer{flex-direction:column;}}
+/* ── CUSTOM CURSOR ── */
+@media(pointer:fine){
+  body{cursor:none}
+  #cursor{position:fixed;width:8px;height:8px;background:#1872ff;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s,opacity .2s;mix-blend-mode:screen;opacity:0}
+  #cursor-ring{position:fixed;width:32px;height:32px;border:1px solid rgba(24,114,255,.3);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .28s,height .28s,opacity .28s;opacity:0}
+  body.cursor-active #cursor,body.cursor-active #cursor-ring{opacity:1}
+}
+@media(pointer:coarse){#cursor,#cursor-ring{display:none!important}}
+/* ═══ CVS PREMIUM DROP-IN v1 ═══ */
+body{font-family:'DM Sans','Segoe UI',sans-serif}
+h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.pf-title,.coming-card h2,.cta-banner h2,.ac-hero__title{font-family:'Syne',sans-serif}
+:root{--accent:#d4a93c;--accent2:#e8c355;--gold:linear-gradient(135deg,#d4a93c,#e8c355)}
+.btn-gold,.btn-ghost,.nav-btn-gold,.nav-btn-ghost,.plan-cta-free,.plan-cta-ghost,.pack-btn,.mob-cta{border-radius:50px!important}
+.wallet-pill{background:rgba(212,169,60,.1)!important;border-color:rgba(212,169,60,.3)!important;color:#d4a93c!important}
+.page-eyebrow{color:#d4a93c!important;background:rgba(212,169,60,.1)!important;border-color:rgba(212,169,60,.28)!important}
+.page-h1 span{background:linear-gradient(112deg,#d4a93c,#e8c355)!important;-webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important}
+.page::before{height:520px!important;background:radial-gradient(ellipse 85% 140% at 8% 0%,rgba(0,40,165,.14) 0%,transparent 55%),radial-gradient(ellipse 65% 100% at 94% 12%,rgba(180,130,20,.09) 0%,transparent 50%),radial-gradient(ellipse 55% 65% at 50% 0%,rgba(0,25,110,.07) 0%,transparent 60%)!important}
+.nav-logo{display:flex!important;align-items:center!important;gap:9px!important;text-decoration:none!important;background:none!important;-webkit-text-fill-color:unset!important}
+.cvs-nav-img{height:36px;width:auto;filter:drop-shadow(0 0 7px rgba(212,169,60,.65));animation:cvs-sub-float 5s ease-in-out infinite}
+.cvs-nav-txt{font-family:'Syne',sans-serif!important;font-size:13px;font-weight:900;letter-spacing:2px;text-transform:uppercase;background:linear-gradient(135deg,#d4a93c,#e8c355)!important;-webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;line-height:1.1}
+.cvs-nav-sub{display:block!important;font-size:9px!important;letter-spacing:4px!important;font-weight:400!important;opacity:.5!important;margin-top:1px!important;-webkit-text-fill-color:rgba(255,255,255,.38)!important;background:none!important;-webkit-background-clip:unset!important}
+@keyframes cvs-sub-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.footer{border-top:1px solid rgba(212,169,60,.12)!important;position:relative;padding:44px 0 28px!important}
+.footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(212,169,60,.32),rgba(24,114,255,.22),transparent)}
+.footer-inner{align-items:flex-start!important;gap:32px!important}
+.footer-brand{max-width:260px}
+.footer-brand-sub{font-size:12px;color:rgba(240,240,255,.35);line-height:1.65;margin-top:6px}
+.footer-cols{display:flex;gap:44px}
+.footer-col{display:flex;flex-direction:column;gap:9px}
+.footer-col a{color:rgba(240,240,255,.38);text-decoration:none;font-size:12px;font-weight:500;transition:color .2s;display:block}
+.footer-col a:hover{color:#d4a93c}
+.footer-bottom{width:min(960px,calc(100% - 48px));margin:24px auto 0;padding-top:18px;border-top:1px solid rgba(255,255,255,.05);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer-bottom .footer-legal{width:auto;border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a href="scene-editor-test.html" class="nav-logo"><img src="assets/cvs-logo.png" alt="CVS" class="cvs-nav-img"><span class="cvs-nav-txt">Cinematic Vision<span class="cvs-nav-sub">Studios</span></span></a>
+  <div class="nav-links">
+    <a href="scene-editor-test.html" class="nav-link">Home</a>
+    <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="nav-link">Studio</a>
+    <a href="shop.html" class="nav-link">Shop</a>
+    <a href="academy.html" class="nav-link active">Academy</a>
+    <a href="portfolio.html" class="nav-link">Portfolio</a>
+    <a href="ki-videos.html" class="nav-link">KI Videos</a>
+    <a href="prompt-generator.html" class="nav-link">Prompts</a>
+    <a href="calendar.html" class="nav-link">Buchung</a>
+    <a href="crystals.html" class="nav-link">Kristalle</a>
+    <a href="contact.php" class="nav-link">Kontakt</a>
+  </div>
+  <div class="nav-actions">
+    <a href="https://cinematic-studio-family.onrender.com/login.php" class="nav-btn-ghost">Login</a>
+    <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="nav-btn-gold">Studio starten</a>
+    <a href="crystals.html" class="wallet-pill">💎 Free</a>
+  </div>
+  <button class="mob-burger" id="mobBurger" aria-label="Menü öffnen" aria-expanded="false"><span></span><span></span><span></span></button>
+</nav>
+<div class="mob-menu" id="mobMenu" role="navigation" aria-label="Navigation">
+  <a href="scene-editor-test.html" class="mob-link">🏠 Home</a>
+  <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="mob-link">🎬 Studio</a>
+  <a href="shop.html" class="mob-link">🛍️ Shop</a>
+  <a href="academy.html" class="mob-link active">🎓 Academy</a>
+  <a href="portfolio.html" class="mob-link">🎞️ Portfolio</a>
+  <a href="ki-videos.html" class="mob-link">🎥 KI Videos</a>
+  <a href="prompt-generator.html" class="mob-link">✍️ Prompts</a>
+  <a href="calendar.html" class="mob-link">📅 Buchung</a>
+  <a href="crystals.html" class="mob-link">💎 Kristalle</a>
+  <a href="contact.php" class="mob-link">📞 Kontakt</a>
+  <div class="mob-sep"></div>
+  <a href="https://cinematic-studio-family.onrender.com/login.php" class="mob-link">🔑 Login / Registrieren</a>
+  <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="mob-cta">🎬 Studio starten</a>
+</div>
+
+<div class="page">
+  <div class="wrap">
+    <div class="ac-page">
+
+      <!-- Hero -->
+      <div class="ac-hero">
+        <div class="ac-hero__text">
+          <div class="ac-hero__eyebrow">📚 Cinematic Academy</div>
+          <h2 class="ac-hero__title">Academy</h2>
+          <p class="ac-hero__sub text-muted">
+            Lerne, wie du bessere Bilder, Videos, Startframes,<br>
+            Sticker und TikTok-Inhalte erstellst.
+          </p>
+        </div>
+        <div class="ac-hero__stats">
+          <div class="ac-stat">
+            <div class="ac-stat__num">13</div>
+            <div class="ac-stat__label">Guides</div>
+          </div>
+          <div class="ac-stat">
+            <div class="ac-stat__num">11</div>
+            <div class="ac-stat__label">Themen</div>
+          </div>
+          <div class="ac-stat">
+            <div class="ac-stat__num">Free</div>
+            <div class="ac-stat__label">Kein Abo nötig</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter -->
+      <div class="ac-filters">
+        <button class="ac-filter-btn ac-filter-btn--active" data-filter="all">📚 Alle</button>
+        <button class="ac-filter-btn" data-filter="api_credits">🔑 API &amp; Credits</button>
+        <button class="ac-filter-btn" data-filter="seedance">🎬 Seedance 2.0</button>
+        <button class="ac-filter-btn" data-filter="image_studio">🖼 Image Studio</button>
+        <button class="ac-filter-btn" data-filter="video_studio">📽 Video Studio</button>
+        <button class="ac-filter-btn" data-filter="startframe">▶ Startframe / Endframe</button>
+        <button class="ac-filter-btn" data-filter="elements">🧩 Element Library</button>
+        <button class="ac-filter-btn" data-filter="character_sheet">🧍 Character Sheets</button>
+        <button class="ac-filter-btn" data-filter="tiktok">🎵 TikTok Studio</button>
+        <button class="ac-filter-btn" data-filter="sticker">🏷 Sticker</button>
+        <button class="ac-filter-btn" data-filter="animation">✨ Animation Service</button>
+        <button class="ac-filter-btn" data-filter="ready_videos">📹 Sofort fertige Videos</button>
+      </div>
+
+      <!-- Results bar -->
+      <div class="ac-results-bar">
+        <span id="ac-count" class="text-muted text-sm"></span>
+        <span id="ac-filter-label" class="text-sm" style="color:var(--accent-blue);"></span>
+      </div>
+
+      <!-- Grid -->
+      <div id="ac-grid" class="ac-grid"></div>
+
+      <!-- Empty state -->
+      <div id="ac-empty" class="ac-empty" hidden>
+        <div class="ac-empty__icon">📚</div>
+        <p>Keine Guides in dieser Kategorie.</p>
+        <button class="btn btn-secondary" id="ac-show-all">Alle Guides anzeigen</button>
+      </div>
+
+    </div><!-- .ac-page -->
+  </div><!-- .wrap -->
+</div><!-- .page -->
+
+
+<!-- Card Template -->
+<template id="tpl-ac-card">
+  <div class="ac-card" data-category="" data-id="">
+    <div class="ac-card__top">
+      <span class="ac-card__icon"></span>
+      <div class="ac-card__badges">
+        <span class="ac-card__cat-badge"></span>
+        <span class="ac-card__diff-badge"></span>
+      </div>
+    </div>
+    <div class="ac-card__title"></div>
+    <div class="ac-card__short text-muted text-sm"></div>
+    <div class="ac-card__footer">
+      <span class="ac-card__read-time text-muted text-sm"></span>
+      <button class="btn btn-primary btn-sm ac-card__open-btn">Guide öffnen →</button>
+    </div>
+  </div>
+</template>
+
+
+<!-- Guide Modal -->
+<div id="ac-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="ac-modal-title" hidden>
+  <div class="modal-backdrop" id="ac-modal-backdrop"></div>
+  <div class="modal-box ac-modal-box">
+    <div class="modal-header">
+      <div class="ac-modal-header-inner">
+        <span id="ac-modal-icon" class="ac-modal-icon"></span>
+        <div>
+          <div class="ac-modal-meta">
+            <span id="ac-modal-cat" class="ac-card__cat-badge"></span>
+            <span id="ac-modal-diff" class="ac-card__diff-badge"></span>
+            <span id="ac-modal-time" class="text-muted text-sm"></span>
+          </div>
+          <h3 class="modal-title" id="ac-modal-title"></h3>
+        </div>
+      </div>
+      <button class="modal-close" id="ac-modal-close" aria-label="Schließen">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="ac-steps-container">
+        <ol id="ac-modal-steps" class="ac-steps"></ol>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a id="ac-modal-cta" class="btn btn-primary" href="#">→</a>
+      <button class="btn btn-secondary" id="ac-modal-close-2">Schließen</button>
+    </div>
+  </div>
+</div>
+
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo">Cinematic Vision Studio</div>
+      <p class="footer-brand-sub">Premium KI-Filmproduktion — Trailer, Transformationen, Anime &amp; Markenwelten.</p>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <a href="scene-editor-test.html">Home</a>
+        <a href="https://cinematic-studio-family.onrender.com/studio-demo.php">Studio</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="academy.html">Academy</a>
+      </div>
+      <div class="footer-col">
+        <a href="shop.html">Shop</a>
+        <a href="crystals.html">Kristalle</a>
+        <a href="calendar.html">Buchung</a>
+        <a href="contact.php">Kontakt</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <nav class="footer-legal">
+      <a href="impressum.html">Impressum</a>
+      <a href="datenschutz.html">Datenschutz</a>
+      <a href="agb.html">AGB</a>
+      <a href="widerruf.html">Widerruf</a>
+      <a href="cookies.html">Cookies</a>
+    </nav>
+    <div class="footer-copy">© 2026 Cinematic Vision Studio · Alle Rechte vorbehalten</div>
+  </div>
+</footer>
+
+
+<script>
+(function () {
+
+const GUIDES = [
+  {"id":"g01","title":"API-Key erstellen und einfügen","category":"api_credits","short":"Hol dir deinen Kie.ai API-Key und verbinde ihn mit dem Studio in wenigen Schritten.","read_time":"2 min","difficulty":"basic","icon":"🔑","steps":["Gehe auf kie.ai und erstelle ein kostenloses Konto.","Navigiere in den Account-Einstellungen zu „API Keys“.","Erstelle einen neuen API-Key und kopiere ihn.","Öffne in Cinematic Studio → „API Key“ in der Sidebar.","Füge deinen Key ein und klicke auf „Verbindung testen“.","Bei Erfolg siehst du den grünen Badge „API verbunden“."],"cta_label":"🔑 API verbinden","cta_url":"https://cinematic-studio-family.onrender.com/api-key.php"},
+  {"id":"g02","title":"Credits über empfohlenen Link kaufen","category":"api_credits","short":"So kaufst du Seedance-Credits günstig und sicherst dir Bonus-Credits über den empfohlenen Link.","read_time":"2 min","difficulty":"basic","icon":"💳","steps":["Nutze den empfohlenen Referral-Link für Bonus-Credits beim ersten Kauf.","Wähle ein Credits-Paket — beginne mit einem kleinen Paket zum Testen.","Seedance Fast verbraucht weniger Credits als Seedance Standard.","Standard-Qualität eignet sich für finale Produktionen.","Behalte immer etwas Reserve — Video-Generierung verbraucht Credits je Sekunde.","Credits werden sofort gutgeschrieben — kein Warten."],"cta_label":"🔑 API verbinden","cta_url":"https://cinematic-studio-family.onrender.com/api-key.php"},
+  {"id":"g03","title":"Seedance Fast vs. Standard — was ist der Unterschied?","category":"seedance","short":"Fast ist günstiger und schneller. Standard ist hochwertiger. Wann nimmst du was?","read_time":"3 min","difficulty":"creator","icon":"⚡","steps":["Seedance Fast: schnell, günstig, gut für erste Entwürfe und Tests.","Seedance Standard: höhere Qualität, bessere Bewegungsphysik, mehr Credits.","Für Kundenprojekte oder finale Produktionen → immer Standard.","Für Prompt-Tests und Iterationen → Fast spart Budget.","Laufzeit beeinflusst Credits: 15s kostet mehr als 5s — plane vorher.","Quality „Super“ in Standard gibt nochmals bessere Details.","Empfehlung: Test mit Fast → finales Video mit Standard."],"cta_label":"🎬 Video Studio öffnen","cta_url":"https://cinematic-studio-family.onrender.com/video-studio.php"},
+  {"id":"g04","title":"Bessere Startframes erstellen","category":"startframe","short":"Der Startframe ist das erste Bild deines Videos. So machst du ihn stark.","read_time":"4 min","difficulty":"creator","icon":"▶","steps":["Wähle im Image Studio das Template „Startframe“ aus.","Beschreibe die exakte Startposition deiner Szene — wo ist die Kamera? Wo ist das Subjekt?","Kein Bewegungsunschärfe im Startframe — das Bild soll statisch und scharf sein.","Definiere Licht klar: Richtung, Stimmung, Intensität — das Video erbt diese Einstellung.","Weiter Kamerawinkel für Establishing-Shots, nah für Emotionen.","Nachdem du den Prompt generiert hast → In Seedance als Startframe-Bild hochladen.","Im Video Studio Modus „Startframe“ wählen und das Bild einfügen."],"cta_label":"🖼 Image Studio öffnen","cta_url":"https://cinematic-studio-family.onrender.com/image-studio.php"},
+  {"id":"g05","title":"Endframes richtig verwenden","category":"startframe","short":"Endframes definieren das letzte Bild deines Clips. So bleiben Start und Ende konsistent.","read_time":"3 min","difficulty":"creator","icon":"⏹","steps":["Endframe = das gewünschte letzte Bild deines generierten Videos.","Wichtig: Startframe und Endframe müssen die gleiche Lichtquelle und Farbstimmung haben.","Generiere den Endframe mit dem Template „Endframe“ im Image Studio.","Schreibe im Prompt explizit: „post-action, resolved composition, settled atmosphere“.","Im Video Studio Modus „Start + End Frame“ wählen — beide Bilder hochladen.","Seedance interpoliert automatisch die Bewegung zwischen den Frames.","Tipp: Teste erst ohne Endframe — manchmal reicht der Startframe alleine."],"cta_label":"🖼 Image Studio öffnen","cta_url":"https://cinematic-studio-family.onrender.com/image-studio.php"},
+  {"id":"g06","title":"Character Sheet für stabile Gesichter","category":"character_sheet","short":"Character Sheets geben Seedance ein konsistentes Gesichtsreferenz-Bild für stabilere Ergebnisse.","read_time":"5 min","difficulty":"pro","icon":"🧍","steps":["Im Image Studio Template „Character Sheet“ wählen.","Beschreibe deinen Charakter: Alter, Aussehen, Kleidung, Stil, Haar.","Das Sheet zeigt mehrere Ansichten (front, side, back) — ideal als Referenz.","Gesicht-Qualität verbessern: Button „Gesicht korrigieren“ nach erstem Prompt.","Generiertes Sheet-Bild in der Element Library als „Charakter“ speichern.","Beim Videogenerieren: Character Sheet als Element-Referenz im Element-Modus hochladen.","Tipp: Character Sheet für jeden wiederkehrenden Charakter erstellen und speichern."],"cta_label":"🖼 Image Studio öffnen","cta_url":"https://cinematic-studio-family.onrender.com/image-studio.php"},
+  {"id":"g07","title":"Elemente richtig in der Library speichern","category":"elements","short":"Die Element Library ist dein persönliches Asset-System. So nutzt du sie optimal.","read_time":"3 min","difficulty":"basic","icon":"🧩","steps":["Elements → Typen: Charakter, Fahrzeug, Produkt, Kreatur, Umgebung, Logo, Objekt, Stil-Referenz.","Rollen: Hauptcharakter, Hauptobjekt, Hintergrund, Stil-Referenz.","Name vergeben — immer beschreibend: „Anna – rote Jacke, Stadtszene“.","Bild hochladen (optional): PNG/JPEG max. 10 MB — kie.ai akzeptiert als Referenz.","Beschreibung schreiben — wird automatisch in Prompts eingebaut.","Tipp: Wiederholende Charaktere, Fahrzeuge oder Produkte einmal anlegen und wiederverwenden.","Gelöschte Elemente sind dauerhaft weg — sichere wichtige Bild-Dateien lokal."],"cta_label":"🧩 Element Library öffnen","cta_url":"https://cinematic-studio-family.onrender.com/elements.php"},
+  {"id":"g08","title":"TikTok Hook in 2 Sekunden","category":"tiktok","short":"Der Hook entscheidet ob jemand weiterscrollt. So baust du einen unwiderstehlichen Opener.","read_time":"4 min","difficulty":"creator","icon":"⚡","steps":["Wähle im TikTok Studio das Template „Viral Hook“ oder „TikTok Ad“.","Beschreibe nur die erste Szene — nicht den ganzen Clip.","Hook-Regel: Bewegung + Überraschung + Frage. Kombiniere mindestens zwei davon.","Vermeide langsame Establishing-Shots — fang mitten in der Szene an.","Stil „Energy“ oder „Dark“ funktioniert stärker als „Cinematic“ für Hooks.","Der generierte Hook-Vorschlag ist ein Startpunkt — passe ihn auf deine Marke an.","Teste verschiedene Hooks A/B — lade beide hoch und vergleiche Views in 24h."],"cta_label":"🎵 TikTok Studio öffnen","cta_url":"https://cinematic-studio-family.onrender.com/tiktok-studio.php"},
+  {"id":"g09","title":"Sticker richtig anfragen","category":"sticker","short":"So formulierst du deine Sticker-Anfrage für das beste Ergebnis.","read_time":"3 min","difficulty":"basic","icon":"🏷","steps":["Wähle den richtigen Sticker-Typ: Emoji / Text / Logo / Reaction / Custom.","Stil klar benennen: Neon, Glow, Gold, Fire, Minimal oder Cartoon.","Format: Für TikTok LIVE → PNG transparent. Für Stories → 9:16.","Beschreibung spezifisch halten: „Lila Neon-Herz mit Gold-Outline, animiert, pulsierend“.","Text-Sticker: maximal 3 kurze Wörter — lange Texte werden unleserlich.","Logo-Sticker: PNG mit transparentem Hintergrund hochladen für beste Ergebnisse.","Je mehr Details, desto besser das Ergebnis — Farbe, Effekt, Bewegung."],"cta_label":"🏷 Sticker Studio öffnen","cta_url":"https://cinematic-studio-family.onrender.com/tiktok-sticker.php"},
+  {"id":"g10","title":"Animation Service richtig nutzen","category":"animation","short":"Booster, Multiplikator, Logo oder Custom — so wählst du die richtige Animation.","read_time":"3 min","difficulty":"creator","icon":"✨","steps":["Booster Animation: Für TikTok LIVE x5 Effekte — starke Lichtblitze, kurze Sequenz.","Multiplikator Animation: x2/x3 Combo-Effekte für Rewards und Gift-Events.","Logo Animation: Dein Marken-Logo als animiertes Intro/Overlay — einfach halten.","Custom Animation: Für alles andere — beschreibe genau was du möchtest.","Stil wählen: Energy und Neon wirken am besten für LIVE-Streams.","Loop immer aktivieren für LIVE-Einsatz — das Video wiederholt sich nahtlos.","Beschreibung so spezifisch wie möglich: Farbe, Effekte, Timing, Hintergrund."],"cta_label":"✨ Animation Studio öffnen","cta_url":"https://cinematic-studio-family.onrender.com/tiktok-animation.php"},
+  {"id":"g11","title":"Sofort fertige Videos anfragen","category":"ready_videos","short":"Du möchtest kein Prompt schreiben? Hol dir ein fertiges Premium-Video direkt.","read_time":"2 min","difficulty":"basic","icon":"📹","steps":["Gehe zu „Sofort fertige Videos“ in der Sidebar.","Filtere nach Kategorie: TikTok Ads, Auto, Horror, Luxury, Anime etc.","Klicke „Dieses Video anfragen“ wenn du es genau so haben möchtest.","Klicke „Ähnliches Video erstellen lassen“ wenn du Anpassungen möchtest.","Trage deine E-Mail oder Telegram und einen kurzen Wunsch ein.","Kein Prompt nötig — wir kümmern uns um alles.","Du erhältst das fertige Video als Download-Link."],"cta_label":"📹 Ready Videos ansehen","cta_url":"https://cinematic-studio-family.onrender.com/ready-videos.php"},
+  {"id":"g12","title":"Video-Prompts mit Seedance optimieren","category":"video_studio","short":"So schreibst du Prompts die Seedance versteht — und bekommst weniger Jitter und bessere Bewegung.","read_time":"5 min","difficulty":"pro","icon":"🎬","steps":["Beschreibe immer: Subjekt + Aktion + Umgebung + Kamera in einem Satz.","Vermeide: „sehr schön“, „toll“, „amazing“ — sei konkret.","Kamera-Keywords: „slow dolly push-in“, „tracking shot“, „crane shot“.","Negativer Prompt ist wichtig: „jitter, teleporting, bad anatomy“ immer eintragen.","Button „Bewegung verbessern“ stabilisiert Jitter automatisch.","Für Charaktere: Startframe + Character Sheet kombinieren → stabilstes Ergebnis.","Kürzere Clips (5–8s) sind konsistenter als 15s — lieber mehrere kurze generieren."],"cta_label":"🎬 Video Studio öffnen","cta_url":"https://cinematic-studio-family.onrender.com/video-studio.php"},
+  {"id":"g13","title":"Image Studio Templates verstehen","category":"image_studio","short":"Jedes Template hat eine andere DNA. So wählst du das richtige für dein Projekt.","read_time":"3 min","difficulty":"basic","icon":"🖼","steps":["Realistic Character: Menschen, Portraits, Charaktere — optimiert für Gesichter.","Vehicle / Car: Automotive Fotografie — Reflexionen, Low-Angle, perfektes Bodywork.","Product: E-Commerce und Print — sauberes Studio-Licht, Details scharf.","Creature: Fantastische Wesen, Monster — filmische Qualität, reale Anatomie.","Startframe: Für Video-Einstieg — kein Blur, klare Komposition.","Endframe: Für Video-Ende — ruhige, abgeschlossene Bildkomposition.","Character Sheet: Mehrere Ansichten desselben Charakters — für Konsistenz."],"cta_label":"🖼 Image Studio öffnen","cta_url":"https://cinematic-studio-family.onrender.com/image-studio.php"}
+];
+
+const CAT_LABELS = {"all":"Alle","api_credits":"API & Credits","seedance":"Seedance 2.0","image_studio":"Image Studio","video_studio":"Video Studio","startframe":"Startframe / Endframe","elements":"Element Library","character_sheet":"Character Sheets","tiktok":"TikTok Studio","sticker":"Sticker","animation":"Animation Service","ready_videos":"Sofort fertige Videos"};
+
+const DIFF_LABELS = {basic:'Basic',creator:'Creator',pro:'Pro'};
+
+const grid      = document.getElementById('ac-grid');
+const emptyEl   = document.getElementById('ac-empty');
+const countEl   = document.getElementById('ac-count');
+const filterEl  = document.getElementById('ac-filter-label');
+const filterBtns = document.querySelectorAll('.ac-filter-btn');
+const tpl       = document.getElementById('tpl-ac-card');
+const showAllBtn = document.getElementById('ac-show-all');
+
+const modal     = document.getElementById('ac-modal');
+const mBackdrop = document.getElementById('ac-modal-backdrop');
+const mClose    = document.getElementById('ac-modal-close');
+const mClose2   = document.getElementById('ac-modal-close-2');
+const mIcon     = document.getElementById('ac-modal-icon');
+const mTitle    = document.getElementById('ac-modal-title');
+const mCat      = document.getElementById('ac-modal-cat');
+const mDiff     = document.getElementById('ac-modal-diff');
+const mTime     = document.getElementById('ac-modal-time');
+const mSteps    = document.getElementById('ac-modal-steps');
+const mCta      = document.getElementById('ac-modal-cta');
+
+function renderCard(guide) {
+  const clone = tpl.content.cloneNode(true);
+  const card  = clone.querySelector('.ac-card');
+  card.dataset.category = guide.category ?? '';
+  card.dataset.id       = guide.id ?? '';
+  clone.querySelector('.ac-card__icon').textContent = guide.icon ?? '📚';
+  const catBadge  = clone.querySelector('.ac-card__cat-badge');
+  const diffBadge = clone.querySelector('.ac-card__diff-badge');
+  catBadge.textContent  = CAT_LABELS[guide.category] ?? guide.category ?? '—';
+  diffBadge.textContent = DIFF_LABELS[guide.difficulty] ?? guide.difficulty ?? '—';
+  diffBadge.dataset.diff = guide.difficulty ?? 'basic';
+  clone.querySelector('.ac-card__title').textContent = guide.title ?? '';
+  clone.querySelector('.ac-card__short').textContent = guide.short ?? '';
+  clone.querySelector('.ac-card__read-time').textContent = guide.read_time ?? '';
+  clone.querySelector('.ac-card__open-btn').addEventListener('click', () => openGuide(guide));
+  grid.appendChild(clone);
+}
+
+function openGuide(guide) {
+  mIcon.textContent  = guide.icon ?? '📚';
+  mTitle.textContent = guide.title ?? '';
+  mTime.textContent  = guide.read_time ?? '';
+  mCat.textContent   = CAT_LABELS[guide.category] ?? guide.category ?? '—';
+  mDiff.textContent  = DIFF_LABELS[guide.difficulty] ?? guide.difficulty ?? '—';
+  mDiff.dataset.diff = guide.difficulty ?? 'basic';
+  mSteps.innerHTML = '';
+  (guide.steps ?? []).forEach(stepText => {
+    const li   = document.createElement('li');
+    li.className = 'ac-step';
+    const num  = document.createElement('span');
+    num.className = 'ac-step__num';
+    const text = document.createElement('span');
+    text.className  = 'ac-step__text';
+    text.textContent = stepText;
+    li.appendChild(num);
+    li.appendChild(text);
+    mSteps.appendChild(li);
+  });
+  mCta.textContent = guide.cta_label ?? 'Öffnen';
+  mCta.href        = guide.cta_url ?? '#';
+  modal.hidden = false;
+  modal.scrollTop = 0;
+  mClose.focus();
+}
+
+function closeGuide() { modal.hidden = true; }
+mBackdrop.addEventListener('click', closeGuide);
+mClose.addEventListener('click',   closeGuide);
+mClose2.addEventListener('click',  closeGuide);
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.hidden) closeGuide(); });
+
+let activeFilter = 'all';
+function applyFilter(filter) {
+  activeFilter = filter;
+  grid.innerHTML = '';
+  const filtered = filter === 'all' ? GUIDES : GUIDES.filter(g => g.category === filter);
+  if (filtered.length === 0) {
+    emptyEl.hidden = false;
+    countEl.textContent = '';
+    filterEl.textContent = '';
+  } else {
+    emptyEl.hidden = true;
+    filtered.forEach(renderCard);
+    countEl.textContent = filtered.length + ' Guide' + (filtered.length !== 1 ? 's' : '');
+    filterEl.textContent = filter !== 'all' ? '— ' + (CAT_LABELS[filter] ?? filter) : '';
+  }
+  filterBtns.forEach(btn => {
+    btn.classList.toggle('ac-filter-btn--active', btn.dataset.filter === filter);
+  });
+}
+filterBtns.forEach(btn => btn.addEventListener('click', () => applyFilter(btn.dataset.filter)));
+showAllBtn?.addEventListener('click', () => applyFilter('all'));
+applyFilter('all');
+
+})();
+</script>
+<script>(function(){var b=document.getElementById('mobBurger'),m=document.getElementById('mobMenu');if(!b||!m)return;function t(){m.style.top=document.querySelector('.nav').offsetHeight+'px';}t();window.addEventListener('resize',t);b.addEventListener('click',function(e){e.stopPropagation();var o=m.classList.toggle('open');b.classList.toggle('open',o);b.setAttribute('aria-expanded',o?'true':'false');b.setAttribute('aria-label',o?'Menü schließen':'Menü öffnen');});m.querySelectorAll('.mob-link,.mob-cta').forEach(function(l){l.addEventListener('click',function(){m.classList.remove('open');b.classList.remove('open');b.setAttribute('aria-expanded','false');b.setAttribute('aria-label','Menü öffnen');});});document.addEventListener('click',function(e){if(!b.contains(e.target)&&!m.contains(e.target)){m.classList.remove('open');b.classList.remove('open');b.setAttribute('aria-expanded','false');}});document.addEventListener('keydown',function(e){if(e.key==='Escape'){m.classList.remove('open');b.classList.remove('open');b.setAttribute('aria-expanded','false');}});})();</script>
+<div id="cursor"></div><div id="cursor-ring"></div>
+<script>
+(function(){
+const isDesktop = window.matchMedia('(pointer: fine)').matches;
+if (!isDesktop) return;
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0,active=false;
+document.addEventListener('mousemove', e => {
+  mx=e.clientX; my=e.clientY;
+  cursor.style.left=mx+'px'; cursor.style.top=my+'px';
+  if (!active){active=true;document.body.classList.add('cursor-active')}
+});
+(function loop(){
+  rx+=(mx-rx)*.1; ry+=(my-ry)*.1;
+  ring.style.left=rx+'px'; ring.style.top=ry+'px';
+  requestAnimationFrame(loop);
+})();
+document.querySelectorAll('a,button,.nav-link,.nav-btn-gold,.nav-btn-ghost,.mob-link,.mob-cta,.btn-ghost,.wallet-pill').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cursor.style.width='20px';cursor.style.height='20px';ring.style.width='52px';ring.style.height='52px'});
+  el.addEventListener('mouseleave',()=>{cursor.style.width='8px';cursor.style.height='8px';ring.style.width='32px';ring.style.height='32px'});
+});
+})();
+</script>
+</body>
+</html>
