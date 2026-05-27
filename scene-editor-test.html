@@ -1,688 +1,1940 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <title>Cinematic Vision Studio – Premium KI-Filmstudio</title>
-  <style>
-    :root {
-      --bg:#06060f; --card:#0f0f1e; --card2:#161628;
-      --text:#f0f0ff; --muted:#8888aa; --muted2:#5a5a7a;
-      --accent:#f5c542; --accent2:#ff8c00; --blue:#3b82f6;
-      --purple:#9333ea; --ok:#4ade80; --danger:#ff5c7a;
-      --border:rgba(255,255,255,.09);
-      --gold:linear-gradient(135deg,#f5c542,#ff8c00);
-      --radius:20px;
-    }
-    *{box-sizing:border-box;margin:0;padding:0;}
-    html{scroll-behavior:smooth;}
-    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Cinematic Vision Studio – High-End KI-Videos, Transformationen, Anime-Sequenzen, Werbeclips und visuelle Markenwelten. Premium AI-Cinematic-Produktion für Creator und Marken.">
+<meta name="theme-color" content="#020205">
+<link rel="icon" type="image/png" href="assets/cvs-logo.png">
+<meta property="og:title" content="Cinematic Vision Studio – Deine Vision. Als cinematic KI-Erlebnis.">
+<meta property="og:description" content="High-End KI-Videos, Transformationen, Anime-Sequenzen und visuelle Markenwelten. Express-Lieferung in 24–48h.">
+<meta property="og:type" content="website">
+<title>Cinematic Vision Studio – Deine Vision. Als cinematic KI-Erlebnis.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+/* ╔══════════════════════════════════════════════╗
+   ║  CINEMATIC VISION STUDIO — FINAL MASTERPIECE  ║
+   ║  Black · Electric Blue · Cinematic Gold       ║
+   ╚══════════════════════════════════════════════╝ */
+:root {
+  --black:       #020205;
+  --black-2:     #06060f;
+  --black-3:     #09091a;
+  --glass-bg:    rgba(5,8,24,0.78);
+  --glass-border:rgba(24,114,255,0.18);
 
-    /* ── Nav ─────────────────────────────────────────────────────────── */
-    .nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 28px;background:rgba(6,6,15,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
-    .nav-logo{font-size:13px;font-weight:900;letter-spacing:2px;background:var(--gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-transform:uppercase;flex-shrink:0;}
-    .nav-logo span{font-size:10px;display:block;letter-spacing:4px;font-weight:400;opacity:.6;margin-top:1px;}
-    .nav-links{display:flex;align-items:center;gap:2px;flex:1;justify-content:center;}
-    .nav-link{color:var(--muted);text-decoration:none;font-size:13px;font-weight:600;padding:7px 10px;border-radius:9px;transition:color .15s,background .15s;white-space:nowrap;}
-    .nav-link:hover{color:var(--text);background:rgba(255,255,255,.06);}
-    .nav-actions{display:flex;align-items:center;gap:8px;flex-shrink:0;}
-    .nav-btn-ghost{color:var(--muted);text-decoration:none;font-size:13px;font-weight:700;padding:8px 13px;border-radius:10px;border:1px solid var(--border);transition:color .15s,border-color .15s;}
-    .nav-btn-ghost:hover{color:var(--text);border-color:rgba(255,255,255,.25);}
-    .nav-btn-gold{background:var(--gold);color:#1a0e00;text-decoration:none;font-size:13px;font-weight:800;padding:9px 16px;border-radius:10px;transition:opacity .15s,transform .15s;white-space:nowrap;}
-    .nav-btn-gold:hover{opacity:.9;transform:translateY(-1px);}
-    .wallet-pill{display:flex;align-items:center;gap:6px;background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.3);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:800;color:var(--accent);cursor:pointer;}
-    @media(max-width:900px){.nav-links{display:none;}}
+  --blue-core:   #003ee8;
+  --blue-bright: #1872ff;
+  --blue-glow:   #4da0ff;
+  --blue-pale:   rgba(77,160,255,0.10);
 
-    /* ── Hero ────────────────────────────────────────────────────────── */
-    .hero{position:relative;overflow:hidden;min-height:80vh;display:flex;align-items:center;padding:110px 0 60px;}
-    .hero::before{content:"";position:absolute;inset:0;background:
-      radial-gradient(ellipse 80% 60% at 30% 40%,rgba(59,130,246,.12) 0%,transparent 60%),
-      radial-gradient(ellipse 60% 80% at 75% 60%,rgba(147,51,234,.09) 0%,transparent 55%),
-      radial-gradient(ellipse 100% 50% at 50% 0%,rgba(245,197,66,.05) 0%,transparent 50%);
-      pointer-events:none;}
-    .hero::after{content:"";position:absolute;inset:0;background-image:
-      radial-gradient(1px 1px at 12% 18%,rgba(255,255,255,.5) 0%,transparent 100%),
-      radial-gradient(1px 1px at 28% 38%,rgba(255,255,255,.4) 0%,transparent 100%),
-      radial-gradient(1px 1px at 55% 12%,rgba(255,255,255,.5) 0%,transparent 100%),
-      radial-gradient(1px 1px at 72% 28%,rgba(255,255,255,.3) 0%,transparent 100%),
-      radial-gradient(1px 1px at 88% 10%,rgba(255,255,255,.5) 0%,transparent 100%),
-      radial-gradient(2px 2px at 45% 82%,rgba(245,197,66,.4) 0%,transparent 100%),
-      radial-gradient(2px 2px at 82% 70%,rgba(59,130,246,.4) 0%,transparent 100%);
-      pointer-events:none;}
-    .hero-inner{position:relative;z-index:2;width:min(1200px,calc(100% - 48px));margin:0 auto;display:grid;grid-template-columns:1fr 420px;gap:60px;align-items:center;}
-    .hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--accent);background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.28);border-radius:999px;padding:6px 14px;margin-bottom:22px;}
-    .hero-h1{font-size:clamp(34px,5vw,62px);font-weight:900;line-height:1.06;letter-spacing:-1.8px;margin-bottom:6px;}
-    .hero-h1 .g{background:var(--gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-    .hero-sub{margin-top:16px;font-size:17px;line-height:1.7;color:#9fa3c0;max-width:480px;}
-    .hero-cta{margin-top:32px;display:flex;gap:12px;flex-wrap:wrap;}
-    .btn-gold{background:var(--gold);color:#1a0e00;border:0;border-radius:13px;padding:15px 26px;font-size:15px;font-weight:900;cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:0 8px 28px rgba(245,197,66,.28);text-decoration:none;display:inline-flex;align-items:center;gap:8px;}
-    .btn-gold:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(245,197,66,.42);}
-    .btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border);border-radius:13px;padding:15px 24px;font-size:15px;font-weight:700;cursor:pointer;transition:border-color .15s,background .15s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;}
-    .btn-ghost:hover{border-color:rgba(255,255,255,.28);background:rgba(255,255,255,.05);}
-    .hero-stats{margin-top:40px;padding-top:36px;border-top:1px solid var(--border);display:flex;gap:30px;flex-wrap:wrap;}
-    .stat-num{font-size:26px;font-weight:900;background:var(--gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-    .stat-lbl{font-size:12px;color:var(--muted);margin-top:2px;}
+  --gold:        #b8942e;
+  --gold-warm:   #d4a93c;
+  --gold-bright: #e8c355;
+  --gold-light:  #f2d878;
+  --gold-glow:   rgba(200,160,60,0.4);
 
-    /* ── Camera visual ───────────────────────────────────────────────── */
-    .hero-visual{position:relative;width:100%;height:440px;display:flex;align-items:center;justify-content:center;}
-    .orbit{position:absolute;border-radius:50%;}
-    .o1{width:420px;height:420px;border:1px solid rgba(59,130,246,.2);animation:ospin 20s linear infinite;}
-    .o2{width:320px;height:320px;border:1px solid rgba(245,197,66,.15);animation:ospin 14s linear infinite reverse;}
-    .o3{width:220px;height:220px;border:1px solid rgba(147,51,234,.18);animation:ospin 9s linear infinite;}
-    @keyframes ospin{to{transform:rotate(360deg);}}
-    .o1::before{content:"";position:absolute;top:-4px;left:50%;width:8px;height:8px;border-radius:50%;background:var(--blue);box-shadow:0 0 12px var(--blue);transform:translateX(-50%);}
-    .o2::before{content:"";position:absolute;bottom:-4px;right:20%;width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);}
-    .o3::before{content:"";position:absolute;top:30%;left:-4px;width:5px;height:5px;border-radius:50%;background:var(--purple);box-shadow:0 0 10px var(--purple);}
-    .cam{position:relative;z-index:5;width:154px;height:114px;background:linear-gradient(145deg,#1e1e38,#0d0d1e);border:1px solid rgba(255,255,255,.14);border-radius:18px;box-shadow:0 0 60px rgba(59,130,246,.14),inset 0 1px 0 rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;}
-    .cam::before{content:"";position:absolute;top:10px;right:14px;width:10px;height:10px;border-radius:50%;background:var(--danger);box-shadow:0 0 8px var(--danger);animation:rblink 2s ease-in-out infinite;}
-    @keyframes rblink{0%,100%{opacity:1}50%{opacity:.2}}
-    .lens{width:84px;height:84px;border-radius:50%;background:radial-gradient(circle at 35% 35%,rgba(59,130,246,.4),rgba(6,6,15,.9) 60%,rgba(0,0,0,1) 100%);border:2px solid rgba(59,130,246,.4);box-shadow:0 0 0 6px rgba(59,130,246,.07),0 0 40px rgba(59,130,246,.28);display:flex;align-items:center;justify-content:center;}
-    .lens-in{width:42px;height:42px;border-radius:50%;background:radial-gradient(circle at 40% 40%,rgba(147,51,234,.6),rgba(0,0,0,.9));border:1px solid rgba(147,51,234,.4);box-shadow:0 0 18px rgba(147,51,234,.4);}
-    .lens-in::after{content:"";display:block;width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,.7);position:relative;left:8px;top:8px;box-shadow:0 0 6px rgba(255,255,255,.5);}
-    .trail{position:absolute;border-radius:999px;filter:blur(2px);}
-    .t1{width:130px;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);top:35%;left:52%;animation:tfloat 4s ease-in-out infinite;}
-    .t2{width:90px;height:2px;background:linear-gradient(90deg,transparent,var(--blue),transparent);top:55%;right:54%;animation:tfloat 5s ease-in-out infinite reverse;}
-    .t3{width:70px;height:1px;background:linear-gradient(90deg,transparent,var(--purple),transparent);top:25%;right:48%;animation:tfloat 3.5s ease-in-out infinite;}
-    @keyframes tfloat{0%,100%{opacity:.5;transform:translateX(0)}50%{opacity:1;transform:translateX(10px)}}
-    .p{position:absolute;border-radius:50%;animation:pdrift 6s ease-in-out infinite;}
-    .p1{width:4px;height:4px;background:var(--accent);box-shadow:0 0 8px var(--accent);top:20%;left:65%;}
-    .p2{width:3px;height:3px;background:var(--blue);box-shadow:0 0 6px var(--blue);top:70%;left:30%;animation-delay:2s;}
-    .p3{width:3px;height:3px;background:var(--purple);box-shadow:0 0 6px var(--purple);top:40%;right:25%;animation-delay:1s;}
-    @keyframes pdrift{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
-    @media(max-width:1000px){.hero-inner{grid-template-columns:1fr;}.hero-visual{display:none;}}
+  --white:       #edf2ff;
+  --white-dim:   rgba(237,242,255,0.52);
+  --white-faint: rgba(237,242,255,0.10);
 
-    /* ── Social Proof ────────────────────────────────────────────────── */
-    .proof-section{padding:64px 0 72px;}
-    .proof-header{text-align:center;margin-bottom:44px;}
-    .proof-eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--ok);background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.22);border-radius:999px;padding:5px 14px;margin-bottom:14px;}
-    .proof-title{font-size:clamp(22px,3.5vw,34px);font-weight:900;letter-spacing:-.8px;}
-    .proof-title span{background:var(--gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-    .proof-stats{display:flex;justify-content:center;gap:40px;flex-wrap:wrap;margin-bottom:48px;padding:28px;background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:20px;}
-    .ps-item{text-align:center;}
-    .ps-num{font-size:32px;font-weight:900;background:var(--gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;}
-    .ps-lbl{font-size:12px;color:var(--muted);margin-top:5px;}
-    .testimonials{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
-    .t-card{background:rgba(15,15,30,.82);border:1px solid var(--border);border-radius:20px;padding:24px;position:relative;overflow:hidden;}
-    .t-card::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:var(--tc,linear-gradient(90deg,#3b82f6,#9333ea));}
-    .t-stars{color:var(--accent);font-size:13px;margin-bottom:12px;letter-spacing:2px;}
-    .t-quote{font-size:14px;color:#c0c4e0;line-height:1.7;margin-bottom:16px;font-style:italic;}
-    .t-author{display:flex;align-items:center;gap:10px;}
-    .t-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;background:var(--ta,rgba(59,130,246,.15));border:1px solid var(--border);flex-shrink:0;}
-    .t-name{font-size:13px;font-weight:800;color:var(--text);}
-    .t-role{font-size:11px;color:var(--muted);}
-    @media(max-width:760px){.testimonials{grid-template-columns:1fr;}.proof-stats{gap:24px;}}
+  --radius-sm:   6px;
+  --radius-md:   14px;
+  --radius-lg:   26px;
+  --perspective: 1400px;
+}
 
-    /* ── FAQ ─────────────────────────────────────────────────────────── */
-    .faq-section{padding:64px 0 72px;background:linear-gradient(180deg,transparent,rgba(147,51,234,.02) 50%,transparent);}
-    .faq-header{text-align:center;margin-bottom:44px;}
-    .faq-eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--purple);background:rgba(147,51,234,.08);border:1px solid rgba(147,51,234,.22);border-radius:999px;padding:5px 14px;margin-bottom:14px;}
-    .faq-title{font-size:clamp(22px,3.5vw,34px);font-weight:900;letter-spacing:-.8px;}
-    .faq-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;max-width:860px;margin:0 auto;}
-    .faq-item{background:rgba(15,15,30,.82);border:1px solid var(--border);border-radius:16px;padding:22px 24px;transition:border-color .2s;}
-    .faq-item:hover{border-color:rgba(255,255,255,.18);}
-    .faq-q{font-size:14px;font-weight:800;color:var(--text);margin-bottom:8px;display:flex;align-items:flex-start;gap:10px;}
-    .faq-q::before{content:"?";width:20px;height:20px;border-radius:50%;background:rgba(147,51,234,.2);color:var(--purple);font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
-    .faq-a{font-size:13px;color:var(--muted);line-height:1.65;padding-left:30px;}
-    @media(max-width:640px){.faq-grid{grid-template-columns:1fr;}}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:'DM Sans',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+#bg-aurora{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+a,button{-webkit-tap-highlight-color:transparent}
+button{touch-action:manipulation}
 
-    /* ── Wie es funktioniert ────────────────────────────────────────── */
-    .steps-section{padding:64px 0 72px;background:linear-gradient(180deg,transparent,rgba(59,130,246,.025) 50%,transparent);}
-    .steps-header{text-align:center;margin-bottom:44px;}
-    .steps-eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--blue);background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.22);border-radius:999px;padding:5px 14px;margin-bottom:14px;}
-    .steps-title{font-size:clamp(22px,3.5vw,34px);font-weight:900;letter-spacing:-.8px;}
-    .steps-title span{background:var(--gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-    .steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;position:relative;}
-    .steps-grid::before{content:"";position:absolute;top:44px;left:calc(33.33% - 20px);right:calc(33.33% - 20px);height:2px;background:linear-gradient(90deg,transparent,rgba(59,130,246,.4),rgba(147,51,234,.4),transparent);z-index:0;pointer-events:none;}
-    .step{text-align:center;padding:28px 32px 32px;position:relative;z-index:1;}
-    .step-icon{width:88px;height:88px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 20px;background:rgba(15,15,30,.9);border:1px solid var(--border);box-shadow:0 0 40px var(--sg,rgba(59,130,246,.12));position:relative;}
-    .step-icon::after{content:attr(data-n);position:absolute;top:-4px;right:-4px;width:24px;height:24px;border-radius:50%;background:var(--gold);color:#1a0e00;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;line-height:1;}
-    .step-title{font-size:16px;font-weight:900;margin-bottom:8px;letter-spacing:-.3px;}
-    .step-desc{font-size:13px;color:var(--muted);line-height:1.65;max-width:220px;margin:0 auto;}
-    @media(max-width:680px){.steps-grid{grid-template-columns:1fr;gap:4px;}.steps-grid::before{display:none;}.step{padding:20px 24px;}}
+/* ── CURSOR ── */
+@media(pointer:fine){
+  body{cursor:none}
+  #cursor{position:fixed;width:8px;height:8px;background:var(--blue-bright);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s,opacity .2s;mix-blend-mode:screen;opacity:0}
+  #cursor-ring{position:fixed;width:32px;height:32px;border:1px solid rgba(24,114,255,.3);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .28s,height .28s,opacity .28s;opacity:0}
+  body.cursor-active #cursor,body.cursor-active #cursor-ring{opacity:1}
+}
+@media(pointer:coarse){#cursor,#cursor-ring{display:none!important}}
 
-    /* ── Finale CTA ──────────────────────────────────────────────────── */
-    .cta-section{padding:80px 0 96px;text-align:center;position:relative;overflow:hidden;}
-    .cta-section::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(59,130,246,.07) 0%,transparent 65%),radial-gradient(ellipse 40% 40% at 50% 90%,rgba(245,197,66,.04) 0%,transparent 60%);}
-    .cta-inner{position:relative;z-index:2;width:min(1200px,calc(100% - 48px));margin:0 auto;}
-    .cta-badge{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:var(--ok);background:rgba(74,222,128,.07);border:1px solid rgba(74,222,128,.22);border-radius:999px;padding:6px 14px;margin-bottom:22px;}
-    .cta-badge::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok);}
-    .cta-h2{font-size:clamp(28px,4.5vw,54px);font-weight:900;letter-spacing:-1.8px;line-height:1.08;margin-bottom:18px;}
-    .cta-h2 span{background:var(--gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-    .cta-sub{font-size:17px;color:#9fa3c0;max-width:500px;margin:0 auto 38px;line-height:1.7;}
-    .cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;}
-    .cta-note{font-size:12px;color:var(--muted2);display:flex;align-items:center;gap:6px;justify-content:center;}
-    .cta-note::before{content:"✓";color:var(--ok);font-weight:900;}
-    @media(max-width:540px){.cta-btns{flex-direction:column;align-items:center;}.cta-btns .btn-gold,.cta-btns .btn-ghost{width:100%;max-width:320px;justify-content:center;}}
+/* ── REDUCED MOTION ── */
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.15s!important}}
 
-    /* ── Hub Grid ────────────────────────────────────────────────────── */
-    .hub-section{padding:70px 0 80px;}
-    .wrap{width:min(1200px,calc(100% - 48px));margin:0 auto;}
-    .hub-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--accent);background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.28);border-radius:999px;padding:6px 14px;margin-bottom:16px;}
-    .hub-title{font-size:clamp(26px,4vw,38px);font-weight:900;letter-spacing:-1px;margin-bottom:8px;}
-    .hub-title span{background:var(--gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-    .hub-sub{font-size:15px;color:var(--muted);margin-bottom:40px;line-height:1.6;}
-    .hub-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
-    .hub-card{background:rgba(15,15,30,.82);backdrop-filter:blur(18px);border:1px solid var(--border);border-radius:var(--radius);padding:26px 22px 22px;text-decoration:none;display:block;position:relative;overflow:hidden;transition:transform .22s,border-color .22s,box-shadow .22s,background .22s;color:var(--text);}
-    .hub-card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--hc,linear-gradient(90deg,#3b82f6,#9333ea));transition:height .22s;}
-    .hub-card:hover{transform:translateY(-6px);border-color:rgba(255,255,255,.24);background:linear-gradient(160deg,rgba(255,255,255,.05) 0%,rgba(15,15,30,.92) 55%);box-shadow:0 32px 80px rgba(0,0,0,.58),0 0 70px var(--hg,rgba(59,130,246,.14));}
-    .hub-card:hover::before{height:4px;}
-    .hc-icon{font-size:34px;margin-bottom:14px;display:block;}
-    .hc-title{font-size:16px;font-weight:900;margin-bottom:6px;}
-    .hc-desc{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:16px;}
-    .hc-footer{display:flex;align-items:center;justify-content:space-between;}
-    .hc-status{font-size:10px;font-weight:800;padding:4px 10px;border-radius:999px;border:1px solid;}
-    .s-aktiv{color:var(--ok);background:rgba(74,222,128,.1);border-color:rgba(74,222,128,.3);}
-    .s-demo{color:var(--blue);background:rgba(59,130,246,.1);border-color:rgba(59,130,246,.3);}
-    .s-beta{color:var(--purple);background:rgba(147,51,234,.1);border-color:rgba(147,51,234,.3);}
-    .s-bald{color:var(--accent);background:rgba(245,197,66,.1);border-color:rgba(245,197,66,.3);}
-    .hc-arrow{color:var(--muted2);font-size:16px;transition:color .15s,transform .15s;}
-    .hub-card:hover .hc-arrow{color:var(--accent);transform:translateX(4px);}
-    .hub-card.hub-featured{grid-column:span 2;padding:32px 28px 28px;}
-    .hub-card.hub-featured .hc-icon{font-size:42px;}
-    .hub-card.hub-featured .hc-title{font-size:18px;}
-    .hub-card.hub-featured .hc-desc{font-size:13px;}
-    @media(max-width:480px){.hub-card.hub-featured{grid-column:span 1;}}
-    .hub-divider{grid-column:1/-1;display:flex;align-items:center;gap:14px;padding:16px 0 4px;margin-top:4px;}
-    .hub-divider-line{flex:1;height:1px;background:var(--border);}
-    .hub-divider-label{font-size:10px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--muted2);white-space:nowrap;}
+/* ── UTILITY ── */
+.syne{font-family:'Syne',sans-serif}
+section{position:relative;overflow:hidden}
 
-    /* ── Footer ──────────────────────────────────────────────────────── */
-    .footer{border-top:1px solid var(--border);padding:36px 0;}
-    .footer-inner{width:min(1200px,calc(100% - 48px));margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
-    .footer-logo{font-size:13px;font-weight:900;letter-spacing:2px;background:var(--gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-    .footer-nav{display:flex;gap:18px;flex-wrap:wrap;}
-    .footer-nav a{color:var(--muted);text-decoration:none;font-size:12px;font-weight:600;transition:color .15s;}
-    .footer-nav a:hover{color:var(--text);}
-    .footer-copy{font-size:12px;color:var(--muted2);}
+/* ── CINEMATIC FILM GRAIN ── */
+body::before{
+  content:'';position:fixed;inset:0;z-index:2;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.028'/%3E%3C/svg%3E");
+  opacity:.5;
+}
 
-    /* ── Divider ─────────────────────────────────────────────────────── */
-    hr{border:0;border-top:1px solid var(--border);}
+/* ──────────────────────────────────────────
+   NAVIGATION
+────────────────────────────────────────── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  padding:0 clamp(24px,4vw,64px);
+  height:76px;display:flex;align-items:center;justify-content:space-between;
+  background:linear-gradient(180deg,rgba(2,2,5,.94) 0%,rgba(2,2,5,0) 100%);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(255,255,255,.03);
+  transition:background .4s,border-color .4s;
+}
+nav.scrolled{background:rgba(2,2,5,.98);border-bottom-color:rgba(24,114,255,.1)}
 
-    /* ── Preview Card ────────────────────────────────────────────────── */
-    .preview-card{background:linear-gradient(145deg,#121228,#0a0a1a);border:1px solid rgba(255,255,255,.13);border-radius:20px;padding:20px;width:100%;max-width:380px;box-shadow:0 0 80px rgba(59,130,246,.1),0 40px 80px rgba(0,0,0,.6);animation:cardglow 4s ease-in-out infinite;}
-    @keyframes cardglow{0%,100%{box-shadow:0 0 80px rgba(59,130,246,.1),0 40px 80px rgba(0,0,0,.6);}50%{box-shadow:0 0 100px rgba(59,130,246,.22),0 40px 80px rgba(0,0,0,.6);}}
-    .preview-frame{border-radius:12px;overflow:hidden;aspect-ratio:16/9;position:relative;margin-bottom:14px;background:linear-gradient(135deg,#0a0f2e 0%,#141428 25%,#1a0a2e 50%,#0f1535 75%,#080820 100%);}
-    .preview-frame::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 30% 50%,rgba(59,130,246,.2) 0%,transparent 60%),radial-gradient(ellipse 50% 70% at 75% 25%,rgba(245,197,66,.07) 0%,transparent 55%),radial-gradient(ellipse 40% 50% at 55% 85%,rgba(147,51,234,.14) 0%,transparent 50%);}
-    .preview-frame::after{content:"";position:absolute;bottom:0;left:0;right:0;height:40%;background:linear-gradient(transparent,rgba(0,0,0,.7));}
-    .preview-frame-inner{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:12px;z-index:1;}
-    .preview-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);border-radius:999px;padding:5px 10px;font-size:10px;font-weight:800;color:var(--text);width:fit-content;}
-    .preview-badge::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--danger);box-shadow:0 0 6px var(--danger);animation:rblink 2s ease-in-out infinite;}
-    .preview-meta{font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.45);}
-    .preview-prompt{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:11px 13px;margin-bottom:12px;}
-    .pp-label{display:block;font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--muted2);margin-bottom:5px;}
-    .pp-text{font-size:11px;color:var(--muted);line-height:1.55;font-style:italic;}
-    .preview-footer{display:flex;align-items:center;justify-content:space-between;}
-    .pf-tool{font-size:11px;font-weight:800;color:var(--blue);}
-    .pf-status{font-size:11px;font-weight:800;color:var(--ok);}
-    /* ── Trust Strip ─────────────────────────────────────────────────── */
-    .trust-strip{padding:18px 0;border-bottom:1px solid var(--border);background:rgba(255,255,255,.015);}
-    .trust-inner{width:min(1200px,calc(100% - 48px));margin:0 auto;display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:center;}
-    .trust-label{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted2);white-space:nowrap;}
-    .trust-tools{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center;}
-    .trust-tool{font-size:12px;font-weight:800;color:var(--muted);padding:4px 10px;border:1px solid rgba(255,255,255,.07);border-radius:999px;background:rgba(255,255,255,.03);white-space:nowrap;}
-    /* ── Responsive ──────────────────────────────────────────────────── */
-    @media(max-width:1100px){.hub-grid{grid-template-columns:repeat(3,1fr);}}
-    @media(max-width:760px){.hub-grid{grid-template-columns:repeat(2,1fr);}}
-    @media(max-width:480px){.hub-grid{grid-template-columns:1fr;}}
+.nav-logo{
+  font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;letter-spacing:.1em;
+  background:linear-gradient(130deg,var(--white) 10%,var(--blue-glow) 85%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  text-decoration:none;flex-shrink:0;
+}
+.nav-logo span{-webkit-text-fill-color:var(--gold-bright)}
 
-    /* ── Mobile Polish ───────────────────────────────────────────────── */
-    @media(max-width:640px){
-      /* Fix 1: Nav overflow stoppen */
-      .nav{padding:12px 16px;gap:8px;}
-      .nav-logo{font-size:11px;letter-spacing:1.5px;min-width:0;flex-shrink:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
-      .nav-logo span{display:none;}
-      .nav-btn-ghost{display:none;}
-      .wallet-pill{display:none;}
-      /* Fix 2: Hero CTA full-width + weniger top-padding */
-      .hero{padding:80px 0 48px;}
-      .hero-cta{flex-direction:column;align-items:stretch;}
-      .btn-gold,.btn-ghost{width:100%;justify-content:center;}
-    }
+.nav-links{display:flex;gap:0;list-style:none;align-items:center}
+.nav-links a{color:rgba(237,242,255,.4);text-decoration:none;font-size:.72rem;font-weight:500;letter-spacing:.07em;padding:7px 10px;transition:color .22s;text-transform:uppercase;white-space:nowrap}
+.nav-links a:hover{color:rgba(237,242,255,.88)}
+.nav-links .nav-cta{margin-left:10px;background:rgba(0,62,232,.15);border:1px solid rgba(24,114,255,.35);color:var(--blue-glow);padding:8px 22px;border-radius:50px;font-weight:600;-webkit-text-fill-color:var(--blue-glow);transition:all .25s}
+.nav-links .nav-cta:hover{background:rgba(0,62,232,.28);border-color:rgba(24,114,255,.6);color:var(--white);-webkit-text-fill-color:var(--white)}
 
-    /* ── Mobile Navigation Menu ──────────────────────────────────────── */
-    .mob-burger{display:none;flex-direction:column;justify-content:center;gap:5px;width:40px;height:40px;padding:8px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:10px;cursor:pointer;flex-shrink:0;}
-    .mob-burger span{display:block;height:2px;border-radius:2px;background:var(--text);transition:transform .22s,opacity .22s;}
-    .mob-burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
-    .mob-burger.open span:nth-child(2){opacity:0;}
-    .mob-burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
-    .mob-menu{position:fixed;left:0;right:0;z-index:99;background:rgba(6,6,15,.97);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);box-shadow:0 24px 60px rgba(0,0,0,.6),0 0 50px rgba(59,130,246,.07);max-height:0;overflow:hidden;opacity:0;pointer-events:none;transition:max-height .3s cubic-bezier(.4,0,.2,1),opacity .22s;display:none;}
-    .mob-menu.open{max-height:820px;opacity:1;pointer-events:auto;}
-    .mob-link{display:block;padding:14px 24px;color:var(--muted);text-decoration:none;font-size:15px;font-weight:700;border-left:3px solid transparent;transition:color .15s,border-color .15s,background .15s;}
-    .mob-link:active{background:rgba(255,255,255,.06);}
-    .mob-link.active{color:var(--accent);border-left-color:var(--accent);}
-    .mob-sep{height:1px;background:var(--border);margin:10px 20px;}
-    .mob-cta{display:block;margin:12px 20px 8px;padding:15px;background:var(--gold);color:#1a0e00;text-decoration:none;font-size:15px;font-weight:900;border-radius:13px;text-align:center;}
-    @media(max-width:900px){
-      .mob-burger{display:flex;}
-      .mob-menu{display:block;}
-    }
-  </style>
+.nav-burger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:none;border:none}
+.nav-burger span{display:block;width:24px;height:2px;background:var(--blue-bright);border-radius:2px;transition:transform .3s,opacity .3s}
+
+/* ──────────────────────────────────────────
+   HERO — FINAL CINEMATIC EXPERIENCE
+────────────────────────────────────────── */
+#hero{
+  min-height:100vh;
+  position:relative;
+  overflow:hidden;
+  /* JPEG-Fallback falls Video nicht lädt */
+  background:url(assets/cvs-hero-studio.jpg) center center / cover no-repeat var(--black);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding-top:76px;text-align:center;
+  perspective:var(--perspective);
+}
+/* Hero Video Loop */
+#hero-video{
+  position:absolute;top:0;left:0;
+  width:100%;height:100%;
+  object-fit:cover;
+  z-index:0;
+  pointer-events:none;
+}
+/* Dark atmospheric overlay — Text lesbar halten */
+#hero::before{
+  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:
+    linear-gradient(180deg,rgba(2,2,5,.55) 0%,rgba(2,2,5,.18) 40%,rgba(2,2,5,.48) 100%),
+    radial-gradient(ellipse 180% 100% at 50% -10%,rgba(0,35,150,.22) 0%,transparent 50%),
+    radial-gradient(ellipse 80% 40% at 50% 100%,rgba(0,10,40,.45) 0%,transparent 65%);
+}
+
+/* Receding depth grid */
+.hero-grid{
+  position:absolute;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(24,114,255,.018) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(24,114,255,.018) 1px,transparent 1px);
+  background-size:80px 80px;
+  mask-image:radial-gradient(ellipse 85% 80% at 50% 50%,black 0%,transparent 68%);
+  transform:perspective(700px) rotateX(14deg) scale(1.2);
+  transform-origin:50% 38%;
+  animation:gridPulse 8s ease-in-out infinite;
+}
+@keyframes gridPulse{0%,100%{opacity:.8}50%{opacity:1}}
+
+/* Volumetric fog — layered, breathing */
+.hero-fog{
+  position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 75%,rgba(0,30,140,.15) 0%,transparent 58%),
+    radial-gradient(ellipse 60% 35% at 50% 100%,rgba(0,12,60,.22) 0%,transparent 55%),
+    radial-gradient(ellipse 40% 30% at 20% 90%,rgba(150,110,20,.05) 0%,transparent 50%);
+  animation:fogBreath 14s ease-in-out infinite;
+}
+@keyframes fogBreath{0%,100%{opacity:.7}50%{opacity:1}}
+
+/* Cinematic scan line */
+.hero-scanline{
+  position:absolute;left:0;right:0;height:1px;z-index:1;pointer-events:none;
+  background:linear-gradient(90deg,
+    transparent 2%,
+    rgba(24,114,255,.08) 22%,
+    rgba(200,160,60,.07) 50%,
+    rgba(24,114,255,.08) 78%,
+    transparent 98%);
+  animation:scanMove 14s ease-in-out infinite alternate;opacity:.55;top:50%;
+}
+@keyframes scanMove{from{top:20%}to{top:80%}}
+
+/* Volumetric light streaks — static diagonal */
+.hero-streaks{
+  position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden;
+}
+.hero-streaks::before{
+  content:'';position:absolute;
+  top:-20%;left:15%;width:1px;height:140%;
+  background:linear-gradient(180deg,transparent,rgba(24,114,255,.04) 30%,rgba(200,160,60,.03) 60%,transparent);
+  transform:rotate(-15deg);
+}
+.hero-streaks::after{
+  content:'';position:absolute;
+  top:-20%;right:18%;width:1px;height:140%;
+  background:linear-gradient(180deg,transparent,rgba(200,160,60,.04) 40%,rgba(24,114,255,.03) 70%,transparent);
+  transform:rotate(12deg);
+}
+
+/* City silhouette / environment layer */
+.hero-env{
+  position:absolute;bottom:0;left:0;right:0;height:220px;z-index:2;pointer-events:none;
+  background:linear-gradient(180deg,transparent 0%,rgba(0,15,80,.1) 55%,rgba(0,8,40,.2) 100%);
+  mask-image:linear-gradient(180deg,transparent 0%,black 45%);
+}
+/* Holographic structure lines */
+.hero-env::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    linear-gradient(90deg,transparent 19.9%,rgba(24,114,255,.035) 20%,rgba(24,114,255,.035) 20.1%,transparent 20.2%),
+    linear-gradient(90deg,transparent 39.9%,rgba(200,160,60,.025) 40%,rgba(200,160,60,.025) 40.1%,transparent 40.2%),
+    linear-gradient(90deg,transparent 59.9%,rgba(24,114,255,.035) 60%,rgba(24,114,255,.035) 60.1%,transparent 60.2%),
+    linear-gradient(90deg,transparent 79.9%,rgba(200,160,60,.025) 80%,rgba(200,160,60,.025) 80.1%,transparent 80.2%);
+}
+
+
+
+/* Energy pulse rings */
+.core-pulse{
+  position:absolute;inset:50%;border-radius:50%;pointer-events:none;
+  border:1px solid rgba(24,114,255,.28);
+  animation:pulseFade 3.8s ease-out infinite;
+}
+.core-pulse-2{animation-delay:1.26s;border-color:rgba(200,160,60,.18)}
+.core-pulse-3{animation-delay:2.52s;border-color:rgba(24,114,255,.22)}
+@keyframes pulseFade{
+  0%{width:186px;height:186px;transform:translate(-50%,-50%);opacity:.65}
+  100%{width:360px;height:360px;transform:translate(-50%,-50%);opacity:0}
+}
+
+/* Gold corona — warm, luxurious */
+.core-corona{
+  position:absolute;inset:50%;width:210px;height:210px;transform:translate(-50%,-50%);
+  border-radius:50%;background:transparent;
+  box-shadow:
+    0 0 0 1px rgba(200,160,60,.2),
+    0 0 0 2px rgba(200,160,60,.04),
+    0 0 28px rgba(200,160,60,.14);
+  pointer-events:none;
+}
+
+/* ORBITAL RINGS */
+.ring{position:absolute;inset:50%;border-radius:50%;transform:translate(-50%,-50%);border:1px solid transparent;will-change:transform}
+.ring-1{width:236px;height:236px;border-color:rgba(24,114,255,.5);box-shadow:0 0 14px rgba(24,114,255,.2),inset 0 0 14px rgba(24,114,255,.05);animation:rr1 13s linear infinite}
+.ring-1::before{content:'';position:absolute;top:-5px;left:50%;width:10px;height:10px;border-radius:50%;background:var(--blue-bright);box-shadow:0 0 12px var(--blue-bright),0 0 24px rgba(24,114,255,.7)}
+.ring-2{width:336px;height:336px;border-color:rgba(200,160,60,.38);box-shadow:0 0 18px rgba(200,160,60,.1);animation:rr2 22s linear infinite reverse;transform:translate(-50%,-50%) rotateX(22deg)}
+.ring-2::before{content:'';position:absolute;bottom:-4px;right:22%;width:7px;height:7px;border-radius:50%;background:var(--gold-bright);box-shadow:0 0 12px var(--gold-warm),0 0 22px rgba(200,160,60,.6)}
+.ring-2::after{content:'';position:absolute;top:12%;left:-4px;width:5px;height:5px;border-radius:50%;background:var(--gold-light);box-shadow:0 0 8px var(--gold-warm)}
+.ring-3{width:440px;height:440px;border:1px solid rgba(24,114,255,.1);animation:rr1 36s linear infinite}
+.ring-3::before{content:'';position:absolute;border-radius:50%;background:rgba(24,114,255,.75);width:5px;height:5px;top:-2.5px;left:34%}
+.ring-3::after{content:'';position:absolute;border-radius:50%;background:rgba(200,160,60,.75);width:5px;height:5px;bottom:-2.5px;right:24%}
+.ring-4{width:520px;height:520px;border:1px solid rgba(200,160,60,.06);animation:rr2 52s linear infinite reverse}
+/* Fragment ring — rotating holographic shards */
+.ring-5{
+  width:280px;height:280px;
+  border:none;animation:rr1 18s linear infinite;
+  position:absolute;inset:50%;transform:translate(-50%,-50%);
+}
+.ring-5::before,.ring-5::after{
+  content:'';position:absolute;border-radius:2px;background:rgba(24,114,255,.45);
+  box-shadow:0 0 6px rgba(24,114,255,.5);
+}
+.ring-5::before{width:14px;height:1px;top:-0.5px;left:40%}
+.ring-5::after{width:8px;height:1px;bottom:-0.5px;right:30%;background:rgba(200,160,60,.45);box-shadow:0 0 6px rgba(200,160,60,.5)}
+
+@keyframes rr1{to{transform:translate(-50%,-50%) rotate(360deg)}}
+@keyframes rr2{to{transform:translate(-50%,-50%) rotateX(22deg) rotate(360deg)}}
+
+/* VOLUMETRIC BEAMS */
+.beam{position:absolute;inset:50%;transform-origin:0 0;height:1px;pointer-events:none;will-change:opacity}
+.beam-blue{background:linear-gradient(90deg,rgba(24,114,255,.45),rgba(24,114,255,.1),transparent)}
+.beam-gold{background:linear-gradient(90deg,rgba(200,160,60,.38),rgba(200,160,60,.08),transparent)}
+.beam-w1{width:280px}.beam-w2{width:220px}.beam-w3{width:300px}
+.beam:nth-child(1){transform:translate(-50%,-50%) rotate(18deg)}
+.beam:nth-child(2){transform:translate(-50%,-50%) rotate(62deg)}
+.beam:nth-child(3){transform:translate(-50%,-50%) rotate(130deg);opacity:.55}
+.beam:nth-child(4){transform:translate(-50%,-50%) rotate(198deg);opacity:.5}
+.beam:nth-child(5){transform:translate(-50%,-50%) rotate(258deg);opacity:.65}
+.beam:nth-child(6){transform:translate(-50%,-50%) rotate(308deg);opacity:.4}
+
+/* Lightning arc */
+.arc{position:absolute;inset:50%;pointer-events:none;animation:arcFlash 6s ease-in-out infinite}
+.arc::before{
+  content:'';position:absolute;
+  width:60px;height:1px;
+  background:linear-gradient(90deg,rgba(24,114,255,.7),transparent);
+  transform:translate(-50%,-50%) rotate(45deg) translateX(120px);
+  animation:arcShift 6s ease-in-out infinite;
+  filter:blur(0.5px);
+}
+@keyframes arcFlash{0%,85%,100%{opacity:0}88%,92%{opacity:1}90%{opacity:.7}}
+@keyframes arcShift{0%{transform:translate(-50%,-50%) rotate(45deg) translateX(118px)}100%{transform:translate(-50%,-50%) rotate(47deg) translateX(122px)}}
+
+/* FLOATING HOLOGRAPHIC PANELS */
+.holo-panel{
+  position:absolute;
+  background:rgba(3,6,18,.68);
+  border:1px solid rgba(24,114,255,.14);
+  border-top:1px solid rgba(200,160,60,.16);
+  border-radius:10px;backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);
+  padding:13px 20px;
+  font-family:'DM Sans',sans-serif;font-size:.65rem;font-weight:400;letter-spacing:.06em;
+  color:rgba(237,242,255,.38);z-index:6;
+  box-shadow:0 10px 36px rgba(0,0,0,.45),inset 0 1px 0 rgba(200,160,60,.05);
+  will-change:transform;
+}
+.holo-panel .panel-val{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:rgba(237,242,255,.8);display:block;margin-top:4px}
+.holo-panel .panel-dot{display:inline-block;width:5px;height:5px;background:rgba(34,210,90,.88);border-radius:50%;margin-right:6px;animation:blink 2.8s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+.panel-a{top:13%;left:2%;animation:panelFloatL 8s ease-in-out infinite}
+.panel-b{top:13%;right:2%;animation:panelFloatR 9.5s ease-in-out infinite}
+@keyframes panelFloatL{0%,100%{transform:perspective(500px) rotateY(10deg) translateY(0)}50%{transform:perspective(500px) rotateY(10deg) translateY(-10px)}}
+@keyframes panelFloatR{0%,100%{transform:perspective(500px) rotateY(-10deg) translateY(0)}50%{transform:perspective(500px) rotateY(-10deg) translateY(9px)}}
+
+/* GLOW ORBS — cinematic atmosphere, warm gold + blue balance */
+.glow-orb{position:absolute;border-radius:50%;pointer-events:none;will-change:transform}
+.orb-1{width:800px;height:800px;background:radial-gradient(circle,rgba(0,42,175,.1),transparent 62%);filter:blur(110px);top:-180px;left:-230px;animation:od1 22s ease-in-out infinite}
+.orb-2{width:500px;height:500px;background:radial-gradient(circle,rgba(160,118,22,.08),transparent 62%);filter:blur(100px);top:0;right:-180px;animation:od2 28s ease-in-out infinite}
+.orb-3{width:360px;height:360px;background:radial-gradient(circle,rgba(70,22,162,.06),transparent 62%);filter:blur(90px);bottom:0;left:18%;animation:od3 20s ease-in-out infinite}
+.orb-4{width:420px;height:420px;background:radial-gradient(circle,rgba(150,110,22,.065),transparent 62%);filter:blur(95px);bottom:5%;right:5%;animation:od2 30s ease-in-out infinite reverse}
+.orb-5{width:300px;height:300px;background:radial-gradient(circle,rgba(0,55,200,.09),transparent 62%);filter:blur(80px);top:25%;left:35%;animation:od3 18s ease-in-out infinite reverse}
+@keyframes od1{0%,100%{transform:translate(0,0)}50%{transform:translate(50px,35px)}}
+@keyframes od2{0%,100%{transform:translate(0,0)}50%{transform:translate(-35px,25px)}}
+@keyframes od3{0%,100%{transform:translate(0,0)}50%{transform:translate(25px,-40px)}}
+
+/* FOREGROUND CINEMATIC PARTICLES */
+.particles{position:absolute;inset:0;z-index:4;pointer-events:none;overflow:hidden}
+.particle{
+  position:absolute;border-radius:50%;
+  animation:particleDrift linear infinite;
+  will-change:transform,opacity;
+}
+@keyframes particleDrift{
+  0%{transform:translateY(0) translateX(0);opacity:0}
+  10%{opacity:1}
+  90%{opacity:.4}
+  100%{transform:translateY(-80px) translateX(var(--px,10px));opacity:0}
+}
+
+/* ── HERO TEXT — LUXURY TYPOGRAPHY ── */
+.hero-content{
+  position:relative;z-index:7;
+  padding:0 clamp(20px,5vw,100px);
+  max-width:1000px;
+  /* subtle content glow for depth */
+}
+
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:14px;
+  font-size:.62rem;font-weight:500;letter-spacing:.32em;text-transform:uppercase;
+  color:rgba(237,242,255,.35);
+  margin-bottom:36px;
+  animation:fadeUp .9s .2s both;
+}
+.hero-eyebrow::before{content:'';width:36px;height:1px;background:linear-gradient(90deg,var(--blue-glow),transparent);opacity:.8}
+.hero-eyebrow::after{content:'';width:36px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-warm));opacity:.7}
+
+.hero-h1{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(3rem,7.5vw,7.2rem);
+  font-weight:800;line-height:.97;letter-spacing:-.038em;
+  margin-bottom:40px;animation:fadeUp 1s .28s both;
+}
+.hero-h1 .line-1{
+  display:block;
+  background:linear-gradient(115deg,rgba(237,242,255,.98) 0%,rgba(200,220,255,.88) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  padding-bottom:.06em;
+}
+.hero-h1 .line-2{
+  display:block;margin-top:.07em;
+  background:linear-gradient(108deg,var(--blue-bright) 0%,var(--blue-glow) 28%,var(--gold-warm) 60%,var(--gold-bright) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+
+.hero-sub{
+  font-size:clamp(.95rem,1.8vw,1.12rem);font-weight:300;
+  color:rgba(237,242,255,.4);line-height:1.95;
+  max-width:580px;margin:0 auto 60px;
+  animation:fadeUp 1s .42s both;
+  letter-spacing:.015em;
+}
+
+.hero-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;animation:fadeUp 1s .56s both}
+
+/* ── MASTERPIECE BUTTONS — tactile glass depth ── */
+.btn-primary{
+  display:inline-flex;align-items:center;gap:10px;
+  background:linear-gradient(145deg,#0042f2 0%,#0038cc 42%,#0030ae 100%);
+  color:#fff;text-decoration:none;
+  font-family:'Syne',sans-serif;font-size:.84rem;font-weight:700;
+  letter-spacing:.09em;text-transform:uppercase;
+  padding:18px 40px;border-radius:50px;
+  border:1px solid rgba(24,114,255,.48);
+  box-shadow:
+    0 0 0 1px rgba(24,114,255,.1),
+    0 0 0 4px rgba(24,114,255,.04),
+    0 0 30px rgba(0,58,220,.58),
+    0 6px 22px rgba(0,38,175,.38),
+    inset 0 1px 0 rgba(255,255,255,.14),
+    inset 0 -1px 0 rgba(0,16,90,.32);
+  transition:all .4s cubic-bezier(.23,1,.32,1);
+  position:relative;overflow:hidden;
+}
+.btn-primary::before{
+  content:'';position:absolute;top:-50%;left:-90%;width:65%;height:200%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.14),transparent);
+  transform:skewX(-22deg);transition:left .6s cubic-bezier(.23,1,.32,1);
+}
+.btn-primary:hover::before{left:165%}
+.btn-primary:hover{
+  transform:translateY(-4px);
+  box-shadow:
+    0 0 0 1px rgba(24,114,255,.2),
+    0 0 0 4px rgba(24,114,255,.06),
+    0 0 52px rgba(0,58,220,.82),
+    0 10px 34px rgba(0,38,175,.52),
+    inset 0 1px 0 rgba(255,255,255,.18);
+  border-color:rgba(24,114,255,.78);
+}
+
+.btn-secondary{
+  display:inline-flex;align-items:center;gap:10px;
+  border:1px solid rgba(200,160,60,.35);
+  color:rgba(237,242,255,.88);text-decoration:none;
+  font-family:'Syne',sans-serif;font-size:.84rem;font-weight:600;
+  letter-spacing:.09em;text-transform:uppercase;
+  padding:18px 40px;border-radius:50px;
+  background:rgba(155,115,25,.08);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  box-shadow:inset 0 1px 0 rgba(200,160,60,.08),inset 0 -1px 0 rgba(0,0,0,.1);
+  transition:all .4s cubic-bezier(.23,1,.32,1);
+  position:relative;overflow:hidden;
+}
+.btn-secondary::before{
+  content:'';position:absolute;top:-50%;left:-90%;width:65%;height:200%;
+  background:linear-gradient(90deg,transparent,rgba(200,160,60,.1),transparent);
+  transform:skewX(-22deg);transition:left .6s;
+}
+.btn-secondary:hover::before{left:165%}
+.btn-secondary:hover{
+  border-color:var(--gold-warm);color:var(--gold-bright);
+  background:rgba(155,115,25,.15);
+  box-shadow:0 0 26px rgba(155,115,25,.24),inset 0 1px 0 rgba(200,160,60,.12);
+  transform:translateY(-3px);
+}
+
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid rgba(237,242,255,.09);color:rgba(237,242,255,.5);text-decoration:none;
+  font-family:'Syne',sans-serif;font-size:.8rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;
+  padding:15px 32px;border-radius:50px;
+  background:rgba(237,242,255,.02);backdrop-filter:blur(10px);
+  transition:all .35s cubic-bezier(.23,1,.32,1);
+}
+.btn-ghost:hover{border-color:rgba(237,242,255,.2);color:rgba(237,242,255,.88);transform:translateY(-2px);background:rgba(237,242,255,.04)}
+
+.btn-play{width:56px;height:56px;background:rgba(200,160,60,.1);border:1px solid rgba(200,160,60,.38);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;transition:all .35s;text-decoration:none;box-shadow:0 0 0 4px rgba(200,160,60,.04)}
+.btn-play svg{margin-left:3px}
+.btn-play:hover{background:rgba(200,160,60,.22);box-shadow:0 0 0 4px rgba(200,160,60,.07),0 0 30px rgba(200,160,60,.38);border-color:var(--gold-bright);transform:scale(1.06)}
+
+.ring,.glow-orb,.holo-panel,.core-inner{will-change:transform}
+@keyframes fadeUp{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:translateY(0)}}
+
+/* ──────────────────────────────────────────
+   STATS BAR
+────────────────────────────────────────── */
+.stats-bar{
+  position:relative;
+  background:linear-gradient(130deg,rgba(0,35,130,.22) 0%,rgba(4,6,18,.94) 45%,rgba(130,90,10,.08) 100%);
+  border-top:1px solid rgba(200,160,60,.1);border-bottom:1px solid rgba(24,114,255,.1);
+  padding:44px clamp(20px,6vw,80px);
+  display:flex;justify-content:space-around;flex-wrap:wrap;gap:20px;
+  backdrop-filter:blur(24px);
+}
+.stats-bar::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(200,160,60,.28),rgba(24,114,255,.28),transparent)}
+.stats-bar::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(24,114,255,.15),rgba(200,160,60,.15),transparent)}
+.stat-item{text-align:center}
+.stat-num{font-family:'Syne',sans-serif;font-size:clamp(2.4rem,4.5vw,3.6rem);font-weight:800;line-height:1;background:linear-gradient(130deg,var(--gold-bright) 0%,var(--blue-glow) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-label{font-size:.68rem;color:rgba(237,242,255,.34);letter-spacing:.16em;text-transform:uppercase;margin-top:8px}
+
+/* ──────────────────────────────────────────
+   SECTION SHARED — LUXURY SPACING
+────────────────────────────────────────── */
+.section-label{
+  display:inline-flex;align-items:center;gap:12px;
+  font-size:.62rem;font-weight:600;letter-spacing:.26em;text-transform:uppercase;
+  color:rgba(77,160,255,.6);margin-bottom:22px;
+}
+.section-label::before{content:'';width:24px;height:1px;background:linear-gradient(90deg,var(--gold-warm),transparent);opacity:.72}
+
+.section-title{
+  font-family:'Syne',sans-serif;font-size:clamp(2.5rem,5.5vw,4.8rem);
+  font-weight:800;line-height:1.05;letter-spacing:-.03em;margin-bottom:80px;
+}
+.section-title span{background:linear-gradient(110deg,var(--blue-bright) 0%,var(--blue-glow) 45%,var(--gold-warm) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.section-intro{font-size:1.05rem;color:var(--white-dim);line-height:1.88;max-width:600px;margin-bottom:76px;letter-spacing:.008em}
+
+.reveal{opacity:0;transform:translateY(36px);transition:opacity .9s cubic-bezier(.23,1,.32,1),transform .9s cubic-bezier(.23,1,.32,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:.12s}
+.reveal-delay-2{transition-delay:.22s}
+.reveal-delay-3{transition-delay:.32s}
+.reveal-delay-4{transition-delay:.44s}
+
+/* ── SCROLL OFFSET FOR FIXED NAV ── */
+#hero,#services,#portfolio,#why,#process,#booking,#crystals,#manifesto{
+  scroll-margin-top:76px;
+}
+
+/* Section atmospheres are self-contained per section ID */
+
+/* ──────────────────────────────────────────
+   SERVICES — 3D CINEMATIC WORLDS
+────────────────────────────────────────── */
+#services{
+  position:relative;
+  padding:clamp(110px,15vh,200px) clamp(20px,6vw,80px);
+  background:
+    radial-gradient(ellipse 100% 55% at 50% 100%,rgba(0,45,160,.1) 0%,transparent 60%),
+    radial-gradient(ellipse 70% 45% at 96% 4%,rgba(170,130,30,.07) 0%,transparent 55%),
+    var(--black-2);
+}
+/* Subtle top fade from hero */
+#services::before{content:'';position:absolute;top:0;left:0;right:0;height:200px;background:linear-gradient(180deg,var(--black) 0%,transparent 100%);pointer-events:none;z-index:0}
+
+.services-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  gap:1px;
+  background:rgba(200,160,60,.07);
+  border:1px solid rgba(200,160,60,.09);border-radius:var(--radius-lg);overflow:hidden;
+}
+
+.service-world{
+  position:relative;padding:56px 44px 52px;background:var(--glass-bg);
+  backdrop-filter:blur(22px);overflow:hidden;
+  transition:transform .52s cubic-bezier(.23,1,.32,1),box-shadow .52s,border-color .4s;
+  cursor:pointer;border:1px solid transparent;transform-style:preserve-3d;
+}
+.service-world::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .5s;pointer-events:none}
+.service-world::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--blue-bright),var(--gold-warm),transparent);transform:scaleX(0);transition:transform .58s cubic-bezier(.23,1,.32,1)}
+.service-world:hover{border-color:rgba(200,160,60,.16);border-top-color:rgba(200,160,60,.22);transform:translateY(-7px);box-shadow:0 28px 80px rgba(0,35,160,.2),0 0 0 1px rgba(200,160,60,.07) inset}
+.service-world:hover::before{opacity:1}
+.service-world:hover::after{transform:scaleX(1)}
+
+.service-icon{width:70px;height:70px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:1.7rem;margin-bottom:28px;background:rgba(4,6,18,.65);border:1px solid rgba(24,114,255,.22);transition:all .45s;position:relative;z-index:1;box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}
+.service-num{position:absolute;top:28px;right:28px;font-family:'Syne',sans-serif;font-size:5.5rem;font-weight:800;color:rgba(24,114,255,.035);line-height:1;transition:color .45s,transform .45s}
+.service-world:hover .service-num{color:rgba(200,160,60,.065);transform:translateZ(22px) scale(1.05)}
+.service-title{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:700;margin-bottom:14px;position:relative;z-index:1;transition:color .3s;letter-spacing:-.01em}
+.service-desc{font-size:.87rem;color:rgba(237,242,255,.44);line-height:1.78;position:relative;z-index:1;margin-bottom:20px}
+
+.service-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:24px;position:relative;z-index:1}
+.service-feat{font-size:.62rem;font-weight:600;letter-spacing:.11em;text-transform:uppercase;padding:3px 11px;border-radius:50px;background:rgba(24,114,255,.07);border:1px solid rgba(24,114,255,.16);color:rgba(77,160,255,.65)}
+
+.service-cta{display:inline-flex;align-items:center;gap:6px;font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--blue-glow);text-decoration:none;position:relative;z-index:1;transition:gap .25s,color .25s}
+.service-cta:hover{gap:11px;color:var(--gold-bright)}
+.service-cta svg{transition:transform .25s}
+.service-cta:hover svg{transform:translateX(3px)}
+
+.service-world .s-bg{position:absolute;inset:0;opacity:0;transition:opacity .65s;pointer-events:none}
+.service-world:hover .s-bg{opacity:1}
+
+/* Per-world atmospheres */
+.sw-transform .s-bg{background:radial-gradient(ellipse 80% 65% at 100% 0%,rgba(200,160,60,.16) 0%,transparent 55%),radial-gradient(ellipse 55% 55% at 0% 100%,rgba(0,62,232,.11) 0%,transparent 55%)}
+.sw-transform .service-icon{background:linear-gradient(140deg,rgba(200,160,60,.24),rgba(0,62,232,.12));border-color:rgba(200,160,60,.4)}
+.sw-transform:hover .service-title{color:var(--gold-bright)}
+.sw-transform:hover .service-icon{box-shadow:0 0 26px rgba(200,160,60,.42)}
+.sw-transform .service-feat{background:rgba(200,160,60,.08);border-color:rgba(200,160,60,.2);color:rgba(230,190,80,.68)}
+.sw-transform .service-cta{color:var(--gold-warm)}
+.sw-transform::before{background:linear-gradient(140deg,rgba(200,160,60,.07) 0%,transparent 55%)}
+
+.sw-cinematic .s-bg{background:radial-gradient(ellipse 100% 70% at 50% 100%,rgba(0,62,232,.15) 0%,transparent 65%)}
+.sw-cinematic .service-icon{background:linear-gradient(140deg,rgba(0,62,232,.25),rgba(24,114,255,.08));border-color:rgba(24,114,255,.44)}
+.sw-cinematic:hover .service-title{color:var(--blue-glow)}
+.sw-cinematic:hover .service-icon{box-shadow:0 0 28px rgba(0,62,232,.5)}
+.sw-cinematic::before{background:linear-gradient(180deg,transparent 0%,rgba(0,62,232,.08) 100%)}
+
+.sw-ads .s-bg{background:radial-gradient(ellipse 72% 90% at 96% 50%,rgba(200,160,60,.15) 0%,transparent 55%),radial-gradient(ellipse 50% 42% at 50% 0%,rgba(240,200,90,.06) 0%,transparent 50%)}
+.sw-ads .service-icon{background:linear-gradient(140deg,rgba(200,160,60,.24),rgba(170,130,30,.07));border-color:rgba(200,160,60,.34)}
+.sw-ads:hover .service-title{color:var(--gold-bright)}
+.sw-ads:hover .service-icon{box-shadow:0 0 24px rgba(200,160,60,.4)}
+.sw-ads .service-feat{background:rgba(200,160,60,.08);border-color:rgba(200,160,60,.2);color:rgba(230,190,80,.68)}
+.sw-ads .service-cta{color:var(--gold-warm)}
+.sw-ads::before{background:linear-gradient(140deg,rgba(200,160,60,.06) 0%,transparent 60%)}
+
+.sw-anim .s-bg{background:radial-gradient(ellipse 100% 70% at 50% 50%,rgba(0,62,232,.14) 0%,transparent 62%),repeating-linear-gradient(0deg,rgba(24,114,255,.014) 0px,rgba(24,114,255,.014) 1px,transparent 1px,transparent 34px),repeating-linear-gradient(90deg,rgba(24,114,255,.014) 0px,rgba(24,114,255,.014) 1px,transparent 1px,transparent 34px)}
+.sw-anim .service-icon{background:linear-gradient(140deg,rgba(0,62,232,.3),rgba(24,114,255,.1));border-color:rgba(24,114,255,.48)}
+.sw-anim:hover .service-title{color:var(--blue-glow)}
+.sw-anim:hover .service-icon{box-shadow:0 0 32px rgba(0,62,232,.55)}
+.sw-anim::before{background:radial-gradient(ellipse 80% 80% at 50% 50%,rgba(0,62,232,.09) 0%,transparent 65%)}
+
+.sw-anime .s-bg{background:radial-gradient(ellipse 70% 70% at 0% 0%,rgba(100,32,210,.13) 0%,transparent 55%),radial-gradient(ellipse 58% 58% at 100% 100%,rgba(24,114,255,.09) 0%,transparent 50%)}
+.sw-anime .service-icon{background:linear-gradient(140deg,rgba(100,32,210,.24),rgba(24,114,255,.1));border-color:rgba(120,50,210,.4)}
+.sw-anime:hover .service-title{color:#b580ff}
+.sw-anime:hover .service-icon{box-shadow:0 0 24px rgba(110,40,210,.45)}
+.sw-anime .service-feat{background:rgba(100,32,210,.09);border-color:rgba(120,50,210,.22);color:rgba(175,125,255,.68)}
+.sw-anime .service-cta{color:#a070ef}
+
+.sw-prompt .s-bg{background-image:radial-gradient(ellipse 80% 80% at 50% 50%,rgba(0,130,240,.08) 0%,transparent 55%),repeating-linear-gradient(0deg,rgba(24,114,255,.02) 0px,rgba(24,114,255,.02) 1px,transparent 1px,transparent 24px),repeating-linear-gradient(90deg,rgba(24,114,255,.02) 0px,rgba(24,114,255,.02) 1px,transparent 1px,transparent 24px)}
+.sw-prompt .service-icon{background:linear-gradient(140deg,rgba(0,90,230,.22),rgba(0,160,245,.07));border-color:rgba(0,160,245,.32)}
+.sw-prompt:hover .service-title{color:#80cfff}
+.sw-prompt:hover .service-icon{box-shadow:0 0 24px rgba(0,130,240,.4)}
+.sw-prompt .service-feat{background:rgba(0,130,240,.08);border-color:rgba(0,160,245,.22);color:rgba(125,200,255,.68)}
+.sw-prompt .service-cta{color:#80cfff}
+
+/* ──────────────────────────────────────────
+   PORTFOLIO — CINEMATIC TRAILER SHOWCASE
+────────────────────────────────────────── */
+#portfolio{
+  padding:clamp(110px,15vh,200px) clamp(20px,6vw,80px);
+  background:
+    radial-gradient(ellipse 80% 45% at 85% 0%,rgba(170,130,30,.065) 0%,transparent 52%),
+    radial-gradient(ellipse 60% 40% at 10% 100%,rgba(0,40,150,.08) 0%,transparent 50%),
+    var(--black);
+}
+#portfolio::before{content:'';position:absolute;top:0;left:0;right:0;height:180px;background:linear-gradient(180deg,var(--black-2) 0%,transparent 100%);pointer-events:none}
+
+.portfolio-filter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:56px}
+.pf-btn{font-size:.7rem;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:rgba(237,242,255,.38);background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06);padding:8px 22px;border-radius:50px;cursor:pointer;transition:all .3s}
+.pf-btn.active,.pf-btn:hover{color:var(--blue-bright);background:rgba(0,62,232,.09);border-color:rgba(24,114,255,.36)}
+
+.portfolio-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+
+.portfolio-item{
+  position:relative;overflow:hidden;border-radius:var(--radius-md);background:var(--black-3);cursor:pointer;
+  border:1px solid rgba(255,255,255,.04);
+  transition:transform .65s cubic-bezier(.23,1,.32,1),box-shadow .65s,border-color .42s;
+}
+.portfolio-item:hover{transform:translateY(-8px) scale(1.006);box-shadow:0 0 0 1px rgba(200,160,60,.22),0 14px 55px rgba(0,35,150,.28),0 32px 90px rgba(0,0,0,.55);border-color:rgba(200,160,60,.22)}
+
+.pi-1{grid-column:span 7;grid-row:span 2}
+.pi-2{grid-column:span 5}
+.pi-3{grid-column:span 5}
+.pi-4{grid-column:span 4}
+.pi-5{grid-column:span 4}
+.pi-6{grid-column:span 4}
+
+.portfolio-thumb{width:100%;aspect-ratio:16/9;position:relative;overflow:hidden}
+.pi-1 .portfolio-thumb{aspect-ratio:unset;height:100%;min-height:480px}
+
+/* Cinematic scene backgrounds */
+.thumb-scene{position:absolute;inset:0;overflow:hidden}
+.ts-transform{background:linear-gradient(155deg,#010912 0%,#061126 55%,#01091a 100%)}
+.ts-cinematic{background:linear-gradient(155deg,#0c0700 0%,#150b00 55%,#0a0600 100%)}
+.ts-ads{background:linear-gradient(155deg,#090700 0%,#120c00 55%,#080600 100%)}
+.ts-anime{background:linear-gradient(155deg,#0a0015 0%,#12001f 55%,#080012 100%)}
+.ts-ai{background:linear-gradient(155deg,#00071e 0%,#000c2c 55%,#00071c 100%)}
+.ts-workflow{background:linear-gradient(155deg,#070400 0%,#0d0800 55%,#060400 100%)}
+
+/* Rich glow cores — upgraded depth */
+.thumb-glow-core{position:absolute;inset:0;transition:filter .55s,opacity .5s}
+.tgc-1{background:radial-gradient(ellipse 70% 70% at 50% 58%,rgba(0,62,232,.4) 0%,rgba(0,45,170,.12) 40%,transparent 66%)}
+.tgc-gold{background:radial-gradient(ellipse 70% 70% at 50% 58%,rgba(200,160,60,.4) 0%,rgba(150,110,30,.12) 40%,transparent 66%)}
+.tgc-purple{background:radial-gradient(ellipse 70% 70% at 50% 58%,rgba(110,25,210,.32) 0%,rgba(70,15,150,.09) 40%,transparent 66%)}
+.tgc-orange{background:radial-gradient(ellipse 70% 70% at 50% 58%,rgba(210,110,20,.28) 0%,rgba(160,70,10,.08) 40%,transparent 66%)}
+.portfolio-item:hover .thumb-glow-core{filter:brightness(1.8) saturate(1.35)}
+
+/* Moving animated glow — simulates video life */
+.thumb-glow-anim{
+  position:absolute;inset:0;pointer-events:none;z-index:1;
+  animation:glowShift 9s ease-in-out infinite;
+  mix-blend-mode:screen;opacity:.6;
+}
+@keyframes glowShift{
+  0%,100%{background:radial-gradient(ellipse 40% 40% at 25% 65%,rgba(24,114,255,.1) 0%,transparent 55%)}
+  33%{background:radial-gradient(ellipse 40% 40% at 75% 35%,rgba(200,160,60,.09) 0%,transparent 55%)}
+  66%{background:radial-gradient(ellipse 40% 40% at 50% 50%,rgba(24,114,255,.08) 0%,transparent 55%)}
+}
+
+/* Animated scanline overlay on hover */
+.thumb-scan{
+  position:absolute;inset:0;pointer-events:none;z-index:3;
+  background:repeating-linear-gradient(0deg,transparent 0px,transparent 3px,rgba(24,114,255,.01) 3px,rgba(24,114,255,.01) 4px);
+  opacity:0;transition:opacity .45s;
+}
+.portfolio-item:hover .thumb-scan{opacity:1}
+
+/* Light sweep — cinematic film reveal */
+.thumb-sweep{
+  position:absolute;inset:0;pointer-events:none;z-index:2;
+  background:linear-gradient(105deg,transparent 26%,rgba(24,114,255,.08) 46%,rgba(200,160,60,.05) 56%,transparent 72%);
+  transform:translateX(-100%);
+}
+.portfolio-item:hover .thumb-sweep{transform:translateX(230%);transition:transform .95s cubic-bezier(.23,1,.32,1)}
+
+/* Timeline — gold/blue progress bar */
+.thumb-timeline{
+  position:absolute;bottom:0;left:0;right:0;height:2px;z-index:4;
+  background:linear-gradient(90deg,transparent,rgba(24,114,255,.32),rgba(200,160,60,.24),rgba(24,114,255,.32),transparent);
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .58s cubic-bezier(.23,1,.32,1);
+}
+.portfolio-item:hover .thumb-timeline{transform:scaleX(1)}
+
+/* Camera HUD corners — sharper, more cinematic */
+.thumb-hud-tl,.thumb-hud-br{position:absolute;width:22px;height:22px;z-index:4;pointer-events:none;opacity:0;transition:opacity .38s}
+.thumb-hud-tl{top:13px;left:13px;border-top:1.5px solid rgba(24,114,255,.6);border-left:1.5px solid rgba(24,114,255,.6)}
+.thumb-hud-br{bottom:13px;right:13px;border-bottom:1.5px solid rgba(200,160,60,.55);border-right:1.5px solid rgba(200,160,60,.55)}
+.portfolio-item:hover .thumb-hud-tl,.portfolio-item:hover .thumb-hud-br{opacity:1}
+
+.thumb-lines{position:absolute;inset:0;background-image:linear-gradient(rgba(24,114,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(24,114,255,.03) 1px,transparent 1px);background-size:52px 52px}
+
+/* Abstract shapes */
+.thumb-shape{position:absolute;border-radius:50%;pointer-events:none}
+.thumb-shape-1{width:130px;height:130px;border:1px solid rgba(24,114,255,.14);top:28%;left:18%}
+.thumb-shape-2{width:65px;height:65px;border:1px solid rgba(200,160,60,.18);bottom:22%;right:22%}
+.thumb-horizon{position:absolute;left:0;right:0;height:1px;top:50%;background:linear-gradient(90deg,transparent,rgba(24,114,255,.18),rgba(200,160,60,.14),transparent)}
+
+/* Gold rim overlay */
+.portfolio-item::after{content:'';position:absolute;inset:0;border:1px solid transparent;border-radius:var(--radius-md);transition:border-color .45s,box-shadow .45s;pointer-events:none;z-index:6}
+.portfolio-item:hover::after{border-color:rgba(200,160,60,.22);box-shadow:inset 0 0 35px rgba(200,160,60,.05)}
+
+/* Category badge */
+.portfolio-cat{position:absolute;top:14px;right:14px;z-index:5;font-size:.58rem;font-weight:700;letter-spacing:.11em;text-transform:uppercase;padding:4px 12px;border-radius:50px;background:rgba(2,3,10,.74);border:1px solid rgba(200,160,60,.2);backdrop-filter:blur(12px);color:rgba(200,160,60,.75);transition:all .32s}
+.portfolio-item:hover .portfolio-cat{border-color:rgba(200,160,60,.52);color:var(--gold-bright)}
+
+/* Play overlay */
+.play-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(1,2,8,0);transition:background .52s;z-index:3}
+.portfolio-item:hover .play-overlay{background:rgba(1,2,8,.2)}
+
+.play-btn-large{
+  width:68px;height:68px;border-radius:50%;
+  background:rgba(3,5,18,.62);border:1px solid rgba(200,160,60,.42);
+  backdrop-filter:blur(22px);display:flex;align-items:center;justify-content:center;
+  transform:scale(0) rotate(-10deg);transition:transform .48s cubic-bezier(.34,1.38,.64,1);
+  box-shadow:0 0 32px rgba(200,160,60,.22),0 0 64px rgba(0,35,170,.22);
+}
+.portfolio-item:hover .play-btn-large{transform:scale(1) rotate(0deg)}
+.play-btn-large svg{margin-left:4px;opacity:.92}
+
+.portfolio-info{
+  padding:24px 26px;
+  background:linear-gradient(180deg,transparent,rgba(1,2,8,.98) 72%);
+  position:absolute;bottom:0;left:0;right:0;transform:translateY(100%);
+  transition:transform .5s cubic-bezier(.23,1,.32,1);
+  border-top:1px solid rgba(200,160,60,.09);z-index:4;
+}
+.portfolio-item:hover .portfolio-info{transform:translateY(0)}
+.portfolio-info h4{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;margin-bottom:5px;color:var(--white);letter-spacing:-.01em}
+.portfolio-info .pi-meta{font-size:.68rem;color:var(--gold-warm);text-transform:uppercase;letter-spacing:.13em;display:block;margin-bottom:7px}
+.portfolio-info .pi-desc{font-size:.8rem;color:rgba(237,242,255,.38);line-height:1.55}
+
+/* Lens flares */
+.lens-flare{position:absolute;pointer-events:none;z-index:1;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.65) 0%,transparent 70%)}
+.lf-1{width:3px;height:3px;top:20%;left:26%;box-shadow:0 0 7px 2px rgba(200,160,60,.55)}
+.lf-2{width:2px;height:2px;top:60%;left:66%;box-shadow:0 0 5px 2px rgba(24,114,255,.72)}
+.lf-3{width:4px;height:4px;top:36%;left:52%;box-shadow:0 0 9px 3px rgba(200,160,60,.42)}
+.lf-4{width:2px;height:2px;top:44%;left:78%;box-shadow:0 0 4px 2px rgba(24,114,255,.52)}
+
+.pi-1 .thumb-label{position:absolute;top:28px;left:28px;z-index:5;font-family:'Syne',sans-serif;font-size:1.55rem;font-weight:800;color:rgba(237,242,255,.94);text-shadow:0 0 44px rgba(0,62,232,.7);letter-spacing:.03em}
+.pi-1 .thumb-label em{display:block;font-style:normal;font-size:.68rem;color:var(--gold-bright);font-weight:600;letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px;text-shadow:0 0 18px rgba(200,160,60,.6)}
+
+/* ──────────────────────────────────────────
+   WHY CVS
+────────────────────────────────────────── */
+#why{
+  padding:clamp(110px,15vh,200px) clamp(20px,6vw,80px);
+  background:
+    radial-gradient(ellipse 100% 65% at 0% 50%,rgba(0,38,148,.1) 0%,transparent 55%),
+    radial-gradient(ellipse 80% 55% at 100% 50%,rgba(170,130,30,.07) 0%,transparent 50%),
+    var(--black-2);
+}
+#why::before{content:'';position:absolute;top:0;left:0;right:0;height:160px;background:linear-gradient(180deg,var(--black) 0%,transparent 100%);pointer-events:none}
+
+.why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:22px;margin-top:16px}
+.why-card{
+  position:relative;padding:48px 38px;
+  background:rgba(5,7,22,.72);backdrop-filter:blur(22px);border-radius:var(--radius-lg);
+  border:1px solid rgba(24,114,255,.12);border-top:2px solid transparent;
+  transition:transform .48s cubic-bezier(.23,1,.32,1),box-shadow .48s,border-color .32s;
+  overflow:hidden;
+}
+.why-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .52s;pointer-events:none}
+.why-card:hover{transform:translateY(-9px);border-color:rgba(24,114,255,.22);box-shadow:0 24px 72px rgba(0,35,160,.2)}
+.why-card:hover::before{opacity:1}
+
+.why-card-1{border-top-color:var(--blue-bright)}.why-card-1::before{background:radial-gradient(ellipse 80% 65% at 50% 0%,rgba(0,62,232,.1) 0%,transparent 65%)}
+.why-card-2{border-top-color:var(--gold-warm)}.why-card-2::before{background:radial-gradient(ellipse 80% 65% at 50% 0%,rgba(200,160,60,.1) 0%,transparent 65%)}
+.why-card-3{border-top-color:#22c55e}.why-card-3::before{background:radial-gradient(ellipse 80% 65% at 50% 0%,rgba(34,197,94,.08) 0%,transparent 65%)}
+.why-card-4{border-top-color:var(--blue-glow)}.why-card-4::before{background:radial-gradient(ellipse 80% 65% at 50% 0%,rgba(77,160,255,.09) 0%,transparent 65%)}
+
+.why-icon{width:62px;height:62px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin-bottom:26px;background:rgba(4,6,18,.7);border:1px solid rgba(24,114,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}
+.why-card-1 .why-icon{border-color:rgba(24,114,255,.3);background:rgba(0,62,232,.1)}
+.why-card-2 .why-icon{border-color:rgba(200,160,60,.3);background:rgba(200,160,60,.1)}
+.why-card-3 .why-icon{border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.1)}
+.why-card-4 .why-icon{border-color:rgba(77,160,255,.3);background:rgba(77,160,255,.1)}
+.why-title{font-family:'Syne',sans-serif;font-size:1.12rem;font-weight:700;margin-bottom:14px;letter-spacing:-.01em}
+.why-desc{font-size:.87rem;color:rgba(237,242,255,.46);line-height:1.78}
+
+/* ──────────────────────────────────────────
+   PROCESS — 4 STEPS
+────────────────────────────────────────── */
+#process{
+  padding:clamp(110px,15vh,200px) clamp(20px,6vw,80px);
+  background:
+    radial-gradient(ellipse 100% 55% at 50% 0%,rgba(0,45,150,.12) 0%,transparent 55%),
+    var(--black-3);
+  text-align:center;
+}
+#process::before{content:'';position:absolute;top:0;left:0;right:0;height:160px;background:linear-gradient(180deg,var(--black-2) 0%,transparent 100%);pointer-events:none}
+
+.process-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0;max-width:1020px;margin:0 auto;position:relative}
+.process-grid::before{content:'';position:absolute;top:50px;left:14%;right:14%;height:1px;background:linear-gradient(90deg,transparent,rgba(24,114,255,.22),rgba(200,160,60,.22),rgba(24,114,255,.22),transparent);z-index:0}
+.process-step{position:relative;padding:0 24px 52px;text-align:center;z-index:1}
+.process-num{width:50px;height:50px;border-radius:50%;background:rgba(4,6,22,.95);border:1px solid rgba(24,114,255,.32);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:.9rem;font-weight:800;color:var(--blue-glow);margin:0 auto 26px;box-shadow:0 0 22px rgba(0,62,232,.2);position:relative;z-index:1;transition:all .42s}
+.process-step:nth-child(2) .process-num{border-color:rgba(200,160,60,.32);color:var(--gold-bright);box-shadow:0 0 22px rgba(200,160,60,.18)}
+.process-step:nth-child(3) .process-num{border-color:rgba(24,114,255,.38);color:var(--blue-bright);box-shadow:0 0 22px rgba(0,62,232,.22)}
+.process-step:nth-child(4) .process-num{border-color:rgba(200,160,60,.38);color:var(--gold-bright);box-shadow:0 0 22px rgba(200,160,60,.22)}
+.process-title{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;margin-bottom:12px;letter-spacing:-.01em}
+.process-desc{font-size:.84rem;color:rgba(237,242,255,.44);line-height:1.72}
+
+/* ──────────────────────────────────────────
+   BOOKING
+────────────────────────────────────────── */
+#booking{
+  padding:clamp(110px,15vh,200px) clamp(20px,6vw,80px);
+  background:
+    radial-gradient(ellipse 120% 62% at 50% 0%,rgba(0,38,148,.14) 0%,transparent 55%),
+    radial-gradient(ellipse 58% 42% at 100% 100%,rgba(170,130,30,.06) 0%,transparent 50%),
+    var(--black-3);
+}
+#booking::before{content:'';position:absolute;top:0;left:0;right:0;height:160px;background:linear-gradient(180deg,var(--black) 0%,transparent 100%);pointer-events:none}
+
+.booking-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
+.booking-intro{font-size:1.08rem;color:rgba(237,242,255,.48);line-height:1.88;margin-bottom:38px;letter-spacing:.005em}
+
+.booking-features{display:flex;flex-direction:column;gap:14px;margin-bottom:44px}
+.bf-item{display:flex;align-items:flex-start;gap:14px;padding:17px 20px;background:rgba(3,5,16,.62);border:1px solid rgba(24,114,255,.1);border-left:2px solid rgba(200,160,60,.28);border-radius:var(--radius-md);backdrop-filter:blur(14px);transition:all .32s}
+.bf-item:hover{border-left-color:var(--gold-warm);background:rgba(160,120,30,.05);transform:translateX(5px)}
+.bf-icon{width:40px;height:40px;flex-shrink:0;background:linear-gradient(140deg,rgba(200,160,60,.2),rgba(0,62,232,.12));border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:1.1rem;border:1px solid rgba(200,160,60,.18)}
+.bf-item h4{font-family:'Syne',sans-serif;font-size:.9rem;font-weight:700;color:var(--white);margin-bottom:4px;letter-spacing:-.01em}
+.bf-item p{font-size:.8rem;color:rgba(237,242,255,.4);margin:0;line-height:1.65}
+
+.booking-panel{background:rgba(3,5,16,.82);border:1px solid rgba(200,160,60,.16);border-top:2px solid rgba(200,160,60,.38);border-radius:var(--radius-lg);backdrop-filter:blur(26px);padding:42px;box-shadow:0 0 70px rgba(0,62,232,.07),0 0 130px rgba(170,130,30,.05),inset 0 0 50px rgba(170,130,30,.015);position:relative;overflow:hidden}
+.booking-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent 4%,var(--gold-warm) 32%,var(--blue-bright) 68%,transparent 96%);opacity:.88}
+
+.booking-panel h3{font-family:'Syne',sans-serif;font-size:1.55rem;font-weight:800;margin-bottom:7px;background:linear-gradient(115deg,var(--white),var(--gold-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-.015em}
+.booking-panel>.bp-sub{font-size:.86rem;color:rgba(237,242,255,.36);margin-bottom:30px}
+
+.slot-legend{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.slot-legend-item{display:flex;align-items:center;gap:6px;font-size:.66rem;color:rgba(237,242,255,.38);letter-spacing:.07em;text-transform:uppercase}
+.sli-dot{width:7px;height:7px;border-radius:50%}
+.sli-available{background:var(--blue-bright);box-shadow:0 0 6px rgba(24,114,255,.6)}
+.sli-reserved{background:var(--gold-warm);box-shadow:0 0 6px rgba(200,160,60,.5)}
+.sli-closed{background:rgba(237,242,255,.18)}
+.sli-express{background:#22c55e;box-shadow:0 0 6px rgba(34,197,94,.6)}
+
+.slot-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:26px}
+.slot{padding:17px 19px;border-radius:var(--radius-md);border:1px solid;cursor:pointer;transition:all .32s;position:relative;font-family:'Syne',sans-serif}
+.slot-available{border-color:rgba(24,114,255,.26);background:rgba(0,42,190,.06)}
+.slot-available:hover{border-color:var(--blue-bright);background:rgba(0,42,190,.15);box-shadow:0 0 20px rgba(0,62,232,.2)}
+.slot-reserved{border-color:rgba(200,160,60,.2);background:rgba(150,110,28,.05);opacity:.58;cursor:not-allowed}
+.slot-closed{border-color:rgba(255,255,255,.04);background:rgba(255,255,255,.01);opacity:.28;cursor:not-allowed}
+.slot-express{border-color:rgba(0,200,90,.36);background:rgba(0,175,78,.07)}
+.slot-express:hover{border-color:#22c55e;background:rgba(0,175,78,.14);box-shadow:0 0 20px rgba(0,175,78,.18)}
+.slot .slot-date{font-size:.8rem;font-weight:700;color:var(--white);display:block}
+.slot .slot-status{font-size:.64rem;font-weight:500;letter-spacing:.07em;text-transform:uppercase;display:block;margin-top:5px}
+.slot-available .slot-status{color:rgba(77,160,255,.78)}
+.slot-reserved .slot-status{color:rgba(200,160,60,.62)}
+.slot-closed .slot-status{color:rgba(237,242,255,.26)}
+.slot-express .slot-status{color:#22c55e}
+.slot-badge{position:absolute;top:-9px;right:10px;font-size:.56rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:50px;background:#22c55e;color:#001a0a}
+
+.booking-express-note{display:flex;align-items:center;gap:10px;padding:15px 19px;background:rgba(0,175,78,.05);border:1px solid rgba(0,200,90,.14);border-left:2px solid #22c55e;border-radius:var(--radius-md);font-size:.82rem;color:rgba(0,210,90,.85);margin-bottom:26px}
+.booking-express-note strong{font-weight:700}
+
+.booking-btn{width:100%;padding:19px;border:none;cursor:pointer;background:linear-gradient(140deg,#c4a03a 0%,#d4af37 55%,#b8941f 100%);color:#1a0e00;font-family:'Syne',sans-serif;font-size:.88rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;border-radius:50px;border:1px solid rgba(200,160,60,.42);box-shadow:0 0 32px rgba(200,160,60,.25),0 5px 22px rgba(150,110,28,.22);transition:all .38s;position:relative;overflow:hidden}
+.booking-btn::before{content:'';position:absolute;top:-50%;left:-80%;width:60%;height:200%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);transform:skewX(-20deg);transition:left .55s}
+.booking-btn:hover::before{left:160%}
+.booking-btn:hover{box-shadow:0 0 55px rgba(200,160,60,.45),0 10px 32px rgba(150,110,28,.32);transform:translateY(-2px)}
+
+/* ──────────────────────────────────────────
+   CRYSTAL SHOP
+────────────────────────────────────────── */
+#crystals{
+  padding:clamp(110px,15vh,200px) clamp(20px,6vw,80px);
+  background:
+    radial-gradient(ellipse 80% 55% at 50% 100%,rgba(170,130,30,.08) 0%,transparent 55%),
+    radial-gradient(ellipse 60% 40% at 50% 0%,rgba(0,40,160,.07) 0%,transparent 50%),
+    var(--black);
+  text-align:center;
+}
+#crystals::before{content:'';position:absolute;top:0;left:0;right:0;height:160px;background:linear-gradient(180deg,var(--black-3) 0%,transparent 100%);pointer-events:none}
+
+.crystals-showcase{display:flex;gap:22px;justify-content:center;flex-wrap:wrap;margin-top:68px}
+.crystal-card{position:relative;width:230px;padding:44px 30px;background:var(--glass-bg);border:1px solid rgba(24,114,255,.14);border-radius:var(--radius-lg);backdrop-filter:blur(22px);text-align:center;cursor:pointer;transition:all .48s cubic-bezier(.23,1,.32,1);overflow:hidden}
+.crystal-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(200,160,60,.42),transparent);opacity:0;transition:opacity .42s}
+.crystal-card::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 70% at 50% 50%,rgba(200,160,60,.05) 0%,transparent 70%);opacity:0;transition:opacity .42s}
+.crystal-card:hover{transform:translateY(-16px) scale(1.02);border-color:rgba(200,160,60,.32);box-shadow:0 0 0 1px rgba(200,160,60,.14),0 28px 70px rgba(0,0,0,.55),0 0 55px rgba(160,120,28,.14)}
+.crystal-card:hover::before,.crystal-card:hover::after{opacity:1}
+.crystal-gem{font-size:3.2rem;margin-bottom:20px;display:block;filter:drop-shadow(0 0 10px rgba(24,114,255,.5));transition:filter .42s,transform .42s}
+.crystal-card:hover .crystal-gem{filter:drop-shadow(0 0 20px rgba(200,160,60,.65));transform:scale(1.1)}
+.crystal-name{font-family:'Syne',sans-serif;font-size:.92rem;font-weight:700;margin-bottom:10px;color:var(--white);letter-spacing:.01em}
+.crystal-price{font-size:1.6rem;font-weight:800;background:linear-gradient(130deg,var(--gold-light),var(--gold-warm));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.crystal-desc{font-size:.74rem;color:rgba(237,242,255,.34);margin-top:10px;line-height:1.62}
+
+/* ──────────────────────────────────────────
+   MANIFESTO — FINAL CTA
+────────────────────────────────────────── */
+#manifesto{
+  padding:clamp(140px,22vh,260px) clamp(20px,6vw,80px);
+  background:
+    radial-gradient(ellipse 120% 80% at 50% 50%,rgba(0,35,155,.17) 0%,transparent 60%),
+    radial-gradient(ellipse 70% 50% at 15% 75%,rgba(155,115,20,.09) 0%,transparent 50%),
+    radial-gradient(ellipse 55% 45% at 85% 25%,rgba(0,55,200,.07) 0%,transparent 50%),
+    linear-gradient(180deg,var(--black-2) 0%,var(--black) 100%);
+  text-align:center;position:relative;
+}
+#manifesto::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(200,160,60,.22),rgba(24,114,255,.22),transparent)}
+#manifesto::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(24,114,255,.1),rgba(200,160,60,.1),transparent)}
+
+.manifesto-quote{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(2.8rem,6.5vw,6rem);
+  font-weight:800;line-height:1.08;letter-spacing:-.032em;
+  position:relative;z-index:1;max-width:920px;margin:0 auto 68px;
+}
+.manifesto-quote .mq-label{
+  display:block;font-family:'DM Sans',sans-serif;font-weight:400;
+  font-size:.46em;margin-bottom:26px;letter-spacing:.28em;text-transform:uppercase;
+  color:rgba(77,160,255,.5);
+}
+.manifesto-quote .mq-blue{background:linear-gradient(112deg,var(--blue-bright) 0%,var(--blue-glow) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.manifesto-quote .mq-gold{background:linear-gradient(112deg,var(--gold-bright) 0%,var(--gold-warm) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.manifesto-cta{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1}
+
+/* ──────────────────────────────────────────
+   FOOTER
+────────────────────────────────────────── */
+footer{background:rgba(2,2,5,.98);border-top:1px solid rgba(24,114,255,.09);padding:68px clamp(20px,6vw,80px) 34px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:44px;margin-bottom:52px}
+.footer-brand h3{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;margin-bottom:14px;background:linear-gradient(130deg,var(--blue-bright),var(--gold-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:.02em}
+.footer-brand p{font-size:.86rem;color:var(--white-dim);line-height:1.78;max-width:280px}
+.footer-col h4{font-family:'Syne',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--blue-glow);margin-bottom:18px;opacity:.75}
+.footer-col a{display:block;color:var(--white-dim);text-decoration:none;font-size:.86rem;padding:5px 0;transition:color .22s;opacity:.7}
+.footer-col a:hover{color:var(--blue-bright);opacity:1}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.05);padding-top:26px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.footer-bottom p{font-size:.76rem;color:rgba(237,242,255,.25)}
+.footer-socials{display:flex;gap:10px}
+.social-btn{width:36px;height:36px;background:rgba(24,114,255,.07);border:1px solid rgba(24,114,255,.18);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;text-decoration:none;color:var(--blue-glow);font-size:.8rem;font-weight:700;transition:all .3s;opacity:.7}
+.social-btn:hover{background:rgba(24,114,255,.18);border-color:var(--blue-bright);opacity:1}
+
+/* ──────────────────────────────────────────
+   MOBILE NAV
+────────────────────────────────────────── */
+.mobile-nav{
+  display:none;position:fixed;inset:0;z-index:999;
+  background:rgba(2,2,5,.98);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:76px 40px 40px;
+  overflow-y:auto;
+}
+.mobile-nav.open{display:flex}
+.mobile-nav a{
+  font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:700;
+  color:var(--white);text-decoration:none;
+  padding:11px 0;width:100%;text-align:center;
+  border-bottom:1px solid rgba(24,114,255,.06);
+  transition:color .22s;letter-spacing:-.01em;
+}
+.mobile-nav a:hover{color:var(--blue-bright)}
+.mobile-nav a:last-child{border-bottom:none;margin-top:8px}
+
+/* ──────────────────────────────────────────
+   RESPONSIVE
+────────────────────────────────────────── */
+@media(max-width:1100px){
+  .booking-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .pi-1{grid-column:span 12}
+  .pi-2,.pi-3{grid-column:span 6}
+  .pi-4,.pi-5,.pi-6{grid-column:span 4}
+  .process-grid::before{display:none}
+}
+@media(max-width:768px){
+  .nav-links{display:none}
+  .nav-burger{display:flex}
+
+  /* Mobile hero — focused, clean */
+  #hero{min-height:100vh;padding-top:76px;padding-bottom:52px}
+  .holo-panel,.beam,.arc,.hero-env,.hero-streaks{display:none}
+  .glow-orb{filter:blur(110px);opacity:.38}
+  .orb-5{display:none}
+  .hero-grid,.hero-scanline,.hero-fog{display:none}
+  .particles{display:none}
+  .hero-eyebrow{margin-bottom:24px;font-size:.6rem}
+  .hero-h1{font-size:clamp(2.6rem,8.5vw,4.2rem);margin-bottom:28px}
+  .hero-sub{font-size:.98rem;margin-bottom:44px;line-height:1.75;max-width:100%}
+
+  /* Portfolio stacking */
+  .pi-1,.pi-2,.pi-3,.pi-4,.pi-5,.pi-6{grid-column:span 12}
+  .pi-1 .portfolio-thumb{min-height:260px}
+
+  /* Layout collapses */
+  .footer-grid{grid-template-columns:1fr}
+  .slot-grid{grid-template-columns:1fr}
+  .services-grid{grid-template-columns:1fr}
+
+  /* Crystals — 2 per row on mobile */
+  .crystals-showcase{gap:12px;justify-content:center}
+  .crystal-card{width:calc(50% - 6px);max-width:185px;padding:28px 16px}
+
+  /* Other sections */
+  .why-grid{grid-template-columns:1fr}
+  .process-grid{grid-template-columns:1fr 1fr}
+  .process-grid::before{display:none}
+
+  /* Section vertical spacing */
+  #services,#portfolio,#why,#process,#booking,#crystals,#manifesto{
+    padding-top:clamp(80px,12vh,140px)!important;
+    padding-bottom:clamp(80px,12vh,140px)!important;
+  }
+
+  /* Stats bar */
+  .stats-bar{padding:32px clamp(20px,6vw,80px);gap:16px}
+  .stat-num{font-size:clamp(2rem,5.5vw,2.8rem)}
+
+  /* Mobile nav */
+  .mobile-nav a{font-size:1.3rem;padding:10px 0}
+
+  /* Service world padding */
+  .service-world{padding:40px 30px 36px}
+
+  /* Section titles */
+  .section-title{margin-bottom:52px}
+
+  /* Booking panel */
+  .booking-panel{padding:28px 22px}
+
+  /* Manifesto mobile */
+  .manifesto-quote{font-size:clamp(2.5rem,7.5vw,3.8rem);margin-bottom:48px}
+}
+@media(max-width:520px){
+  .hero-actions{flex-direction:column;align-items:center}
+  .hero-actions .btn-primary,.hero-actions .btn-secondary,.hero-actions .btn-ghost{width:100%;justify-content:center;max-width:300px;padding:16px 20px}
+  .manifesto-cta{flex-direction:column;align-items:center}
+  .manifesto-cta a{width:100%;justify-content:center;max-width:300px}
+  .process-grid{grid-template-columns:1fr}
+  .portfolio-filter{gap:5px}
+  .portfolio-filter .pf-btn{padding:6px 12px;font-size:.62rem}
+  .crystal-card{width:calc(50% - 6px)}
+  .section-title{margin-bottom:44px}
+  .booking-panel{padding:24px 18px}
+  .btn-primary,.btn-secondary{font-size:.8rem;letter-spacing:.07em}
+  .hero-sub{font-size:.92rem}
+}
+
+/* ══════════════════════════════════
+   CVS LOGO — ANIMATED
+══════════════════════════════════ */
+/* Nav logo image */
+.nav-logo-img-wrap {
+  display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;
+}
+.nav-logo-img {
+  height:44px;width:auto;object-fit:contain;
+  filter:drop-shadow(0 0 8px rgba(232,195,85,.7)) drop-shadow(0 0 16px rgba(24,114,255,.4));
+  animation:logo-float-nav 5s ease-in-out infinite,logo-glow-nav 3s ease-in-out infinite alternate;
+  transition:filter .3s;
+}
+.nav-logo-img-wrap:hover .nav-logo-img {
+  filter:drop-shadow(0 0 16px rgba(232,195,85,1)) drop-shadow(0 0 32px rgba(24,114,255,.7));
+}
+.nav-logo-text {
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:900;letter-spacing:2.5px;
+  text-transform:uppercase;background:linear-gradient(135deg,#e8c355,#ff8c00);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  line-height:1.1;
+}
+.nav-logo-text span {display:block;font-size:9px;letter-spacing:4px;font-weight:400;opacity:.55;margin-top:1px;}
+
+/* Hero logo center container */
+.hero-logo-center {
+  position:relative;z-index:2;
+  display:flex;justify-content:center;align-items:center;
+  padding:40px 0 20px;
+}
+
+/* Hero logo */
+.hero-logo-wrap {
+  position:relative;display:inline-block;margin-bottom:0;
+  animation:logo-float 5s ease-in-out infinite;
+  cursor:pointer;
+}
+.hero-logo-wrap::before {
+  content:'';position:absolute;inset:-16px;border-radius:50%;
+  background:conic-gradient(from 0deg,#e8c355 0%,#ff8c00 18%,rgba(24,114,255,.9) 38%,transparent 56%,rgba(24,114,255,.7) 70%,#e8c355 86%,transparent 100%);
+  animation:logo-ring-spin 5s linear infinite;
+  filter:blur(5px);opacity:.75;z-index:0;
+}
+.hero-logo-wrap::after {
+  content:'';position:absolute;inset:-32px;border-radius:50%;
+  background:radial-gradient(ellipse at center,rgba(24,114,255,.22) 0%,rgba(232,195,85,.14) 45%,transparent 68%);
+  animation:logo-aura-pulse 3.5s ease-in-out infinite alternate;z-index:0;
+}
+.hero-logo-img {
+  position:relative;z-index:1;
+  width:280px;height:auto;object-fit:contain;
+  filter:drop-shadow(0 0 22px rgba(232,195,85,.8)) drop-shadow(0 0 44px rgba(24,114,255,.4)) drop-shadow(0 0 80px rgba(232,195,85,.2));
+  animation:logo-glow 3s ease-in-out infinite alternate;
+  transition:filter .4s;
+}
+.hero-logo-wrap:hover .hero-logo-img {
+  filter:drop-shadow(0 0 36px rgba(232,195,85,1)) drop-shadow(0 0 70px rgba(24,114,255,.8)) drop-shadow(0 0 120px rgba(232,195,85,.4));
+}
+.hero-logo-wrap:hover::before { animation-duration:1.8s; filter:blur(4px); opacity:1; }
+
+/* Keyframes */
+@keyframes logo-float {
+  0%,100%{transform:translateY(0) scale(1)}
+  50%{transform:translateY(-14px) scale(1.015)}
+}
+@keyframes logo-float-nav {
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-3px)}
+}
+@keyframes logo-ring-spin {
+  from{transform:rotate(0deg)} to{transform:rotate(360deg)}
+}
+@keyframes logo-aura-pulse {
+  from{transform:scale(.88);opacity:.5}
+  to{transform:scale(1.18);opacity:1}
+}
+@keyframes logo-glow {
+  from{filter:drop-shadow(0 0 18px rgba(232,195,85,.8)) drop-shadow(0 0 40px rgba(24,114,255,.3))}
+  to{filter:drop-shadow(0 0 28px rgba(24,114,255,.9)) drop-shadow(0 0 55px rgba(232,195,85,.4))}
+}
+@keyframes logo-glow-nav {
+  from{filter:drop-shadow(0 0 7px rgba(232,195,85,.8)) drop-shadow(0 0 14px rgba(24,114,255,.3))}
+  to{filter:drop-shadow(0 0 12px rgba(24,114,255,.9)) drop-shadow(0 0 22px rgba(232,195,85,.5))}
+}
+@media(max-width:640px){
+  .hero-logo-img{width:160px;height:160px}
+  .hero-logo-wrap::before{inset:-10px}
+  .hero-logo-wrap::after{inset:-22px}
+}
+</style>
 </head>
 <body>
+<canvas id="bg-aurora"></canvas>
 
-  <!-- NAV -->
-  <nav class="nav">
-    <a href="scene-editor-test.html" class="nav-logo">Cinematic Vision Studio<span>Premium KI-Filmstudio</span></a>
-    <div class="nav-links">
-      <a href="scene-editor-test.html" class="nav-link active">Home</a>
-      <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="nav-link">Studio</a>
-      <a href="shop.html" class="nav-link">Shop</a>
-      <a href="academy.html" class="nav-link">Academy</a>
-      <a href="crystals.html" class="nav-link">Kristalle</a>
-      <a href="https://cinematic-studio-family.onrender.com/contact.php" class="nav-link">Kontakt</a>
-    </div>
-    <div class="nav-actions">
-      <a href="https://cinematic-studio-family.onrender.com/login.php" class="nav-btn-ghost">Login</a>
-      <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="nav-btn-gold">Studio starten</a>
-      <a href="crystals.html" class="wallet-pill">💎 Free</a>
-    </div>
-    <button class="mob-burger" id="mobBurger" aria-label="Menü öffnen" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
+<!-- ╔══════════════════════════════════════════════════════╗
+     ║  CINEMATIC VISION STUDIO — FINAL MASTER v1.0        ║
+     ║  Design-Basis für die echte Website                 ║
+     ║  Letzte Änderung: 2025                              ║
+     ╚══════════════════════════════════════════════════════╝ -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
 
-  <!-- NAVIGATION MENU (Mobile + alle Seiten) -->
-  <div class="mob-menu" id="mobMenu" role="navigation" aria-label="Navigation">
-    <a href="scene-editor-test.html" class="mob-link active">🏠 Home</a>
-    <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="mob-link">🎬 Studio</a>
-    <a href="shop.html" class="mob-link">🛍️ Shop Beta</a>
-    <a href="academy.html" class="mob-link">🎓 Academy</a>
-    <a href="portfolio.html" class="mob-link">🎞️ Portfolio</a>
-    <a href="ki-videos.html" class="mob-link">🎥 KI Videos</a>
-    <a href="prompt-generator.html" class="mob-link">✍️ Prompts</a>
-    <a href="calendar.html" class="mob-link">📅 Kalender</a>
-    <a href="crystals.html" class="mob-link">💎 Kristalle</a>
-    <a href="https://cinematic-studio-family.onrender.com/contact.php" class="mob-link">📞 Kontakt</a>
-    <div class="mob-sep"></div>
-    <a href="https://cinematic-studio-family.onrender.com/login.php" class="mob-link">🔑 Login / Registrieren</a>
-    <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="mob-cta">🎬 Studio starten</a>
-  </div>
+<!-- ══════════════════════════════════
+     NAVIGATION
+══════════════════════════════════ -->
+<nav id="main-nav">
+  <a href="scene-editor-test.html" class="nav-logo-img-wrap">
+    <img src="assets/cvs-logo.png" alt="CVS Logo" class="nav-logo-img">
+    <span class="nav-logo-text">Cinematic Vision<span>Studios</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#hero">Home</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#portfolio">Portfolio</a></li>
+    <li><a href="academy.html">Academy</a></li>
+    <li><a href="#booking">Buchung</a></li>
+    <li><a href="crystals.html">Kristalle</a></li>
+    <li><a href="shop.html">Shop</a></li>
+    <li><a href="https://cinematic-studio-family.onrender.com/contact.php">Kontakt</a></li>
+    <li><a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="nav-cta">🎬 Studio →</a></li>
+    <li><a href="https://cinematic-studio-family.onrender.com/login.php" style="-webkit-text-fill-color:rgba(237,242,255,.5);font-size:.72rem;padding:7px 8px">Login</a></li>
+  </ul>
+  <button class="nav-burger" id="burger-btn" aria-label="Menü"><span></span><span></span><span></span></button>
+</nav>
 
-  <!-- HERO -->
-  <section class="hero" id="home">
-    <div class="hero-inner">
-      <div>
-        <div class="hero-eyebrow">✦ Cinematic Vision Studio</div>
-        <h1 class="hero-h1">
-          Erstelle <span class="g">KI-Filme</span><br>
-          die begeistern.
-        </h1>
-        <p class="hero-sub">Video hochladen, Szenen ersetzen, KI-Bild generieren — dein fertiger Film in unter 2 Minuten. Kein Account. Kein Code.</p>
-        <div class="hero-cta">
-          <a href="studio-demo.php" class="btn-gold">🎬 Studio starten</a>
-          <a href="academy.php" class="btn-ghost">Academy ansehen →</a>
-        </div>
-        <div class="hero-stats">
-          <div><div class="stat-num">100+</div><div class="stat-lbl">Prompt-Vorlagen</div></div>
-          <div><div class="stat-num">720p</div><div class="stat-lbl">Export-Qualität</div></div>
-          <div><div class="stat-num">0</div><div class="stat-lbl">Code-Kenntnisse nötig</div></div>
-        </div>
-      </div>
-      <div class="hero-visual">
-        <div class="preview-card">
-          <div class="preview-frame">
-            <div class="preview-frame-inner">
-              <div class="preview-badge">Rendering</div>
-              <div class="preview-meta">Noir · Drohne · 720p · 00:34</div>
-            </div>
-          </div>
-          <div class="preview-prompt">
-            <span class="pp-label">Dein Prompt</span>
-            <span class="pp-text">Familien-Urlaub am Meer, goldenes Abendlicht, cinematic Drohnenaufnahme, warme Farbgebung, emotionaler Schnitt…</span>
-          </div>
-          <div class="preview-footer">
-            <span class="pf-tool">Kie.ai Flux Kontext</span>
-            <span class="pf-status">✓ Fertig in 28 Sek.</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+<nav class="mobile-nav" id="mobile-nav">
+  <a href="#hero" class="mn-link">Home</a>
+  <a href="#services" class="mn-link">Services</a>
+  <a href="#portfolio" class="mn-link">Portfolio</a>
+  <a href="academy.html" class="mn-link">Academy</a>
+  <a href="#booking" class="mn-link">Buchung</a>
+  <a href="crystals.html" class="mn-link">Kristalle</a>
+  <a href="shop.html" class="mn-link">Shop</a>
+  <a href="https://cinematic-studio-family.onrender.com/contact.php" class="mn-link">Kontakt</a>
+  <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="mn-link" style="color:var(--gold-bright)">🎬 Studio →</a>
+  <a href="https://cinematic-studio-family.onrender.com/login.php" class="mn-link" style="color:var(--blue-bright)">Login →</a>
+</nav>
 
-  <hr>
+<!-- ══════════════════════════════════
+     HERO — LEGENDARY STAGE
+══════════════════════════════════ -->
+<section id="hero">
+  <!-- Cinematic Video Loop Background -->
+  <video id="hero-video" autoplay loop muted playsinline
+    poster="assets/cvs-hero-studio.jpg"
+    preload="auto">
+    <source src="assets/cvs-hero-loop.mp4" type="video/mp4">
+  </video>
 
-  <!-- TRUST STRIP -->
-  <div class="trust-strip">
-    <div class="trust-inner">
-      <span class="trust-label">Prompt-Vorlagen für</span>
-      <div class="trust-tools">
-        <span class="trust-tool">Runway ML</span>
-        <span class="trust-tool">Sora</span>
-        <span class="trust-tool">Kling AI</span>
-        <span class="trust-tool">Midjourney</span>
-        <span class="trust-tool">Pika</span>
-        <span class="trust-tool">DALL·E 3</span>
-      </div>
+  <div class="hero-grid"></div>
+  <div class="hero-fog"></div>
+  <div class="hero-scanline"></div>
+  <div class="hero-env"></div>
+  <div class="hero-streaks"></div>
+
+  <!-- Glow atmosphere -->
+  <div class="glow-orb orb-1"></div>
+  <div class="glow-orb orb-2"></div>
+  <div class="glow-orb orb-3"></div>
+  <div class="glow-orb orb-4"></div>
+  <div class="glow-orb orb-5"></div>
+
+  <!-- Foreground particles -->
+  <div class="particles" id="particles-container"></div>
+
+  <!-- Text -->
+  <div class="hero-content">
+    <div class="hero-eyebrow">AI-Powered Cinematic Studio</div>
+    <h1 class="hero-h1">
+      <span class="line-1">Deine Vision.</span>
+      <span class="line-2">Als cinematic KI-Erlebnis.</span>
+    </h1>
+    <p class="hero-sub">
+      High-End KI-Videos, Transformationen, Anime-Sequenzen, Werbeclips und visuelle Markenwelten. Premium-Look, klare Strategie, schnelle Umsetzung.
+    </p>
+    <div class="hero-actions">
+      <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="btn-primary">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 1l6 7-6 7M2 8h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        Studio starten
+      </a>
+      <a href="#portfolio" class="btn-secondary">Portfolio ansehen</a>
+      <a href="https://cinematic-studio-family.onrender.com/contact.php" class="btn-ghost">⚡ Projekt anfragen</a>
     </div>
   </div>
+</section>
 
-  <!-- SOCIAL PROOF -->
-  <section class="proof-section">
-    <div class="wrap">
-      <div class="proof-header">
-        <div class="proof-eyebrow">✓ Echte Ergebnisse</div>
-        <h2 class="proof-title">Familien lieben <span>ihre Filme</span></h2>
+<!-- ══════════════════════════════════
+     STATS
+══════════════════════════════════ -->
+<div class="stats-bar">
+  <div class="stat-item reveal"><div class="stat-num">2400+</div><div class="stat-label">Projekte abgeschlossen</div></div>
+  <div class="stat-item reveal reveal-delay-1"><div class="stat-num">140+</div><div class="stat-label">Globale Marken</div></div>
+  <div class="stat-item reveal reveal-delay-2"><div class="stat-num">48h</div><div class="stat-label">Express-Lieferung</div></div>
+  <div class="stat-item reveal reveal-delay-3"><div class="stat-num">99%</div><div class="stat-label">Kundenzufriedenheit</div></div>
+  <div class="stat-item reveal reveal-delay-4"><div class="stat-num">6</div><div class="stat-label">Cinematic Disziplinen</div></div>
+</div>
+
+<!-- ══════════════════════════════════
+     SERVICES
+══════════════════════════════════ -->
+<section id="services">
+  <div class="section-label reveal">Was wir erschaffen</div>
+  <h2 class="section-title reveal reveal-delay-1">Sechs cinematic<br><span>Dimensionen.</span></h2>
+  <div class="services-grid">
+
+    <div class="service-world sw-transform reveal">
+      <div class="s-bg"></div><div class="service-num">01</div>
+      <div class="service-icon">⚡</div>
+      <h3 class="service-title">KI-Videos & Trailer</h3>
+      <p class="service-desc">Cinematic Szenen, Musikvideos, Trailer und Social Clips auf Hollywood-Niveau. Aus deiner Idee wird ein visuelles Ereignis – in Rekordzeit.</p>
+      <div class="service-tags"><span class="service-feat">Trailer</span><span class="service-feat">Social Clip</span><span class="service-feat">Musikvideo</span></div>
+      <a href="#booking" class="service-cta">Mehr erfahren <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1 6.5h11M7 2l4.5 4.5L7 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></a>
+    </div>
+
+    <div class="service-world sw-cinematic reveal reveal-delay-1">
+      <div class="s-bg"></div><div class="service-num">02</div>
+      <div class="service-icon">🔥</div>
+      <h3 class="service-title">Transformationen</h3>
+      <p class="service-desc">Vorher/Nachher auf einem anderen Level: Anime, Superheld, Fantasy, Sci-Fi, Character-Upgrade. Dein Gesicht, deine Story – cinematic verwandelt.</p>
+      <div class="service-tags"><span class="service-feat">Anime</span><span class="service-feat">Superheld</span><span class="service-feat">Fantasy</span></div>
+      <a href="#booking" class="service-cta">Mehr erfahren <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1 6.5h11M7 2l4.5 4.5L7 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></a>
+    </div>
+
+    <div class="service-world sw-ads reveal reveal-delay-2">
+      <div class="s-bg"></div><div class="service-num">03</div>
+      <div class="service-icon">📡</div>
+      <h3 class="service-title">Werbung & Produktvideos</h3>
+      <p class="service-desc">TikTok Ads, Shop-Videos, Produktspots, Beauty, Fashion, Technik. Ads, die stoppen – nicht geskippt werden. Conversion-optimiert, cinematic umgesetzt.</p>
+      <div class="service-tags"><span class="service-feat">TikTok Ads</span><span class="service-feat">Shop-Video</span><span class="service-feat">Produktspot</span></div>
+      <a href="#booking" class="service-cta">Mehr erfahren <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1 6.5h11M7 2l4.5 4.5L7 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></a>
+    </div>
+
+    <div class="service-world sw-anim reveal">
+      <div class="s-bg"></div><div class="service-num">04</div>
+      <div class="service-icon">🤖</div>
+      <h3 class="service-title">Animationen</h3>
+      <p class="service-desc">Bild-zu-Video, Character Motion, Logo Motion, Intro/Outro. Jede Bewegung kalkuliert, jeder Frame als visuelles Statement – KI als Co-Regisseur.</p>
+      <div class="service-tags"><span class="service-feat">Bild-zu-Video</span><span class="service-feat">Logo Motion</span><span class="service-feat">Intro/Outro</span></div>
+      <a href="#booking" class="service-cta">Mehr erfahren <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1 6.5h11M7 2l4.5 4.5L7 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></a>
+    </div>
+
+    <div class="service-world sw-anime reveal reveal-delay-1">
+      <div class="s-bg"></div><div class="service-num">05</div>
+      <div class="service-icon">🌸</div>
+      <h3 class="service-title">Anime & Storywelten</h3>
+      <p class="service-desc">KI-generierte Anime-Sequenzen mit eigenem Stil. Story-Charaktere, Action-Szenen, emotionale Welten – deine Geschichte in Anime-Ästhetik.</p>
+      <div class="service-tags"><span class="service-feat">Anime-Sequenz</span><span class="service-feat">Story-Charakter</span><span class="service-feat">Action-Szene</span></div>
+      <a href="#booking" class="service-cta">Mehr erfahren <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1 6.5h11M7 2l4.5 4.5L7 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></a>
+    </div>
+
+    <div class="service-world sw-prompt reveal reveal-delay-2">
+      <div class="s-bg"></div><div class="service-num">06</div>
+      <div class="service-icon">💡</div>
+      <h3 class="service-title">Prompt & Workflow Studio</h3>
+      <p class="service-desc">Professionelle Prompts, Vorlagen, Workflows und Creator-Systeme. Lerne wie wir arbeiten und baue deine eigene cinematic KI-Produktion auf.</p>
+      <div class="service-tags"><span class="service-feat">Prompts</span><span class="service-feat">Workflows</span><span class="service-feat">Creator-System</span></div>
+      <a href="#crystals" class="service-cta">Mehr erfahren <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1 6.5h11M7 2l4.5 4.5L7 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     PORTFOLIO
+══════════════════════════════════ -->
+<section id="portfolio">
+  <div class="section-label reveal">Unsere Arbeiten</div>
+  <h2 class="section-title reveal reveal-delay-1">Cinematic <span>Showcase.</span></h2>
+  <div class="portfolio-filter reveal reveal-delay-2">
+    <button class="pf-btn active">Alle</button>
+    <button class="pf-btn">Transformationen</button>
+    <button class="pf-btn">KI Video</button>
+    <button class="pf-btn">Werbung</button>
+    <button class="pf-btn">Anime</button>
+    <button class="pf-btn">Animation</button>
+  </div>
+
+  <div class="portfolio-grid reveal">
+
+    <div class="portfolio-item pi-1">
+      <div class="portfolio-thumb">
+        <div class="thumb-scene ts-transform">
+          <div class="thumb-glow-core tgc-1"></div>
+          <div class="thumb-glow-anim"></div>
+          <div class="thumb-lines"></div>
+          <div class="thumb-shape thumb-shape-1"></div>
+          <div class="thumb-shape thumb-shape-2"></div>
+          <div class="thumb-horizon"></div>
+          <div class="thumb-label"><em>Featured Transformation</em>AIB Transformation Sequence</div>
+          <div class="lens-flare lf-1"></div>
+          <div class="lens-flare lf-2"></div>
+          <div class="lens-flare lf-3"></div>
+        </div>
+        <div class="thumb-scan"></div>
+        <div class="thumb-sweep"></div>
+        <div class="thumb-timeline"></div>
+        <div class="thumb-hud-tl"></div>
+        <div class="thumb-hud-br"></div>
+        <div class="play-overlay">
+          <div class="play-btn-large"><svg width="20" height="20" viewBox="0 0 22 22" fill="white"><path d="M8 4l10 7-10 7V4z"/></svg></div>
+        </div>
       </div>
-      <div class="proof-stats">
-        <div class="ps-item"><div class="ps-num">1.200+</div><div class="ps-lbl">Videos gerendert</div></div>
-        <div class="ps-item"><div class="ps-num">28 Sek.</div><div class="ps-lbl">Ø Render-Zeit</div></div>
-        <div class="ps-item"><div class="ps-num">4,9 ★</div><div class="ps-lbl">Durchschnittsbewertung</div></div>
-        <div class="ps-item"><div class="ps-num">0€</div><div class="ps-lbl">Kostenlos starten</div></div>
-      </div>
-      <div class="testimonials">
-        <div class="t-card" style="--tc:linear-gradient(90deg,#f5c542,#ff8c00)">
-          <div class="t-stars">★★★★★</div>
-          <div class="t-quote">„Unser Urlaubsvideo sieht aus wie ein echter Kinofilm. Meine Kinder haben geweint vor Freude — und ich auch."</div>
-          <div class="t-author">
-            <div class="t-avatar" style="--ta:rgba(245,197,66,.15)">👩</div>
-            <div><div class="t-name">Sandra M.</div><div class="t-role">Mutter von 3 Kindern · Mallorca-Urlaub</div></div>
-          </div>
-        </div>
-        <div class="t-card" style="--tc:linear-gradient(90deg,#3b82f6,#9333ea)">
-          <div class="t-stars">★★★★★</div>
-          <div class="t-quote">„Ich hab keine Ahnung von Video-Schnitt. Trotzdem war mein Geburtstags-Film nach 4 Minuten fertig. Absoluter Wahnsinn."</div>
-          <div class="t-author">
-            <div class="t-avatar" style="--ta:rgba(59,130,246,.15)">👨</div>
-            <div><div class="t-name">Thomas B.</div><div class="t-role">Hobbyfilmer · Jahresrückblick 2025</div></div>
-          </div>
-        </div>
-        <div class="t-card" style="--tc:linear-gradient(90deg,#ec4899,#a855f7)">
-          <div class="t-stars">★★★★★</div>
-          <div class="t-quote">„Die KI hat genau den Stil getroffen den ich mir vorgestellt habe. Grandma hat das Video 10x angeschaut."</div>
-          <div class="t-author">
-            <div class="t-avatar" style="--ta:rgba(236,72,153,.15)">👩</div>
-            <div><div class="t-name">Laura K.</div><div class="t-role">Content Creator · Familien-Vlog</div></div>
-          </div>
-        </div>
+      <div class="portfolio-cat">Transformation · 2025</div>
+      <div class="portfolio-info">
+        <span class="pi-meta">Transformation · CVS Studio</span>
+        <h4>AIB Transformation Sequence</h4>
+        <p class="pi-desc">Vollständige cinematic Verwandlung in Anime-Ästhetik mit KI-gesteuerten Motion-Effekten.</p>
       </div>
     </div>
-  </section>
 
-  <!-- WIE ES FUNKTIONIERT -->
-  <section class="steps-section">
-    <div class="wrap">
-      <div class="steps-header">
-        <div class="steps-eyebrow">⚡ So einfach geht's</div>
-        <h2 class="steps-title">Vom Video zum <span>fertigen Film</span> in 3 Schritten</h2>
+    <div class="portfolio-item pi-2">
+      <div class="portfolio-thumb">
+        <div class="thumb-scene ts-ads">
+          <div class="thumb-glow-core tgc-gold"></div>
+          <div class="thumb-glow-anim"></div>
+          <div class="thumb-lines"></div>
+          <div class="thumb-horizon"></div>
+          <div class="lens-flare lf-1"></div><div class="lens-flare lf-3"></div>
+        </div>
+        <div class="thumb-scan"></div><div class="thumb-sweep"></div>
+        <div class="thumb-timeline"></div><div class="thumb-hud-tl"></div><div class="thumb-hud-br"></div>
+        <div class="play-overlay"><div class="play-btn-large"><svg width="20" height="20" viewBox="0 0 22 22" fill="white"><path d="M8 4l10 7-10 7V4z"/></svg></div></div>
       </div>
-      <div class="steps-grid">
-        <div class="step">
-          <div class="step-icon" data-n="1" style="--sg:rgba(59,130,246,.18)">📤</div>
-          <div class="step-title">Video hochladen</div>
-          <div class="step-desc">Lade dein Rohvideo hoch. Das Studio analysiert automatisch alle Szenen und erkennt die optimalen Schnittmomente.</div>
-        </div>
-        <div class="step">
-          <div class="step-icon" data-n="2" style="--sg:rgba(147,51,234,.18)">🤖</div>
-          <div class="step-title">KI bearbeitet</div>
-          <div class="step-desc">Ersetze Szenen mit KI-generierten Bildern, passe Text-Overlays an und wähle deinen Stil per Prompt.</div>
-        </div>
-        <div class="step">
-          <div class="step-icon" data-n="3" style="--sg:rgba(245,197,66,.18)">🎬</div>
-          <div class="step-title">Download &amp; fertig</div>
-          <div class="step-desc">Ein Klick – dein finales MP4 wird gerendert und steht sofort zum Download bereit. Keine Installation nötig.</div>
-        </div>
+      <div class="portfolio-cat">Werbung · 2025</div>
+      <div class="portfolio-info">
+        <span class="pi-meta">Werbung · Luxury Brand</span>
+        <h4>Luxury Product Ad</h4>
+        <p class="pi-desc">Premium-Produktspot mit Gold-Lichtatmosphäre und cinematischem Produktritual.</p>
       </div>
     </div>
-  </section>
 
-  <!-- HUB GRID -->
-  <section class="hub-section" id="hub">
-    <div class="wrap">
-      <div class="hub-eyebrow">Studio-Module</div>
-      <h2 class="hub-title">Dein <span>komplettes Studio</span></h2>
-      <p class="hub-sub">Wähle ein Modul und starte sofort.</p>
-
-      <div class="hub-grid">
-
-        <div class="hub-divider">
-          <div class="hub-divider-line"></div>
-          <div class="hub-divider-label">🎬 Produktion</div>
-          <div class="hub-divider-line"></div>
+    <div class="portfolio-item pi-3">
+      <div class="portfolio-thumb">
+        <div class="thumb-scene ts-anime">
+          <div class="thumb-glow-core tgc-purple"></div>
+          <div class="thumb-glow-anim"></div>
+          <div class="thumb-lines"></div>
+          <div class="thumb-shape thumb-shape-1"></div>
+          <div class="lens-flare lf-2"></div><div class="lens-flare lf-4"></div>
         </div>
-
-        <a href="studio-demo.php" class="hub-card hub-featured" style="--hc:linear-gradient(90deg,#3b82f6,#9333ea);--hg:rgba(59,130,246,.12)">
-          <span class="hc-icon">🎬</span>
-          <div class="hc-title">Studio Demo</div>
-          <div class="hc-desc">Video analysieren, Szenen ersetzen, KI-Bild generieren, finales MP4 rendern – jetzt live ausprobieren.</div>
-          <div class="hc-footer"><span class="hc-status s-aktiv">Jetzt starten</span><span class="hc-arrow">→</span></div>
-        </a>
-
-        <a href="prompt-generator.php" class="hub-card" style="--hc:linear-gradient(90deg,#9333ea,#6366f1);--hg:rgba(147,51,234,.12)">
-          <span class="hc-icon">✍️</span>
-          <div class="hc-title">Prompt Generator</div>
-          <div class="hc-desc">Cinematische KI-Prompts für Midjourney, DALL·E, Runway &amp; mehr.</div>
-          <div class="hc-footer"><span class="hc-status s-aktiv">Aktiv</span><span class="hc-arrow">→</span></div>
-        </a>
-
-        <a href="ki-videos.php" class="hub-card" style="--hc:linear-gradient(90deg,#f97316,#f5c542);--hg:rgba(249,115,22,.12)">
-          <span class="hc-icon">🎥</span>
-          <div class="hc-title">KI Videos</div>
-          <div class="hc-desc">Hochwertige KI-Kurzfilme und Clips mit führenden Modellen.</div>
-          <div class="hc-footer"><span class="hc-status s-beta">Beta</span><span class="hc-arrow">→</span></div>
-        </a>
-
-        <a href="trailer-builder.php" class="hub-card" style="--hc:linear-gradient(90deg,#f5c542,#f97316);--hg:rgba(245,197,66,.12)">
-          <span class="hc-icon">🎞️</span>
-          <div class="hc-title">Trailer Builder</div>
-          <div class="hc-desc">Cinematische Trailer mit Timeline, Musik-Stil und automatischer Beat-Struktur.</div>
-          <div class="hc-footer"><span class="hc-status s-aktiv">Aktiv</span><span class="hc-arrow">→</span></div>
-        </a>
-
-        <div class="hub-divider">
-          <div class="hub-divider-line"></div>
-          <div class="hub-divider-label">📱 TikTok</div>
-          <div class="hub-divider-line"></div>
-        </div>
-
-        <a href="tiktok-studio.php" class="hub-card" style="--hc:linear-gradient(90deg,#ec4899,#a855f7);--hg:rgba(236,72,153,.12)">
-          <span class="hc-icon">🎵</span>
-          <div class="hc-title">TikTok Studio</div>
-          <div class="hc-desc">Hooks, Viral-Prompts, Animation &amp; Sticker – alles für TikTok in einem Hub.</div>
-          <div class="hc-footer"><span class="hc-status s-aktiv">Aktiv</span><span class="hc-arrow">→</span></div>
-        </a>
-
-        <a href="tiktok-animation.php" class="hub-card" style="--hc:linear-gradient(90deg,#ec4899,#f97316);--hg:rgba(236,72,153,.12)">
-          <span class="hc-icon">📱</span>
-          <div class="hc-title">TikTok Animation</div>
-          <div class="hc-desc">Animierte Clips optimiert für TikTok-Format und Trends.</div>
-          <div class="hc-footer"><span class="hc-status s-aktiv">Aktiv</span><span class="hc-arrow">→</span></div>
-        </a>
-
-        <a href="tiktok-sticker.php" class="hub-card" style="--hc:linear-gradient(90deg,#06b6d4,#3b82f6);--hg:rgba(6,182,212,.12)">
-          <span class="hc-icon">✨</span>
-          <div class="hc-title">Sticker Studio</div>
-          <div class="hc-desc">Individuelle animierte &amp; statische Sticker-Sets erstellen.</div>
-          <div class="hc-footer"><span class="hc-status s-aktiv">Aktiv</span><span class="hc-arrow">→</span></div>
-        </a>
-
-        <div class="hub-divider">
-          <div class="hub-divider-line"></div>
-          <div class="hub-divider-label">🎓 Lernen &amp; Tools</div>
-          <div class="hub-divider-line"></div>
-        </div>
-
-        <a href="ready-videos.php" class="hub-card" style="--hc:linear-gradient(90deg,#22c55e,#06b6d4);--hg:rgba(34,197,94,.12)">
-          <span class="hc-icon">▶️</span>
-          <div class="hc-title">Ready Videos</div>
-          <div class="hc-desc">Fertige KI-Videoclips — sofort download-bereit und einsatzfähig.</div>
-          <div class="hc-footer"><span class="hc-status s-aktiv">Aktiv</span><span class="hc-arrow">→</span></div>
-        </a>
-
-        <a href="academy.php" class="hub-card" style="--hc:linear-gradient(90deg,#10b981,#06b6d4);--hg:rgba(16,185,129,.12)">
-          <span class="hc-icon">🎓</span>
-          <div class="hc-title">Academy</div>
-          <div class="hc-desc">Guides, Tutorials und Kurse für professionelle KI-Filmproduktion.</div>
-          <div class="hc-footer"><span class="hc-status s-aktiv">Aktiv</span><span class="hc-arrow">→</span></div>
-        </a>
-
-        <a href="merge-clips.php" class="hub-card" style="--hc:linear-gradient(90deg,#6366f1,#06b6d4);--hg:rgba(99,102,241,.12)">
-          <span class="hc-icon">⛓️</span>
-          <div class="hc-title">Multi-Scene Export</div>
-          <div class="hc-desc">Mehrere Clips zusammenführen und in einem Schritt final rendern.</div>
-          <div class="hc-footer"><span class="hc-status s-aktiv">Aktiv</span><span class="hc-arrow">→</span></div>
-        </a>
-
-        <a href="dashboard.php" class="hub-card" style="--hc:linear-gradient(90deg,#10b981,#3b82f6);--hg:rgba(16,185,129,.12)">
-          <span class="hc-icon">📁</span>
-          <div class="hc-title">Meine Projekte</div>
-          <div class="hc-desc">Alle Projekte im Überblick – öffnen, bearbeiten oder neues Projekt anlegen.</div>
-          <div class="hc-footer"><span class="hc-status s-aktiv">Aktiv</span><span class="hc-arrow">→</span></div>
-        </a>
-
-        <a href="contact.php" class="hub-card" style="--hc:linear-gradient(90deg,#f43f5e,#ec4899);--hg:rgba(244,63,94,.12)">
-          <span class="hc-icon">🚀</span>
-          <div class="hc-title">Kontakt &amp; Beta</div>
-          <div class="hc-desc">Beta-Zugang sichern, Projekt anfragen oder Workflow bauen lassen.</div>
-          <div class="hc-footer"><span class="hc-status s-demo">Beta</span><span class="hc-arrow">→</span></div>
-        </a>
-
-        <div class="hub-divider">
-          <div class="hub-divider-line"></div>
-          <div class="hub-divider-label">Demnächst</div>
-          <div class="hub-divider-line"></div>
-        </div>
-
-        <a href="shop.php" class="hub-card" style="--hc:linear-gradient(90deg,#f5c542,#ff8c00);--hg:rgba(245,197,66,.12)">
-          <span class="hc-icon">🛒</span>
-          <div class="hc-title">Shop</div>
-          <div class="hc-desc">Pakete, Abos, Mystery Deals und maßgeschneiderte Services.</div>
-          <div class="hc-footer"><span class="hc-status s-bald">Bald</span><span class="hc-arrow">→</span></div>
-        </a>
-
-        <a href="portfolio.php" class="hub-card" style="--hc:linear-gradient(90deg,#6366f1,#9333ea);--hg:rgba(99,102,241,.12)">
-          <span class="hc-icon">🎞️</span>
-          <div class="hc-title">Portfolio</div>
-          <div class="hc-desc">KI-Videos, Animationen, Sticker &amp; Prompts — alles ansehen.</div>
-          <div class="hc-footer"><span class="hc-status s-bald">Bald</span><span class="hc-arrow">→</span></div>
-        </a>
-
-        <a href="crystals.php" class="hub-card" style="--hc:linear-gradient(90deg,#f5c542,#ff8c00);--hg:rgba(245,197,66,.14)">
-          <span class="hc-icon">💎</span>
-          <div class="hc-title">Kristalle &amp; Pakete</div>
-          <div class="hc-desc">Kristalle kaufen, Verbrauch tracken, Pakete verwalten.</div>
-          <div class="hc-footer"><span class="hc-status s-bald">Bald</span><span class="hc-arrow">→</span></div>
-        </a>
-
+        <div class="thumb-scan"></div><div class="thumb-sweep"></div>
+        <div class="thumb-timeline"></div><div class="thumb-hud-tl"></div><div class="thumb-hud-br"></div>
+        <div class="play-overlay"><div class="play-btn-large"><svg width="20" height="20" viewBox="0 0 22 22" fill="white"><path d="M8 4l10 7-10 7V4z"/></svg></div></div>
+      </div>
+      <div class="portfolio-cat">Anime · 2025</div>
+      <div class="portfolio-info">
+        <span class="pi-meta">Anime · Story Sequence</span>
+        <h4>Anime Storm Awakening</h4>
+        <p class="pi-desc">Dramatische Anime-Erwachungsszene mit violetter Energie-Aura und dynamischer Kameraführung.</p>
       </div>
     </div>
-  </section>
 
-  <!-- FAQ -->
-  <section class="faq-section">
-    <div class="wrap">
-      <div class="faq-header">
-        <div class="faq-eyebrow">❓ Häufige Fragen</div>
-        <h2 class="faq-title">Alles was du wissen musst</h2>
+    <div class="portfolio-item pi-4">
+      <div class="portfolio-thumb">
+        <div class="thumb-scene ts-cinematic">
+          <div class="thumb-glow-core tgc-gold"></div>
+          <div class="thumb-lines"></div>
+          <div class="thumb-horizon"></div>
+          <div class="lens-flare lf-1"></div>
+        </div>
+        <div class="thumb-scan"></div><div class="thumb-sweep"></div>
+        <div class="thumb-timeline"></div><div class="thumb-hud-tl"></div><div class="thumb-hud-br"></div>
+        <div class="play-overlay"><div class="play-btn-large"><svg width="20" height="20" viewBox="0 0 22 22" fill="white"><path d="M8 4l10 7-10 7V4z"/></svg></div></div>
       </div>
-      <div class="faq-grid">
-        <div class="faq-item">
-          <div class="faq-q">Brauche ich einen Account?</div>
-          <div class="faq-a">Nein. Einfach auf „Studio starten" klicken — sofort loslegen, kein Login, keine E-Mail-Adresse nötig.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-q">Welche Videoformate werden unterstützt?</div>
-          <div class="faq-a">MP4 und WebM, bis 50 MB und max. 15 Sekunden im Free-Plan. Das reicht für alle Standard-Urlaubsclips vom Smartphone.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-q">Wie lange dauert das Rendern?</div>
-          <div class="faq-a">Im Schnitt 10–30 Sekunden. Das Tab einfach offen lassen — du bekommst sofort den Download-Link.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-q">Ist es wirklich kostenlos?</div>
-          <div class="faq-a">Ja. Der Free-Plan ist dauerhaft kostenlos: 720p, max. 15 Sek., 3 Szenen. Mehr Leistung gibt's mit Starter+.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-q">Was macht die KI genau?</div>
-          <div class="faq-a">Du gibst einen Prompt ein — die KI generiert daraus ein cinematic Bild per Flux Kontext und ersetzt damit eine Szene in deinem Video.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-q">Bleiben meine Videos gespeichert?</div>
-          <div class="faq-a">Videos und Renders bleiben 48 Stunden verfügbar. Im Free-Plan kein dauerhafter Speicher — rechtzeitig herunterladen.</div>
-        </div>
+      <div class="portfolio-cat">KI Video · 2025</div>
+      <div class="portfolio-info">
+        <span class="pi-meta">KI Video · Cinematic Reveal</span>
+        <h4>Cinematic Car Reveal</h4>
+        <p class="pi-desc">Atmosphärisches Fahrzeug-Reveal mit Gold-Licht-Choreografie und cinematic Slow-Motion.</p>
       </div>
     </div>
-  </section>
 
-  <!-- FINALE CTA -->
-  <section class="cta-section">
-    <div class="cta-inner">
-      <div class="cta-badge">Jetzt kostenlos</div>
-      <h2 class="cta-h2">Dein erster <span>KI-Film</span><br>wartet auf dich.</h2>
-      <p class="cta-sub">Kein Account nötig. Kein Code. Einfach Video hochladen, KI arbeiten lassen und in unter 30 Sekunden fertig rendern.</p>
-      <div class="cta-btns">
-        <a href="studio-demo.php" class="btn-gold">🎬 Jetzt starten — kostenlos</a>
-        <a href="academy.php" class="btn-ghost">Wie es funktioniert →</a>
+    <div class="portfolio-item pi-5">
+      <div class="portfolio-thumb">
+        <div class="thumb-scene ts-ai">
+          <div class="thumb-glow-core tgc-1"></div>
+          <div class="thumb-lines"></div>
+          <div class="thumb-shape thumb-shape-2"></div>
+          <div class="lens-flare lf-2"></div>
+        </div>
+        <div class="thumb-scan"></div><div class="thumb-sweep"></div>
+        <div class="thumb-timeline"></div><div class="thumb-hud-tl"></div><div class="thumb-hud-br"></div>
+        <div class="play-overlay"><div class="play-btn-large"><svg width="20" height="20" viewBox="0 0 22 22" fill="white"><path d="M8 4l10 7-10 7V4z"/></svg></div></div>
       </div>
-      <div class="cta-note">Keine Anmeldung · Kein Download · Läuft im Browser</div>
+      <div class="portfolio-cat">Animation · 2025</div>
+      <div class="portfolio-info">
+        <span class="pi-meta">Animation · Character Motion</span>
+        <h4>AI Character Motion</h4>
+        <p class="pi-desc">Flüssige Character-Animation mit KI-gestützter Motion-Interpolation und Electric-Blue-Energie.</p>
+      </div>
     </div>
-  </section>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="footer-inner">
-      <div class="footer-logo">Cinematic Vision Studio</div>
-      <nav class="footer-nav">
-        <a href="https://cinematic-studio-family.onrender.com/studio-demo.php">Studio</a>
-        <a href="shop.html">Shop</a>
-        <a href="academy.html">Academy</a>
-        <a href="portfolio.html">Portfolio</a>
-        <a href="ki-videos.html">KI Videos</a>
-        <a href="prompt-generator.html">Prompts</a>
-        <a href="calendar.html">Kalender</a>
-        <a href="crystals.html">Kristalle</a>
-        <a href="https://cinematic-studio-family.onrender.com/contact.php">Kontakt</a>
-        <a href="https://cinematic-studio-family.onrender.com/login.php">Login</a>
-      </nav>
-      <div class="footer-copy">© 2026 Cinematic Vision Studio · Alle Rechte vorbehalten</div>
+    <div class="portfolio-item pi-6">
+      <div class="portfolio-thumb">
+        <div class="thumb-scene ts-workflow">
+          <div class="thumb-glow-core tgc-orange"></div>
+          <div class="thumb-lines"></div>
+          <div class="thumb-horizon"></div>
+          <div class="lens-flare lf-3"></div>
+        </div>
+        <div class="thumb-scan"></div><div class="thumb-sweep"></div>
+        <div class="thumb-timeline"></div><div class="thumb-hud-tl"></div><div class="thumb-hud-br"></div>
+        <div class="play-overlay"><div class="play-btn-large"><svg width="20" height="20" viewBox="0 0 22 22" fill="white"><path d="M8 4l10 7-10 7V4z"/></svg></div></div>
+      </div>
+      <div class="portfolio-cat">Workflow · 2025</div>
+      <div class="portfolio-info">
+        <span class="pi-meta">Workflow · Brand System</span>
+        <h4>Brand Visual System</h4>
+        <p class="pi-desc">Komplettes visuelles Identitätssystem mit Templates, Prompts und Produktionsregeln für Marken.</p>
+      </div>
     </div>
-  </footer>
 
+  </div>
+</section>
 
-  <script>
-    (function(){
-      var burger = document.getElementById('mobBurger');
-      var menu   = document.getElementById('mobMenu');
-      if(!burger || !menu) return;
-      // Set menu top to match nav height
-      function setTop(){ menu.style.top = document.querySelector('.nav').offsetHeight + 'px'; }
-      setTop();
-      window.addEventListener('resize', setTop);
-      // Toggle
-      burger.addEventListener('click', function(e){
-        e.stopPropagation();
-        var open = menu.classList.toggle('open');
-        burger.classList.toggle('open', open);
-        burger.setAttribute('aria-expanded', open ? 'true' : 'false');
-        burger.setAttribute('aria-label', open ? 'Menü schließen' : 'Menü öffnen');
+<!-- ══════════════════════════════════
+     WHY CVS
+══════════════════════════════════ -->
+<section id="why">
+  <div class="section-label reveal">Der Unterschied</div>
+  <h2 class="section-title reveal reveal-delay-1">Warum <span>Cinematic Vision Studio?</span></h2>
+  <div class="why-grid">
+    <div class="why-card why-card-1 reveal">
+      <div class="why-icon">🎬</div>
+      <h3 class="why-title">Filmischer Look statt KI-Standard</h3>
+      <p class="why-desc">Unsere Arbeit klingt nicht nach „KI-generiert". Jede Szene ist kompositorisch gedacht, jeder Frame cinematisch kalkuliert. Der Unterschied ist sofort sichtbar.</p>
+    </div>
+    <div class="why-card why-card-2 reveal reveal-delay-1">
+      <div class="why-icon">⚙️</div>
+      <h3 class="why-title">Klare Workflows statt Zufall</h3>
+      <p class="why-desc">Statt blindlings zu prompten, arbeiten wir mit bewährten Produktionssystemen. Jedes Projekt folgt einem klaren kreativen Prozess – reproduzierbar und skalierbar.</p>
+    </div>
+    <div class="why-card why-card-3 reveal reveal-delay-2">
+      <div class="why-icon">⚡</div>
+      <h3 class="why-title">Schnelle Umsetzung mit Express-Option</h3>
+      <p class="why-desc">Standard-Lieferung in 3–5 Tagen, Express in 24–48h nach Bestätigung. Weil deine Ideen nicht warten sollten, bis sie viral gehen könnten.</p>
+    </div>
+    <div class="why-card why-card-4 reveal reveal-delay-3">
+      <div class="why-icon">🎯</div>
+      <h3 class="why-title">Persönliche Betreuung von Idee bis Ergebnis</h3>
+      <p class="why-desc">Kein Ticket-System, kein Automaten-Service. Du sprichst direkt mit deinem Creator – von der ersten Vision bis zum finalen Frame.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     PROCESS
+══════════════════════════════════ -->
+<section id="process">
+  <div class="section-label reveal" style="justify-content:center">So funktioniert's</div>
+  <h2 class="section-title reveal reveal-delay-1" style="text-align:center">Dein Projekt in <span>4 Schritten.</span></h2>
+  <div class="process-grid reveal reveal-delay-2">
+    <div class="process-step">
+      <div class="process-num">01</div>
+      <h3 class="process-title">Vision senden</h3>
+      <p class="process-desc">Du beschreibst deine Idee, dein Ziel und deinen Look. Referenzen willkommen – je klarer die Vision, desto stärker das Ergebnis.</p>
+    </div>
+    <div class="process-step">
+      <div class="process-num">02</div>
+      <h3 class="process-title">Look & Stil festlegen</h3>
+      <p class="process-desc">Wir definieren gemeinsam Ästhetik, Farbwelt, Motion-Stil und Storytelling-Ansatz. Kein Raten – klare Abstimmung vor dem Start.</p>
+    </div>
+    <div class="process-step">
+      <div class="process-num">03</div>
+      <h3 class="process-title">KI-Produktion starten</h3>
+      <p class="process-desc">Unser Studio produziert mit professionellen KI-Workflows. Preview-Frames und Feedback-Runden, bevor das finale Rendering startet.</p>
+    </div>
+    <div class="process-step">
+      <div class="process-num">04</div>
+      <h3 class="process-title">Finales Ergebnis erhalten</h3>
+      <p class="process-desc">Du erhältst dein Projekt in Exportformat, Full-Rights-Transfer inklusive. Bereit für Social, Werbung, Präsentation.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     BOOKING
+══════════════════════════════════ -->
+<section id="booking">
+  <div class="section-label reveal">Jetzt starten</div>
+  <h2 class="section-title reveal reveal-delay-1">Wähle deinen <span>Projekt-Slot.</span></h2>
+  <div class="booking-grid">
+    <div class="booking-info reveal">
+      <p class="booking-intro">Limitierte Slots. Maximale Qualität. Wähle deinen Starttermin und starte deine cinematic Produktion — wir erschaffen gemeinsam etwas, das bleibt.</p>
+      <div class="booking-features">
+        <div class="bf-item">
+          <div class="bf-icon">⚡</div>
+          <div><h4>Express-Lieferung 24–48h</h4><p>Dringendes Projekt? Express-Option nach Bestätigung – ohne Qualitätskompromisse.</p></div>
+        </div>
+        <div class="bf-item">
+          <div class="bf-icon">🎙️</div>
+          <div><h4>Persönlicher Support</h4><p>Direkter Kontakt mit deinem Creator. Kein Ticket, keine Warteschleife.</p></div>
+        </div>
+        <div class="bf-item">
+          <div class="bf-icon">🏆</div>
+          <div><h4>Sicher & Professionell</h4><p>Full Rights Transfer inklusive. Kein Release ohne deine Freigabe.</p></div>
+        </div>
+        <div class="bf-item">
+          <div class="bf-icon">🔄</div>
+          <div><h4>Revisionen inbegriffen</h4><p>Jeder Auftrag enthält definierte Korrekturschleifen. Bis das Ergebnis stimmt.</p></div>
+        </div>
+      </div>
+      <a href="calendar.html" class="btn-primary">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 1l6 7-6 7M2 8h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        Projekt anfragen
+      </a>
+    </div>
+    <div class="booking-panel reveal reveal-delay-2">
+      <h3>Verfügbare Slots</h3>
+      <p class="bp-sub">Wähle deinen Starttermin — limitierte Kapazitäten für maximale Qualität</p>
+      <div class="slot-legend">
+        <span class="slot-legend-item"><span class="sli-dot sli-available"></span>Buchbar</span>
+        <span class="slot-legend-item"><span class="sli-dot sli-reserved"></span>Reserviert</span>
+        <span class="slot-legend-item"><span class="sli-dot sli-closed"></span>Geschlossen</span>
+        <span class="slot-legend-item"><span class="sli-dot sli-express"></span>Express</span>
+      </div>
+      <div class="booking-express-note">⚡ <span><strong>Express verfügbar</strong> — Lieferung in 24–48h nach Bestätigung</span></div>
+      <div class="slot-grid">
+        <div class="slot slot-express"><span class="slot-badge">EXPRESS</span><span class="slot-date">Heute – Sofort</span><span class="slot-status">⚡ Express buchbar</span></div>
+        <div class="slot slot-available"><span class="slot-date">🟢 26. Mai 2026</span><span class="slot-status">● Buchbar</span></div>
+        <div class="slot slot-available"><span class="slot-date">🟢 2. Juni 2026</span><span class="slot-status">● Buchbar</span></div>
+        <div class="slot slot-reserved"><span class="slot-date">🟡 9. Juni 2026</span><span class="slot-status">◌ Reserviert</span></div>
+        <div class="slot slot-reserved"><span class="slot-date">🟡 16. Juni 2026</span><span class="slot-status">◌ Reserviert</span></div>
+        <div class="slot slot-closed"><span class="slot-date">🔒 23. Juni 2026</span><span class="slot-status">✕ Geschlossen</span></div>
+      </div>
+      <a href="calendar.html" class="booking-btn" style="display:block;text-align:center;text-decoration:none">Projekt anfragen →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     CRYSTALS
+══════════════════════════════════ -->
+<section id="crystals">
+  <div class="section-label reveal" style="justify-content:center">Premium Shop</div>
+  <h2 class="section-title reveal reveal-delay-1" style="text-align:center">Cinematic <span>Kristalle.</span></h2>
+  <p class="section-intro reveal reveal-delay-2" style="text-align:center;margin-left:auto;margin-right:auto">Exklusive Prompt-Pakete, Workflow-Templates und Creator-Ressourcen für deine eigene KI-Produktion. Kuratiert und battle-tested vom Studio.</p>
+  <div class="crystals-showcase">
+    <div class="crystal-card reveal"><span class="crystal-gem">💎</span><div class="crystal-name">Starter Crystal</div><div class="crystal-price">€29</div><div class="crystal-desc">50 Pro Prompts + 3 Workflow Templates + Schnellstart-Guide</div></div>
+    <div class="crystal-card reveal reveal-delay-1"><span class="crystal-gem">🔷</span><div class="crystal-name">Blue Core Pack</div><div class="crystal-price">€79</div><div class="crystal-desc">200 Prompts + Cinematic Pack + Community-Zugang + Support</div></div>
+    <div class="crystal-card reveal reveal-delay-2" style="border-color:rgba(200,160,60,.28)"><span class="crystal-gem">⭐</span><div class="crystal-name">Gold Master</div><div class="crystal-price">€149</div><div class="crystal-desc">Unlimited Prompts + 1:1 Creator Session + Academy-Zugang</div></div>
+    <div class="crystal-card reveal reveal-delay-3"><span class="crystal-gem">🌐</span><div class="crystal-name">Universe Pack</div><div class="crystal-price">€299</div><div class="crystal-desc">Alles. Monatlicher Refresh + Creator Badge + Priority Booking</div></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     MANIFESTO
+══════════════════════════════════ -->
+<section id="manifesto">
+  <div class="manifesto-quote reveal">
+    <span class="mq-label">Das Cinematic Manifest</span>
+    Jedes Frame<br>
+    <span class="mq-blue">erzählt eine Welt.</span><br>
+    Jede Sekunde<br>
+    <span class="mq-gold">ist Kunst.</span>
+  </div>
+  <div class="manifesto-cta">
+    <a href="#booking" class="btn-primary reveal"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 1l6 7-6 7M2 8h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Projekt starten</a>
+    <a href="#booking" class="btn-ghost reveal reveal-delay-1">⚡ Express anfragen</a>
+    <a href="#portfolio" class="btn-secondary reveal reveal-delay-2">Portfolio ansehen</a>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     FOOTER
+══════════════════════════════════ -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <h3>CINEMATIC VISION STUDIO</h3>
+      <p>Kein Standard-KI-Service. Ein cinematic Creator-Studio für High-End KI-Videos, Transformationen und visuelle Markenwelten – für Creator, Marken und Visionäre.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Studio</h4>
+      <a href="#why">Über uns</a>
+      <a href="#process">Prozess</a>
+      <a href="academy.html">Academy</a>
+      <a href="#booking">Buchung</a>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <a href="ki-videos.html">KI-Videos &amp; Trailer</a>
+      <a href="shop.html">Shop</a>
+      <a href="prompt-generator.html">Prompt Studio</a>
+      <a href="portfolio.html">Portfolio</a>
+      <a href="crystals.html">Kristalle</a>
+    </div>
+    <div class="footer-col">
+      <h4>Kontakt</h4>
+      <a href="https://cinematic-studio-family.onrender.com/contact.php">Projekt anfragen</a>
+      <a href="https://cinematic-studio-family.onrender.com/studio-demo.php">Studio starten</a>
+      <a href="impressum.html">Impressum</a>
+      <a href="datenschutz.html">Datenschutz</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Cinematic Vision Studio. Alle Rechte vorbehalten.</p>
+    <div class="footer-socials">
+      <a href="https://tiktok.com" target="_blank" rel="noopener" class="social-btn" aria-label="TikTok">TK</a>
+      <a href="https://instagram.com" target="_blank" rel="noopener" class="social-btn" aria-label="Instagram">IG</a>
+      <a href="https://youtube.com" target="_blank" rel="noopener" class="social-btn" aria-label="YouTube">YT</a>
+      <a href="https://discord.com" target="_blank" rel="noopener" class="social-btn" aria-label="Discord">DC</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════ -->
+<script>
+(function(){
+'use strict';
+
+// ── Particles (desktop only, respects reduced motion) ──
+const pc = document.getElementById('particles-container');
+const prefersReduced = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+if (pc && !prefersReduced && window.innerWidth > 768) {
+  const cols = ['rgba(24,114,255,0.55)','rgba(200,160,60,0.45)','rgba(77,160,255,0.4)','rgba(200,160,60,0.35)','rgba(255,255,255,0.25)'];
+  const count = window.innerWidth > 1200 ? 24 : 16;
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const sz = 1 + Math.random() * 2;
+    const left = 5 + Math.random() * 90;
+    const dur = 10 + Math.random() * 14;
+    const delay = Math.random() * -20;
+    const dx = -18 + Math.random() * 36;
+    p.style.cssText = `width:${sz}px;height:${sz}px;left:${left}%;bottom:${Math.random()*8}%;background:${cols[Math.floor(Math.random()*cols.length)]};filter:blur(${Math.random()>.6?.5:0}px);animation-duration:${dur}s;animation-delay:${delay}s;--px:${dx}px;border-radius:50%`;
+    pc.appendChild(p);
+  }
+}
+
+// ── Custom cursor ──
+const isDesktop = window.matchMedia('(pointer: fine)').matches;
+if (isDesktop) {
+  const cursor = document.getElementById('cursor');
+  const ring   = document.getElementById('cursor-ring');
+  let mx=0,my=0,rx=0,ry=0,active=false;
+  document.addEventListener('mousemove', e => {
+    mx=e.clientX; my=e.clientY;
+    cursor.style.left=mx+'px'; cursor.style.top=my+'px';
+    if (!active){active=true;document.body.classList.add('cursor-active')}
+  });
+  (function loop(){
+    rx+=(mx-rx)*.1; ry+=(my-ry)*.1;
+    ring.style.left=rx+'px'; ring.style.top=ry+'px';
+    requestAnimationFrame(loop);
+  })();
+  document.querySelectorAll('a,button,.portfolio-item,.service-world,.crystal-card,.slot,.why-card').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{cursor.style.width='20px';cursor.style.height='20px';ring.style.width='52px';ring.style.height='52px'});
+    el.addEventListener('mouseleave',()=>{cursor.style.width='8px';cursor.style.height='8px';ring.style.width='32px';ring.style.height='32px'});
+  });
+
+  // 3D card tilts
+  function addTilt(sel, maxDeg) {
+    document.querySelectorAll(sel).forEach(el => {
+      el.style.transition = 'transform .55s cubic-bezier(.23,1,.32,1),box-shadow .55s,border-color .4s';
+      el.addEventListener('mousemove', e => {
+        const r = el.getBoundingClientRect();
+        const x = (e.clientX-r.left)/r.width-.5;
+        const y = (e.clientY-r.top)/r.height-.5;
+        el.style.transform = `translateY(-7px) rotateX(${-y*maxDeg}deg) rotateY(${x*maxDeg}deg)`;
       });
-      // Close on link click
-      menu.querySelectorAll('.mob-link, .mob-cta').forEach(function(l){
-        l.addEventListener('click', function(){
-          menu.classList.remove('open');
-          burger.classList.remove('open');
-          burger.setAttribute('aria-expanded', 'false');
-          burger.setAttribute('aria-label', 'Menü öffnen');
-        });
-      });
-      // Close on outside click
-      document.addEventListener('click', function(e){
-        if(!burger.contains(e.target) && !menu.contains(e.target)){
-          menu.classList.remove('open');
-          burger.classList.remove('open');
-          burger.setAttribute('aria-expanded', 'false');
-          burger.setAttribute('aria-label', 'Menü öffnen');
-        }
-      });
-      // Close on ESC
-      document.addEventListener('keydown', function(e){
-        if(e.key === 'Escape'){
-          menu.classList.remove('open');
-          burger.classList.remove('open');
-          burger.setAttribute('aria-expanded', 'false');
-        }
-      });
-    })();
-  </script>
+      el.addEventListener('mouseleave', () => { el.style.transform = ''; });
+    });
+  }
+  addTilt('.service-world', 5);
+  addTilt('.why-card', 4.5);
+  // Portfolio tilt via JS (overrides CSS transition during mousemove)
+  document.querySelectorAll('.portfolio-item').forEach(item => {
+    item.addEventListener('mousemove', e => {
+      const r = item.getBoundingClientRect();
+      const x = (e.clientX-r.left)/r.width-.5;
+      const y = (e.clientY-r.top)/r.height-.5;
+      item.style.transform = `translateY(-8px) scale(1.006) rotateX(${-y*2.8}deg) rotateY(${x*2.8}deg)`;
+    });
+    item.addEventListener('mouseleave', () => { item.style.transform = ''; });
+  });
+}
+
+// ── Navbar scroll ──
+const nav = document.getElementById('main-nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 60), {passive:true});
+
+// ── Mobile nav ──
+const burger = document.getElementById('burger-btn');
+const mobileNav = document.getElementById('mobile-nav');
+burger.addEventListener('click', () => mobileNav.classList.toggle('open'));
+document.querySelectorAll('.mn-link').forEach(a => a.addEventListener('click', () => mobileNav.classList.remove('open')));
+
+// ── Portfolio filter ──
+document.querySelectorAll('.pf-btn').forEach(btn => btn.addEventListener('click', () => {
+  document.querySelectorAll('.pf-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}));
+
+// ── Scroll reveal ──
+const ro = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.07, rootMargin: '0px 0px -44px 0px' });
+document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+
+// ── Slot interaction ──
+document.querySelectorAll('.slot-available,.slot-express').forEach(slot => slot.addEventListener('click', () => {
+  document.querySelectorAll('.slot').forEach(s => s.style.outline = 'none');
+  slot.style.outline = '2px solid var(--blue-bright)';
+  slot.style.outlineOffset = '2px';
+}));
+
+// ── Stat counters ──
+function counter(el, target, suffix) {
+  let t0 = null;
+  (function step(ts){
+    if (!t0) t0=ts;
+    const p = Math.min((ts-t0)/1800,1);
+    const e = 1-Math.pow(1-p,3);
+    el.textContent = Math.floor(e*target)+suffix;
+    if (p<1) requestAnimationFrame(step);
+  })(performance.now());
+}
+const sb = document.querySelector('.stats-bar');
+if (sb) {
+  const els = sb.querySelectorAll('.stat-num');
+  const targets=[2400,140,48,99,6], suffixes=['+','+','h','%',''];
+  let fired=false;
+  new IntersectionObserver(([e])=>{
+    if (e.isIntersecting&&!fired){fired=true;els.forEach((el,i)=>counter(el,targets[i],suffixes[i]))}
+  },{threshold:.4}).observe(sb);
+}
+
+// ── Mouse Trail + Click Burst (single rAF loop) ──
+{
+  const SPARK_COLS = ['#1872ff','#e8c355','#4da8ff','#ffffff','#b8942e','#60a5ff','#a78bfa'];
+  const pool = [];
+  let trailT = 0, looping = false;
+
+  function spawnSpark(x, y, burst) {
+    const angle  = Math.random() * Math.PI * 2;
+    const speed  = burst ? 80 + Math.random()*110 : 18 + Math.random()*44;
+    const size   = burst ? 3 + Math.random()*4   : 1.5 + Math.random()*2.5;
+    const dur    = burst ? 520 + Math.random()*320 : 340 + Math.random()*220;
+    const col    = SPARK_COLS[Math.floor(Math.random()*SPARK_COLS.length)];
+    const el     = document.createElement('div');
+    el.style.cssText = `position:fixed;pointer-events:none;z-index:9999;border-radius:50%;will-change:transform,opacity;width:${size}px;height:${size}px;background:${col};box-shadow:0 0 ${size*2.5}px ${col};left:${x}px;top:${y}px;transform:translate(-50%,-50%)`;
+    document.body.appendChild(el);
+    pool.push({ el, x, y, vx: Math.cos(angle)*speed, vy: Math.sin(angle)*speed - (burst?0:14), born: performance.now(), dur, burst });
+  }
+
+  function spawnBurst(x, y, n) {
+    for (let i=0;i<n;i++) {
+      const angle = (i/n)*Math.PI*2 + Math.random()*.25;
+      const speed = 70 + Math.random()*110;
+      const size  = 3 + Math.random()*4.5;
+      const dur   = 500 + Math.random()*360;
+      const col   = SPARK_COLS[Math.floor(Math.random()*SPARK_COLS.length)];
+      const el    = document.createElement('div');
+      el.style.cssText = `position:fixed;pointer-events:none;z-index:9999;border-radius:50%;will-change:transform,opacity;width:${size}px;height:${size}px;background:${col};box-shadow:0 0 ${size*3}px ${col};left:${x}px;top:${y}px;transform:translate(-50%,-50%)`;
+      document.body.appendChild(el);
+      pool.push({ el, x, y, vx: Math.cos(angle)*speed, vy: Math.sin(angle)*speed, born: performance.now(), dur, burst:true });
+    }
+  }
+
+  function sparkLoop(ts) {
+    for (let i=pool.length-1;i>=0;i--) {
+      const s=pool[i], p=Math.min((ts-s.born)/s.dur,1);
+      if (p>=1) { s.el.remove(); pool.splice(i,1); continue; }
+      const grav = s.burst ? 130 : 45;
+      s.el.style.left   = (s.x + s.vx*p) + 'px';
+      s.el.style.top    = (s.y + s.vy*p + grav*p*p) + 'px';
+      s.el.style.opacity= p<.15 ? p/.15 : 1-(p-.15)/.85;
+      s.el.style.transform = `translate(-50%,-50%) scale(${1-p*.65})`;
+    }
+    if (pool.length) requestAnimationFrame(sparkLoop); else looping=false;
+  }
+
+  function startLoop() { if (!looping) { looping=true; requestAnimationFrame(sparkLoop); } }
+
+  if (isDesktop && !prefersReduced) {
+    document.addEventListener('mousemove', e => {
+      const now=performance.now(); if (now-trailT<22) return; trailT=now;
+      spawnSpark(e.clientX, e.clientY, false);
+      if (Math.random()>.55) spawnSpark(e.clientX, e.clientY, false);
+      startLoop();
+    }, {passive:true});
+  }
+
+  if (!prefersReduced) {
+    document.addEventListener('click', e => { spawnBurst(e.clientX, e.clientY, 15); startLoop(); });
+  }
+}
+
+// ── Hero H1 Glitch ──
+{
+  const h1 = document.querySelector('.hero-h1');
+  if (h1 && !prefersReduced) {
+    let busy = false;
+    function glitch() {
+      if (busy) return; busy = true;
+      let step = 0, total = 9;
+      (function tick() {
+        if (step >= total) { h1.style.cssText=''; busy=false; return; }
+        const even = step%2===0;
+        h1.style.textShadow = even ? '3px 0 #1872ff,-3px 0 #e8c355,0 0 18px rgba(24,114,255,.4)' : '-2px 0 #1872ff,2px 0 #e8c355';
+        h1.style.transform  = `translateX(${(Math.random()-.5)*6}px) skewX(${(Math.random()-.5)*1.2}deg)`;
+        h1.style.filter     = even ? 'brightness(1.35)' : 'brightness(.88)';
+        step++;
+        setTimeout(tick, 45+Math.random()*35);
+      })();
+    }
+    (function schedule() { setTimeout(()=>{ glitch(); schedule(); }, 5500+Math.random()*5000); })();
+    const heroSec = document.getElementById('hero');
+    if (heroSec) heroSec.addEventListener('mouseenter', glitch);
+  }
+}
+
+// ── Magnetic Buttons ──
+if (isDesktop && !prefersReduced) {
+  document.querySelectorAll('.btn-primary,.btn-secondary,.nav-cta').forEach(btn => {
+    btn.style.transition = 'transform .38s cubic-bezier(.23,1,.32,1),box-shadow .38s,background .2s,border-color .2s,color .2s';
+    btn.addEventListener('mousemove', e => {
+      const r  = btn.getBoundingClientRect();
+      const dx = (e.clientX - (r.left+r.width/2)) * .28;
+      const dy = (e.clientY - (r.top+r.height/2)) * .28;
+      btn.style.transform = `translate(${dx}px,${dy}px)`;
+    });
+    btn.addEventListener('mouseleave', () => { btn.style.transform = 'translate(0,0)'; });
+  });
+}
+
+})();
+
+/* ── Aurora Canvas Background ── */
+(function(){
+  const c=document.getElementById('bg-aurora'),ctx=c.getContext('2d');
+  let W,H,t=0,stars=[];
+  function resize(){W=c.width=innerWidth;H=c.height=innerHeight;}
+  function initStars(){
+    stars=[];
+    for(let i=0;i<180;i++){
+      stars.push({x:Math.random()*W,y:Math.random()*H*.75,r:Math.random()<.85?.25+Math.random()*.55:.7+Math.random()*.7,a:.08+Math.random()*.7,da:(.0004+Math.random()*.002)*(Math.random()<.5?1:-1),blue:Math.random()<.22});
+    }
+  }
+  function drawStars(){
+    stars.forEach(s=>{
+      s.a+=s.da;if(s.a>1){s.a=1;s.da*=-1;}if(s.a<.04){s.a=.04;s.da*=-1;}
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle=s.blue?`rgba(160,200,255,${s.a.toFixed(2)})`:`rgba(255,248,228,${s.a.toFixed(2)})`;
+      ctx.fill();
+    });
+  }
+  const CURTAINS=[
+    {hf:.13,amp:40,freq:.005, spd:.52,ph:0.0, col:'232,195,85', al:.28},
+    {hf:.20,amp:48,freq:.0034,spd:.36,ph:2.2, col:'24,114,255', al:.30},
+    {hf:.32,amp:44,freq:.0042,spd:.28,ph:1.1, col:'232,195,85', al:.18},
+    {hf:.42,amp:36,freq:.0058,spd:.42,ph:3.4, col:'60,130,255', al:.20},
+    {hf:.54,amp:50,freq:.0027,spd:.23,ph:0.6, col:'232,195,85', al:.11},
+    {hf:.63,amp:32,freq:.0052,spd:.33,ph:1.8, col:'24,114,255', al:.13},
+  ];
+  function drawAurora(){
+    CURTAINS.forEach(r=>{
+      const topY=H-r.hf*H,alP=r.al*(.68+Math.sin(t*r.spd*.55+r.ph)*.32);
+      ctx.beginPath();ctx.moveTo(0,H);
+      for(let x=0;x<=W;x+=6)ctx.lineTo(x,topY+Math.sin(x*r.freq+t*r.spd+r.ph)*r.amp);
+      ctx.lineTo(W,H);ctx.closePath();
+      const g=ctx.createLinearGradient(0,topY-r.amp,0,H);
+      g.addColorStop(0,`rgba(${r.col},0)`);
+      g.addColorStop(.28,`rgba(${r.col},${(alP*.3).toFixed(3)})`);
+      g.addColorStop(.65,`rgba(${r.col},${alP.toFixed(3)})`);
+      g.addColorStop(1,`rgba(${r.col},${(alP*.5).toFixed(3)})`);
+      ctx.fillStyle=g;ctx.fill();
+    });
+  }
+  function drawHorizon(){
+    const gG=ctx.createRadialGradient(W*.3,H,0,W*.3,H,H*.55);
+    gG.addColorStop(0,'rgba(232,195,85,.45)');gG.addColorStop(.5,'rgba(232,195,85,.12)');gG.addColorStop(1,'rgba(232,195,85,0)');
+    ctx.fillStyle=gG;ctx.fillRect(0,H*.5,W,H*.5);
+    const gB=ctx.createRadialGradient(W*.7,H,0,W*.7,H,H*.55);
+    gB.addColorStop(0,'rgba(24,114,255,.42)');gB.addColorStop(.5,'rgba(24,114,255,.12)');gB.addColorStop(1,'rgba(24,114,255,0)');
+    ctx.fillStyle=gB;ctx.fillRect(0,H*.5,W,H*.5);
+  }
+  function vignette(){
+    const g=ctx.createLinearGradient(0,0,0,H);
+    g.addColorStop(0,'rgba(2,2,5,.97)');
+    g.addColorStop(.25,'rgba(2,2,5,.45)');
+    g.addColorStop(.5,'rgba(2,2,5,.08)');
+    g.addColorStop(1,'rgba(2,2,5,0)');
+    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  }
+  function frame(){
+    t+=.013;ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#020205';ctx.fillRect(0,0,W,H);
+    drawStars();drawHorizon();drawAurora();vignette();
+    requestAnimationFrame(frame);
+  }
+  resize();initStars();frame();
+  addEventListener('resize',()=>{resize();initStars();});
+})();
+</script>
 </body>
 </html>
