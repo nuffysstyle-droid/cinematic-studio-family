@@ -33,6 +33,7 @@ if (str_starts_with($redirect, '//') || str_contains($redirect, ':')) {
     <title>Login – Cinematic Vision Studio</title>
     <meta name="description" content="Einloggen oder Konto erstellen für Cinematic Vision Studio.">
     <meta name="robots" content="noindex">
+    <link rel="icon" type="image/png" href="assets/cvs-logo.png">
     <style>
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
