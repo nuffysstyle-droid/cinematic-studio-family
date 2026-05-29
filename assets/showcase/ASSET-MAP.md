@@ -103,4 +103,24 @@ assets/showcase/
 
 ---
 
-*Letzte Aktualisierung: 2026-05-29 | Session AD*
+## Portfolio Asset Generation Prompts (Session 10)
+
+Spezifikation für alle generierten Assets:
+- **Format:** JPG (Qualität 85)
+- **Auflösung:** 640×360 px (16:9)
+- **Max-Größe:** 300 KB
+- **Zielordner:** `assets/showcase/portfolio/`
+
+| # | Karte | Dateiname | Kie.ai Prompt | Status |
+|---|---|---|---|---|
+| 1 | Nacht & Neon | `noir-trailer-v1.jpg` | *(Fallback aktiv — siehe oben)* | 🟡 Fallback |
+| 2 | Orbit Protocol | `scifi-music-v1.jpg` | *Epic spacecraft drifting through a vibrant purple nebula, cinematic wide shot, volumetric lighting, lens flare, deep space atmosphere, ultra detailed, dark background with cyan and purple accents* | 🟡 Prompt bereit |
+| 3 | Tokyo Dusk | `golden-social-v1.jpg` | *Tokyo cityscape rooftop view at golden hour, warm amber sunlight reflecting on glass buildings, cinematic color grading, subtle lens flare, urban photography style, shallow depth of field* | 🟡 Prompt bereit |
+| 4 | Midnight Fizz | `tiktok-viral-v1.jpg` | *Neon pink and blue studio lighting, close-up of a soda can opening with dramatic fizz splash, slow motion feel, high contrast, dark background with colorful backlighting* | 🟡 Prompt bereit |
+| 5 | Luminex Pro | `product-ad-v1.jpg` | *Sleek wireless headphones on a white marble surface, soft professional studio lighting, premium product photography, subtle shadow, minimalist composition, high-end commercial look* | 🟡 Prompt bereit |
+
+**Hinweis:** Prompts sind für Kie.ai Flux Kontext Pro/Max optimiert. Generierung erfordert ~10–20 Kristalle pro Bild. Assets sollten nach Generierung durch ImageMagick oder Squoosh komprimiert werden (`mogrify -quality 85 -resize 640x360`).
+
+---
+
+*Letzte Aktualisierung: 2026-05-29 | Session AD + AI-2*

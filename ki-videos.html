@@ -21,7 +21,12 @@ body::before{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;bac
 .coming-card{background:linear-gradient(145deg,rgba(212,169,60,.04),rgba(255,140,0,.02));border:1px solid rgba(212,169,60,.22);border-radius:var(--radius);padding:52px 40px;text-align:center;margin-bottom:28px;}
 @media(max-width:600px){.coming-card{padding:36px 24px;}}
 .preview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:16px;}
-.preview-card{background:rgba(5,8,24,0.78);border:1px solid rgba(24,114,255,0.18);border-radius:18px;padding:24px;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);}
+.preview-card{background:rgba(5,8,24,0.78);border:1px solid rgba(24,114,255,0.18);border-radius:18px;padding:24px;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);overflow:hidden;transition:transform .22s,box-shadow .22s,border-color .22s;}
+.preview-card:hover{transform:translateY(-4px);border-color:rgba(212,169,60,.28);box-shadow:0 24px 60px rgba(0,0,0,.45),0 0 0 1px rgba(200,160,60,.08) inset;}
+.play-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:1;}
+.play-btn{width:52px;height:52px;border-radius:50%;background:rgba(0,0,0,.55);border:2px solid rgba(255,255,255,.35);display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;backdrop-filter:blur(4px);transition:transform .15s,background .15s;}
+.play-btn:hover{transform:scale(1.08);background:rgba(0,0,0,.75);}
+.preview-meta{font-size:15px;font-weight:900;color:var(--accent);margin-bottom:12px;}
 .preview-tag{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
 .preview-title{font-size:16px;font-weight:900;margin-bottom:6px;}
 .preview-desc{font-size:13px;color:var(--muted);line-height:1.55;margin-bottom:12px;}
@@ -96,22 +101,37 @@ body::before{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;bac
     <div class="preview-head">✦ Beispiel-Formate</div>
     <div class="preview-grid">
       <div class="preview-card">
+        <div class="cvs-thumb thumb-viral"><span class="cvs-thumb-icon">🎵</span><div class="play-overlay"><span class="play-btn">▶</span></div></div>
         <div class="preview-tag">TikTok / Reels</div>
         <div class="preview-title">Viral Hook Clip</div>
         <div class="preview-desc">15 Sekunden — Hook-optimiert, Beat-Sync, Text-Overlay. Für maximale Reichweite.</div>
         <div class="preview-meta">1080×1920 · 30fps · ab 80 💎</div>
+        <div class="preview-cta-row" style="margin-top:12px;">
+          <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="preview-cta" style="font-size:12px;font-weight:700;color:var(--text);text-decoration:none;padding:7px 12px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;transition:background .15s,border-color .15s;">Im Studio öffnen</a>
+          <a href="academy.html" class="preview-cta" style="font-size:12px;font-weight:700;color:var(--text);text-decoration:none;padding:7px 12px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;transition:background .15s,border-color .15s;">Guide ansehen</a>
+        </div>
       </div>
       <div class="preview-card">
+        <div class="cvs-thumb thumb-commercial"><span class="cvs-thumb-icon">📺</span><div class="play-overlay"><span class="play-btn">▶</span></div></div>
         <div class="preview-tag">Werbung</div>
         <div class="preview-title">Product Spotlight</div>
         <div class="preview-desc">30 Sekunden — Produkt-Reveal, CTA, Branding. Conversion-optimiert.</div>
         <div class="preview-meta">1920×1080 · 30fps · ab 120 💎</div>
+        <div class="preview-cta-row" style="margin-top:12px;">
+          <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="preview-cta" style="font-size:12px;font-weight:700;color:var(--text);text-decoration:none;padding:7px 12px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;transition:background .15s,border-color .15s;">Im Studio öffnen</a>
+          <a href="academy.html" class="preview-cta" style="font-size:12px;font-weight:700;color:var(--text);text-decoration:none;padding:7px 12px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;transition:background .15s,border-color .15s;">Guide ansehen</a>
+        </div>
       </div>
       <div class="preview-card">
+        <div class="cvs-thumb thumb-music"><span class="cvs-thumb-icon">🎬</span><div class="play-overlay"><span class="play-btn">▶</span></div></div>
         <div class="preview-tag">Musikvideo</div>
         <div class="preview-title">Cinematic Track</div>
         <div class="preview-desc">60–90 Sekunden — Beat-Sync, Szenenwechsel, Farbgrading. Premium-Look.</div>
         <div class="preview-meta">1920×1080 · 60fps · ab 250 💎</div>
+        <div class="preview-cta-row" style="margin-top:12px;">
+          <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="preview-cta" style="font-size:12px;font-weight:700;color:var(--text);text-decoration:none;padding:7px 12px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;transition:background .15s,border-color .15s;">Im Studio öffnen</a>
+          <a href="academy.html" class="preview-cta" style="font-size:12px;font-weight:700;color:var(--text);text-decoration:none;padding:7px 12px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;transition:background .15s,border-color .15s;">Guide ansehen</a>
+        </div>
       </div>
     </div>
     <div class="btn-row">

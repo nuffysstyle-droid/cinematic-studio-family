@@ -35,11 +35,11 @@ body::before{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;bac
 .shop-features li::before{content:"✦";color:var(--accent);font-size:10px;position:absolute;left:0;top:4px;}
 @media(max-width:600px){.coming-card{padding:36px 24px;}}
 .preview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:16px;}
-.preview-card{background:rgba(5,8,24,0.78);border:1px solid rgba(24,114,255,0.18);border-radius:18px;padding:24px;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);}
+.preview-card{background:rgba(5,8,24,0.78);border:1px solid rgba(24,114,255,0.18);border-radius:18px;padding:24px;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);overflow:hidden;}
 .preview-tag{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
 .preview-title{font-size:16px;font-weight:900;margin-bottom:6px;}
 .preview-desc{font-size:13px;color:var(--muted);line-height:1.55;margin-bottom:12px;}
-.preview-price{font-size:13px;font-weight:800;color:var(--accent);}
+.preview-price{font-size:22px;font-weight:900;color:var(--accent);margin-bottom:12px;}
 .preview-head{font-size:14px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--muted2);margin:36px 0 20px;}
 .preview-card{display:flex;flex-direction:column;}
 .preview-benefit{font-size:12px;color:var(--muted);line-height:1.55;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border);}
@@ -103,21 +103,12 @@ h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.pf-title
     <div class="page-eyebrow">✦ Kristalle · Sofort einlösbar</div>
     <h1 class="page-h1">Premium Assets.<br><span>Für dein Studio.</span></h1>
     <p class="page-sub">Prompt-Pakete, KI-Video-Bundles und Preset-Assets — zahlbar mit Kristallen, sofort einsetzbar nach Kauf.</p>
-    <div class="coming-card">
-      <span class="coming-icon">🛍️</span>
-      <h2>Was im Shop erscheint</h2>
-      <p>Alles zahlbar mit Kristallen — deiner Währung im Cinematic Vision Studio.</p>
-      <ul class="shop-features">
-        <li><strong>Prompt-Pakete</strong> · 10–50 cinematic Prompts · sofort nutzbar</li>
-        <li><strong>KI-Video-Bundles</strong> · fertige Szenen & Stil-Templates</li>
-        <li><strong>Sticker & Preset-Assets</strong> · für TikTok, Reels & Stories</li>
-      </ul>
-    </div>
     <div class="preview-head">✦ Creator Template-Pakete</div>
     <div class="preview-grid">
 
       <!-- data-asset: shop/starter-crystal-cover.jpg -->
       <div class="preview-card">
+        <div class="cvs-thumb thumb-starter"><span class="cvs-thumb-icon">💎</span><span class="cvs-badge recommended">Empfohlen</span></div>
         <div class="preview-tag">Starter Paket</div>
         <div class="preview-title">Starter Crystal</div>
         <div class="preview-desc">Dein Einstieg in cinematic KI-Produktion. Prompts, Guides und ein Workflow für den ersten Clip.</div>
@@ -125,14 +116,14 @@ h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.pf-title
         <div class="preview-workflow">1. Template wählen → 2. Prompt generieren → 3. Im Studio rendern</div>
         <div class="preview-price">25 💎</div>
         <div class="preview-cta-row">
-          <a href="academy.html" class="preview-cta">Workflow ansehen</a>
-          <a href="prompt-generator.html" class="preview-cta">Prompt nutzen</a>
-          <a href="contact.php" class="preview-cta">Anfrage starten</a>
+          <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="preview-cta">Im Studio öffnen</a>
+          <a href="academy.html" class="preview-cta">Guide ansehen</a>
         </div>
       </div>
 
       <!-- data-asset: shop/tiktok-viral-cover.jpg -->
       <div class="preview-card">
+        <div class="cvs-thumb thumb-tiktok"><span class="cvs-thumb-icon">🚀</span><span class="cvs-badge bestseller">Bestseller</span></div>
         <div class="preview-tag">Viral Pack</div>
         <div class="preview-title">TikTok Viral Pack</div>
         <div class="preview-desc">7 Hook-optimierte Prompts und Templates für maximale Retention und Shares — battle-tested.</div>
@@ -140,14 +131,14 @@ h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.pf-title
         <div class="preview-workflow">Hook-Template → 3-Slot-Struktur → Text-Overlay → 7s Export</div>
         <div class="preview-price">35 💎</div>
         <div class="preview-cta-row">
-          <a href="academy.html" class="preview-cta">Workflow ansehen</a>
-          <a href="prompt-generator.html" class="preview-cta">Prompt nutzen</a>
-          <a href="calendar.html" class="preview-cta">Booking öffnen</a>
+          <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="preview-cta">Im Studio öffnen</a>
+          <a href="academy.html" class="preview-cta">Guide ansehen</a>
         </div>
       </div>
 
       <!-- data-asset: shop/product-ad-cover.jpg -->
       <div class="preview-card">
+        <div class="cvs-thumb thumb-product"><span class="cvs-thumb-icon">📦</span></div>
         <div class="preview-tag">Commercial Pack</div>
         <div class="preview-title">Product Ad Pro</div>
         <div class="preview-desc">Premium-Produktreveals mit Makro-Setup, Studio-Licht und Conversion-Grade. Verkaufsstark.</div>
@@ -155,14 +146,14 @@ h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.pf-title
         <div class="preview-workflow">Produktvideo upload → Slot-Replace mit KI-Grade → Logo-Slot → 1080p</div>
         <div class="preview-price">45 💎</div>
         <div class="preview-cta-row">
-          <a href="academy.html" class="preview-cta">Workflow ansehen</a>
-          <a href="prompt-generator.html" class="preview-cta">Prompt nutzen</a>
-          <a href="contact.php" class="preview-cta">Anfrage starten</a>
+          <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="preview-cta">Im Studio öffnen</a>
+          <a href="academy.html" class="preview-cta">Guide ansehen</a>
         </div>
       </div>
 
       <!-- data-asset: shop/anime-shift-cover.jpg -->
       <div class="preview-card">
+        <div class="cvs-thumb thumb-anime"><span class="cvs-thumb-icon">✨</span></div>
         <div class="preview-tag">Transformation Pack</div>
         <div class="preview-title">Anime Shift</div>
         <div class="preview-desc">Portrait-to-Anime Workflow mit Pastell-Grade, Partikel-Effekten und Loop-Render.</div>
@@ -170,14 +161,14 @@ h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.pf-title
         <div class="preview-workflow">Portrait upload → KI-Anime-Filter → Slot-Replace → 12s Loop Render</div>
         <div class="preview-price">40 💎</div>
         <div class="preview-cta-row">
-          <a href="academy.html" class="preview-cta">Workflow ansehen</a>
-          <a href="prompt-generator.html" class="preview-cta">Prompt nutzen</a>
-          <a href="calendar.html" class="preview-cta">Booking öffnen</a>
+          <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="preview-cta">Im Studio öffnen</a>
+          <a href="academy.html" class="preview-cta">Guide ansehen</a>
         </div>
       </div>
 
       <!-- data-asset: shop/pro-bundle-cover.jpg -->
       <div class="preview-card">
+        <div class="cvs-thumb thumb-pro"><span class="cvs-thumb-icon">🎬</span><span class="cvs-badge pro">Pro</span></div>
         <div class="preview-tag">Pro Bundle</div>
         <div class="preview-title">Pro Studio Bundle</div>
         <div class="preview-desc">Alles was du brauchst — Prompts, Templates, Presets und Priority-Support für Profis.</div>
@@ -185,12 +176,14 @@ h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.pf-title
         <div class="preview-workflow">Academy-Zugang + alle Templates + 1:1 Creator Session</div>
         <div class="preview-price">120 💎</div>
         <div class="preview-cta-row">
-          <a href="academy.html" class="preview-cta">Workflow ansehen</a>
-          <a href="contact.php" class="preview-cta">Anfrage starten</a>
-          <a href="calendar.html" class="preview-cta">Booking öffnen</a>
+          <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="preview-cta">Im Studio öffnen</a>
+          <a href="academy.html" class="preview-cta">Guide ansehen</a>
         </div>
       </div>
 
+    </div>
+    <div class="coming-card" style="padding:22px 24px;margin-top:24px;">
+      <p style="font-size:13px;color:var(--muted);margin:0;">🛍️ <strong style="color:var(--text);">Demnächst:</strong> Sticker, Presets & Sound-Packs — alles zahlbar mit Kristallen.</p>
     </div>
     <div class="btn-row">
       <a href="crystals.html" class="btn-gold">💎 Kristalle sichern →</a>

@@ -933,6 +933,24 @@ footer{
   .cvs-footer-simple .footer-bottom{flex-direction:column;align-items:flex-start}
 }
 
+/* ── 17. PREVIEW THUMBNAILS & BADGES (Shop + KI-Videos) ── */
+.cvs-thumb{aspect-ratio:16/9;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;margin:-24px -24px 16px;}
+.cvs-thumb .cvs-thumb-icon{font-size:2.4rem;opacity:.55;}
+.cvs-badge{position:absolute;top:10px;left:10px;font-size:9px;font-weight:900;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:6px;z-index:2;}
+.cvs-badge.bestseller{background:rgba(255,92,122,.92);color:#fff;}
+.cvs-badge.recommended{background:rgba(212,169,60,.92);color:#1a0e00;}
+.cvs-badge.pro{background:rgba(24,114,255,.92);color:#fff;}
+/* Thumbnail theme gradients */
+.thumb-starter{background:linear-gradient(135deg,#0a1f3d,#1a3a6b);}
+.thumb-tiktok{background:linear-gradient(135deg,#2d0a1f,#4a1a3b);}
+.thumb-product{background:linear-gradient(135deg,#1a1508,#3a3020);}
+.thumb-anime{background:linear-gradient(135deg,#1a0a2e,#3a1a5e);}
+.thumb-pro{background:linear-gradient(135deg,#0a0a0a,#2a2a2a);}
+.thumb-music{background:linear-gradient(135deg,#0a1a2e,#1a3a5e);}
+.thumb-commercial{background:linear-gradient(135deg,#1a0a08,#3a2010);}
+.thumb-viral{background:linear-gradient(135deg,#1a0a1f,#3a1a4a);}
+@media(max-width:600px){.cvs-thumb{margin:-20px -20px 14px;}}
+
 /* ════════════════════════════════════════════════════════
    16. UTILITY CLASSES (migration helpers)
 ════════════════════════════════════════════════════════ */
