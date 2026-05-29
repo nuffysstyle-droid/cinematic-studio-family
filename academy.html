@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="de">
 <head>
 <meta charset="utf-8">
@@ -7,6 +7,7 @@
 <link rel="icon" type="image/png" href="assets/cvs-logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/cvs-core.css">
 <title>Academy – Cinematic Vision Studio</title>
 <style>
 /* ── Marketing-page variables ── */
@@ -26,51 +27,12 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
 body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-/* ── CINEMATIC FILM GRAIN ── */
+/* ── Cinematic Film Grain ── */
 body::before{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.028'/%3E%3C/svg%3E");opacity:.5;}
-/* ── Nav ── */
-.nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 28px;background:rgba(6,6,15,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
-.nav-logo{font-size:13px;font-weight:900;letter-spacing:2px;background:var(--gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-transform:uppercase;flex-shrink:0;text-decoration:none;}
-.nav-logo span{font-size:10px;display:block;letter-spacing:4px;font-weight:400;opacity:.6;margin-top:1px;}
-.nav-links{display:flex;align-items:center;gap:2px;flex:1;justify-content:center;}
-.nav-link{color:var(--muted);text-decoration:none;font-size:12px;font-weight:600;padding:6px 8px;border-radius:9px;transition:color .15s,background .15s;white-space:nowrap;}
-.nav-link:hover,.nav-link.active{color:var(--text);background:rgba(255,255,255,.06);}
-.nav-actions{display:flex;align-items:center;gap:8px;flex-shrink:0;}
-.nav-btn-ghost{color:var(--muted);text-decoration:none;font-size:13px;font-weight:700;padding:8px 13px;border-radius:10px;border:1px solid var(--border);transition:color .15s,border-color .15s;}
-.nav-btn-ghost:hover{color:var(--text);border-color:rgba(255,255,255,.25);}
-.nav-btn-gold{background:var(--gold);color:#1a0e00;text-decoration:none;font-size:13px;font-weight:800;padding:9px 16px;border-radius:10px;transition:opacity .15s;}
-.nav-btn-gold:hover{opacity:.88;}
-.wallet-pill{display:flex;align-items:center;gap:6px;background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.3);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:800;color:var(--accent);cursor:pointer;text-decoration:none;}
-@media(max-width:1280px){.nav-links{display:none;}}
-@media(max-width:640px){.nav{padding:12px 16px;gap:8px;}.nav-logo{font-size:11px;letter-spacing:1.5px;min-width:0;flex-shrink:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}.nav-logo span{display:none;}.nav-btn-ghost{display:none;}.nav-btn-gold{display:none;}.wallet-pill{display:none;}}
-.mob-burger{display:none;flex-direction:column;justify-content:center;gap:5px;width:40px;height:40px;padding:8px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:10px;cursor:pointer;flex-shrink:0;}
-.mob-burger span{display:block;height:2px;border-radius:2px;background:var(--text);transition:transform .22s,opacity .22s;}
-.mob-burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
-.mob-burger.open span:nth-child(2){opacity:0;}
-.mob-burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
-.mob-menu{position:fixed;left:0;right:0;z-index:99;background:rgba(6,6,15,.97);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);box-shadow:0 24px 60px rgba(0,0,0,.6),0 0 50px rgba(59,130,246,.07);max-height:0;overflow:hidden;opacity:0;pointer-events:none;transition:max-height .3s cubic-bezier(.4,0,.2,1),opacity .22s;display:none;}
-.mob-menu.open{max-height:820px;opacity:1;pointer-events:auto;}
-.mob-link{display:block;padding:14px 24px;color:var(--muted);text-decoration:none;font-size:15px;font-weight:700;border-left:3px solid transparent;transition:color .15s,border-color .15s,background .15s;}
-.mob-link:active{background:rgba(255,255,255,.06);}
-.mob-link.active{color:var(--accent);border-left-color:var(--accent);}
-.mob-sep{height:1px;background:var(--border);margin:10px 20px;}
-.mob-cta{display:block;margin:12px 20px 8px;padding:15px;background:var(--gold);color:#1a0e00;text-decoration:none;font-size:15px;font-weight:900;border-radius:13px;text-align:center;}
-@media(max-width:900px){.mob-burger{display:flex;}.mob-menu{display:block;}}
 /* ── Page layout ── */
 .page{padding:90px 0 60px;position:relative;}
 .page::before{content:"";position:absolute;top:0;left:0;right:0;height:380px;background:radial-gradient(ellipse 70% 120% at 15% 0%,rgba(59,130,246,.07) 0%,transparent 60%),radial-gradient(ellipse 50% 80% at 85% 20%,rgba(147,51,234,.05) 0%,transparent 55%);pointer-events:none;z-index:0;}
 .wrap{width:min(960px,calc(100% - 48px));margin:0 auto;position:relative;z-index:1;}
-/* ── Footer ── */
-.footer{border-top:1px solid var(--border);padding:36px 0;margin-top:60px;}
-.footer-inner{width:min(960px,calc(100% - 48px));margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
-.footer-logo{font-size:13px;font-weight:900;letter-spacing:2px;background:var(--gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.footer-nav{display:flex;gap:18px;flex-wrap:wrap;}
-.footer-nav a{color:var(--muted);text-decoration:none;font-size:12px;font-weight:600;transition:color .15s;}
-.footer-nav a:hover{color:var(--text);}
-.footer-copy{font-size:12px;color:var(--muted2);}
-.footer-legal{display:flex;gap:16px;flex-wrap:wrap;width:100%;padding-top:12px;border-top:1px solid var(--border);}
-.footer-legal a{color:var(--muted2);text-decoration:none;font-size:11px;font-weight:600;transition:color .15s;}
-.footer-legal a:hover{color:var(--text);}
 /* ── Shared util ── */
 .text-muted{color:var(--text-muted);}
 .text-sm{font-size:0.8rem;}
@@ -93,13 +55,13 @@ body::before{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;bac
 .ac-filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
 .ac-filter-btn{padding:6px 13px;background:var(--bg-panel);border:1px solid var(--border-color);border-radius:999px;font-size:0.8rem;font-weight:500;color:var(--text-secondary);cursor:pointer;white-space:nowrap;transition:background var(--transition),border-color var(--transition),color var(--transition);}
 .ac-filter-btn:hover{background:var(--bg-elevated);border-color:var(--accent-blue);color:var(--text-primary);}
-.ac-filter-btn--active{background:var(--accent-blue-glow);border-color:var(--accent-blue);color:var(--accent-blue);font-weight:600;}
+.ac-filter-btn--active{background:rgba(200,160,60,.08);border-color:var(--accent);color:var(--accent);font-weight:600;box-shadow:0 0 20px rgba(200,160,60,.15);}
 .ac-results-bar{display:flex;align-items:center;gap:12px;margin-bottom:16px;min-height:20px;}
 .ac-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
 .ac-empty{display:flex;flex-direction:column;align-items:center;gap:12px;padding:60px 24px;text-align:center;color:var(--text-muted);}
 .ac-empty__icon{font-size:3rem;opacity:0.4;}
-.ac-card{background:var(--bg-panel);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:20px;display:flex;flex-direction:column;gap:10px;transition:border-color var(--transition),transform var(--transition),box-shadow var(--transition);cursor:default;}
-.ac-card:hover{border-color:rgba(61,142,245,0.4);transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,0,0,0.35);}
+.ac-card{background:rgba(5,8,24,0.78);border:1px solid rgba(24,114,255,0.18);border-radius:var(--radius-lg);padding:20px;display:flex;flex-direction:column;gap:10px;transition:border-color var(--transition),transform var(--transition),box-shadow var(--transition);cursor:default;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);box-shadow:0 28px 80px rgba(0,35,160,.2),0 0 0 1px rgba(200,160,60,.07) inset;}
+.ac-card:hover{border-color:rgba(200,160,60,.22);transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,0,0,0.35),0 0 0 1px rgba(200,160,60,.07) inset;}
 .ac-card__top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
 .ac-card__icon{font-size:1.8rem;line-height:1;}
 .ac-card__badges{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;}
@@ -116,7 +78,7 @@ body::before{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;bac
 .modal{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;}
 .modal[hidden]{display:none;}
 .modal-backdrop{position:absolute;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);cursor:pointer;}
-.modal-box{position:relative;background:var(--bg-panel);border:1px solid var(--border-color);border-radius:var(--radius-lg);width:100%;max-width:560px;max-height:85vh;overflow-y:auto;box-shadow:var(--shadow);z-index:1;}
+.modal-box{position:relative;background:rgba(5,8,24,0.78);border:1px solid rgba(24,114,255,0.18);border-radius:var(--radius-lg);width:100%;max-width:560px;max-height:85vh;overflow-y:auto;box-shadow:var(--shadow);z-index:1;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);box-shadow:0 28px 80px rgba(0,35,160,.2),0 0 0 1px rgba(200,160,60,.07) inset;}
 .ac-modal-box{max-width:580px;}
 .modal-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:20px 24px 16px;border-bottom:1px solid var(--border-color);position:sticky;top:0;background:var(--bg-panel);z-index:1;}
 .ac-modal-header-inner{display:flex;align-items:flex-start;gap:14px;}
@@ -133,44 +95,19 @@ body::before{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;bac
 .ac-step__num::before{content:counter(step-counter);}
 .ac-step__text{font-size:0.875rem;color:var(--text-secondary);line-height:1.6;padding-top:6px;}
 @media(max-width:768px){.ac-hero{flex-direction:column;}.ac-hero__title{font-size:1.5rem;}.ac-grid{grid-template-columns:1fr;}.ac-modal-box{max-width:100%;}}
-@media(max-width:480px){.ac-hero__stats{width:100%;}.ac-stat{flex:1;min-width:80px;}.modal-footer{flex-direction:column;}}
-/* ── CUSTOM CURSOR ── */
-@media(pointer:fine){
-  body{cursor:none}
-  #cursor{position:fixed;width:8px;height:8px;background:#1872ff;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s,opacity .2s;mix-blend-mode:screen;opacity:0}
-  #cursor-ring{position:fixed;width:32px;height:32px;border:1px solid rgba(24,114,255,.3);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .28s,height .28s,opacity .28s;opacity:0}
-  body.cursor-active #cursor,body.cursor-active #cursor-ring{opacity:1}
-}
-@media(pointer:coarse){#cursor,#cursor-ring{display:none!important}}
-/* ═══ CVS PREMIUM DROP-IN v1 ═══ */
+@media(max-width:480px){.ac-hero__stats{width:100%;}.ac-stat{flex:1;min-width:80px;}.modal-footer{flex-direction:column;}.modal-footer .btn{display:flex;width:100%;justify-content:center;}}
+/* ── Premium Drop-In page overrides (no !important) ── */
 body{font-family:'DM Sans','Segoe UI',sans-serif}
 h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.pf-title,.coming-card h2,.cta-banner h2,.ac-hero__title{font-family:'Syne',sans-serif}
 :root{--accent:#d4a93c;--accent2:#e8c355;--gold:linear-gradient(135deg,#d4a93c,#e8c355)}
-.btn-gold,.btn-ghost,.nav-btn-gold,.nav-btn-ghost,.plan-cta-free,.plan-cta-ghost,.pack-btn,.mob-cta{border-radius:50px!important}
-.wallet-pill{background:rgba(212,169,60,.1)!important;border-color:rgba(212,169,60,.3)!important;color:#d4a93c!important}
-.page-eyebrow{color:#d4a93c!important;background:rgba(212,169,60,.1)!important;border-color:rgba(212,169,60,.28)!important}
-.page-h1 span{background:linear-gradient(112deg,#d4a93c,#e8c355)!important;-webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;background-clip:text!important}
-.page::before{height:520px!important;background:radial-gradient(ellipse 85% 140% at 8% 0%,rgba(0,40,165,.14) 0%,transparent 55%),radial-gradient(ellipse 65% 100% at 94% 12%,rgba(180,130,20,.09) 0%,transparent 50%),radial-gradient(ellipse 55% 65% at 50% 0%,rgba(0,25,110,.07) 0%,transparent 60%)!important}
-.nav-logo{display:flex!important;align-items:center!important;gap:9px!important;text-decoration:none!important;background:none!important;-webkit-text-fill-color:unset!important}
-.cvs-nav-img{height:36px;width:auto;filter:drop-shadow(0 0 7px rgba(212,169,60,.65));animation:cvs-sub-float 5s ease-in-out infinite}
-.cvs-nav-txt{font-family:'Syne',sans-serif!important;font-size:13px;font-weight:900;letter-spacing:2px;text-transform:uppercase;background:linear-gradient(135deg,#d4a93c,#e8c355)!important;-webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;line-height:1.1}
-.cvs-nav-sub{display:block!important;font-size:9px!important;letter-spacing:4px!important;font-weight:400!important;opacity:.5!important;margin-top:1px!important;-webkit-text-fill-color:rgba(255,255,255,.38)!important;background:none!important;-webkit-background-clip:unset!important}
-@keyframes cvs-sub-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
-.footer{border-top:1px solid rgba(212,169,60,.12)!important;position:relative;padding:44px 0 28px!important}
-.footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(212,169,60,.32),rgba(24,114,255,.22),transparent)}
-.footer-inner{align-items:flex-start!important;gap:32px!important}
-.footer-brand{max-width:260px}
-.footer-brand-sub{font-size:12px;color:rgba(240,240,255,.35);line-height:1.65;margin-top:6px}
-.footer-cols{display:flex;gap:44px}
-.footer-col{display:flex;flex-direction:column;gap:9px}
-.footer-col a{color:rgba(240,240,255,.38);text-decoration:none;font-size:12px;font-weight:500;transition:color .2s;display:block}
-.footer-col a:hover{color:#d4a93c}
-.footer-bottom{width:min(960px,calc(100% - 48px));margin:24px auto 0;padding-top:18px;border-top:1px solid rgba(255,255,255,.05);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-.footer-bottom .footer-legal{width:auto;border-top:none;padding-top:0}
+.btn-gold,.btn-ghost,.plan-cta-free,.plan-cta-ghost,.pack-btn{border-radius:50px}
+.page-eyebrow{color:#d4a93c;background:rgba(212,169,60,.1);border-color:rgba(212,169,60,.28)}
+.page-h1 span{background:linear-gradient(112deg,#d4a93c,#e8c355);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.page::before{height:520px;background:radial-gradient(ellipse 85% 140% at 8% 0%,rgba(0,40,165,.14) 0%,transparent 55%),radial-gradient(ellipse 65% 100% at 94% 12%,rgba(180,130,20,.09) 0%,transparent 50%),radial-gradient(ellipse 55% 65% at 50% 0%,rgba(0,25,110,.07) 0%,transparent 60%)}
 </style>
 </head>
 <body>
-<nav class="nav">
+<nav class="cvs-nav-simple">
   <a href="scene-editor-test.html" class="nav-logo"><img src="assets/cvs-logo.png" alt="CVS" class="cvs-nav-img"><span class="cvs-nav-txt">Cinematic Vision<span class="cvs-nav-sub">Studios</span></span></a>
   <div class="nav-links">
     <a href="scene-editor-test.html" class="nav-link">Home</a>
@@ -189,7 +126,7 @@ h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.pf-title
     <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="nav-btn-gold">Studio starten</a>
     <a href="crystals.html" class="wallet-pill">💎 Free</a>
   </div>
-  <button class="mob-burger" id="mobBurger" aria-label="Menü öffnen" aria-expanded="false"><span></span><span></span><span></span></button>
+  <button class="nav-burger" id="mobBurger" aria-label="Menü öffnen" aria-expanded="false"><span></span><span></span><span></span></button>
 </nav>
 <div class="mob-menu" id="mobMenu" role="navigation" aria-label="Navigation">
   <a href="scene-editor-test.html" class="mob-link">🏠 Home</a>
@@ -223,11 +160,11 @@ h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.pf-title
         </div>
         <div class="ac-hero__stats">
           <div class="ac-stat">
-            <div class="ac-stat__num">13</div>
+            <div class="ac-stat__num">24</div>
             <div class="ac-stat__label">Guides</div>
           </div>
           <div class="ac-stat">
-            <div class="ac-stat__num">11</div>
+            <div class="ac-stat__num">14</div>
             <div class="ac-stat__label">Themen</div>
           </div>
           <div class="ac-stat">
@@ -251,12 +188,18 @@ h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.pf-title
         <button class="ac-filter-btn" data-filter="sticker">🏷 Sticker</button>
         <button class="ac-filter-btn" data-filter="animation">✨ Animation Service</button>
         <button class="ac-filter-btn" data-filter="ready_videos">📹 Sofort fertige Videos</button>
+        <button class="ac-filter-btn" data-filter="prompting">🎨 Prompting Basics</button>
+        <button class="ac-filter-btn" data-filter="editing">✂️ Editing</button>
+        <button class="ac-filter-btn" data-filter="creator_support">🆘 Creator Support</button>
       </div>
 
       <!-- Results bar -->
       <div class="ac-results-bar">
         <span id="ac-count" class="text-muted text-sm"></span>
         <span id="ac-filter-label" class="text-sm" style="color:var(--accent-blue);"></span>
+      </div>
+      <div style="margin-bottom:16px;">
+        <a href="prompt-generator.html" style="font-size:12px;font-weight:600;color:var(--accent);text-decoration:none;opacity:.7;transition:opacity .15s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.7'">✍️ Noch keinen Prompt? Zum Prompt Generator →</a>
       </div>
 
       <!-- Grid -->
@@ -325,7 +268,7 @@ h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.pf-title
 </div>
 
 
-<footer class="footer">
+<footer class="cvs-footer-simple">
   <div class="footer-inner">
     <div class="footer-brand">
       <div class="footer-logo">Cinematic Vision Studio</div>
@@ -375,10 +318,21 @@ const GUIDES = [
   {"id":"g10","title":"Animation Service richtig nutzen","category":"animation","short":"Booster, Multiplikator, Logo oder Custom — so wählst du die richtige Animation.","read_time":"3 min","difficulty":"creator","icon":"✨","steps":["Booster Animation: Für TikTok LIVE x5 Effekte — starke Lichtblitze, kurze Sequenz.","Multiplikator Animation: x2/x3 Combo-Effekte für Rewards und Gift-Events.","Logo Animation: Dein Marken-Logo als animiertes Intro/Overlay — einfach halten.","Custom Animation: Für alles andere — beschreibe genau was du möchtest.","Stil wählen: Energy und Neon wirken am besten für LIVE-Streams.","Loop immer aktivieren für LIVE-Einsatz — das Video wiederholt sich nahtlos.","Beschreibung so spezifisch wie möglich: Farbe, Effekte, Timing, Hintergrund."],"cta_label":"✨ Animation Studio öffnen","cta_url":"https://cinematic-studio-family.onrender.com/tiktok-animation.php"},
   {"id":"g11","title":"Sofort fertige Videos anfragen","category":"ready_videos","short":"Du möchtest kein Prompt schreiben? Hol dir ein fertiges Premium-Video direkt.","read_time":"2 min","difficulty":"basic","icon":"📹","steps":["Gehe zu „Sofort fertige Videos“ in der Sidebar.","Filtere nach Kategorie: TikTok Ads, Auto, Horror, Luxury, Anime etc.","Klicke „Dieses Video anfragen“ wenn du es genau so haben möchtest.","Klicke „Ähnliches Video erstellen lassen“ wenn du Anpassungen möchtest.","Trage deine E-Mail oder Telegram und einen kurzen Wunsch ein.","Kein Prompt nötig — wir kümmern uns um alles.","Du erhältst das fertige Video als Download-Link."],"cta_label":"📹 Ready Videos ansehen","cta_url":"https://cinematic-studio-family.onrender.com/ready-videos.php"},
   {"id":"g12","title":"Video-Prompts mit Seedance optimieren","category":"video_studio","short":"So schreibst du Prompts die Seedance versteht — und bekommst weniger Jitter und bessere Bewegung.","read_time":"5 min","difficulty":"pro","icon":"🎬","steps":["Beschreibe immer: Subjekt + Aktion + Umgebung + Kamera in einem Satz.","Vermeide: „sehr schön“, „toll“, „amazing“ — sei konkret.","Kamera-Keywords: „slow dolly push-in“, „tracking shot“, „crane shot“.","Negativer Prompt ist wichtig: „jitter, teleporting, bad anatomy“ immer eintragen.","Button „Bewegung verbessern“ stabilisiert Jitter automatisch.","Für Charaktere: Startframe + Character Sheet kombinieren → stabilstes Ergebnis.","Kürzere Clips (5–8s) sind konsistenter als 15s — lieber mehrere kurze generieren."],"cta_label":"🎬 Video Studio öffnen","cta_url":"https://cinematic-studio-family.onrender.com/video-studio.php"},
-  {"id":"g13","title":"Image Studio Templates verstehen","category":"image_studio","short":"Jedes Template hat eine andere DNA. So wählst du das richtige für dein Projekt.","read_time":"3 min","difficulty":"basic","icon":"🖼","steps":["Realistic Character: Menschen, Portraits, Charaktere — optimiert für Gesichter.","Vehicle / Car: Automotive Fotografie — Reflexionen, Low-Angle, perfektes Bodywork.","Product: E-Commerce und Print — sauberes Studio-Licht, Details scharf.","Creature: Fantastische Wesen, Monster — filmische Qualität, reale Anatomie.","Startframe: Für Video-Einstieg — kein Blur, klare Komposition.","Endframe: Für Video-Ende — ruhige, abgeschlossene Bildkomposition.","Character Sheet: Mehrere Ansichten desselben Charakters — für Konsistenz."],"cta_label":"🖼 Image Studio öffnen","cta_url":"https://cinematic-studio-family.onrender.com/image-studio.php"}
+  {"id":"g13","title":"Image Studio Templates verstehen","category":"image_studio","short":"Jedes Template hat eine andere DNA. So wählst du das richtige für dein Projekt.","read_time":"3 min","difficulty":"basic","icon":"🖼","steps":["Realistic Character: Menschen, Portraits, Charaktere — optimiert für Gesichter.","Vehicle / Car: Automotive Fotografie — Reflexionen, Low-Angle, perfektes Bodywork.","Product: E-Commerce und Print — sauberes Studio-Licht, Details scharf.","Creature: Fantastische Wesen, Monster — filmische Qualität, reale Anatomie.","Startframe: Für Video-Einstieg — kein Blur, klare Komposition.","Endframe: Für Video-Ende — ruhige, abgeschlossene Bildkomposition.","Character Sheet: Mehrere Ansichten desselben Charakters — für Konsistenz."],"cta_label":"🖼 Image Studio öffnen","cta_url":"https://cinematic-studio-family.onrender.com/image-studio.php"},
+  {"id":"g14","title":"Prompting Basics — Von Null zum ersten Bild","category":"prompting","short":"Der komplette Einstieg in KI-Prompting: Aufbau, Motiv, Stil, Kamera, Licht und Negative Prompts.","read_time":"6 min","difficulty":"basic","icon":"🎨","steps":["Ein Prompt ist dein Text-Befehl an die KI. Er beschreibt, was das Bild zeigen soll — wie eine Regieanweisung für einen virtuellen Kameramann. Je präziser, desto besser das Ergebnis.","Der Aufbau folgt einer einfachen Formel: Motiv + Stil + Kamera + Licht + Bewegung + Qualität. Beispiel: ‚cinematic portrait of a cyberpunk warrior, neon lights, 85mm lens, rim lighting, shallow depth of field, 8k, highly detailed‘.","Motiv: Beschreibe das Hauptthema konkret. Statt ‚eine Frau‘ schreibe ‚eine junge Frau mit roten Haaren, Lederjacke, steht auf einem Dach in Tokio bei Nacht‘. Details machen den Unterschied.","Stil: Definiere den Look deines Bildes. Beispiele: cinematic, photorealistic, anime, oil painting, cyberpunk, vintage 80s, noir. Der Stil prägt 50% des visuellen Eindrucks — wähle ihn bewusst.","Kamera: Gib Kamerawinkel und Objektiv an. Beispiele: ‚low-angle shot, 24mm lens, shallow depth of field, tracking shot‘. Das verleiht dem Bild professionelle Dramaturgie und Tiefe.","Licht: Beschreibe Lichtquelle und Stimmung. Beispiele: ‚golden hour sunlight, rim lighting, volumetric fog, softbox lighting‘. Licht macht den Unterschied zwischen Flat und Cinematic.","Bewegung (für Videos): Beschreibe die Action klar. Beispiele: ‚slow-motion hair flowing, walking towards camera, camera orbiting‘. Seedance braucht exakte Bewegungsanweisungen für flüssige Ergebnisse.","Qualität: Füge Qualitäts-Keywords hinzu: ‚8k, highly detailed, masterpiece, best quality, sharp focus, ultra-detailed‘. Das pusht die Detailtreue und reduziert Artefakte.","Negative Prompt: Schreibe auf, was du NICHT willst. Beispiele: ‚blurry, low quality, deformed hands, oversaturated, watermark, text, cropped‘. Das verhindert die häufigsten KI-Fehler."],"cta_label":"✍️ Prompt Generator öffnen","cta_url":"prompt-generator.html"},
+  {"id":"g15","title":"CapCut Workflow — Schnitt, Musik, Übergänge, Export","category":"editing","short":"Wie du aus 2–3 KI-Szenen in CapCut ein fertiges TikTok, Reel oder Ad erstellst — Schritt für Schritt.","read_time":"7 min","difficulty":"creator","icon":"✂️","steps":["Importiere deine generierten Szenen direkt aus dem Download-Ordner in CapCut. Nutze ‚Neues Projekt‘ und wähle 9:16 für TikTok/Reels oder 16:9 für YouTube Ads. Die richtige Aspect Ratio ist der erste entscheidende Schritt.","Verstehe die Timeline: Oben liegen die Video-Spuren, darunter Audio. Ziehe deine Clips nacheinander auf die Hauptspur. Halte jeden Clip auf 3–5 Sekunden — kurze Szenen halten die Attention Span.","Verbinde Startframe und Endframe visuell: Wenn Szene 1 mit einer Nahaufnahme endet, starte Szene 2 mit einer ähnlichen Perspektive. Das Auge folgt kontinuierlich — keine harten Sprünge.","Nutze Übergänge sparsam: ‚Morph‘ oder ‚Dissolve‘ zwischen Szenen wirken am professionellsten. Vermeide ‚Cube‘ oder ‚Wipe‘ — die wirken amateurhaft. Ein guter Cut braucht oft gar keinen Effekt.","Synchronisiere Musik mit Bildern: Lade einen Trend-Sound oder Royalty-Free Track. Markiere Beat-Drops und platziere dort deine Schnitte. CapCuts ‚Beat-Sync‘-Funktion macht das automatisch.","Soundeffekte verstärken die Story: Füge ‚Whoosh‘ bei Übergängen, ‚Impact‘ bei Reveals und leichte Ambience in leeren Szenen hinzu. Weniger ist mehr — überlade es nicht.","Slow Motion richtig nutzen: Wähle den dramatischsten Moment (z. B. Haare im Wind, Wassertropfen). Setze Geschwindigkeit auf 0.3x und aktiviere ‚Optical Flow‘ für flüssige Ergebnisse. Nicht die ganze Szene — nur das Highlight.","Exportiere ohne Qualitätsverlust: Wähle ‚1080p, 60fps, H.264‘. Für TikTok/Reels reicht 30fps. Aktiviere ‚Smart HDR‘ nur, wenn deine Quelle HDR-fähig ist.","TikTok/Reels Export-Settings: Ratio 9:16, 1080×1920, 30–60fps. Nutze CapCuts ‚TikTok Export Preset‘ — es optimiert automatisch Bitrate und Farbraum für mobile Geräte.","Vermeide die häufigsten Fehler: Zu lange Clips (>15s pro Szene), überladene Übergänge, fehlender Sound, falsches Format, zu viele Text-Overlays. Less is more — lasse die KI-Bilder atmen."],"cta_label":"🎬 Video Studio öffnen","cta_url":"https://cinematic-studio-family.onrender.com/video-studio.php"},
+  {"id":"g16","title":"Cinematic Prompting — Licht, Kamera, Atmosphäre","category":"prompting","short":"Pro-Level Prompting für Hollywood-Look: Kamerawinkel, Lichtsetzung, Volumetrics und Motion Language.","read_time":"8 min","difficulty":"pro","icon":"🎬","steps":["Cinematic Prompts sind mehr als Stil-Keywords — sie simulieren eine komplette Filmproduktion in Textform. Während ein Basic-Prompt das Motiv beschreibt, definiert ein Cinematic Prompt Kamera, Licht, Atmosphäre und Bewegung als kohärentes System.","Kamerawinkel als Storytelling-Tool: Low-Angle = Macht, Heroismus. High-Angle = Verletzlichkeit, Isolation. Dutch Angle = Unruhe, Spannung. Eye-Level = Authentizität, Intimität. Beispiel: ‚low-angle dolly-in, subject towers over viewer, dramatic perspective‘.","Objektive prägen den Look: 24mm = Weitwinkel, Umgebung betont, leichte Verzerrung. 50mm = Natürlich, menschliche Wahrnehmung. 85mm = Porträt, flache Schärfentiefe, isoliertes Subjekt. 135mm = Kompression, Tele-Look, filigrane Details.","Depth of Field kontrolliert den Fokus: ‚shallow depth of field, f/1.4, creamy bokeh background‘ isoliert das Subjekt. ‚Deep focus, f/16, everything in sharp detail‘ zeigt komplexe Szenen. DOF lenkt das Auge des Betrachters gezielt.","Rim Lighting erzeugt Dimension: Licht von hinten zeichnet das Subjekt als Kontur ab. Prompt: ‚strong rim light from behind, subject edges glowing, separation from dark background‘. Funktioniert besonders bei dunklen Szenen und Silhouetten.","Volumetric Lighting schafft Tiefe: Lichtstrahlen durch Nebel, Staub oder Wasser. Prompt: ‚volumetric god rays piercing through forest canopy, dust particles visible in light beams, atmospheric haze‘. Verleiht jeder Szene instant cinematische Tiefe.","Atmosphere und Fog als Stimmungswerkzeug: ‚dense fog rolling through neon-lit streets, wet asphalt reflecting colored lights, moody cyberpunk night‘. Atmosphäre verändert die emotionale Wirkung stärker als das Motiv selbst.","Motion Language für flüssige Videos: ‚slow push-in with subtle parallax, camera breathing, handheld documentary feel‘ vs. ‚locked-off tripod, precise mechanical movement, clinical precision‘. Die Kamera-Bewegung erzählt eine eigene Geschichte.","Negative Prompting auf Pro-Level: Vermeide nicht nur ‚blurry‘, sondern auch ‚amateur composition, flat lighting, oversaturated colors, smartphone photography look, stock photo aesthetic‘. Das unterscheidet Basic von Cinematic Ergebnissen.","Hollywood-Look in einem Prompt: Kombiniere alle Elemente zu einem kohärenten System. Beispiel: ‚cinematic wide shot, 35mm anamorphic lens, shallow depth of field, golden hour backlight with volumetric haze, slow dolly-in, film grain, color graded warm teal-orange, 8k, masterpiece‘. Jeder Parameter hat eine Aufgabe — keine Füllwörter."],"cta_label":"✍️ Prompt Generator öffnen","cta_url":"prompt-generator.html"},
+  {"id":"g17","title":"Hilfe bekommen — Creator Support & Workflow","category":"creator_support","short":"Der schnellste Weg von Null zum fertigen Video: Welche Tools zuerst, wie du Credits sparst und worauf du achten musst.","read_time":"5 min","difficulty":"basic","icon":"🆘","steps":["Starte mit dem Studio: Öffne cinematic-studio-family.onrender.com/studio-demo.php. Kein Account nötig. Lade ein Video hoch (max. 50 MB, 15 Sekunden) oder starte direkt mit KI-Bildgenerierung. Der Free-Plan ist dauerhaft kostenlos.","Die richtige Reihenfolge: 1) Video uploaden → 2) Szenen analysieren lassen → 3) Szenen ersetzen (Bild/Video/Text) → 4) Final rendern → 5) Download. Upload und Render sind immer kostenlos — nur KI-Generierungen kosten Kristalle.","Seedance Fast vs. Standard: Nutze Fast für Tests und erste Entwürfe (günstiger, schneller). Nutze Standard für finale Videos (bessere Qualität, mehr Credits). Ein typischer Workflow: 3× Fast testen → 1× Standard finalisieren.","Wann Bilder statt Video? Generiere Bilder, wenn du präzise Kontrolle über einzelne Frames brauchst: Startframes, Endframes, Character Sheets, Produkt-Shots. Videos sind für Bewegung und Story — Bilder für Präzision und Kontrolle.","Credits sparen: 1) Nutze Fast für Tests. 2) Plane Szenen vor dem Generieren — weniger Iterationen. 3) Nutze Startframes — sie reduzieren Rerolls drastisch. 4) Generiere Tags/Startframes aus existierenden Bildern statt aus Text. 5) Kürzere Clips sind konsistenter.","Szenen planen: Skizziere vor dem Generieren, welche Szenen du brauchst. Ein typischer TikTok hat 3–5 Szenen à 3–5 Sekunden. Notiere für jede Szene: Motiv, Kamera, Licht, Übergang zur nächsten Szene. Das spart 50% der Generierungszeit.","Startframes richtig nutzen: Generiere den ersten Frame als Bild im Image Studio. Lade ihn als Startframe hoch. Das gibt Seedance eine exakte visuelle Referenz — das Video folgt der Komposition, dem Licht und dem Stil des Bildes. Reduziert Fehler um 70%.","Character Sheets für wiederkehrende Charaktere: Erstelle ein Character Sheet für jeden Hauptcharakter. Speichere es in der Element Library. Nutze es als Referenz in jedem Video, in dem der Charakter vorkommt. So bleibt das Gesicht konsistent über mehrere Clips.","TikTok-Export: Generiere im 9:16-Format. Nutze CapCut für Schnitt, Musik und Text-Overlays. Exportiere 1080×1920, 30fps. Der Algorithmus bevorzugt nativ hochgeladene Videos gegenüber Re-Uploads von anderen Plattformen.","Wenn du festhängst: 1) Academy-Guides durchlesen. 2) Prompt Generator nutzen für Inspiration. 3) Kontakt-Formular für individuelle Hilfe. 4) Community über Discord/Telegram. Die meisten Probleme lösen sich durch präzisere Prompts oder besser geplante Startframes."],"cta_label":"🎬 Studio starten","cta_url":"https://cinematic-studio-family.onrender.com/studio-demo.php"},
+  {"id":"g18","title":"Bewegung in KI-Videos — was funktioniert","category":"video_studio","short":"Welche Bewegungen Seedance gut versteht und welche zu Jitter oder Artefakten führen.","read_time":"4 min","difficulty":"creator","icon":"🏃","steps":["Langsame, gleichmäßige Bewegungen funktionieren am besten: ‚slow dolly-in‘, ‚gentle tracking shot‘, ‚subtle pan‘. Seedance interpoliert diese flüssig und stabil.","Schnelle, abrupte Bewegungen sind problematisch: ‚fast zoom‘, ‚sudden cut‘, ‚rapid shake‘ führen oft zu Jitter, Morphing oder Artefakten. Vermeide sie.","Kamerabewegungen definieren: ‚push-in‘ nähert sich langsam. ‚pull-back‘ entfernt sich. ‚orbit‘ bewegt sich kreisförmig. ‚crane-up‘ steigt. Beschreibe die Richtung exakt.","Statische Subjekte mit bewegter Kamera sind stabiler als bewegte Subjekte mit statischer Kamera. Wenn das Subjekt stillsteht und nur die Kamera sich bewegt, reduziert sich Jitter um 60%.","Bewegungsunschärfe vermeiden: Seedance kann keinen Motion Blur erzeugen. Prompte daher keine ‚schnellen Autos‘ oder ‚fliegenden Vögel‘. Nutze stattdessen ‚car slowly driving‘ oder ‚bird gliding‘.","Kombiniere Startframe + Bewegungsbeschreibung: Ein statisches Startframe-Bild mit exakter Bewegungsanweisung im Prompt gibt Seedance die beste Referenz. Das Startframe definiert den Look — der Prompt definiert die Bewegung.","Teste mit 3-Sekunden-Clips: Generiere zuerst einen 3-Sekunden-Clip mit deiner Bewegung. Wenn der stabil ist, generiere die 5-Sekunden-Version. Nie direkt 15 Sekunden generieren.","Bewegungs-Keywords für stabile Ergebnisse: ‚slow motion‘, ‚gentle drift‘, ‚smooth glide‘, ‚steady cam‘, ‚breathing camera‘, ‚subtle parallax‘. Diese Keywords signalisieren der KI, dass Flüssigkeit wichtig ist."],"cta_label":"🎬 Video Studio öffnen","cta_url":"https://cinematic-studio-family.onrender.com/video-studio.php"},
+  {"id":"g19","title":"Sounddesign für KI-Videos","category":"editing","short":"Wie du deinen KI-Video-Clips mit Musik, Soundeffekten und Stimmung das perfekte Audio-Gewand gibst.","read_time":"4 min","difficulty":"creator","icon":"🎵","steps":["Musik bestimmt 50% der Wirkung: Ein Clip mit passender Musik wirkt professioneller als derselbe Clip mit falschem oder fehlendem Sound. Wähle den Track vor dem Schnitt.","Beat-Sync als Struktur: Markiere Beat-Drops in deinem Track und platziere dort deine Schnitte. CapCuts Auto-Beat-Sync erkennt den Takt automatisch. Jeder Beat-Drop = ein visueller Moment.","Soundeffekte sparsam einsetzen: ‚Whoosh‘ bei Übergängen, ‚Impact‘ bei Reveals, ‚Ambient‘ bei Landschaften. Ein Effekt pro Szene reicht. Weniger ist mehr.","Voice-Overlay richtig nutzen: Spreche einen kurzen Hook oder Call-to-Action ein. 3–5 Sekunden reichen. Nutze einen kostenlosen AI-Voice-Generator oder nimm selbst auf. Stimme + Video = 3× höhere Retention.","Stille als dramaturgisches Mittel: Manchmal ist keine Musik stärker. Eine 1-Sekunden-Stille vor einem Reveal erzeugt Spannung. Nutze Stille bewusst — nicht als Lücke.","Lizenzfreie Musik-Quellen: Epidemic Sound, Artlist, Uppbeat, Pixabay Music. Alle bieten lizenzfreie Tracks für Social Media. Lade den Track direkt in CapCut.","Export-Settings für Audio: AAC 320kbps reicht für Social Media. Für Premium-Produktionen exportiere separat als WAV und mixe in Audacity oder GarageBand."],"cta_label":"✂️ CapCut Guide öffnen","cta_url":"https://cinematic-studio-family.onrender.com/video-studio.php"},
+  {"id":"g20","title":"Kamera-Bewegung — Dolly, Crane, Tracking","category":"prompting","short":"Die wichtigsten Kamera-Bewegungen für cinematic KI-Videos und wie du sie im Prompt beschreibst.","read_time":"5 min","difficulty":"pro","icon":"📷","steps":["Dolly In / Out: Die Kamera bewegt sich auf das Subjekt zu oder weg. Prompt: ‚slow dolly-in, subject fills frame, shallow depth of field‘. Funktioniert besonders gut für Reveals und emotionale Momente.","Tracking Shot: Die Kamera folgt einem bewegten Subjekt. Prompt: ‚smooth tracking shot, subject walks through corridor, camera maintains consistent distance‘. Wichtig: Das Subjekt muss langsam sein.","Crane Shot: Die Kamera steigt oder sinkt. Prompt: ‚gradual crane-up, revealing city skyline from rooftop, golden hour light‘. Erzeugt epische, weitläufige Momente.","Orbit / Arc: Die Kamera bewegt sich kreisförmig um das Subjekt. Prompt: ‚slow 180-degree orbit around subject, parallax background, cinematic depth‘. Am stabilsten bei statischem Subjekt.","Static with Depth: Die Kamera bleibt still, aber Elemente im Vordergrund bewegen sich. Prompt: ‚locked-off static shot, foreground leaves gently swaying, subject in sharp focus‘. Sehr stabil und cinematisch.","Parallax: Verschiedene Bildebenen bewegen sich mit unterschiedlicher Geschwindigkeit. Prompt: ‚subtle parallax, foreground bokeh, midground subject, background city lights‘. Erzeugt instant Tiefe.","Handheld / Documentary: Leichtes Wackeln für Authentizität. Prompt: ‚subtle handheld documentary feel, natural camera breathing, intimate close-up‘. Nicht zu viel — sonst wird es unruhig.","Kombiniere Bewegungen: ‚slow dolly-in transitioning to gentle orbit, subject remains centered‘. Kombinationen sind möglich, aber halte sie einfach. Maximal zwei Bewegungen pro Clip."],"cta_label":"✍️ Prompt Generator öffnen","cta_url":"prompt-generator.html"},
+  {"id":"g21","title":"Charakter-Konsistenz über mehrere Szenen","category":"character_sheet","short":"Wie du denselben Charakter in verschiedenen Szenen, Outfits und Beleuchtungen stabil hältst.","read_time":"5 min","difficulty":"pro","icon":"🧍","steps":["Das Character Sheet ist dein Fundament: Erstelle ein Sheet mit front, side, back view. Speichere es in der Element Library. Ohne Sheet ist Konsistenz reiner Zufall.","Gesichts-Details dokumentieren: Augenfarbe, Haarfarbe, Haarlänge, Gesichtsform, Narben, Make-up. Je präziser deine Beschreibung, desto konsistenter das Ergebnis. Ein Satz reicht nicht.","Outfit als separates Element: Lege das Outfit als eigenes Element in der Library an. Wenn sich der Charakter umzieht, nutze das Outfit-Element als Referenz. So bleibt der Look konsistent.","Licht-Änderungen managen: Wenn sich die Beleuchtung ändert (Tag → Nacht, Indoor → Outdoor), generiere ein neues Sheet im passenden Licht. Ein Charakter bei Nacht sieht anders aus als bei Tag.","Gesichts-Referenz in jedem Prompt: Füge am Ende jedes Prompts hinzu: ‚consistent face: [Beschreibung], same person, identical facial features‘. Das verankert das Gesicht im Bewusstsein der KI.","Expression-Range testen: Generiere 3–5 Bilder mit unterschiedlichen Emotionen (neutral, lächelnd, ernst, überrascht). Überprüfe, ob das Gesicht identisch bleibt. Wenn nicht, verfeinere die Beschreibung.","Wiederkehrende Charaktere: Für Serien oder Geschichten mit demselben Protagonisten — erstelle ein Master-Sheet und nutze es in jedem Video. Das reduziert Rerolls um 80%."],"cta_label":"🖼 Image Studio öffnen","cta_url":"https://cinematic-studio-family.onrender.com/image-studio.php"},
+  {"id":"g22","title":"Produkt-Fotografie mit KI","category":"image_studio","short":"Professionelle Produkt-Shots, Packshots und Lifestyle-Bilder mit KI — ohne Studio.","read_time":"4 min","difficulty":"creator","icon":"📦","steps":["Das richtige Template: Wähle im Image Studio das Template ‚Product‘. Es ist optimiert für saubere Kanten, Studio-Licht und Detailtreue.","Beschreibe das Produkt exakt: Marke, Material, Farbe, Form, Oberfläche (matt, glänzend, strukturiert). Statt ‚eine Uhr‘ schreibe ‚eine schwarze Titan-Uhr mit gebürstetem Zifferblatt, Lederarmband, minimalistisches Design‘.","Licht als Selling Point: ‚softbox lighting from 45 degrees, subtle reflection on surface, clean white background, professional product photography‘. Produkt-Fotografie lebt vom Licht.","Lifestyle-Kontext: Zeige das Produkt in Nutzung. ‚Smartphone on marble desk, morning coffee, soft natural light, lifestyle product shot‘. Lifestyle verkauft besser als Packshot.","Hintergrund bewusst wählen: Weiß für E-Commerce, Holz für Naturprodukte, Beton für Industrial, Neon für Tech. Der Hintergrund definiert die Zielgruppe.","Details scharf halten: Füge immer ‚sharp focus, 8k, highly detailed, macro lens‘ hinzu. Produktfotografie braucht Schärfe — sonst wirkt es amateurhaft.","Mehrere Winkel generieren: Front, 45-Grad, Detail, Lifestyle. 4 Bilder pro Produkt geben dir maximale Flexibilität für Shop, Ads und Social."],"cta_label":"🖼 Image Studio öffnen","cta_url":"https://cinematic-studio-family.onrender.com/image-studio.php"},
+  {"id":"g23","title":"Batch-Generierung — Effizienz-Workflows","category":"creator_support","short":"Wie du mehrere Bilder oder Videos parallel generierst und deinen Workflow beschleunigst.","read_time":"3 min","difficulty":"creator","icon":"⚡","steps":["Plane vor dem Generieren: Skizziere alle Szenen, die du brauchst. Ein typischer TikTok braucht 3–5 Szenen. Ein Musikvideo 8–12. Plane vorher — spare 50% Zeit.","Batch-Prompts vorbereiten: Schreibe alle Prompts in einem Dokument. Nutze den Prompt Generator für konsistente Struktur. Kopiere dann in Seedance.","Startframes als Batch: Generiere alle Startframes zuerst im Image Studio. Lade sie hoch und generiere dann alle Videos parallel. So hast du visuelle Konsistenz von Anfang an.","Template-basiertes Arbeiten: Erstelle 3–5 Master-Prompts mit Platzhaltern. ‚[Subjekt] in [Umgebung], [Licht], [Kamera], 8k, cinematic‘. Tausche nur die Platzhalter aus. Das beschleunigt die Erstellung um 70%.","Parallel-Rendering: Starte mehrere Render-Jobs gleichzeitig. Während Video 1 rendert, bereitest du Video 2 vor. Keine Leerlaufzeit.","CapCut-Templates: Erstelle ein CapCut-Template mit deinem Branding (Farben, Fonts, Intro). Kopiere es für jedes neue Projekt. So bleibt der Look konsistent.","Review-Runde: Schaue alle generierten Clips am Stück an. Markiere die besten. Lösche die schlechten sofort. So behältst du den Überblick."],"cta_label":"🎬 Studio starten","cta_url":"https://cinematic-studio-family.onrender.com/studio-demo.php"},
+  {"id":"g24","title":"TikTok Algorithmus — was der Algorithmus bevorzugt","category":"tiktok","short":"Die wichtigsten Faktoren, die der TikTok Algorithmus bei KI-Videos bevorzugt — und wie du sie nutzt.","read_time":"4 min","difficulty":"creator","icon":"📈","steps":["Retention ist König: Der Algorithmus misst, wie lange jemand zuschaut. Die ersten 3 Sekunden entscheiden. Dein Hook muss sofort greifen — keine langen Intros.","Completion Rate: Videos, die zu 100% angeschaut werden, werden bevorzugt. Halte Clips unter 15 Sekunden. Kurz = höhere Completion Rate = mehr Reichweite.","Engagement-Signale: Likes, Kommentare, Shares und Saves. Ein Save ist der stärkste Signal. Erstelle Content, den Leute speichern wollen — z.B. Tutorials, Prompts, Tipps.","Wiederverwendbarer Content: ‚Wie ich diesen Prompt gebaut habe‘, ‚Vorher/Nachher‘, ‚3 KI-Tools im Vergleich‘. Educational Content wird häufiger gespeichert und geteilt.","Posting-Zeit: Poste, wenn deine Zielgruppe online ist. Für TikTok: 7–9 Uhr, 12–14 Uhr, 19–22 Uhr. Teste verschiedene Zeiten und analysiere deine Analytics.","Hashtags strategisch: 3–5 Hashtags reichen. 1 Broad (#fyp, #viral), 2 Niche (#aivideo, #cinematic), 2 Brand-spezifisch (#cinematicvision). Nicht mehr.","Konsistenz schlägt Viralität: Ein Video pro Tag für 30 Tage bringt mehr Reichweite als 1 virales Video pro Monat. Der Algorithmus belohnt Konsistenz. Plane deinen Content im Voraus."],"cta_label":"🎵 TikTok Studio öffnen","cta_url":"https://cinematic-studio-family.onrender.com/tiktok-studio.php"}
 ];
 
-const CAT_LABELS = {"all":"Alle","api_credits":"API & Credits","seedance":"Seedance 2.0","image_studio":"Image Studio","video_studio":"Video Studio","startframe":"Startframe / Endframe","elements":"Element Library","character_sheet":"Character Sheets","tiktok":"TikTok Studio","sticker":"Sticker","animation":"Animation Service","ready_videos":"Sofort fertige Videos"};
+const CAT_LABELS = {"all":"Alle","api_credits":"API & Credits","seedance":"Seedance 2.0","image_studio":"Image Studio","video_studio":"Video Studio","startframe":"Startframe / Endframe","elements":"Element Library","character_sheet":"Character Sheets","tiktok":"TikTok Studio","sticker":"Sticker","animation":"Animation Service","ready_videos":"Sofort fertige Videos","prompting":"Prompting Basics","editing":"Editing","creator_support":"Creator Support"};
 
 const DIFF_LABELS = {basic:'Basic',creator:'Creator',pro:'Pro'};
 
@@ -444,10 +398,11 @@ function openGuide(guide) {
   mCta.href        = guide.cta_url ?? '#';
   modal.hidden = false;
   modal.scrollTop = 0;
+  document.body.style.overflow = 'hidden';
   mClose.focus();
 }
 
-function closeGuide() { modal.hidden = true; }
+function closeGuide() { modal.hidden = true; document.body.style.overflow = ''; }
 mBackdrop.addEventListener('click', closeGuide);
 mClose.addEventListener('click',   closeGuide);
 mClose2.addEventListener('click',  closeGuide);
@@ -469,7 +424,9 @@ function applyFilter(filter) {
     filterEl.textContent = filter !== 'all' ? '— ' + (CAT_LABELS[filter] ?? filter) : '';
   }
   filterBtns.forEach(btn => {
-    btn.classList.toggle('ac-filter-btn--active', btn.dataset.filter === filter);
+    const isActive = btn.dataset.filter === filter;
+    btn.classList.toggle('ac-filter-btn--active', isActive);
+    btn.setAttribute('aria-pressed', String(isActive));
   });
 }
 filterBtns.forEach(btn => btn.addEventListener('click', () => applyFilter(btn.dataset.filter)));
@@ -478,30 +435,7 @@ applyFilter('all');
 
 })();
 </script>
-<script>(function(){var b=document.getElementById('mobBurger'),m=document.getElementById('mobMenu');if(!b||!m)return;function t(){m.style.top=document.querySelector('.nav').offsetHeight+'px';}t();window.addEventListener('resize',t);b.addEventListener('click',function(e){e.stopPropagation();var o=m.classList.toggle('open');b.classList.toggle('open',o);b.setAttribute('aria-expanded',o?'true':'false');b.setAttribute('aria-label',o?'Menü schließen':'Menü öffnen');});m.querySelectorAll('.mob-link,.mob-cta').forEach(function(l){l.addEventListener('click',function(){m.classList.remove('open');b.classList.remove('open');b.setAttribute('aria-expanded','false');b.setAttribute('aria-label','Menü öffnen');});});document.addEventListener('click',function(e){if(!b.contains(e.target)&&!m.contains(e.target)){m.classList.remove('open');b.classList.remove('open');b.setAttribute('aria-expanded','false');}});document.addEventListener('keydown',function(e){if(e.key==='Escape'){m.classList.remove('open');b.classList.remove('open');b.setAttribute('aria-expanded','false');}});})();</script>
 <div id="cursor"></div><div id="cursor-ring"></div>
-<script>
-(function(){
-const isDesktop = window.matchMedia('(pointer: fine)').matches;
-if (!isDesktop) return;
-const cursor = document.getElementById('cursor');
-const ring = document.getElementById('cursor-ring');
-let mx=0,my=0,rx=0,ry=0,active=false;
-document.addEventListener('mousemove', e => {
-  mx=e.clientX; my=e.clientY;
-  cursor.style.left=mx+'px'; cursor.style.top=my+'px';
-  if (!active){active=true;document.body.classList.add('cursor-active')}
-});
-(function loop(){
-  rx+=(mx-rx)*.1; ry+=(my-ry)*.1;
-  ring.style.left=rx+'px'; ring.style.top=ry+'px';
-  requestAnimationFrame(loop);
-})();
-document.querySelectorAll('a,button,.nav-link,.nav-btn-gold,.nav-btn-ghost,.mob-link,.mob-cta,.btn-ghost,.wallet-pill').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{cursor.style.width='20px';cursor.style.height='20px';ring.style.width='52px';ring.style.height='52px'});
-  el.addEventListener('mouseleave',()=>{cursor.style.width='8px';cursor.style.height='8px';ring.style.width='32px';ring.style.height='32px'});
-});
-})();
-</script>
+<script src="assets/js/nav.js" defer></script>
 </body>
 </html>

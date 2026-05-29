@@ -1127,6 +1127,53 @@ footer{background:rgba(2,2,5,.98);border-top:1px solid rgba(24,114,255,.09);padd
   .hero-logo-wrap::before{inset:-10px}
   .hero-logo-wrap::after{inset:-22px}
 }
+
+/* ── Creator Templates ── */
+.templates-section{padding:90px 0 40px;position:relative;}
+.templates-section::before{content:"";position:absolute;top:0;left:0;right:0;height:400px;background:radial-gradient(ellipse 80% 120% at 10% 0%,rgba(0,40,165,.10) 0%,transparent 55%),radial-gradient(ellipse 60% 80% at 90% 10%,rgba(180,130,20,.07) 0%,transparent 50%);pointer-events:none;}
+.templates-label{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--accent);background:rgba(212,169,60,.1);border:1px solid rgba(212,169,60,.28);border-radius:999px;padding:6px 14px;margin-bottom:18px;position:relative;z-index:1;}
+.templates-title{font-size:clamp(26px,4vw,44px);font-weight:900;letter-spacing:-1.2px;margin-bottom:12px;line-height:1.1;font-family:'Syne',sans-serif;position:relative;z-index:1;}
+.templates-title span{background:linear-gradient(112deg,#d4a93c,#e8c355);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.templates-intro{color:var(--muted);font-size:15px;line-height:1.6;max-width:560px;margin-bottom:44px;position:relative;z-index:1;}
+.templates-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;position:relative;z-index:1;}
+@media(max-width:900px){.templates-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:600px){.templates-grid{grid-template-columns:1fr;gap:16px;}}
+.template-card{background:rgba(5,8,24,0.78);border:1px solid rgba(24,114,255,0.18);border-radius:18px;overflow:hidden;transition:transform .22s,box-shadow .22s,border-color .22s;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);box-shadow:0 28px 80px rgba(0,35,160,.2),0 0 0 1px rgba(200,160,60,.07) inset;display:flex;flex-direction:column;}
+
+/* ── Creator Journey ── */
+.journey-section{padding:70px 0 50px;position:relative;}
+.journey-label{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--accent);background:rgba(212,169,60,.1);border:1px solid rgba(212,169,60,.28);border-radius:999px;padding:6px 14px;margin-bottom:18px;position:relative;z-index:1;}
+.journey-title{font-size:clamp(26px,4vw,44px);font-weight:900;letter-spacing:-1.2px;margin-bottom:12px;line-height:1.1;font-family:'Syne',sans-serif;position:relative;z-index:1;}
+.journey-title span{background:linear-gradient(112deg,#d4a93c,#e8c355);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.journey-intro{color:var(--muted);font-size:15px;line-height:1.6;max-width:560px;margin-bottom:38px;position:relative;z-index:1;}
+.journey-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;position:relative;z-index:1;}
+@media(max-width:980px){.journey-steps{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:560px){.journey-steps{grid-template-columns:1fr;gap:12px;}}
+.journey-step{background:rgba(5,8,24,0.78);border:1px solid rgba(24,114,255,0.18);border-radius:18px;padding:22px 18px 18px;transition:transform .22s,border-color .22s,box-shadow .22s;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);box-shadow:0 28px 80px rgba(0,35,160,.2),0 0 0 1px rgba(200,160,60,.07) inset;position:relative;overflow:hidden;display:flex;flex-direction:column;}
+.journey-step:hover{transform:translateY(-4px);border-color:rgba(200,160,60,.22);box-shadow:0 24px 60px rgba(0,0,0,.5),0 0 0 1px rgba(200,160,60,.07) inset;}
+.journey-num{font-size:36px;font-weight:900;color:rgba(212,169,60,.12);position:absolute;top:10px;right:14px;line-height:1;font-family:'Syne',sans-serif;}
+.journey-step-title{font-size:15px;font-weight:900;margin-bottom:8px;font-family:'Syne',sans-serif;position:relative;z-index:1;}
+.journey-step-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:18px;position:relative;z-index:1;flex:1;}
+.journey-step-cta{font-size:11px;font-weight:700;color:var(--gold-bright);text-decoration:none;display:inline-flex;align-items:center;gap:6px;padding:7px 13px;background:rgba(212,169,60,.08);border:1px solid rgba(212,169,60,.25);border-radius:8px;transition:background .15s;position:relative;z-index:1;}
+.journey-step-cta:hover{background:rgba(212,169,60,.18);}
+@media(max-width:560px){.journey-step-cta{padding:9px 14px;font-size:12px;}}
+.template-card:hover{transform:translateY(-5px);border-color:rgba(200,160,60,.22);box-shadow:0 24px 60px rgba(0,0,0,.5),0 0 0 1px rgba(200,160,60,.07) inset;}
+.template-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 0;}
+.template-cat{font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--blue-bright);}
+.template-level{font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:6px;background:rgba(255,255,255,.06);color:var(--muted);border:1px solid var(--border);}
+.template-level.beginner{background:rgba(74,222,80,.10);color:#4ade80;border-color:rgba(74,222,80,.25);}
+.template-level.intermediate{background:rgba(212,169,60,.10);color:var(--gold-warm);border-color:rgba(212,169,60,.25);}
+.template-level.advanced{background:rgba(255,92,122,.10);color:var(--danger);border-color:rgba(255,92,122,.25);}
+.template-body{padding:10px 16px 16px;flex:1;display:flex;flex-direction:column;}
+.template-title{font-size:16px;font-weight:900;margin-bottom:6px;font-family:'Syne',sans-serif;}
+.template-hook{font-size:12px;color:var(--muted);line-height:1.55;margin-bottom:10px;}
+.template-cam{font-size:11px;color:var(--muted2);line-height:1.5;margin-bottom:14px;padding:8px 10px;background:rgba(24,114,255,.06);border-left:2px solid var(--blue-bright);border-radius:0 6px 6px 0;}
+.template-cta-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;}
+.template-cta{font-size:11px;font-weight:700;color:var(--text);text-decoration:none;padding:7px 13px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;transition:background .15s,border-color .15s;}
+.template-cta:hover{background:rgba(212,169,60,.12);border-color:rgba(212,169,60,.35);color:var(--gold-bright);}
+.template-cta:first-child{background:rgba(212,169,60,.08);border-color:rgba(212,169,60,.25);color:var(--gold-bright);}
+.template-cta:first-child:hover{background:rgba(212,169,60,.18);}
+@media(max-width:600px){.template-cta{padding:9px 14px;font-size:12px;}}
 </style>
 </head>
 <body>
@@ -1150,14 +1197,10 @@ footer{background:rgba(2,2,5,.98);border-top:1px solid rgba(24,114,255,.09);padd
   </a>
   <ul class="nav-links">
     <li><a href="#hero">Home</a></li>
-    <li><a href="#services">Services</a></li>
-    <li><a href="#portfolio">Portfolio</a></li>
-    <li><a href="academy.html">Academy</a></li>
-    <li><a href="#booking">Buchung</a></li>
+    <li><a href="https://cinematic-studio-family.onrender.com/studio-demo.php">Studio</a></li>
     <li><a href="crystals.html">Kristalle</a></li>
-    <li><a href="shop.html">Shop</a></li>
-    <li><a href="https://cinematic-studio-family.onrender.com/contact.php">Kontakt</a></li>
-    <li><a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="nav-cta">🎬 Studio →</a></li>
+    <li><a href="contact.php">Kontakt</a></li>
+    <li><a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="nav-cta">🎬 Studio starten</a></li>
     <li><a href="https://cinematic-studio-family.onrender.com/login.php" style="-webkit-text-fill-color:rgba(237,242,255,.5);font-size:.72rem;padding:7px 8px">Login</a></li>
   </ul>
   <button class="nav-burger" id="burger-btn" aria-label="Menü"><span></span><span></span><span></span></button>
@@ -1165,15 +1208,11 @@ footer{background:rgba(2,2,5,.98);border-top:1px solid rgba(24,114,255,.09);padd
 
 <nav class="mobile-nav" id="mobile-nav">
   <a href="#hero" class="mn-link">Home</a>
-  <a href="#services" class="mn-link">Services</a>
-  <a href="#portfolio" class="mn-link">Portfolio</a>
-  <a href="academy.html" class="mn-link">Academy</a>
-  <a href="#booking" class="mn-link">Buchung</a>
+  <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="mn-link">Studio</a>
   <a href="crystals.html" class="mn-link">Kristalle</a>
-  <a href="shop.html" class="mn-link">Shop</a>
-  <a href="https://cinematic-studio-family.onrender.com/contact.php" class="mn-link">Kontakt</a>
-  <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="mn-link" style="color:var(--gold-bright)">🎬 Studio →</a>
-  <a href="https://cinematic-studio-family.onrender.com/login.php" class="mn-link" style="color:var(--blue-bright)">Login →</a>
+  <a href="contact.php" class="mn-link">Kontakt</a>
+  <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="mn-link" style="color:var(--gold-bright)">🎬 Studio starten</a>
+  <a href="https://cinematic-studio-family.onrender.com/login.php" class="mn-link" style="color:var(--blue-bright)">Login</a>
 </nav>
 
 <!-- ══════════════════════════════════
@@ -1221,6 +1260,11 @@ footer{background:rgba(2,2,5,.98);border-top:1px solid rgba(24,114,255,.09);padd
       <a href="#portfolio" class="btn-secondary">Portfolio ansehen</a>
       <a href="https://cinematic-studio-family.onrender.com/contact.php" class="btn-ghost">⚡ Projekt anfragen</a>
     </div>
+    <div style="margin-top:28px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap;animation:fadeUp 1s .7s both">
+      <a href="academy.html" style="font-size:12px;font-weight:600;color:var(--gold-warm);text-decoration:none;opacity:.65;transition:opacity .15s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.65'">🎓 Academy</a>
+      <a href="prompt-generator.html" style="font-size:12px;font-weight:600;color:var(--gold-warm);text-decoration:none;opacity:.65;transition:opacity .15s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.65'">✍️ Prompt Generator</a>
+      <a href="crystals.html" style="font-size:12px;font-weight:600;color:var(--gold-warm);text-decoration:none;opacity:.65;transition:opacity .15s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.65'">💎 Kristalle</a>
+    </div>
   </div>
 </section>
 
@@ -1234,6 +1278,160 @@ footer{background:rgba(2,2,5,.98);border-top:1px solid rgba(24,114,255,.09);padd
   <div class="stat-item reveal reveal-delay-3"><div class="stat-num">99%</div><div class="stat-label">Kundenzufriedenheit</div></div>
   <div class="stat-item reveal reveal-delay-4"><div class="stat-num">6</div><div class="stat-label">Cinematic Disziplinen</div></div>
 </div>
+
+<!-- ══════════════════════════════════
+     CREATOR TEMPLATES
+══════════════════════════════════ -->
+<section class="templates-section" id="templates">
+  <div class="wrap">
+    <div class="templates-label reveal">✦ Direkt starten</div>
+    <h2 class="templates-title reveal reveal-delay-1">Ausgewählte <span>Creator Templates.</span></h2>
+    <p class="templates-intro reveal reveal-delay-2">Starte nicht bei Null — nutze bewährte Creator-Workflows. Jedes Template enthält Kamera-Hinweise, Licht-Setup und einen optimierten Prompt.</p>
+
+    <div class="templates-grid">
+
+      <div class="template-card reveal">
+        <div class="template-header">
+          <span class="template-cat">Viral TikTok Hook</span>
+          <span class="template-level beginner">Beginner</span>
+        </div>
+        <div class="template-body">
+          <div class="template-title">Midnight Fizz</div>
+          <div class="template-hook">7-Sekunden-Hook mit Slow-Motion-Produktreveal. Optimiert für Retention und Shares.</div>
+          <div class="template-cam">📷 Extreme Close-up · Rim Light · 9:16 · 60fps</div>
+          <div class="template-cta-row">
+            <a href="prompt-generator.html" class="template-cta">Prompt nutzen</a>
+            <a href="academy.html" class="template-cta">Workflow ansehen</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="template-card reveal reveal-delay-1">
+        <div class="template-header">
+          <span class="template-cat">Anime Transformation</span>
+          <span class="template-level beginner">Beginner</span>
+        </div>
+        <div class="template-body">
+          <div class="template-title">Sakura Shift</div>
+          <div class="template-hook">Portrait morpht sanft in Anime-Stil. Pastell-Grade mit fallenden Blütenblättern.</div>
+          <div class="template-cam">📷 85mm Portrait · Softbox Studio · Loop-Render · Pastell-Grade</div>
+          <div class="template-cta-row">
+            <a href="prompt-generator.html" class="template-cta">Prompt nutzen</a>
+            <a href="academy.html" class="template-cta">Workflow ansehen</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="template-card reveal reveal-delay-2">
+        <div class="template-header">
+          <span class="template-cat">Product Commercial</span>
+          <span class="template-level intermediate">Intermediate</span>
+        </div>
+        <div class="template-body">
+          <div class="template-title">Luminex Pro</div>
+          <div class="template-hook">Premium-Produktreveal auf Marmor mit weichem Studiolicht. Cinematic und verkaufsstark.</div>
+          <div class="template-cam">📷 50mm Standard · Softbox + Reflektor · 1:1 · 24fps</div>
+          <div class="template-cta-row">
+            <a href="prompt-generator.html" class="template-cta">Prompt nutzen</a>
+            <a href="academy.html" class="template-cta">Workflow ansehen</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="template-card reveal">
+        <div class="template-header">
+          <span class="template-cat">Cinematic Trailer</span>
+          <span class="template-level intermediate">Intermediate</span>
+        </div>
+        <div class="template-body">
+          <div class="template-title">Nacht & Neon</div>
+          <div class="template-hook">Film-Noir-Trailer mit Drohnen-Intro und Neon-Reflections. Dramatischer, dunkler Look.</div>
+          <div class="template-cam">📷 Overhead Drone · Neon Night · 16:9 · 24fps · Film Grain</div>
+          <div class="template-cta-row">
+            <a href="prompt-generator.html" class="template-cta">Prompt nutzen</a>
+            <a href="academy.html" class="template-cta">Workflow ansehen</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="template-card reveal reveal-delay-1">
+        <div class="template-header">
+          <span class="template-cat">Luxury Car Edit</span>
+          <span class="template-level advanced">Advanced</span>
+        </div>
+        <div class="template-body">
+          <div class="template-title">Apex GT Reveal</div>
+          <div class="template-hook">Dramatischer Car-Reveal in Undergound-Garage. Rim Light, Slow Push-In, Metallic-Grade.</div>
+          <div class="template-cam">📷 Tracking Shot · Rim Light + Blue Accent · 16:9 · 24fps</div>
+          <div class="template-cta-row">
+            <a href="prompt-generator.html" class="template-cta">Prompt nutzen</a>
+            <a href="academy.html" class="template-cta">Workflow ansehen</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="template-card reveal reveal-delay-2">
+        <div class="template-header">
+          <span class="template-cat">Music Visualizer</span>
+          <span class="template-level advanced">Advanced</span>
+        </div>
+        <div class="template-body">
+          <div class="template-title">Orbit Protocol</div>
+          <div class="template-hook">Epischer Space-Nebula-Visualizer für elektronische Musik. Volumetric, groß, kino.</div>
+          <div class="template-cam">📷 Wide Establishing · Volumetric God Rays · 16:9 · 24fps · IMAX</div>
+          <div class="template-cta-row">
+            <a href="prompt-generator.html" class="template-cta">Prompt nutzen</a>
+            <a href="academy.html" class="template-cta">Workflow ansehen</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     CREATOR JOURNEY
+══════════════════════════════════ -->
+<section class="journey-section" id="journey">
+  <div class="wrap">
+    <div class="journey-label reveal">✦ Dein Weg</div>
+    <h2 class="journey-title reveal reveal-delay-1">In 4 Schritten zum <span>cinematic Ergebnis.</span></h2>
+    <p class="journey-intro reveal reveal-delay-2">Du brauchst keine Vorerfahrung. Folge dem Workflow — von der ersten Idee bis zum fertigen Clip.</p>
+
+    <div class="journey-steps">
+
+      <div class="journey-step reveal">
+        <div class="journey-num">01</div>
+        <div class="journey-step-title">Idee wählen</div>
+        <div class="journey-step-desc">Entdecke Templates und Showcases. Finde den Stil, der zu deiner Vision passt.</div>
+        <a href="portfolio.html" class="journey-step-cta">Showcases entdecken →</a>
+      </div>
+
+      <div class="journey-step reveal reveal-delay-1">
+        <div class="journey-num">02</div>
+        <div class="journey-step-title">Prompt bauen</div>
+        <div class="journey-step-desc">Nutze den Generator oder ein Template. Wir optimieren Licht, Kamera und Look für dich.</div>
+        <a href="prompt-generator.html" class="journey-step-cta">Prompt Generator starten →</a>
+      </div>
+
+      <div class="journey-step reveal reveal-delay-2">
+        <div class="journey-num">03</div>
+        <div class="journey-step-title">Workflow lernen</div>
+        <div class="journey-step-desc">Schritt-für-Schritt Guides in der Academy. Kein Raten, nur bewährte Ergebnisse.</div>
+        <a href="academy.html" class="journey-step-cta">Academy Workflow ansehen →</a>
+      </div>
+
+      <div class="journey-step reveal reveal-delay-3">
+        <div class="journey-num">04</div>
+        <div class="journey-step-title">Studio öffnen</div>
+        <div class="journey-step-desc">Lade deine Clips hoch, ersetze Slots mit KI-Generierungen und render in Minuten.</div>
+        <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="journey-step-cta">Studio öffnen →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
 
 <!-- ══════════════════════════════════
      SERVICES

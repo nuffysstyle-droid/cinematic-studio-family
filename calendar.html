@@ -1,0 +1,758 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Buche deinen Termin im Cinematic Vision Studio — KI-Filmproduktion, Express-Lieferung, persönliche Betreuung.">
+<meta name="theme-color" content="#020205">
+<link rel="icon" type="image/png" href="assets/cvs-logo.png">
+<title>Buchung – Cinematic Vision Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/cvs-core.css">
+<style>
+/* ╔══════════════════════════════════════════════════════╗
+   ║  CINEMATIC VISION STUDIO — DESIGN SYSTEM v1.0       ║
+   ║  Buchungskalender — Premium Dark Theme               ║
+   ╚══════════════════════════════════════════════════════╝ */
+:root {
+  --black:       #020205;
+  --black-2:     #06060f;
+  --black-3:     #09091a;
+  --glass-bg:    rgba(5,8,24,0.78);
+  --glass-border:rgba(24,114,255,0.18);
+  --blue-core:   #003ee8;
+  --blue-bright: #1872ff;
+  --blue-glow:   #4da0ff;
+  --blue-pale:   rgba(77,160,255,0.10);
+  --gold:        #b8942e;
+  --gold-warm:   #d4a93c;
+  --gold-bright: #e8c355;
+  --gold-light:  #f2d878;
+  --gold-glow:   rgba(200,160,60,0.4);
+  --white:       #edf2ff;
+  --white-dim:   rgba(237,242,255,0.52);
+  --white-faint: rgba(237,242,255,0.10);
+  --radius-sm:   6px;
+  --radius-md:   14px;
+  --radius-lg:   26px;
+  --perspective: 1400px;
+  --ease-smooth: cubic-bezier(.23,1,.32,1);
+  --avail:       #22c55e;
+  --avail-glow:  rgba(34,197,94,0.4);
+  --reserv:      #e8c355;
+  --closed:      #ef4444;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:'DM Sans',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+/* ── Cinematic Film Grain ── */
+body::before{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.028'/%3E%3C/svg%3E");opacity:.5;}
+#bg-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+
+/* ── UTILITY ── */
+.syne{font-family:'Syne',sans-serif}
+section{position:relative;overflow:hidden}
+
+/* ── HERO ── */
+.hero{
+  position:relative;z-index:1;
+  text-align:center;padding:140px 20px 60px;
+  background:
+    radial-gradient(ellipse 180% 100% at 50% -20%,rgba(0,35,150,.32) 0%,transparent 48%),
+    radial-gradient(ellipse 60% 60% at 5% 60%,rgba(150,110,20,.09) 0%,transparent 52%),
+    radial-gradient(ellipse 50% 55% at 95% 70%,rgba(70,20,170,.08) 0%,transparent 52%),
+    radial-gradient(ellipse 80% 40% at 50% 100%,rgba(0,15,60,.35) 0%,transparent 60%),
+    var(--black);
+}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:14px;
+  font-size:.62rem;font-weight:500;letter-spacing:.32em;text-transform:uppercase;
+  color:rgba(237,242,255,.35);
+  margin-bottom:36px;
+}
+.hero-eyebrow::before{content:'';width:36px;height:1px;background:linear-gradient(90deg,var(--blue-glow),transparent);opacity:.8}
+.hero-eyebrow::after{content:'';width:36px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-warm));opacity:.7}
+
+.hero h1{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(2.4rem,6vw,4.8rem);
+  font-weight:800;line-height:1.05;letter-spacing:-.03em;
+  margin-bottom:20px;
+}
+.hero h1 em{
+  font-style:normal;
+  background:linear-gradient(108deg,var(--blue-bright) 0%,var(--blue-glow) 28%,var(--gold-warm) 60%,var(--gold-bright) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero p{
+  font-size:clamp(.95rem,1.8vw,1.12rem);font-weight:300;
+  color:rgba(237,242,255,.4);line-height:1.95;
+  max-width:580px;margin:0 auto;
+}
+
+/* ── MAIN GRID ── */
+.main-grid{
+  position:relative;z-index:1;
+  display:grid;grid-template-columns:1fr 400px;gap:28px;
+  max-width:1200px;width:100%;margin:0 auto;
+  padding:0 clamp(20px,4vw,48px) 60px;
+}
+@media(max-width:960px){.main-grid{grid-template-columns:1fr}}
+
+/* ── BUTTONS (Master System) ── */
+.btn-primary{
+  display:inline-flex;align-items:center;gap:10px;
+  background:linear-gradient(145deg,#0042f2 0%,#0038cc 42%,#0030ae 100%);
+  color:#fff;text-decoration:none;
+  font-family:'Syne',sans-serif;font-size:.84rem;font-weight:700;
+  letter-spacing:.09em;text-transform:uppercase;
+  padding:18px 40px;border-radius:50px;
+  border:1px solid rgba(24,114,255,.48);
+  box-shadow:0 0 0 1px rgba(24,114,255,.1),0 0 0 4px rgba(24,114,255,.04),0 0 30px rgba(0,58,220,.58),0 6px 22px rgba(0,38,175,.38),inset 0 1px 0 rgba(255,255,255,.14),inset 0 -1px 0 rgba(0,16,90,.32);
+  transition:all .4s var(--ease-smooth);
+  position:relative;overflow:hidden;
+}
+.btn-primary::before{
+  content:'';position:absolute;top:-50%;left:-90%;width:65%;height:200%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.14),transparent);
+  transform:skewX(-22deg);transition:left .6s var(--ease-smooth);
+}
+.btn-primary:hover::before{left:165%}
+.btn-primary:hover{
+  transform:translateY(-4px);
+  box-shadow:0 0 0 1px rgba(24,114,255,.2),0 0 0 4px rgba(24,114,255,.06),0 0 52px rgba(0,58,220,.82),0 10px 34px rgba(0,38,175,.52),inset 0 1px 0 rgba(255,255,255,.18);
+  border-color:rgba(24,114,255,.78);
+}
+
+.btn-secondary{
+  display:inline-flex;align-items:center;gap:10px;
+  border:1px solid rgba(200,160,60,.35);
+  color:rgba(237,242,255,.88);text-decoration:none;
+  font-family:'Syne',sans-serif;font-size:.84rem;font-weight:600;
+  letter-spacing:.09em;text-transform:uppercase;
+  padding:18px 40px;border-radius:50px;
+  background:rgba(155,115,25,.08);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  box-shadow:inset 0 1px 0 rgba(200,160,60,.08),inset 0 -1px 0 rgba(0,0,0,.1);
+  transition:all .4s var(--ease-smooth);
+  position:relative;overflow:hidden;
+}
+.btn-secondary::before{
+  content:'';position:absolute;top:-50%;left:-90%;width:65%;height:200%;
+  background:linear-gradient(90deg,transparent,rgba(200,160,60,.1),transparent);
+  transform:skewX(-22deg);transition:left .6s;
+}
+.btn-secondary:hover::before{left:165%}
+.btn-secondary:hover{
+  border-color:var(--gold-warm);color:var(--gold-bright);
+  background:rgba(155,115,25,.15);
+  box-shadow:0 0 26px rgba(155,115,25,.24),inset 0 1px 0 rgba(200,160,60,.12);
+  transform:translateY(-3px);
+}
+
+/* ── CALENDAR CARD ── */
+.cal-card{
+  background:var(--glass-bg);
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius-lg);
+  padding:36px 32px;
+  backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+  box-shadow:0 28px 80px rgba(0,35,160,.2),0 0 0 1px rgba(200,160,60,.07) inset;
+}
+.month-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+.month-label{
+  font-family:'Syne',sans-serif;font-size:1.45rem;font-weight:900;
+  background:linear-gradient(130deg,var(--gold-bright),var(--gold-warm));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.month-btn{
+  background:rgba(0,62,232,.15);border:1px solid rgba(24,114,255,.35);
+  color:var(--blue-glow);font-size:20px;width:44px;height:44px;border-radius:50%;
+  cursor:pointer;transition:all .25s;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-weight:700;
+}
+.month-btn:hover{background:rgba(0,62,232,.28);border-color:rgba(24,114,255,.6);color:var(--white);box-shadow:0 0 22px rgba(0,62,232,.3)}
+
+.day-hdrs{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:10px}
+.day-hdr{text-align:center;font-size:.62rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(237,242,255,.25);padding:5px;font-family:'Syne',sans-serif}
+
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}
+.cal-day{
+  aspect-ratio:1;border-radius:var(--radius-md);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  font-size:15px;font-weight:700;
+  border:1px solid rgba(255,255,255,.05);
+  background:rgba(255,255,255,.02);
+  color:rgba(255,255,255,.22);
+  position:relative;cursor:default;
+  transition:transform .32s var(--ease-smooth),box-shadow .32s,background .25s,border-color .25s;
+  user-select:none;
+}
+.cal-day .dot{width:5px;height:5px;border-radius:50%}
+.cal-day.empty{background:transparent;border-color:transparent;pointer-events:none}
+.cal-day.past{color:rgba(255,255,255,.14)}
+
+/* VERFÜGBAR */
+.cal-day.avail{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.22);color:var(--white);cursor:pointer}
+.cal-day.avail .dot{background:var(--avail);box-shadow:0 0 6px var(--avail)}
+.cal-day.avail:hover{transform:scale(1.1) translateY(-2px);background:rgba(34,197,94,.15);border-color:var(--avail);box-shadow:0 0 24px var(--avail-glow),0 0 0 1px var(--avail)}
+.cal-day.avail:hover .tip{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}
+.tip{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%) translateY(4px) scale(.9);background:var(--avail);color:#000;font-size:9px;font-weight:900;letter-spacing:.5px;padding:5px 10px;border-radius:20px;white-space:nowrap;opacity:0;pointer-events:none;transition:all .22s var(--ease-smooth);z-index:20;box-shadow:0 4px 14px rgba(34,197,94,.5)}
+.tip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--avail)}
+
+/* RESERVIERT */
+.cal-day.reserv{background:rgba(232,195,85,.08);border-color:rgba(232,195,85,.18);color:var(--gold-bright);cursor:pointer}
+.cal-day.reserv .dot{background:var(--reserv);box-shadow:0 0 6px rgba(232,195,85,.6)}
+.cal-day.reserv:hover{transform:scale(1.08);background:rgba(232,195,85,.13);border-color:var(--gold-bright);box-shadow:0 0 18px rgba(232,195,85,.3),0 0 0 1px var(--gold-bright)}
+.cal-day.reserv:hover .tip-r{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}
+.tip-r{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%) translateY(4px) scale(.9);background:var(--gold-bright);color:#000;font-size:9px;font-weight:900;letter-spacing:.5px;padding:5px 10px;border-radius:20px;white-space:nowrap;opacity:0;pointer-events:none;transition:all .22s var(--ease-smooth);z-index:20;box-shadow:0 4px 14px rgba(232,195,85,.45)}
+.tip-r::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--gold-bright)}
+
+/* GESCHLOSSEN */
+.cal-day.closed{background:rgba(239,68,68,.06);border-color:rgba(239,68,68,.18);color:rgba(239,68,68,.55);cursor:not-allowed}
+.cal-day.closed .dot{background:var(--closed)}
+
+/* TODAY */
+.cal-day.today{outline:2px solid var(--gold-bright);outline-offset:2px;box-shadow:0 0 12px rgba(232,195,85,.2)}
+
+/* SELECTED */
+.cal-day.sel-avail{background:rgba(34,197,94,.18) !important;border-color:var(--avail) !important;box-shadow:0 0 28px var(--avail-glow),0 0 0 2px var(--avail) !important}
+.cal-day.sel-reserv{background:rgba(232,195,85,.15) !important;border-color:var(--gold-bright) !important;box-shadow:0 0 28px rgba(232,195,85,.35),0 0 0 2px var(--gold-bright) !important}
+
+/* LEGEND */
+.legend{display:flex;align-items:center;justify-content:center;gap:24px;margin-top:24px;flex-wrap:wrap;padding-top:20px;border-top:1px solid rgba(255,255,255,.06)}
+.legend-item{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:var(--white-dim)}
+.ld{width:9px;height:9px;border-radius:50%}
+.ld-avail{background:var(--avail);box-shadow:0 0 6px var(--avail)}
+.ld-reserv{background:var(--gold-bright);box-shadow:0 0 6px rgba(232,195,85,.6)}
+.ld-closed{background:var(--closed)}
+
+/* ── DETAIL PANEL ── */
+.detail-panel{display:flex;flex-direction:column;gap:0}
+.dp-card{
+  background:var(--glass-bg);
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius-lg);overflow:hidden;
+  backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+  box-shadow:0 28px 80px rgba(0,35,160,.2),0 0 0 1px rgba(200,160,60,.07) inset;
+}
+.dp-header{display:flex;align-items:center;justify-content:space-between;padding:22px 26px 0}
+.dp-date{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--white);letter-spacing:.02em}
+.dp-badge{font-size:.58rem;font-weight:800;letter-spacing:.11em;text-transform:uppercase;padding:4px 12px;border-radius:50px}
+.badge-avail{background:rgba(34,197,94,.12);color:var(--avail);border:1px solid rgba(34,197,94,.28)}
+.badge-reserv{background:rgba(24,114,255,.12);color:var(--blue-glow);border:1px solid rgba(24,114,255,.28)}
+.badge-closed{background:rgba(239,68,68,.1);color:#f87171;border:1px solid rgba(239,68,68,.22)}
+
+.dp-img-placeholder{width:100%;height:180px;margin-top:18px;background:linear-gradient(135deg,#050510 0%,#0f0820 35%,#060f1e 65%,#050510 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.dp-img-placeholder::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 60%,rgba(232,195,85,.1) 0%,transparent 65%)}
+.dp-img-placeholder svg{opacity:.3;z-index:1}
+
+.dp-body{padding:22px 26px}
+.dp-studio-name{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;margin-bottom:6px;color:var(--white)}
+.dp-studio-desc{font-size:13px;color:var(--white-dim);line-height:1.6;margin-bottom:18px}
+
+.dp-infobox{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-radius:var(--radius-md);margin-bottom:16px;font-size:13px;line-height:1.5}
+.dp-infobox.blue{background:rgba(24,114,255,.09);border:1px solid rgba(24,114,255,.22);color:#93c5fd}
+.dp-infobox.green{background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);color:#86efac}
+.dp-infobox.red{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.18);color:#fca5a5}
+.dp-infobox-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+
+.dp-btn-gold{
+  display:flex;align-items:center;justify-content:center;gap:8px;width:100%;
+  background:linear-gradient(145deg,var(--gold-bright),var(--gold-warm));
+  color:#0a0600;border:none;
+  font-family:'Syne',sans-serif;font-size:.84rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;
+  padding:16px;border-radius:50px;cursor:pointer;transition:all .35s var(--ease-smooth);text-decoration:none;
+  box-shadow:0 4px 20px rgba(232,195,85,.25),inset 0 1px 0 rgba(255,255,255,.3);
+  position:relative;overflow:hidden;
+}
+.dp-btn-gold::before{
+  content:'';position:absolute;top:-50%;left:-90%;width:65%;height:200%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);
+  transform:skewX(-22deg);transition:left .6s var(--ease-smooth);
+}
+.dp-btn-gold:hover::before{left:165%}
+.dp-btn-gold:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(232,195,85,.4),inset 0 1px 0 rgba(255,255,255,.4)}
+
+.dp-btn-outline{
+  display:flex;align-items:center;justify-content:center;gap:8px;width:100%;
+  background:transparent;color:var(--gold-bright);border:1px solid rgba(200,160,60,.35);
+  font-family:'Syne',sans-serif;font-size:.84rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+  padding:16px;border-radius:50px;cursor:pointer;transition:all .35s var(--ease-smooth);margin-top:10px;text-decoration:none;
+}
+.dp-btn-outline:hover{background:rgba(155,115,25,.12);border-color:var(--gold-warm);color:var(--gold-bright);transform:translateY(-2px)}
+
+.dp-why{padding:18px 26px 0}
+.dp-why h4{font-family:'Syne',sans-serif;font-size:.72rem;font-weight:800;color:var(--gold-bright);margin-bottom:12px;letter-spacing:.16em;text-transform:uppercase}
+.dp-why ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.dp-why li{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--white-dim)}
+.dp-why li::before{content:'✓';color:var(--avail);font-weight:900;font-size:12px;flex-shrink:0}
+
+.dp-cta{margin:18px 26px 26px;padding:18px 22px;background:rgba(200,160,60,.05);border:1px solid rgba(200,160,60,.12);border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.dp-cta-text h4{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;margin-bottom:3px;color:var(--white)}
+.dp-cta-text p{font-size:12px;color:var(--white-dim)}
+.dp-cta-btn{
+  background:linear-gradient(145deg,var(--gold-bright),var(--gold-warm));color:#0a0600;border:none;
+  font-family:'Syne',sans-serif;font-size:.84rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;
+  padding:14px 24px;border-radius:50px;cursor:pointer;white-space:nowrap;flex-shrink:0;
+  box-shadow:0 4px 20px rgba(232,195,85,.25),inset 0 1px 0 rgba(255,255,255,.3);
+  transition:all .35s var(--ease-smooth);position:relative;overflow:hidden;
+}
+.dp-cta-btn:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(232,195,85,.4)}
+
+.dp-default{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 32px;gap:14px}
+.dp-default-icon{font-size:3rem;opacity:.45}
+.dp-default h3{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:var(--white-dim)}
+.dp-default p{font-size:13px;color:rgba(237,242,255,.22);line-height:1.6}
+
+/* ── TRUST BAR ── */
+.trust-bar{position:relative;z-index:1;max-width:1200px;width:100%;margin:0 auto;padding:0 clamp(20px,4vw,48px) 80px}
+.trust-inner{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+  background:var(--glass-bg);border:1px solid var(--glass-border);
+  border-radius:var(--radius-lg);overflow:hidden;
+  box-shadow:0 28px 80px rgba(0,35,160,.15),0 0 0 1px rgba(200,160,60,.05) inset;
+  backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+}
+@media(max-width:720px){.trust-inner{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:420px){.trust-inner{grid-template-columns:1fr}}
+.trust-item{display:flex;align-items:flex-start;gap:12px;padding:24px 26px;border-right:1px solid rgba(255,255,255,.05)}
+.trust-item:last-child{border-right:none}
+.trust-icon{font-size:20px;flex-shrink:0;margin-top:2px}
+.trust-item h5{font-family:'Syne',sans-serif;font-size:.72rem;font-weight:800;color:var(--gold-bright);margin-bottom:3px;letter-spacing:.16em;text-transform:uppercase}
+.trust-item p{font-size:12px;color:var(--white-dim);line-height:1.5}
+
+/* ── BOOKING MODAL ── */
+.modal-bg{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.78);backdrop-filter:blur(14px);align-items:center;justify-content:center;padding:20px}
+.modal-bg.open{display:flex}
+.modal{
+  background:linear-gradient(160deg,rgba(10,10,26,.99),rgba(2,2,5,1));
+  border:1px solid rgba(34,197,94,.18);border-radius:var(--radius-lg);padding:36px;
+  max-width:440px;width:100%;
+  box-shadow:0 40px 120px rgba(0,0,0,.9),0 0 60px rgba(34,197,94,.07);
+}
+.m-title{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:900;margin-bottom:4px;color:var(--white)}
+.m-date{font-size:13px;color:var(--avail);font-weight:800;margin-bottom:22px}
+.m-row{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
+.m-label{font-size:.62rem;color:var(--white-dim);font-weight:800;letter-spacing:.16em;text-transform:uppercase}
+.m-input{
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:var(--white);
+  font-size:14px;font-family:'DM Sans',sans-serif;padding:14px 16px;border-radius:var(--radius-md);outline:none;
+  transition:border-color .25s,background .25s;width:100%;
+}
+.m-input:focus{border-color:rgba(34,197,94,.5);background:rgba(34,197,94,.04)}
+.m-btns{display:flex;gap:10px;margin-top:22px}
+.m-cancel{flex:1;background:transparent;color:var(--white-dim);border:1px solid rgba(255,255,255,.1);font-size:14px;font-weight:700;font-family:'DM Sans',sans-serif;padding:14px;border-radius:var(--radius-md);cursor:pointer;transition:all .25s}
+.m-cancel:hover{border-color:rgba(255,255,255,.25);color:var(--white)}
+.m-submit{flex:2;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border:none;font-size:14px;font-weight:900;font-family:'Syne',sans-serif;padding:14px;border-radius:var(--radius-md);cursor:pointer;box-shadow:0 4px 20px rgba(34,197,94,.3);transition:all .25s}
+.m-submit:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(34,197,94,.4)}
+.m-success{text-align:center;padding:12px 0}
+.m-success .s-icon{font-size:3rem;margin-bottom:14px;display:block}
+.m-success h3{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:900;color:var(--avail);margin-bottom:10px}
+.m-success p{color:var(--white-dim);font-size:14px;line-height:1.7}
+.m-close{display:block;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border:none;font-size:14px;font-weight:900;font-family:'Syne',sans-serif;padding:14px 30px;border-radius:var(--radius-md);cursor:pointer;margin:20px auto 0;transition:all .25s}
+.m-close:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(34,197,94,.4)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1100px){
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .trust-inner{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:768px){
+  .hero{padding:120px 20px 50px}
+  .footer-grid{grid-template-columns:1fr}
+  .trust-inner{grid-template-columns:1fr}
+  .trust-item{border-right:none;border-bottom:1px solid rgba(255,255,255,.05)}
+  .cal-card{padding:28px 22px}
+  .dp-cta{flex-direction:column;text-align:center}
+}
+@media(max-width:520px){
+  .cal-card{padding:22px 16px}
+  .cal-day{font-size:13px;border-radius:var(--radius-sm)}
+  .hero h1{font-size:2rem}
+  .dp-cta{flex-direction:column;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+<div class="glow-orb orb-1"></div>
+<div class="glow-orb orb-2"></div>
+<div class="glow-orb orb-3"></div>
+<div class="glow-orb orb-4"></div>
+<div class="glow-orb orb-5"></div>
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- ══════════════════════════════════
+     NAVIGATION
+══════════════════════════════════ -->
+<nav id="main-nav">
+  <a href="scene-editor-test.html" class="nav-logo-img-wrap">
+    <img src="assets/cvs-logo.png" alt="CVS Logo" class="nav-logo-img">
+    <span class="nav-logo-text">Cinematic Vision<span>Studio</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="scene-editor-test.html">Home</a></li>
+    <li><a href="scene-editor-test.html#services">Services</a></li>
+    <li><a href="scene-editor-test.html#portfolio">Portfolio</a></li>
+    <li><a href="academy.html">Academy</a></li>
+    <li><a href="calendar.html" class="active">Buchung</a></li>
+    <li><a href="crystals.html">Kristalle</a></li>
+    <li><a href="shop.html">Shop</a></li>
+    <li><a href="contact.php">Kontakt</a></li>
+    <li><a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="nav-cta">Studio starten</a></li>
+    <li><a href="https://cinematic-studio-family.onrender.com/login.php" style="-webkit-text-fill-color:rgba(237,242,255,.5);font-size:.72rem;padding:7px 8px">Login</a></li>
+  </ul>
+  <button class="nav-burger" id="burger-btn" aria-label="Menü"><span></span><span></span><span></span></button>
+</nav>
+
+<nav class="mobile-nav" id="mobile-nav">
+  <a href="scene-editor-test.html">Home</a>
+  <a href="scene-editor-test.html#services">Services</a>
+  <a href="scene-editor-test.html#portfolio">Portfolio</a>
+  <a href="academy.html">Academy</a>
+  <a href="calendar.html" style="color:var(--gold-bright)">Buchung</a>
+  <a href="crystals.html">Kristalle</a>
+  <a href="shop.html">Shop</a>
+  <a href="contact.php">Kontakt</a>
+  <a href="https://cinematic-studio-family.onrender.com/studio-demo.php">🎬 Studio</a>
+  <a href="ki-videos.html">🎥 KI Videos</a>
+  <a href="prompt-generator.html">✍️ Prompts</a>
+  <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" style="color:var(--gold-bright)">Studio starten</a>
+  <a href="https://cinematic-studio-family.onrender.com/login.php" style="color:var(--blue-bright)">Login →</a>
+</nav>
+
+<!-- ══════════════════════════════════
+     HERO
+══════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-eyebrow">✦ Buchungskalender</div>
+  <h1>Dein Termin.<br><em>Dein Kinofilm.</em></h1>
+  <p>Wähle einen freien Tag — wir produzieren deinen KI-Film. Professionell, persönlich, unvergesslich.</p>
+</section>
+
+<!-- ══════════════════════════════════
+     MAIN GRID
+══════════════════════════════════ -->
+<div class="main-grid">
+
+  <!-- LEFT: CALENDAR -->
+  <div class="cal-card">
+    <div class="month-nav">
+      <button class="month-btn" id="prevBtn">&#8249;</button>
+      <div class="month-label" id="monthLabel"></div>
+      <button class="month-btn" id="nextBtn">&#8250;</button>
+    </div>
+    <div class="day-hdrs">
+      <div class="day-hdr">MO</div><div class="day-hdr">DI</div>
+      <div class="day-hdr">MI</div><div class="day-hdr">DO</div>
+      <div class="day-hdr">FR</div><div class="day-hdr">SA</div>
+      <div class="day-hdr">SO</div>
+    </div>
+    <div class="cal-grid" id="calGrid"></div>
+    <div class="legend">
+      <div class="legend-item"><div class="ld ld-avail"></div> Verfügbar</div>
+      <div class="legend-item"><div class="ld ld-reserv"></div> Reserviert</div>
+      <div class="legend-item"><div class="ld ld-closed"></div> Geschlossen</div>
+    </div>
+  </div>
+
+  <!-- RIGHT: DETAIL PANEL -->
+  <div class="detail-panel" id="detailPanel">
+    <div class="dp-card">
+      <div class="dp-default" id="dpDefault">
+        <div class="dp-default-icon">🎬</div>
+        <h3>Wähle einen Tag</h3>
+        <p>Klicke auf einen grünen Tag im Kalender, um deinen Wunschtermin zu buchen.</p>
+      </div>
+      <div id="dpContent" style="display:none">
+        <div class="dp-header">
+          <div class="dp-date" id="dpDateLabel"></div>
+          <div class="dp-badge" id="dpBadge"></div>
+        </div>
+        <div class="dp-img-placeholder" id="dpImgFallback">
+          <svg width="80" height="60" viewBox="0 0 80 60" fill="none">
+            <rect x="10" y="15" width="60" height="38" rx="4" stroke="#e8c355" stroke-width="1.5"/>
+            <circle cx="40" cy="34" r="10" stroke="#e8c355" stroke-width="1.5"/>
+            <circle cx="40" cy="34" r="5" fill="rgba(232,195,85,.2)" stroke="#e8c355" stroke-width="1"/>
+            <line x1="10" y1="22" x2="70" y2="22" stroke="#e8c355" stroke-width="1" opacity=".4"/>
+            <rect x="5" y="10" width="8" height="5" rx="1" fill="rgba(232,195,85,.3)"/>
+            <rect x="67" y="10" width="8" height="5" rx="1" fill="rgba(232,195,85,.3)"/>
+            <circle cx="20" cy="19" r="2" fill="rgba(232,195,85,.5)"/>
+            <circle cx="60" cy="19" r="2" fill="rgba(232,195,85,.5)"/>
+          </svg>
+        </div>
+        <div class="dp-body">
+          <div class="dp-studio-name">Studio A</div>
+          <div class="dp-studio-desc">Unser High-End KI-Filmstudio mit 360° LED-Wall &amp; Dolby Atmos Sound.</div>
+          <div class="dp-infobox" id="dpInfoBox">
+            <div class="dp-infobox-icon" id="dpInfoIcon"></div>
+            <div id="dpInfoText"></div>
+          </div>
+          <div id="dpActions"></div>
+        </div>
+        <div class="dp-why" id="dpWhy">
+          <h4>Warum jetzt buchen?</h4>
+          <ul>
+            <li>Sichere dir deinen Wunschtermin</li>
+            <li>KI-gestützte Studio-Optimierung</li>
+            <li>Professionelles Team &amp; Ausrüstung</li>
+          </ul>
+        </div>
+        <div class="dp-cta">
+          <div class="dp-cta-text">
+            <h4>Bereit für deine Vision?</h4>
+            <p>Buche jetzt deinen nächsten Drehtag.</p>
+          </div>
+          <button class="dp-cta-btn" id="dpCtaBtn">TERMIN BUCHEN ›</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════
+   TRUST BAR
+══════════════════════════════════ -->
+<div class="trust-bar">
+  <div class="trust-inner">
+    <div class="trust-item"><div class="trust-icon">🛡️</div><div><h5>Sichere Buchung</h5><p>SSL-verschlüsselt &amp; sicher</p></div></div>
+    <div class="trust-item"><div class="trust-icon">🚀</div><div><h5>Sofort bestätigt</h5><p>Dein Termin ist sofort reserviert</p></div></div>
+    <div class="trust-item"><div class="trust-icon">⭐</div><div><h5>KI-Optimierung</h5><p>Beste Ergebnisse garantiert</p></div></div>
+    <div class="trust-item"><div class="trust-icon">🎧</div><div><h5>Premium Support</h5><p>Persönliche Betreuung</p></div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+   FOOTER
+══════════════════════════════════ -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <h3>CINEMATIC VISION STUDIO</h3>
+      <p>Kein Standard-KI-Service. Ein cinematic Creator-Studio für High-End KI-Videos, Transformationen und visuelle Markenwelten – für Creator, Marken und Visionäre.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Studio</h4>
+      <a href="scene-editor-test.html#why">Über uns</a>
+      <a href="scene-editor-test.html#process">Prozess</a>
+      <a href="academy.html">Academy</a>
+      <a href="calendar.html">Buchung</a>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <a href="ki-videos.html">KI-Videos &amp; Trailer</a>
+      <a href="shop.html">Shop</a>
+      <a href="prompt-generator.html">Prompt Studio</a>
+      <a href="portfolio.html">Portfolio</a>
+      <a href="crystals.html">Kristalle</a>
+    </div>
+    <div class="footer-col">
+      <h4>Kontakt</h4>
+      <a href="contact.php">Projekt anfragen</a>
+      <a href="https://cinematic-studio-family.onrender.com/studio-demo.php">Studio starten</a>
+      <a href="impressum.html">Impressum</a>
+      <a href="datenschutz.html">Datenschutz</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Cinematic Vision Studio. Alle Rechte vorbehalten.</p>
+    <div class="footer-socials">
+      <a href="https://tiktok.com" target="_blank" rel="noopener" class="social-btn" aria-label="TikTok">TK</a>
+      <a href="https://instagram.com" target="_blank" rel="noopener" class="social-btn" aria-label="Instagram">IG</a>
+      <a href="https://youtube.com" target="_blank" rel="noopener" class="social-btn" aria-label="YouTube">YT</a>
+      <a href="https://discord.com" target="_blank" rel="noopener" class="social-btn" aria-label="Discord">DC</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════
+   BOOKING MODAL
+══════════════════════════════════ -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <div id="mForm">
+      <div class="m-title">Termin anfragen</div>
+      <div class="m-date" id="mDate"></div>
+      <div class="m-row"><div class="m-label">Dein Name</div><input class="m-input" id="fName" type="text" placeholder="Max Mustermann"></div>
+      <div class="m-row"><div class="m-label">E-Mail</div><input class="m-input" id="fEmail" type="email" placeholder="deine@email.de"></div>
+      <div class="m-row">
+        <div class="m-label">Paket</div>
+        <select class="m-input" id="fPkg" style="cursor:pointer">
+          <option value="">Bitte wählen …</option>
+          <option>Quick Cut – 1 Szene (15 min)</option>
+          <option>Standard Film – bis 3 Szenen (45 min)</option>
+          <option>Premium Produktion – unbegrenzt (2 h)</option>
+          <option>Individuelles Angebot</option>
+        </select>
+      </div>
+      <div class="m-row"><div class="m-label">Nachricht (optional)</div><input class="m-input" id="fMsg" type="text" placeholder="Kurze Info zu deinem Projekt …"></div>
+      <div class="m-btns">
+        <button class="m-cancel" id="mCancel">Abbrechen</button>
+        <button class="m-submit" id="mSubmit">Anfrage senden</button>
+      </div>
+    </div>
+    <div id="mSuccess" style="display:none" class="m-success">
+      <span class="s-icon">✅</span>
+      <h3>Anfrage gesendet!</h3>
+      <p>Wir melden uns in 24 h bei dir — bereit für deinen Kinofilm.</p>
+      <button class="m-close" id="mClose">Schließen</button>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/nav.js" defer></script>
+<script>
+/* ══ AURORA CANVAS ════════════════════════════════════════════════════ */
+(function(){
+  const c=document.getElementById('bg-canvas'),ctx=c.getContext('2d');
+  let W,H,t=0,stars=[];
+  function resize(){W=c.width=innerWidth;H=c.height=innerHeight;}
+  function initStars(){
+    stars=[];
+    for(let i=0;i<220;i++){
+      stars.push({x:Math.random()*W,y:Math.random()*H*.78,r:Math.random()<.85?.3+Math.random()*.65:.9+Math.random()*.8,a:.12+Math.random()*.88,da:(.0005+Math.random()*.0026)*(Math.random()<.5?1:-1),blue:Math.random()<.18});
+    }
+  }
+  function drawStars(){
+    stars.forEach(s=>{
+      s.a+=s.da;if(s.a>1){s.a=1;s.da*=-1;}if(s.a<.05){s.a=.05;s.da*=-1;}
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle=s.blue?`rgba(180,210,255,${s.a.toFixed(2)})`:`rgba(255,248,228,${s.a.toFixed(2)})`;
+      ctx.fill();
+    });
+  }
+  const CURTAINS=[
+    {hf:.17,amp:44,freq:.0048,spd:.55,ph:0.0,col:'245,215,40',al:.32},
+    {hf:.23,amp:50,freq:.0033,spd:.38,ph:2.3,col:'50,100,255',al:.32},
+    {hf:.36,amp:46,freq:.0041,spd:.30,ph:1.2,col:'245,215,40',al:.22},
+    {hf:.45,amp:38,freq:.0056,spd:.45,ph:3.5,col:'70,120,255',al:.24},
+    {hf:.57,amp:52,freq:.0026,spd:.25,ph:0.7,col:'245,215,40',al:.14},
+    {hf:.66,amp:34,freq:.0050,spd:.35,ph:1.9,col:'50,100,255',al:.16},
+  ];
+  function drawAurora(){
+    CURTAINS.forEach(r=>{
+      const topY=H-r.hf*H,alP=r.al*(.70+Math.sin(t*r.spd*.55+r.ph)*.30);
+      ctx.beginPath();ctx.moveTo(0,H);
+      for(let x=0;x<=W;x+=5)ctx.lineTo(x,topY+Math.sin(x*r.freq+t*r.spd+r.ph)*r.amp);
+      ctx.lineTo(W,H);ctx.closePath();
+      const g=ctx.createLinearGradient(0,topY-r.amp,0,H);
+      g.addColorStop(0,`rgba(${r.col},0)`);g.addColorStop(.26,`rgba(${r.col},${(alP*.35).toFixed(3)})`);
+      g.addColorStop(.65,`rgba(${r.col},${alP.toFixed(3)})`);g.addColorStop(1,`rgba(${r.col},${(alP*.52).toFixed(3)})`);
+      ctx.fillStyle=g;ctx.fill();
+    });
+  }
+  function drawHorizon(){
+    const gY=ctx.createRadialGradient(W*.32,H,0,W*.32,H,H*.62);
+    gY.addColorStop(0,'rgba(232,195,85,.5)');gY.addColorStop(.45,'rgba(232,195,85,.16)');gY.addColorStop(1,'rgba(232,195,85,0)');
+    ctx.fillStyle=gY;ctx.fillRect(0,H*.45,W,H*.55);
+    const gB=ctx.createRadialGradient(W*.68,H,0,W*.68,H,H*.62);
+    gB.addColorStop(0,'rgba(24,114,255,.45)');gB.addColorStop(.45,'rgba(24,114,255,.14)');gB.addColorStop(1,'rgba(24,114,255,0)');
+    ctx.fillStyle=gB;ctx.fillRect(0,H*.45,W,H*.55);
+  }
+  function vignette(){
+    const g=ctx.createLinearGradient(0,0,0,H);
+    g.addColorStop(0,'rgba(2,2,5,.96)');g.addColorStop(.30,'rgba(2,2,5,.38)');
+    g.addColorStop(.52,'rgba(2,2,5,.04)');g.addColorStop(1,'rgba(2,2,5,0)');
+    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  }
+  function frame(){t+=.014;ctx.clearRect(0,0,W,H);ctx.fillStyle='#020205';ctx.fillRect(0,0,W,H);drawStars();drawHorizon();drawAurora();vignette();requestAnimationFrame(frame);}
+  resize();initStars();frame();
+  addEventListener('resize',()=>{resize();initStars();});
+})();
+
+/* ══ CALENDAR ════════════════════════════════════════════════════════ */
+const MONTHS=['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+const DAYS_DE=['Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag','Sonntag'];
+let cy,cm,selDay=null,selStatus=null;
+function getStatus(y,m,d){const h=((y*397+m*53+d*17)*2654435761)>>>0,v=h%100;if(v<32)return'avail';if(v<60)return'reserv';return'closed';}
+function dayName(y,m,d){const dow=new Date(y,m,d).getDay();return DAYS_DE[dow===0?6:dow-1];}
+function renderCal(){
+  const now=new Date();
+  document.getElementById('monthLabel').textContent=MONTHS[cm]+' '+cy;
+  const grid=document.getElementById('calGrid');grid.innerHTML='';
+  const first=new Date(cy,cm,1).getDay(),offset=first===0?6:first-1,total=new Date(cy,cm+1,0).getDate();
+  const ty=now.getFullYear(),tm=now.getMonth(),td=now.getDate();
+  for(let i=0;i<offset;i++){const e=document.createElement('div');e.className='cal-day empty';grid.appendChild(e);}
+  for(let d=1;d<=total;d++){
+    const el=document.createElement('div');el.className='cal-day';
+    const isToday=cy===ty&&cm===tm&&d===td,isPast=new Date(cy,cm,d)<new Date(ty,tm,td);
+    if(isToday)el.classList.add('today');
+    const num=document.createElement('span');num.textContent=d;el.appendChild(num);
+    if(isPast){el.classList.add('past');}
+    else{
+      const st=getStatus(cy,cm+1,d);el.classList.add(st);
+      const dot=document.createElement('div');dot.className='dot';el.appendChild(dot);
+      if(st==='avail'){const tip=document.createElement('div');tip.className='tip';tip.textContent='Direkt buchbar';el.appendChild(tip);}
+      if(st==='reserv'){const tip=document.createElement('div');tip.className='tip-r';tip.textContent='Vorläufig reserviert';el.appendChild(tip);}
+      el.addEventListener('click',()=>selectDay(d,st));
+    }
+    if(selDay&&selDay.y===cy&&selDay.m===cm&&selDay.d===d)el.classList.add(selStatus==='avail'?'sel-avail':'sel-reserv');
+    grid.appendChild(el);
+  }
+}
+function selectDay(d,st){selDay={y:cy,m:cm,d};selStatus=st;renderCal();showPanel(d,st);}
+function showPanel(d,st){
+  document.getElementById('dpDefault').style.display='none';
+  document.getElementById('dpContent').style.display='';
+  const ds=`${dayName(cy,cm,d)}, ${d}. ${MONTHS[cm]} ${cy}`;
+  document.getElementById('dpDateLabel').textContent=ds;
+  const badge=document.getElementById('dpBadge'),box=document.getElementById('dpInfoBox'),icon=document.getElementById('dpInfoIcon'),txt=document.getElementById('dpInfoText'),actions=document.getElementById('dpActions'),why=document.getElementById('dpWhy'),cta=document.getElementById('dpCtaBtn');
+  badge.className='dp-badge';box.className='dp-infobox';
+  if(st==='avail'){
+    badge.className+=' badge-avail';badge.textContent='VERFÜGBAR';
+    box.className+=' green';icon.textContent='✅';
+    txt.innerHTML='<strong>Dieser Tag ist verfügbar!</strong><br>Klicke auf "Termin buchen" um deinen Wunschtermin zu sichern.';
+    actions.innerHTML=`<button class="dp-btn-gold" onclick="openModal(${d})">📅 TERMIN BUCHEN</button>`;
+    why.style.display='';cta.style.display='';cta.onclick=()=>openModal(d);
+  }else if(st==='reserv'){
+    badge.className+=' badge-reserv';badge.textContent='RESERVIERT';
+    box.className+=' blue';icon.textContent='🕐';
+    txt.innerHTML='<strong>Dieser Tag ist bereits reserviert.</strong><br>Bitte wähle einen anderen verfügbaren Tag.';
+    actions.innerHTML=`<button class="dp-btn-gold" onclick="clearSel()">📅 ANDEREN TAG WÄHLEN</button>`;
+    why.style.display='';cta.style.display='';cta.onclick=()=>clearSel();
+  }else{
+    badge.className+=' badge-closed';badge.textContent='GESCHLOSSEN';
+    box.className+=' red';icon.textContent='⚠️';
+    txt.innerHTML='<strong>Studio geschlossen.</strong><br>An diesem Tag bieten wir keine Aufnahmen an.';
+    actions.innerHTML=`<button class="dp-btn-gold" onclick="clearSel()">📅 ANDEREN TAG WÄHLEN</button>`;
+    why.style.display='none';cta.style.display='none';
+  }
+}
+function clearSel(){selDay=null;selStatus=null;renderCal();document.getElementById('dpDefault').style.display='';document.getElementById('dpContent').style.display='none';}
+document.getElementById('prevBtn').addEventListener('click',()=>{cm--;if(cm<0){cm=11;cy--;}renderCal();});
+document.getElementById('nextBtn').addEventListener('click',()=>{cm++;if(cm>11){cm=0;cy++;}renderCal();});
+
+/* ══ MODAL ═══════════════════════════════════════════════════════════ */
+function openModal(d){
+  const ds=`${dayName(cy,cm,d)}, ${d}. ${MONTHS[cm]} ${cy}`;
+  document.getElementById('mDate').textContent='📅 '+ds;
+  document.getElementById('mForm').style.display='';document.getElementById('mSuccess').style.display='none';
+  ['fName','fEmail','fMsg'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fPkg').value='';
+  document.getElementById('modalBg').classList.add('open');
+}
+function closeModal(){document.getElementById('modalBg').classList.remove('open');}
+document.getElementById('mCancel').addEventListener('click',closeModal);
+document.getElementById('mClose').addEventListener('click',closeModal);
+document.getElementById('modalBg').addEventListener('click',e=>{if(e.target===document.getElementById('modalBg'))closeModal();});
+document.getElementById('mSubmit').addEventListener('click',()=>{
+  const n=document.getElementById('fName').value.trim(),e=document.getElementById('fEmail').value.trim(),p=document.getElementById('fPkg').value;
+  document.getElementById('fName').style.borderColor=n?'':'#ef4444';
+  document.getElementById('fEmail').style.borderColor=e?'':'#ef4444';
+  document.getElementById('fPkg').style.borderColor=p?'':'#ef4444';
+  if(!n||!e||!p)return;
+  document.getElementById('mForm').style.display='none';document.getElementById('mSuccess').style.display='';
+});
+
+/* Init */
+(function(){const n=new Date();cy=n.getFullYear();cm=n.getMonth();renderCal();})();
+</script>
+</body>
+</html>

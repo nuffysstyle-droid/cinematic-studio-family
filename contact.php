@@ -51,6 +51,7 @@ $renderBase = 'https://cinematic-studio-family.onrender.com';
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Kontakt – Cinematic Vision Studio</title>
 <meta name="description" content="Kontaktformular für Cinematic Vision Studio. Fragen, Feedback, Beta-Zugang.">
+<link rel="icon" type="image/png" href="assets/cvs-logo.png">
 <style>
 :root{
   --bg:#06060f;--card:#0f0f1e;--card2:#161628;--text:#f0f0ff;--muted:#8888aa;--muted2:#5a5a7a;
@@ -181,7 +182,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--te
   <a href="portfolio.html" class="mob-link">🎞️ Portfolio</a>
   <a href="ki-videos.html" class="mob-link">🎥 KI Videos</a>
   <a href="prompt-generator.html" class="mob-link">✍️ Prompts</a>
-  <a href="calendar.html" class="mob-link">📅 Kalender</a>
+  <a href="calendar.html" class="mob-link">📅 Buchung</a>
   <a href="crystals.html" class="mob-link">💎 Kristalle</a>
   <a href="contact.php" class="mob-link active">📞 Kontakt</a>
   <div class="mob-sep"></div>

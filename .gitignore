@@ -94,3 +94,4 @@ claude-flow.config.json
 .claude/worktrees/
 .claude/launch.json
 .claude/settings.json
+.claude/settings.local.json
