@@ -95,3 +95,31 @@ claude-flow.config.json
 .claude/launch.json
 .claude/settings.json
 .claude/settings.local.json
+
+# QA-Screenshots & Test-Artefakte
+*-test.png
+*-test-*.png
+*-desktop.png
+*-mobile.png
+batch*.png
+final-*.png
+ad-*.png
+academy-*.png
+step*.png
+calendar-*.png
+crystals-*.png
+datenschutz-*.png
+impressum-*.png
+widerruf-*.png
+orbit-protocol-*.png
+phaseac*.png
+promptgen-*.png
+qa-*.png
+studio-demo-live.png
+
+# Temporäre Dokumente
+WORKSPACE_CLEANUP_*.md
+
+# Lokale Tools
+ionos-upload*.mjs
+docs/superpowers/

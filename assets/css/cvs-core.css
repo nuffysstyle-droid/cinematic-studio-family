@@ -950,6 +950,11 @@ footer{
 .thumb-commercial{background:linear-gradient(135deg,#1a0a08,#3a2010);}
 .thumb-viral{background:linear-gradient(135deg,#1a0a1f,#3a1a4a);}
 @media(max-width:600px){.cvs-thumb{margin:-20px -20px 14px;}}
+/* Thumbnail image support (Shop + KI-Videos) */
+.cvs-thumb-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;border-radius:18px 18px 0 0;transition:transform .35s ease;}
+.cvs-thumb.has-image{background:none !important;}
+.cvs-thumb.has-image .cvs-thumb-icon{display:none;}
+.preview-card:hover .cvs-thumb-img{transform:scale(1.04);}
 
 /* ════════════════════════════════════════════════════════
    16. UTILITY CLASSES (migration helpers)

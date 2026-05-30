@@ -1,6 +1,6 @@
-# CVS Session Handoff — 2026-05-29
+# CVS Session Handoff — 2026-05-30
 
-> **Scope-Kontext:** Keine Billing/Stripe-Arbeiten. Keine DB-Änderungen. Keine Deployments.  
+> **Scope-Kontext:** Alle Asset-Batches abgeschlossen. Portfolio, Shop, KI-Videos vollständig mit echten Bildern.
 > **Master-Referenz:** `scene-editor-test.html`
 
 ---
@@ -9,64 +9,123 @@
 
 | Phase | Status | Key Deliverables |
 |---|---|---|
-| **AH-1** — Academy Glass Panel & Glow | ✅ | Cards: stärkerer Gold-Glow + Lift, Modal: opaker + Glow, Filter-Buttons: blauer Hover-Glow |
-| **AH-2** — Prompt Generator Glass Panel | ✅ | gen-card: Hover + Glow, output-box: Hover + Glow, qs-cards: Glow, Inputs: stärkerer Focus-Glow |
-| **AH-3** — Portfolio Glass Panels & Glow | ✅ | pf-card: stärkerer Glow-Hover, pf-frame-img: Scale(1.04) bei Hover |
-| **AH-4** — Globale Focus States | ✅ | `input:focus`, `textarea:focus`, `select:focus`, `button:focus-visible`, `a:focus-visible` in `cvs-core.css` |
+| **S12-A** — Batch A (Portfolio #3–#7) | ✅ | 5 Bilder generiert, komprimiert, gespeichert |
+| **S12-B** — Batch B (Portfolio #1, #8–#10) | ✅ | 4 Bilder generiert, komprimiert, gespeichert |
+| **S12-C** — Batch C (Shop #1–#5) | ✅ | 5 Cover generiert, komprimiert, gespeichert |
+| **S12-D** — Batch D (KI-Videos #1–#3) | ✅ | 3 Thumbnails generiert, komprimiert, gespeichert |
 
 ---
 
-## Geänderte Dateien (Phase AH)
+## Asset-Infrastruktur-Status (Session 12 — KOMPLETT)
+
+### Portfolio (`portfolio.html`)
+
+| # | Karte | Bild | Status |
+|---|---|---|---|
+| 1 | Nacht & Neon | `noir-trailer-v1.jpg` | ✅ |
+| 2 | Orbit Protocol | `scifi-music-v1.jpg` | ✅ |
+| 3 | Tokyo Dusk | `golden-social-v1.jpg` | ✅ |
+| 4 | Midnight Fizz | `tiktok-viral-v1.jpg` | ✅ |
+| 5 | Luminex Pro | `product-ad-v1.jpg` | ✅ |
+| 6 | Sakura Shift | `anime-transform-v1.jpg` | ✅ |
+| 7 | Apex GT Reveal | `car-luxury-v1.jpg` | ✅ |
+| 8 | Summer Memories 4K | `restoration-v1.jpg` | ✅ |
+| 9 | Phoenix Rise | `fx-transform-v1.jpg` | ✅ |
+| 10 | Pure Essence | `hyperreal-ad-v1.jpg` | ✅ |
+
+**→ 10/10 Karten mit echten Bildern.**
+
+### Shop (`shop.html`)
+
+| # | Paket | Cover | Status |
+|---|---|---|---|
+| 1 | Starter Crystal | `starter-crystal-cover.jpg` | ✅ |
+| 2 | TikTok Viral Pack | `tiktok-viral-cover.jpg` | ✅ |
+| 3 | Product Ad Pro | `product-ad-cover.jpg` | ✅ |
+| 4 | Anime Shift | `anime-shift-cover.jpg` | ✅ |
+| 5 | Pro Studio Bundle | `pro-bundle-cover.jpg` | ✅ |
+
+**→ 5/5 Pakete mit echten Cover-Bildern.**
+
+### KI-Videos (`ki-videos.html`)
+
+| # | Format | Thumbnail | Status |
+|---|---|---|---|
+| 1 | Viral Hook Clip | `viral-hook-v1.jpg` | ✅ |
+| 2 | Product Spotlight | `product-spotlight-v1.jpg` | ✅ |
+| 3 | Cinematic Track | `cinematic-track-v1.jpg` | ✅ |
+
+**→ 3/3 Formate mit echten Thumbnails.**
+
+---
+
+## Generierte Assets — Gesamtübersicht
+
+| Bereich | Anzahl | Gesamtgröße (final) | Ordner |
+|---|---|---|---|
+| Portfolio | 10 Bilder | ~364 KB | `assets/showcase/portfolio/` |
+| Shop | 5 Bilder | ~108 KB | `assets/showcase/shop/` |
+| KI-Videos | 3 Bilder | ~58 KB | `assets/showcase/thumbnails/` |
+| **Gesamt** | **18 Bilder** | **~530 KB** | — |
+
+---
+
+## Geänderte Dateien (Session 12)
 
 **Modified:**
-- `academy.html` — `.ac-card` Hover-Glow, `.modal-box` Glow, `.ac-filter-btn:hover` Glow
-- `prompt-generator.html` — `.gen-card` Hover, `.output-box` Hover, `.qs-card` Glow, Input Focus verstärkt
-- `portfolio.html` — `.pf-card` Hover-Glow, `.pf-frame-img` Scale-Hover
-- `assets/css/cvs-core.css` — Globale Focus-States (Sektion 18)
+- `portfolio.html` — Karte #1: `src` auf `noir-trailer-v1.jpg` aktualisiert
+- `assets/showcase/ASSET-MAP.md` — Alle Assets auf ✅, Batch-Plan abgeschlossen
 - `NEXT_SESSION_HANDOFF.md` — Dokumentation aktualisiert
+
+**Created (neue Assets):**
+- `assets/showcase/portfolio/golden-social-v1.jpg`
+- `assets/showcase/portfolio/tiktok-viral-v1.jpg`
+- `assets/showcase/portfolio/product-ad-v1.jpg`
+- `assets/showcase/portfolio/anime-transform-v1.jpg`
+- `assets/showcase/portfolio/car-luxury-v1.jpg`
+- `assets/showcase/portfolio/noir-trailer-v1.jpg`
+- `assets/showcase/portfolio/restoration-v1.jpg`
+- `assets/showcase/portfolio/fx-transform-v1.jpg`
+- `assets/showcase/portfolio/hyperreal-ad-v1.jpg`
+- `assets/showcase/shop/starter-crystal-cover.jpg`
+- `assets/showcase/shop/tiktok-viral-cover.jpg`
+- `assets/showcase/shop/product-ad-cover.jpg`
+- `assets/showcase/shop/anime-shift-cover.jpg`
+- `assets/showcase/shop/pro-bundle-cover.jpg`
+- `assets/showcase/thumbnails/viral-hook-v1.jpg`
+- `assets/showcase/thumbnails/product-spotlight-v1.jpg`
+- `assets/showcase/thumbnails/cinematic-track-v1.jpg`
+
+**Created (Skripte):**
+- `bin/generate-test-asset.php`
+- `bin/generate-batch-a.php`
+- `bin/generate-batch-b.php`
+- `bin/generate-batch-c.php`
+- `bin/generate-batch-d.php`
+- `bin/diagnose-network.php`
 
 ---
 
 ## Beta Readiness Einschätzung
 
-🟢 **Beta-Ready** — Visuell auf Premium-Niveau.
+🟢 **Beta-Ready** — Alle visuellen Assets vollständig.
 
 | Kriterium | Stand |
 |---|---|
-| Stabilität | ✅ 0 Console-Fehler auf allen getesteten Seiten |
-| Link-Integrität | ✅ 0 Broken Links |
-| Meta-/SEO-Basis | ✅ Alle 15 Seiten mit charset, viewport, favicon, title |
-| Navigation | ✅ Desktop + Mobile konsistent |
-| Footer/Crosslinking | ✅ 13/15 mit `cvs-footer-simple` |
-| Glass-Panel System | ✅ Academy, Prompt Generator, Portfolio, Shop, KI-Videos |
-| Focus States | ✅ Global in `cvs-core.css` |
-| Mobile | ✅ Getestet auf 375×812 |
+| Portfolio | ✅ 10/10 mit echten Bildern |
+| Shop | ✅ 5/5 mit echten Cover-Bildern |
+| KI-Videos | ✅ 3/3 mit echten Thumbnails |
+| Fallback-Mechanismus | ✅ `onerror` überall aktiv |
+| Asset-Dokumentation | ✅ ASSET-MAP.md vollständig |
 
 ---
 
-## Aktualisierte Top-10 Must-Fix
+## Nächste Schritte
 
-| # | Issue | Status | Schwere |
-|---|---|---|---|
-| 1 | Shop 5/5 ohne Cover-Bilder | 🟡 CSS-Thumbnails als Übergang | Mittel |
-| 2 | KI-Videos 3/3 ohne echte Videos | 🟡 CSS-Thumbnails + Play-Overlay | Mittel |
-| 3 | Portfolio 9/10 ohne echte Assets | 🟡 Asset-Map mit Prompts | Mittel |
-| 4 | Academy Cards + Modal Glass-Panel | ✅ Phase AH erledigt | — |
-| 5 | Prompt Generator gen-card Glass-Panel | ✅ Phase AH erledigt | — |
-| 6 | Portfolio Cards Glass-Panel | ✅ Phase AH erledigt | — |
-| 7 | Input Focus-States blauer Glow | ✅ Phase AH erledigt | — |
-| 8 | studio-header.jpg 1.5 MB | ✅ Komprimiert | — |
-| 9 | showreel.mp4 7.6 MB ungenutzt | 🟢 Später optimieren | Niedrig |
-| 10 | Assets generieren/beschaffen | ⬜ Backlog | Hoch |
-
----
-
-## Offene Punkte für nächste Session
-
-1. **Assets generieren/beschaffen** — Portfolio-Karten #2-#10 und Shop-Covers mit echten Bildern füllen
-2. **Bild-Optimierung** — showreel.mp4 komprimieren (wenn genutzt)
-3. **Deploy-Vorbereitung** — Geänderte Dateien auf IONOS hochladen
-4. **Session 11+** — Keine weiteren Design-Phasen nötig; Fokus auf Content & Assets
+1. **Deploy:** Alle neuen Assets + geänderte HTML auf IONOS hochladen
+2. **Browser-Test:** Visuelle Prüfung Portfolio, Shop, KI-Videos
+3. **Mobile-Test:** Responsive Darstellung bestätigen
+4. **Cleanup:** Temporäre Skripte entfernen (optional)
 
 ---
 
@@ -75,22 +134,11 @@
 | Datei | Zweck |
 |---|---|
 | `scene-editor-test.html` | Master-Homepage |
-| `portfolio.html` | 10 Showcase-Karten, 1 mit optimiertem Bild |
-| `shop.html` | 5 Template-Pakete mit Thumbnails + Badges |
-| `ki-videos.html` | 3 Preview-Cards mit Play-Overlay |
-| `academy.html` | 13 Guides, Filter-System — Glass-Panel ✅ |
-| `prompt-generator.html` | Prompt-Formular — Glass-Panel ✅ |
-| `assets/showcase/ASSET-MAP.md` | Asset-Planung + Spezifikationen |
-| `assets/css/cvs-core.css` | Shared Styles + Thumbnails + Focus States |
-| `assets/js/nav.js` | Mobile Burger-Menu |
+| `portfolio.html` | 10 Showcase-Karten, 10/10 mit Bild |
+| `shop.html` | 5 Template-Pakete, 5/5 mit Cover |
+| `ki-videos.html` | 3 Preview-Cards, 3/3 mit Thumbnail |
+| `assets/showcase/ASSET-MAP.md` | Asset-Planung + Spezifikationen + Prompts |
 
 ---
 
-## Session-Limitationen
-
-- Context ist nach diesem Handoff **vollständig ausgelastet**.
-- Nächste Session sollte mit diesem Handoff starten.
-- Keine Billing-/Stripe-/DB-Arbeiten ohne explizite Freigabe.
-
----
-*Session beendet: 2026-05-29 | Phasen AH-1 bis AH-4 abgeschlossen*
+*Session beendet: 2026-05-30 | Alle Batches A–D abgeschlossen*
