@@ -5,8 +5,19 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Cinematic Vision Studio Kristalle — Interne Währung für KI-Generierungen, Pakete und Premium-Features.">
 <link rel="icon" type="image/png" href="assets/cvs-logo.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#020205">
+<link rel="canonical" href="https://cinematic-vision-studio.de/crystals.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Cinematic Vision Studio">
+<meta property="og:title" content="Pläne & Kristalle – Cinematic Vision Studio">
+<meta property="og:description" content="Starte kostenlos. Skaliere wenn du bereit bist. Free-Plan, Starter+ und Pro.">
+<meta property="og:url" content="https://cinematic-vision-studio.de/crystals.html">
+<meta property="og:image" content="https://cinematic-vision-studio.de/assets/cvs-logo.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Pläne & Kristalle – Cinematic Vision Studio">
+<meta name="twitter:description" content="Starte kostenlos. Skaliere wenn du bereit bist.">
+<meta name="twitter:image" content="https://cinematic-vision-studio.de/assets/cvs-logo.png">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
 <link rel="stylesheet" href="assets/css/cvs-core.css">
 <title>Pläne & Kristalle – Cinematic Vision Studio</title>
 <style>
@@ -119,32 +130,141 @@ body::before{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;bac
 .btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border);border-radius:12px;padding:14px 22px;font-size:14px;font-weight:700;cursor:pointer;transition:border-color .15s,background .15s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;}
 .btn-ghost:hover{border-color:rgba(255,255,255,.28);background:rgba(255,255,255,.05);}
 
-/* ── Premium Drop-In page overrides (no !important) ── */
+/* ════════════════════════════════════════════════════════════
+   DESIGN DNA ALIGNMENT — immobilienvideos.html Master Reference
+   ════════════════════════════════════════════════════════════ */
+
+/* Fonts */
 body{font-family:'DM Sans','Segoe UI',sans-serif}
-h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.pf-title,.coming-card h2,.cta-banner h2,.ac-hero__title{font-family:'Syne',sans-serif}
-:root{--accent:#d4a93c;--accent2:#e8c355;--gold:linear-gradient(135deg,#d4a93c,#e8c355)}
-.btn-gold,.btn-ghost,.plan-cta-free,.plan-cta-ghost,.pack-btn{border-radius:50px}
-.page-eyebrow{color:#d4a93c;background:rgba(212,169,60,.1);border-color:rgba(212,169,60,.28)}
+h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.cta-banner h2{font-family:'Syne',sans-serif}
+
+/* Root extensions + Gold alignment */
+:root{--accent:#d4a93c;--accent2:#e8c355;--gold:linear-gradient(135deg,#d4a93c,#e8c355);--blue-glow:#4da0ff;--gold-solid:#e8c355;--gold-light:#f2d878;--gold-warm:#d4922b;--ease:cubic-bezier(.16,1,.3,1);--maxw:1180px;}
+
+/* Film-Grain auf Referenz-Level */
+body::before{z-index:0!important;opacity:.28!important}
+
+/* Content über Aurora */
+.page,.wrap,.wrap-wide,.section-header,.plans-grid,.packs-grid,.crystal-uses,.faq-grid,.cta-banner{position:relative;z-index:1}
+
+/* ── Cinematic Aurora ── */
+.cvs-aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.cvs-aurora span{position:absolute;border-radius:50%;filter:blur(120px);will-change:transform}
+.cvs-aurora .a1{width:56vw;height:56vw;left:-14vw;top:-12vw;background:radial-gradient(circle,rgba(24,114,255,.26),transparent 66%);animation:drift1 28s ease-in-out infinite}
+.cvs-aurora .a2{width:50vw;height:50vw;right:-14vw;top:34vh;background:radial-gradient(circle,rgba(232,169,59,.18),transparent 66%);animation:drift2 34s ease-in-out infinite}
+.cvs-aurora .a3{width:46vw;height:46vw;left:28vw;bottom:-16vw;background:radial-gradient(circle,rgba(0,62,232,.18),transparent 68%);animation:drift1 40s ease-in-out infinite reverse}
+.cvs-aurora .a4{width:34vw;height:34vw;right:18vw;bottom:8vh;background:radial-gradient(circle,rgba(212,146,43,.12),transparent 70%);animation:drift2 46s ease-in-out infinite}
+@keyframes drift1{0%,100%{transform:translate(0,0)}50%{transform:translate(7vw,5vh)}}
+@keyframes drift2{0%,100%{transform:translate(0,0)}50%{transform:translate(-7vw,-4vh)}}
+
+/* ── Reveal-on-scroll ── */
+.reveal{opacity:0;transform:translateY(34px);transition:opacity 1s var(--ease),transform 1s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+.reveal[data-d="1"]{transition-delay:.1s}.reveal[data-d="2"]{transition-delay:.2s}.reveal[data-d="3"]{transition-delay:.3s}
+
+/* ── Eyebrow (Master) ── */
+.page-eyebrow,.section-eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:'Syne',sans-serif;font-size:13px;font-weight:900;letter-spacing:2.5px;text-transform:uppercase;color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;border:none;border-radius:0;padding:0;margin-bottom:18px;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+.page-eyebrow::before,.page-eyebrow::after,.section-eyebrow::before,.section-eyebrow::after{content:'';height:1px;width:34px}
+.page-eyebrow::before,.section-eyebrow::before{background:linear-gradient(90deg,transparent,var(--blue-glow))}
+.page-eyebrow::after,.section-eyebrow::after{background:linear-gradient(90deg,var(--gold-solid),transparent)}
+
+/* ── Lightbar ── */
+.lightbar{width:min(var(--maxw),calc(100% - 48px));height:1px;margin:0 auto;border:0;background:linear-gradient(90deg,transparent,rgba(47,139,255,.5),rgba(243,213,133,.55),rgba(212,146,43,.5),transparent);position:relative;z-index:1}
+.lightbar::after{content:'';position:absolute;left:50%;top:50%;width:6px;height:6px;border-radius:50%;background:var(--gold-light);transform:translate(-50%,-50%);box-shadow:0 0 12px var(--gold-light),0 0 28px rgba(47,139,255,.55)}
+
+/* ── Premium buttons ── */
+.btn-cvs{position:relative;display:inline-flex;align-items:center;gap:10px;font-family:'Syne',sans-serif;font-weight:800;font-size:15px;letter-spacing:.5px;padding:17px 36px;border-radius:14px;text-decoration:none;cursor:pointer;white-space:nowrap;transition:transform .3s var(--ease),box-shadow .3s var(--ease),border-color .3s}
+.btn-cvs i{font-style:normal;display:inline-flex;align-items:center;vertical-align:middle;transition:transform .3s var(--ease)}
+.btn-cvs:hover i{transform:translateX(5px)}
+.btn-cvs--gold{background:linear-gradient(180deg,#fff7a8 0%,#ffe15a 18%,#ffc21f 48%,#f59a00 78%,#d97900 100%);color:#100700;font-weight:900;box-shadow:0 8px 30px rgba(232,169,59,.28),0 0 0 1px rgba(255,255,255,.08),inset 0 1px 0 rgba(255,255,255,.6)}
+.btn-cvs--gold:hover{transform:translateY(-3px);box-shadow:0 18px 48px rgba(232,169,59,.45),0 0 0 1px rgba(255,255,255,.12),inset 0 1px 0 rgba(255,255,255,.7)}
+.btn-cvs--ghost{background:rgba(8,11,22,.86);color:#ffffff;font-weight:800;border:1px solid transparent;background-image:linear-gradient(rgba(8,11,22,.86),rgba(8,11,22,.86)),linear-gradient(120deg,var(--blue-glow),var(--gold-solid));background-origin:border-box;background-clip:padding-box,border-box;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.btn-cvs--ghost:hover{color:#fff;transform:translateY(-3px);box-shadow:0 16px 40px rgba(24,114,255,.25),0 0 0 1px rgba(24,114,255,.1)}
+
+/* ── NAV overrides ── */
+.cvs-nav-simple{background:linear-gradient(180deg,rgba(3,4,10,.92) 0%,rgba(3,4,10,.74) 58%,rgba(3,4,10,0) 100%);border-bottom:0;backdrop-filter:blur(18px) saturate(115%);-webkit-backdrop-filter:blur(18px) saturate(115%);padding-bottom:18px}
+.cvs-nav-simple::after{content:'';position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,transparent,rgba(24,114,255,.45),rgba(232,195,85,.4),transparent);opacity:.7}
+.cvs-nav-simple.scrolled{background:linear-gradient(180deg,rgba(2,2,6,.96) 0%,rgba(2,2,6,.86) 70%,rgba(2,2,6,.55) 100%)}
+.cvs-nav-simple .nav-logo{flex-direction:row;align-items:center;gap:12px}
+.cvs-nav-simple .nav-logo .cvs-nav-img{display:block;height:68px;width:68px;object-fit:contain;animation:none;transform:scale(1.06);filter:drop-shadow(0 0 14px rgba(24,114,255,.28)) drop-shadow(0 0 30px rgba(232,195,85,.14))}
+.cvs-nav-simple .nav-logo .cvs-nav-txt{background:none;-webkit-text-fill-color:initial;color:#fff;font-size:20px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;text-shadow:none;line-height:1.15;filter:none}
+.cvs-nav-simple .nav-logo .nav-t1{color:#4da0ff;-webkit-text-fill-color:#4da0ff;text-shadow:0 0 16px rgba(77,160,255,.4)}
+.cvs-nav-simple .nav-logo .nav-t2{color:#ffc21f!important;-webkit-text-fill-color:#ffc21f!important;background:none!important;margin-left:4px;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+.cvs-nav-simple .nav-logo .cvs-nav-sub{display:block;background:none;-webkit-text-fill-color:initial;margin-top:3px;color:#fff;font-size:10px;font-weight:800;letter-spacing:4px;text-transform:uppercase;opacity:1;filter:none}
+.cvs-nav-simple .nav-logo .nav-t3{color:#4da0ff;-webkit-text-fill-color:#4da0ff;opacity:1}
+.cvs-nav-simple{padding-left:18px;padding-right:18px}
+.cvs-nav-simple .nav-links{gap:2px}
+.cvs-nav-simple .nav-links a{font-family:'Syne',sans-serif;font-size:12px;letter-spacing:.2px;padding:6px 7px;position:relative;color:#fff;font-weight:700;opacity:.96;transition:color .2s ease,text-shadow .2s ease}
+.cvs-nav-simple .nav-links a:hover{color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+.cvs-nav-simple .nav-links a.active{color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+.cvs-nav-simple .nav-links a::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%) scale(0);width:4px;height:4px;background:var(--blue);border-radius:50%;box-shadow:0 0 6px rgba(59,130,246,.6);transition:transform .2s}
+.cvs-nav-simple .nav-links a:hover::after{transform:translateX(-50%) scale(1)}
+.cvs-nav-simple .nav-actions{gap:10px}
+.cvs-nav-simple .nav-btn-ghost,.cvs-nav-simple .nav-btn-gold{font-family:'Syne',sans-serif;font-size:12px;font-weight:800;letter-spacing:.3px;padding:8px 14px;border-radius:11px;white-space:nowrap;transition:transform .25s var(--ease),box-shadow .25s var(--ease),color .2s,opacity .2s}
+.cvs-nav-simple .nav-btn-ghost{color:#ffffff;border:1px solid transparent;background:linear-gradient(rgba(9,12,24,.88),rgba(9,12,24,.88)) padding-box,linear-gradient(120deg,var(--blue-glow),var(--gold-solid)) border-box;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.cvs-nav-simple .nav-btn-ghost:hover{color:var(--gold-solid);transform:translateY(-2px);box-shadow:0 8px 24px rgba(24,114,255,.25),0 0 18px rgba(232,195,85,.22);text-shadow:0 0 14px rgba(232,195,85,.5)}
+.cvs-nav-simple .nav-btn-gold{color:#100700!important;font-weight:900;background:linear-gradient(180deg,#fff7a8 0%,#ffe15a 18%,#ffc21f 48%,#f59a00 78%,#d97900 100%);border:0;box-shadow:0 6px 20px rgba(232,169,59,.3),inset 0 1px 0 rgba(255,255,255,.55)}
+.cvs-nav-simple .nav-btn-gold:hover{opacity:1;transform:translateY(-2px);box-shadow:0 12px 30px rgba(232,169,59,.5),inset 0 1px 0 rgba(255,255,255,.65)}
+
+/* ── FOOTER overrides ── */
+.cvs-footer-master{margin-top:20px;background:linear-gradient(180deg,rgba(2,2,6,0),rgba(2,2,6,.98) 22%)}
+.cvs-footer-master .footer-brand h3{font-size:25px;letter-spacing:.5px;color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+.cvs-footer-master .footer-brand p{color:rgba(255,255,255,.90);font-size:16px;line-height:1.74;max-width:300px}
+.cvs-footer-master .footer-col h4{font-size:15px;margin-bottom:16px;letter-spacing:2px;text-transform:uppercase;font-weight:900;opacity:1;color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+.cvs-footer-master .footer-col a{font-size:14.5px;padding:6px 0;color:rgba(255,255,255,.88);opacity:1;transition:color .2s,text-shadow .2s,transform .2s}
+.cvs-footer-master .footer-col a:hover{color:#ffc21f;text-shadow:0 0 12px rgba(255,194,31,.45);transform:translateX(3px)}
+.cvs-footer-master .footer-bottom{padding-top:24px;font-size:14px;border-top:1px solid rgba(255,255,255,.09)}
+.cvs-footer-master .footer-copy{font-size:14px;color:rgba(255,255,255,.80)}
+.cvs-footer-master .footer-legal a{font-size:14px;padding:0 9px;color:rgba(255,255,255,.80);transition:color .2s,text-shadow .2s}
+.cvs-footer-master .footer-legal a:hover{color:#ffc21f;text-shadow:0 0 10px rgba(255,194,31,.45)}
+.mob-menu .mob-link{font-family:'Syne',sans-serif;font-weight:700}
+.mob-menu .mob-link:hover,.mob-menu .mob-link.active{color:#ffc21f;text-shadow:0 0 12px rgba(255,194,31,.45)}
+.mob-menu .mob-cta{font-family:'Syne',sans-serif;color:#100700;font-weight:900;background:linear-gradient(180deg,#fff7a8 0%,#ffe15a 18%,#ffc21f 48%,#f59a00 78%,#d97900 100%)}
+
+/* ── Scroll-Progress-Bar ── */
+#cvs-progress{position:fixed;top:0;left:0;width:0%;height:2px;z-index:9999;pointer-events:none;background:linear-gradient(90deg,var(--blue-glow),#ecca63,var(--gold-warm));box-shadow:0 0 8px rgba(232,195,85,.6),0 0 2px rgba(77,160,255,.5);transform-origin:left}
+
+/* Globalen Custom-Cursor überschreiben */
+html,body{cursor:auto!important}
+a,button,[role=button],label,.nav-burger{cursor:pointer!important}
+#cursor,#cursor-ring{display:none!important}
+
+/* Mobile nav: hide links, show burger */
+@media(max-width:1530px){
+  .cvs-nav-simple .nav-links{display:none}
+  .cvs-nav-simple .nav-burger{display:flex}
+  .mob-menu{display:block}
+}
+
+/* Card buttons keep pill shape */
+.plan-cta-free,.plan-cta-ghost,.pack-btn{border-radius:50px}
+
+/* Page-specific preserved overrides */
 .page-h1 span{background:linear-gradient(112deg,#d4a93c,#e8c355);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .page::before{height:520px;background:radial-gradient(ellipse 85% 140% at 8% 0%,rgba(0,40,165,.14) 0%,transparent 55%),radial-gradient(ellipse 65% 100% at 94% 12%,rgba(180,130,20,.09) 0%,transparent 50%),radial-gradient(ellipse 55% 65% at 50% 0%,rgba(0,25,110,.07) 0%,transparent 60%)}
+
+/* Reduced motion */
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}*{animation:none!important}}
 </style>
 </head>
 <body>
 
+<div class="cvs-aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span><span class="a4"></span></div>
+
 <!-- NAV -->
 <nav class="cvs-nav-simple">
-  <a href="scene-editor-test.html" class="nav-logo"><img src="assets/cvs-logo.png" alt="CVS" class="cvs-nav-img"><span class="cvs-nav-txt">Cinematic Vision<span class="cvs-nav-sub">Studios</span></span></a>
+  <a href="scene-editor-test.html" class="nav-logo"><img src="assets/cvs-logo-icon.png" alt="CVS" class="cvs-nav-img"><span class="cvs-nav-txt"><span class="nav-t1">Cinematic</span> <span class="nav-t2">Vision</span><span class="cvs-nav-sub"><span class="nav-t3">Studio</span></span></span></a>
   <div class="nav-links">
     <a href="scene-editor-test.html" class="nav-link">Home</a>
     <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="nav-link">Studio</a>
-    <a href="shop.html" class="nav-link">Shop</a>
-    <a href="academy.html" class="nav-link">Academy</a>
-    <a href="portfolio.html" class="nav-link">Portfolio</a>
-    <a href="ki-videos.html" class="nav-link">KI Videos</a>
-    <a href="prompt-generator.html" class="nav-link">Prompts</a>
-    <a href="calendar.html" class="nav-link">Buchung</a>
     <a href="crystals.html" class="nav-link active">Kristalle</a>
     <a href="contact.php" class="nav-link">Kontakt</a>
+    <a href="calendar.html" class="nav-link">Buchung</a>
+    <a href="prompt-generator.html" class="nav-link">Prompts</a>
+    <a href="ki-videos.html" class="nav-link">KI Videos</a>
+    <a href="portfolio.html" class="nav-link">Portfolio</a>
+    <a href="academy.html" class="nav-link">Academy</a>
+    <a href="shop.html" class="nav-link">Shop</a>
   </div>
   <div class="nav-actions">
     <a href="https://cinematic-studio-family.onrender.com/login.php" class="nav-btn-ghost">Login</a>
@@ -157,16 +277,16 @@ h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.pf-title
 <div class="mob-menu" id="mobMenu" role="navigation" aria-label="Navigation">
   <a href="scene-editor-test.html" class="mob-link">🏠 Home</a>
   <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="mob-link">🎬 Studio</a>
-  <a href="shop.html" class="mob-link">🛍️ Shop</a>
-  <a href="academy.html" class="mob-link">🎓 Academy</a>
-  <a href="portfolio.html" class="mob-link">🎞️ Portfolio</a>
-  <a href="ki-videos.html" class="mob-link">🎥 KI Videos</a>
-  <a href="prompt-generator.html" class="mob-link">✍️ Prompts</a>
-  <a href="calendar.html" class="mob-link">📅 Buchung</a>
   <a href="crystals.html" class="mob-link active">💎 Kristalle</a>
   <a href="contact.php" class="mob-link">📞 Kontakt</a>
+  <a href="calendar.html" class="mob-link">📅 Buchung</a>
+  <a href="prompt-generator.html" class="mob-link">✍️ Prompts</a>
+  <a href="ki-videos.html" class="mob-link">🎥 KI Videos</a>
+  <a href="portfolio.html" class="mob-link">🎞️ Portfolio</a>
+  <a href="academy.html" class="mob-link">🎓 Academy</a>
+  <a href="shop.html" class="mob-link">🛍️ Shop</a>
   <div class="mob-sep"></div>
-  <a href="https://cinematic-studio-family.onrender.com/login.php" class="mob-link">🔑 Login / Registrieren</a>
+  <a href="https://cinematic-studio-family.onrender.com/login.php" class="mob-link">🔑 Login</a>
   <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="mob-cta">🎬 Studio starten</a>
 </div>
 
@@ -175,15 +295,15 @@ h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.pf-title
   <div class="wrap">
 
     <!-- HEADER -->
-    <div class="page-eyebrow">💎 Pläne &amp; Kristalle</div>
-    <h1 class="page-h1">Starte kostenlos.<br><span>Skaliere wenn du bereit bist.</span></h1>
-    <p class="page-sub">Der Free-Plan ist dauerhaft kostenlos — kein Kreditkarten, kein Account. Kristalle brauchst du nur für KI-Generierungen.</p>
+    <div class="page-eyebrow reveal">💎 Pläne &amp; Kristalle</div>
+    <h1 class="page-h1 reveal" data-d="1">Starte kostenlos.<br><span>Skaliere wenn du bereit bist.</span></h1>
+    <p class="page-sub reveal" data-d="2">Der Free-Plan ist dauerhaft kostenlos — kein Kreditkarten, kein Account. Kristalle brauchst du nur für KI-Generierungen.</p>
 
     <!-- PLANS -->
     <div class="plans-grid">
 
       <!-- FREE -->
-      <div class="plan" style="--plan-accent:linear-gradient(90deg,#4ade80,#06b6d4)">
+      <div class="plan reveal" data-d="1" style="--plan-accent:linear-gradient(90deg,#4ade80,#06b6d4)">
         <div class="plan-tier">Free — Jetzt verfügbar</div>
         <div class="plan-price-row">
           <div class="plan-price free">0€</div>
@@ -209,7 +329,7 @@ h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.pf-title
       </div>
 
       <!-- STARTER+ -->
-      <div class="plan plan-popular" style="--plan-accent:linear-gradient(135deg,#f5c542,#ff8c00)">
+      <div class="plan plan-popular reveal" data-d="2" style="--plan-accent:linear-gradient(135deg,#f5c542,#ff8c00)">
         <div class="popular-badge">⭐ Beliebt</div>
         <div class="plan-tier">Starter+ <span class="soon-badge bald">Bald</span></div>
         <div class="plan-price-row">
@@ -236,7 +356,7 @@ h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.pf-title
       </div>
 
       <!-- PRO / ULTRA -->
-      <div class="plan" style="--plan-accent:linear-gradient(90deg,#9333ea,#3b82f6)">
+      <div class="plan reveal" data-d="3" style="--plan-accent:linear-gradient(90deg,#9333ea,#3b82f6)">
         <div class="plan-tier">Pro / Ultra <span class="soon-badge bald">Bald</span></div>
         <div class="plan-price-row">
           <div class="plan-price" style="color:var(--purple)">29€</div>
@@ -263,15 +383,17 @@ h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.pf-title
 
     </div><!-- /plans-grid -->
 
+    <hr class="lightbar">
+
     <!-- CRYSTALS SECTION -->
-    <div class="section-header">
+    <div class="section-header reveal">
       <div class="section-eyebrow gold">💎 Kristalle — für KI-Generierungen</div>
       <h2 class="section-title">Einmal aufladen. <span>Überall einsetzen.</span></h2>
       <p class="section-sub">Kristalle brauchst du ausschließlich für KI-basierte Generierungen — nicht für Upload, Analyse oder Render.</p>
     </div>
 
     <div class="packs-grid">
-      <div class="pack">
+      <div class="pack reveal" data-d="1">
         <span class="pack-gem">💎</span>
         <div class="pack-name">Starter</div>
         <div class="pack-crystals">100 💎</div>
@@ -280,7 +402,7 @@ h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.pf-title
         <div class="pack-tag">Einstieg</div>
         <a href="contact.php" class="pack-btn">Frühzugang →</a>
       </div>
-      <div class="pack pack-popular">
+      <div class="pack pack-popular reveal" data-d="2">
         <span class="pack-gem">💎💎</span>
         <div class="pack-name">Creator</div>
         <div class="pack-crystals">500 💎</div>
@@ -289,7 +411,7 @@ h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.pf-title
         <div class="pack-tag">⭐ Beliebt</div>
         <a href="contact.php" class="pack-btn">Frühzugang →</a>
       </div>
-      <div class="pack">
+      <div class="pack reveal" data-d="3">
         <span class="pack-gem">💎💎💎</span>
         <div class="pack-name">Pro Studio</div>
         <div class="pack-crystals">1.500 💎</div>
@@ -302,7 +424,7 @@ h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.pf-title
 
     <!-- CRYSTAL USES -->
     <div class="crystal-uses">
-      <div class="use-item">
+      <div class="use-item reveal" data-d="1">
         <div class="use-icon">🤖</div>
         <div>
           <div class="use-title">KI-Bild generieren</div>
@@ -310,7 +432,7 @@ h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.pf-title
           <div class="use-cost">~5–10 💎 pro Generierung</div>
         </div>
       </div>
-      <div class="use-item">
+      <div class="use-item reveal" data-d="2">
         <div class="use-icon">🎥</div>
         <div>
           <div class="use-title">KI-Video (Pro)</div>
@@ -318,7 +440,7 @@ h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.pf-title
           <div class="use-cost">~50–150 💎 pro Clip <span class="soon-badge bald">Bald</span></div>
         </div>
       </div>
-      <div class="use-item">
+      <div class="use-item reveal" data-d="3">
         <div class="use-icon">✨</div>
         <div>
           <div class="use-title">Auto Story Engine</div>
@@ -326,7 +448,7 @@ h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.pf-title
           <div class="use-cost">~100–300 💎 pro Story <span class="soon-badge bald">Bald</span></div>
         </div>
       </div>
-      <div class="use-item">
+      <div class="use-item reveal" data-d="1">
         <div class="use-icon">🎵</div>
         <div>
           <div class="use-title">TikTok Prompts &amp; Hooks</div>
@@ -334,7 +456,7 @@ h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.pf-title
           <div class="use-cost">~2–8 💎 pro Paket</div>
         </div>
       </div>
-      <div class="use-item">
+      <div class="use-item reveal" data-d="2">
         <div class="use-icon">🛍️</div>
         <div>
           <div class="use-title">Shop-Assets</div>
@@ -342,7 +464,7 @@ h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.pf-title
           <div class="use-cost">Variiert je Asset <span class="soon-badge bald">Bald</span></div>
         </div>
       </div>
-      <div class="use-item">
+      <div class="use-item reveal" data-d="3">
         <div class="use-icon">🎞️</div>
         <div>
           <div class="use-title">Trailer Builder</div>
@@ -352,47 +474,51 @@ h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.pf-title
       </div>
     </div>
 
+    <hr class="lightbar">
+
     <!-- FAQ -->
-    <div class="section-header">
+    <div class="section-header reveal">
       <div class="section-eyebrow blue">❓ Häufige Fragen</div>
       <h2 class="section-title">Alles zu <span>Plänen &amp; Kristallen</span></h2>
     </div>
 
     <div class="faq-grid">
-      <div class="faq-item">
+      <div class="faq-item reveal" data-d="1">
         <div class="faq-q">Was sind Kristalle genau?</div>
         <div class="faq-a">Kristalle sind die interne Währung für KI-basierte Aktionen. Upload, Szenen-Analyse und Render sind immer kostenlos — nur KI-Generierungen kosten Kristalle.</div>
       </div>
-      <div class="faq-item">
+      <div class="faq-item reveal" data-d="2">
         <div class="faq-q">Kann ich den Free-Plan dauerhaft nutzen?</div>
         <div class="faq-a">Ja, dauerhaft und ohne Einschränkungen im Free-Bereich: 720p, 15 Sek., 3 Szenen, 3 KI-Bilder pro Job. Kein Account, keine Kreditkarte.</div>
       </div>
-      <div class="faq-item">
+      <div class="faq-item reveal" data-d="1">
         <div class="faq-q">Verfallen Kristalle?</div>
         <div class="faq-a">Nein. Einmal gekaufte Kristalle verfallen nicht. Inklusiv-Kristalle aus Monatsplänen (Starter+/Pro) werden monatlich erneuert, nicht kumuliert.</div>
       </div>
-      <div class="faq-item">
+      <div class="faq-item reveal" data-d="2">
         <div class="faq-q">Wann startet Starter+ / Pro?</div>
         <div class="faq-a">Starter+ und Pro sind aktuell in Entwicklung. Trage dich jetzt auf die Warteliste ein — Early-Bird-Nutzer bekommen Zugang zuerst und zum günstigsten Preis.</div>
       </div>
-      <div class="faq-item">
+      <div class="faq-item reveal" data-d="3">
         <div class="faq-q">Brauche ich für Upload &amp; Render Kristalle?</div>
         <div class="faq-a">Nein. Video hochladen, Szenen analysieren, Szenen ersetzen (Bild/Video/Text) und das finale MP4 rendern sind alle komplett kostenlos — auch im Free-Plan.</div>
       </div>
-      <div class="faq-item">
+      <div class="faq-item reveal" data-d="3">
         <div class="faq-q">Kann ich jederzeit kündigen?</div>
         <div class="faq-a">Ja. Monatsabos (Starter+/Pro) sind jederzeit kündbar — keine Bindung, keine Kündigungsfrist. Einmal gekaufte Kristall-Pakete werden nicht erstattet.</div>
       </div>
     </div>
 
+    <hr class="lightbar">
+
     <!-- CTA BANNER -->
-    <div class="cta-banner">
+    <div class="cta-banner reveal">
       <div class="cta-banner-content">
         <h2>Dein erster <span>KI-Film</span> wartet.</h2>
         <p>Kein Account. Kein Code. Einfach Video hochladen und in unter 30 Sekunden rendern — kostenlos und dauerhaft.</p>
         <div class="cta-banner-btns">
-          <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="btn-gold">🎬 Jetzt kostenlos starten</a>
-          <a href="contact.php" class="btn-ghost">Warteliste eintragen →</a>
+          <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="btn-cvs btn-cvs--gold">🎬 Jetzt kostenlos starten <i>→</i></a>
+          <a href="contact.php" class="btn-cvs btn-cvs--ghost">Warteliste eintragen →</a>
         </div>
       </div>
     </div>
@@ -400,40 +526,74 @@ h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.pf-title
   </div><!-- /wrap -->
 </div><!-- /page -->
 
-<footer class="cvs-footer-simple">
+<footer class="cvs-footer-master">
   <div class="footer-inner">
     <div class="footer-brand">
-      <div class="footer-logo">Cinematic Vision Studio</div>
-      <p class="footer-brand-sub">Premium KI-Filmproduktion — Trailer, Transformationen, Anime &amp; Markenwelten.</p>
+      <h3>Cinematic Vision Studio</h3>
+      <p>Deine Vision. Als cinematic KI-Erlebnis. Premium AI-Cinematic-Produktion für Creator und Marken.</p>
     </div>
-    <div class="footer-cols">
-      <div class="footer-col">
-        <a href="scene-editor-test.html">Home</a>
-        <a href="https://cinematic-studio-family.onrender.com/studio-demo.php">Studio</a>
-        <a href="portfolio.html">Portfolio</a>
-        <a href="academy.html">Academy</a>
-      </div>
-      <div class="footer-col">
-        <a href="shop.html">Shop</a>
-        <a href="crystals.html">Kristalle</a>
-        <a href="calendar.html">Buchung</a>
-        <a href="contact.php">Kontakt</a>
-      </div>
+    <div class="footer-col">
+      <h4>Studio</h4>
+      <a href="scene-editor-test.html">Über uns</a>
+      <a href="scene-editor-test.html#process">Prozess</a>
+      <a href="academy.html">Academy</a>
+      <a href="calendar.html">Buchung</a>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <a href="ki-videos.html">KI Videos</a>
+      <a href="portfolio.html">Trailer</a>
+      <a href="shop.html">Shop</a>
+      <a href="prompt-generator.html">Prompt Studio</a>
+      <a href="portfolio.html">Portfolio</a>
+      <a href="crystals.html">Kristalle</a>
+    </div>
+    <div class="footer-col">
+      <h4>Kontakt</h4>
+      <a href="contact.php">Projekt anfragen</a>
+      <a href="https://cinematic-studio-family.onrender.com/studio-demo.php">Studio starten</a>
     </div>
   </div>
   <div class="footer-bottom">
-    <nav class="footer-legal">
+    <div class="footer-copy">© 2026 Cinematic Vision Studio · Alle Rechte vorbehalten</div>
+    <div class="footer-legal">
       <a href="impressum.html">Impressum</a>
       <a href="datenschutz.html">Datenschutz</a>
       <a href="agb.html">AGB</a>
       <a href="widerruf.html">Widerruf</a>
       <a href="cookies.html">Cookies</a>
-    </nav>
-    <div class="footer-copy">© 2026 Cinematic Vision Studio · Alle Rechte vorbehalten</div>
+      <a href="contact.php">Kontakt</a>
+    </div>
   </div>
 </footer>
 
+<div id="cvs-progress" aria-hidden="true"></div>
 <div id="cursor"></div><div id="cursor-ring"></div>
 <script src="assets/js/nav.js" defer></script>
+<script>
+(function(){
+  var els=document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion:reduce)').matches){
+    els.forEach(function(e){e.classList.add('in');});return;
+  }
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});
+  },{threshold:.12,rootMargin:'0px 0px -8% 0px'});
+  els.forEach(function(e){io.observe(e);});
+})();
+
+/* Gold Scroll-Progress-Bar */
+(function(){
+  var bar=document.getElementById('cvs-progress');if(!bar)return;
+  var raf=null;
+  function update(){
+    var h=document.documentElement.scrollHeight-window.innerHeight;
+    bar.style.width=(h>0?(window.scrollY/h*100):0)+'%';
+    raf=null;
+  }
+  window.addEventListener('scroll',function(){if(!raf)raf=requestAnimationFrame(update);},{passive:true});
+  update();
+})();
+</script>
 </body>
 </html>

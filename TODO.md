@@ -1,5 +1,14 @@
 # TODO.md — Cinematic Studio Family
 
+## CVS Session Management Rules
+1. Nach jeder abgeschlossenen Seite: `git status` + `git diff --stat` + Kurzzusammenfassung
+2. Nach jedem Major Milestone: MEMORY.md + CLAUDE.md + TODO.md + workflow-design-reference.md aktualisieren
+3. Immer pflegen: Master Reference, Active Target, Next Target, Projekt-Status
+4. Session-Ende: SESSION HANDOVER (abgeschlossen, laufend, nächste Aktion, Issues)
+5. Context-Monitoring nach jeder Antwort (low / medium / high / critical)
+6. Vor neuem Chat: Projekt-State + Workflow-State + Task-State + Design-Reference-State speichern
+7. Nie Projekt-Analyse von vorne starten, wenn Memory aktuell ist.
+
 ## Legende
 - 🔴 Blockiert | 🟡 In Arbeit | 🟢 Bereit | ✅ Fertig | ⬜ Ausstehend
 
@@ -127,3 +136,35 @@
   + api/health.php + README_DEPLOY.md). Status 🟡 weil der eigentliche Klick
   „Deploy on Render" nur durch den User mit eigenem Render-Account erfolgen kann.
   Sobald Live-Test (siehe README_DEPLOY.md §4) grün ist → ✅.
+
+---
+
+## PHASE 6 — Design Alignment Gate (Session 11, 2026-06-06)
+
+**Master Reference:** `immobilienvideos.html`
+**Commit Rule:** Nur nach visuellem Approval
+
+| # | Aufgabe | Status | Priorität |
+|---|---------|--------|-----------|
+| D1 | scene-editor-test.html → immobilienvideos.html Design-DNA | ✅ | P0 |
+| D2 | portfolio.html → immobilienvideos.html Design-DNA | ✅ | P1 |
+| D3 | shop.html → immobilienvideos.html Design-DNA | ✅ | P1 |
+| D4 | crystals.html → immobilienvideos.html Design-DNA | ✅ | P1 |
+| D5 | academy.html → immobilienvideos.html Design-DNA | ⬜ | P1 |
+| D6 | prompt-generator.html → immobilienvideos.html Design-DNA | ⬜ | P2 |
+| D7 | calendar.html → immobilienvideos.html Design-DNA | ⬜ | P2 |
+| D8 | Legal pages → immobilienvideos.html Design-DNA | ⬜ | P3 |
+| ~~D9~~ | ~~ki-videos.html~~ | ~~⬜~~ | ~~Archiv~~ |
+| D9 | Legal pages (impressum, datenschutz, agb, cookies, widerruf) | ⬜ | P3 |
+
+### Design-DNA Checkliste (pro Seite)
+- [x] `.cvs-nav-simple` Navigation
+- [x] `.cvs-aurora` CSS-Orb-Hintergrund
+- [x] `.btn-cvs--gold` / `.btn-cvs--ghost` Buttons
+- [x] `.cvs-footer-master` Footer
+- [x] `.lightbar` Section-Separatoren
+- [x] `#cvs-progress` Scroll-Bar
+- [x] Film-Grain auf Referenz-Level
+- [x] Custom-Cursor deaktiviert
+- [x] Syne + DM Sans Typography
+- [x] Gold headline highlights (`#ffc21f`)

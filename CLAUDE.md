@@ -266,6 +266,98 @@ cinematic-studio-family/
 
 ---
 
+## Was wurde in Session 11 gebaut (2026-06-06)
+
+> Design Alignment Gate — `immobilienvideos.html` ist der Master-Reference für alle IONOS-Seiten.
+
+### Session 11 — Ziel
+`scene-editor-test.html` an `immobilienvideos.html`-Designsprache angleichen:
+- `.cvs-nav-simple` Navigation (Gradient-Fade, Gold-Hover, Blur)
+- `.cvs-aurora` Hintergrund (CSS-Orbs statt Canvas)
+- `.btn-cvs--gold` / `.btn-cvs--ghost` Premium-Buttons
+- `.cvs-footer-master` Footer mit 3 Spalten
+- `.lightbar` Section-Separatoren
+- `#cvs-progress` Scroll-Progress-Bar
+- Film-Grain auf Referenz-Level (`opacity:.28`, `z-index:0`)
+- Custom-Cursor deaktiviert
+- Alle bestehenden Funktionen (Video, Partikel, Portfolio-Filter, Stat-Counter, Mobile-Nav, Reveal-Animationen) erhalten
+
+### Session 11 — Änderungen (Stand jetzt)
+| Datei | Was geändert |
+|---|---|
+| `scene-editor-test.html` | **CSS Overrides:** Aurora-Orbs, Lightbar, Premium Buttons, Footer-Master, Scroll-Progress, Nav-Override, Eyebrow/Title Gold, Cursor-Disable, Reveal-Animationen |
+| `scene-editor-test.html` | **HTML:** Canvas aurora → CSS-Orbs, Cursor entfernt, Nav-Klassen ergänzt, Footer-Struktur auf 3-Spalten + Legal-Bottom umgebaut, Mobile-Nav erweitert, Lightbars zwischen Sections eingefügt |
+| `scene-editor-test.html` | **JS:** Aurora-Canvas entfernt → Gold Scroll-Progress-Bar, Magnetic Buttons um `.btn-cvs` erweitert |
+| `scene-editor-test.html` | **Finishing:** Logo-Source auf `cvs-logo-icon.png`, Mobile-CTA `.mob-cta` + Reorder, Booking-CTA auf `.btn-cvs--gold`, Content-Safety `z-index:1` |
+| `portfolio.html` | **Design-DNA-Alignment:** Lokale Fonts, `.btn-cvs--gold`/`.btn-cvs--ghost`, Lightbars, Scroll-Progress-Bar, Reveal-Animationen (10 Karten + Header + CTA), Open-Graph-Meta-Tags |
+| `shop.html` | **Design-DNA-Alignment:** Lokale Fonts, `.cvs-aurora`, `.btn-cvs--gold`/`.btn-cvs--ghost`, Lightbars, Scroll-Progress-Bar, Reveal-Animationen (5 Karten + Header + CTA), Open-Graph-Meta-Tags, Nav-Logo auf `cvs-logo-icon.png`, Footer-Struktur auf 3-Spalten + Legal-Bottom |
+| `crystals.html` | **Design-DNA-Alignment:** Lokale Fonts, `.cvs-aurora`, Film-Grain-Fix, `.btn-cvs--gold`/`.btn-cvs--ghost` (CTA-Banner), Lightbars, Scroll-Progress-Bar, Reveal-Animationen (Plans 3×, Packs 3×, Uses 6×, FAQ 6×, Header + CTA), Open-Graph-Meta-Tags, Nav-Logo auf `cvs-logo-icon.png`, Footer-Legal-Bottom bereinigt |
+
+### Status
+- ✅ `scene-editor-test.html` — Design-Alignment abgeschlossen
+- ✅ `portfolio.html` — Design-Alignment abgeschlossen
+- ✅ `shop.html` — Design-Alignment abgeschlossen
+- ✅ `crystals.html` — Design-Alignment abgeschlossen (Score 100/100, approved)
+- ⬜ `academy.html` — nächstes Target
+
+### Regeln für diesen Workflow
+1. `immobilienvideos.html` = Master Design Reference.
+2. `academy.html` = aktives Target (nächste Seite).
+3. Nach academy.html: page-by-page (prompt-generator.html → calendar.html → ...).
+4. Commit nur nach visuellem Approval.
+5. Kein Backend, kein Login/Dashboard, kein MCP während dieses Gates.
+
+---
+
+## SESSION HANDOVER — Save-Point (2026-06-06)
+
+### Abgeschlossene Arbeit
+- `scene-editor-test.html` — Design-Alignment an `immobilienvideos.html` abgeschlossen. Zusätzliche Fixes: Google-Fonts-CDN → lokale `assets/fonts/fonts.css`, Custom-Cursor explizit deaktiviert (`cursor:auto!important`).
+- `portfolio.html` — Design-Alignment abgeschlossen: Aurora, Nav-Overrides, Premium-Buttons (`.btn-cvs--gold`/`.btn-cvs--ghost`), Footer-Master, Lightbars, Scroll-Progress-Bar, Reveal-Animationen mit Staggering, Open-Graph-Meta-Tags.
+- `shop.html` — Design-Alignment abgeschlossen: Aurora, Nav-Overrides, Premium-Buttons, Footer-Master, Lightbars, Scroll-Progress-Bar, Reveal-Animationen mit Staggering, Open-Graph-Meta-Tags, Google-Fonts-CDN → lokale Fonts.
+- `crystals.html` — Design-Alignment abgeschlossen: Aurora, Film-Grain-Fix (z-index:0/opacity:.28), Nav-Overrides, Premium-Buttons (CTA-Banner), Footer-Legal-Bottom bereinigt, Lightbars, Scroll-Progress-Bar, Reveal-Animationen mit Staggering, Open-Graph-Meta-Tags, Google-Fonts-CDN → lokale Fonts.
+- Memory-Dateien aktualisiert: MEMORY.md, CLAUDE.md, TODO.md, workflow-design-reference.md.
+
+### Laufende Arbeit
+- Keine. Save-Point wurde erstellt.
+
+### Nächste geplante Aktion
+- `academy.html` Design-Alignment an `immobilienvideos.html` beginnen.
+
+### Bekannte Issues / Abweichungen (academy.html Vorbereitung)
+- `academy.html` nutzt noch Google-Fonts-CDN (nicht lokale Fonts).
+- `academy.html` hat keinen `.cvs-aurora`-Hintergrund.
+- `academy.html` hat keine `.lightbar`-Separatoren.
+- `academy.html` hat keine `#cvs-progress`-Scroll-Leiste.
+- `academy.html` hat keine `.reveal`-Scroll-Animationen.
+- `academy.html` Buttons nutzen `.btn-gold`/`.btn-ghost` statt `.btn-cvs--gold`/`.btn-cvs--ghost`.
+- `academy.html` Film-Grain ist `body::before` mit `z-index:2` und `opacity:.5` — Master-Reference nutzt `body::after` mit `z-index:0` und `opacity:.28`.
+- `academy.html` Logo-Quelle ist `assets/cvs-logo.png` — Master-Reference nutzt `assets/cvs-logo-icon.png`.
+- Keine Console-Errors erwartet (vanilla JS, bewährte Patterns).
+
+### Archiv-Entscheidung
+- `ki-videos.html` wird **nicht** als Standalone-Seite aligned. KI-Video-Content wird in `portfolio.html` (Showcase) und `shop.html` (Produkte/Templates) integriert.
+
+### Git-Status (Uncommitted)
+- 19 modified Files (inkl. scene-editor-test.html, portfolio.html, shop.html, Memory-Dateien, cvs-core.css).
+- 0 staged commits.
+4. Commit nur nach visuellem Approval.
+5. Kein Backend, kein Login/Dashboard, kein MCP während dieses Gates.
+
+---
+
+## CVS Session Management Rules
+
+1. Nach jeder abgeschlossenen Seite: `git status` + `git diff --stat` + Kurzzusammenfassung
+2. Nach jedem Major Milestone: MEMORY.md + CLAUDE.md + TODO.md + workflow-design-reference.md aktualisieren
+3. Immer pflegen: Master Reference, Active Target, Next Target, Projekt-Status
+4. Session-Ende: SESSION HANDOVER (abgeschlossen, laufend, nächste Aktion, Issues)
+5. Context-Monitoring nach jeder Antwort (low / medium / high / critical)
+6. Vor neuem Chat: Projekt-State + Workflow-State + Task-State + Design-Reference-State speichern
+7. Nie Projekt-Analyse von vorne starten, wenn Memory aktuell ist.
+
+---
+
 ## Agent-Regeln (für Claude Code + Sub-Agents)
 
 1. **Diese Datei VOR jeder Arbeit lesen.**
@@ -326,3 +418,28 @@ cinematic-studio-family/
 2. **[Agent]** Starter+ Plan: Stripe-Integration, 1080p-Freischaltung (V0.4)
 3. **[User-Aktion optional]** Render Cron-Service: Starter-Plan aktivieren → `csf-cleanup-cron` Service automatisch deployed
 4. **[Entscheidung]** Domain: cinematic-vision-studio.de als primäre Domain permanent behalten?
+
+---
+
+## Was wurde in Session 11 gebaut (2026-06-06)
+
+> Design Alignment Gate — `immobilienvideos.html` ist der Master-Reference für alle IONOS-Seiten.
+
+### Session 11 — Ziel
+`scene-editor-test.html` an `immobilienvideos.html`-Designsprache angleichen:
+- `.cvs-nav-simple` Navigation (Gradient-Fade, Gold-Hover, Blur)
+- `.cvs-aurora` Hintergrund (CSS-Orbs statt Canvas)
+- `.btn-cvs--gold` / `.btn-cvs--ghost` Premium-Buttons
+- `.cvs-footer-master` Footer mit 3 Spalten
+- `.lightbar` Section-Separatoren
+- `#cvs-progress` Scroll-Progress-Bar
+- Film-Grain auf Referenz-Level (`opacity:.28`, `z-index:0`)
+- Custom-Cursor deaktiviert
+- Alle bestehenden Funktionen (Video, Partikel, Portfolio-Filter, Stat-Counter, Mobile-Nav, Reveal-Animationen) erhalten
+
+### Regeln für diesen Workflow
+1. `immobilienvideos.html` = Master Design Reference.
+2. `scene-editor-test.html` = aktives Target.
+3. Nach dieser Seite: page-by-page (portfolio.html → shop.html → crystals.html → ...).
+4. Commit nur nach visuellem Approval.
+5. Kein Backend, kein Login/Dashboard, kein MCP während dieses Gates.

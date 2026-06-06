@@ -69,6 +69,7 @@ FEHLER-UPDATE [DATUM]
 | `memory/business.md` | Pricing, Zielgruppen, Wettbewerb, Metriken | Bei Business-Entscheidungen |
 | `memory/current-problems.md` | Offene Bugs, Tech Debt, Limits | IMMER lesen |
 | `memory/error-bank.md` | Fehlergedächtnis mit Root Causes + Fixes | IMMER vor dem Coden lesen |
+| `memory/workflow-design-reference.md` | Design-Alignment-Workflow (immobilienvideos.html = Master) | Bei Design-/CSS-Tasks |
 
 ---
 
@@ -92,33 +93,41 @@ FEHLER-UPDATE [DATUM]
 | **Working OS** | Windows + PowerShell 5.1 + Git Bash |
 | **Browser-Tests** | Playwright (NICHT Claude_in_Chrome) |
 
-### Aktueller Status (Session 8, 2026-05-16)
+### Aktueller Status (Session 11 / Save-Point, 2026-06-06)
+- ✅ Design Alignment Gate geöffnet — `immobilienvideos.html` = Master Reference
+- ✅ `scene-editor-test.html` Design-Alignment abgeschlossen (inkl. Font-Fix: Google-CDN → lokal, Cursor-Disable)
+- ✅ `portfolio.html` Design-Alignment abgeschlossen (Aurora, Nav, Buttons, Footer, Lightbars, Scroll-Progress, Reveal-Animationen)
+- ✅ `shop.html` Design-Alignment abgeschlossen (Aurora, Nav, Buttons, Footer, Lightbars, Scroll-Progress, Reveal-Animationen)
+- ✅ `crystals.html` Design-Alignment abgeschlossen (Score 100/100, approved)
+- ⬜ `academy.html` — nächstes Target
 - ✅ E2E-Test bestätigt: Upload → Analyse → KI-Bild → Render → Download
+- ✅ Auth-System live: Register, Login, Logout, Profil, Passwort-Reset
+- ✅ `KIE_AI_API_KEY` + `CLEANUP_SECRET` in Render gesetzt
 - ✅ Auth-System live: Register, Login, Logout, Profil, Passwort-Reset
 - ✅ Dashboard + Studio Auth-Integration funktional
 - ✅ `KIE_AI_API_KEY` + `CLEANUP_SECRET` in Render gesetzt
-- ✅ Quality Audit aller HTML/PHP-Seiten abgeschlossen
 - ⚠️ Render Cron-Service nicht deployed (Free-Plan; Fallback aktiv: 1/50 probabilistisch + HTTP-Endpoint)
 
 ---
 
-## Nächste Prioritäten (Stand 2026-05-28 — Session 9, Design-Audit)
+## Nächste Prioritäten (Stand 2026-06-06 — Session 11, Design Alignment Gate)
 
 ### Design & UX (Gate 2 — aktiv)
-1. **P1:** Film Grain + DM Sans Font auf allen 7 Drop-In-Seiten (schnellster Premium-Win)
-2. **P1:** Gold-Farbton angleichen (`#f5c542` → `#d4a93c`) auf allen Drop-In-Seiten
-3. **P2:** Academy Cards + Modal mit Glass-Panel-Styling aufwerten
-4. **P2:** Prompt Generator `gen-card` mit Glass-Panel + Glow aufwerten
-5. **P2:** Shop + KI-Videos mit echtem Content statt nur "Coming Soon"
-6. **P3:** Landing Page CTA zu Academy / Prompt Generator verstärken
+1. ✅ `scene-editor-test.html` → Design-Alignment abgeschlossen
+2. ✅ `portfolio.html` → Design-Alignment abgeschlossen
+3. ✅ `shop.html` → Design-Alignment abgeschlossen
+4. ✅ `crystals.html` → Design-Alignment abgeschlossen (Score 98/100)
+5. **P1:** `academy.html` → immobilienvideos.html Design-DNA (nächstes Target)
+6. **P2:** `prompt-generator.html` → immobilienvideos.html Design-DNA
+7. **P2:** `calendar.html` → immobilienvideos.html Design-DNA
+8. **P3:** Legal pages (impressum, datenschutz, agb, cookies, widerruf)
+9. **Archiv:** `ki-videos.html` — wird nicht als Standalone aligned (Content geht in Portfolio + Shop)
 
 ### Tech (V0.4+)
-7. **P2:** Email-Verifizierung bei Register (V0.5 — Mailgun oder SMTP)
-8. **P2:** Starter+ Plan / Stripe-Integration (V0.4 — 1080p-Freischaltung)
-9. **P3:** Render Cron-Service deployen (Starter-Plan aktivieren → `csf-cleanup-cron`)
-10. **P3:** Polling-Backoff in `progress.js` (Exponentielles Backoff + max. Retry-Count)
-
-→ Detaillierte Design-Gap-Analyse in `memory/design-audit.md`
+10. **P2:** Email-Verifizierung bei Register (V0.5 — Mailgun oder SMTP)
+11. **P2:** Starter+ Plan / Stripe-Integration (V0.4 — 1080p-Freischaltung)
+12. **P3:** Render Cron-Service deployen (Starter-Plan aktivieren → `csf-cleanup-cron`)
+13. **P3:** Polling-Backoff in `progress.js` (Exponentielles Backoff + max. Retry-Count)
 
 ---
 
@@ -133,3 +142,43 @@ FEHLER-UPDATE [DATUM]
 7. **Playwright für Browser-Tests** — kein Claude_in_Chrome, kein zweites Fenster.
 8. **Council-Trigger:** Bei Entscheidungen mit mehreren validen Optionen → vorschlagen.
 9. **Bei neuem Bug → sofort als ERR-NNN in `memory/error-bank.md` eintragen.**
+
+---
+
+## CVS Session Management Rules
+
+1. **Nach jeder abgeschlossenen Seite:**
+   - `git status`
+   - `git diff --stat`
+   - Kurze Zusammenfassung der Änderungen
+
+2. **Nach jedem Major Milestone:**
+   - `MEMORY.md` aktualisieren
+   - `CLAUDE.md` aktualisieren
+   - `TODO.md` aktualisieren
+   - `memory/workflow-design-reference.md` aktualisieren
+
+3. **Immer pflegen:**
+   - Aktuelle Master Design Reference
+   - Aktive Target-Page
+   - Nächste Target-Page
+   - Aktueller Projekt-Status
+
+4. **Am Ende jeder Session:** SESSION HANDOVER mit:
+   - Abgeschlossene Arbeit
+   - Laufende Arbeit
+   - Nächste Aktion
+   - Bekannte Issues
+
+5. **Kontext-Monitoring:**
+   - Geschätzte Context-Nutzung nach jeder Antwort melden (low / medium / high / critical)
+   - Warnung bei high / critical
+   - Bei >70%: Compact Handover erstellen, alle Memory-Dateien aktualisieren, neuen Chat empfehlen
+
+6. **Vor neuem Chat:**
+   - Projekt-State speichern
+   - Workflow-State speichern
+   - Active-Task-State speichern
+   - Design-Reference-State speichern
+
+7. **Nie Projekt-Analyse von vorne starten**, wenn Memory-Dateien bereits den aktuellen State enthalten.

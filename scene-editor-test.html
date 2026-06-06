@@ -10,8 +10,7 @@
 <meta property="og:description" content="High-End KI-Videos, Transformationen, Anime-Sequenzen und visuelle Markenwelten. Express-Lieferung in 24–48h.">
 <meta property="og:type" content="website">
 <title>Cinematic Vision Studio – Deine Vision. Als cinematic KI-Erlebnis.</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
 <style>
 /* ╔══════════════════════════════════════════════╗
    ║  CINEMATIC VISION STUDIO — FINAL MASTERPIECE  ║
@@ -1174,31 +1173,138 @@ footer{background:rgba(2,2,5,.98);border-top:1px solid rgba(24,114,255,.09);padd
 .template-cta:first-child{background:rgba(212,169,60,.08);border-color:rgba(212,169,60,.25);color:var(--gold-bright);}
 .template-cta:first-child:hover{background:rgba(212,169,60,.18);}
 @media(max-width:600px){.template-cta{padding:9px 14px;font-size:12px;}}
+
+/* ════════════════════════════════════════════════════════════
+   CVS DESIGN ALIGNMENT — Session 11 (immobilienvideos.html DNA)
+   Overrides ab hier — höchste Priorität im Cascade
+   ════════════════════════════════════════════════════════════ */
+
+/* ── 1. Grain auf Referenz-Level ── */
+body::before{z-index:0;opacity:.28}
+
+/* ── 2. Aurora (CSS-Orbs statt Canvas) ── */
+.cvs-aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.cvs-aurora span{position:absolute;border-radius:50%;filter:blur(120px);will-change:transform}
+.cvs-aurora .a1{width:56vw;height:56vw;left:-14vw;top:-12vw;background:radial-gradient(circle,rgba(24,114,255,.26),transparent 66%);animation:drift1 28s ease-in-out infinite}
+.cvs-aurora .a2{width:50vw;height:50vw;right:-14vw;top:34vh;background:radial-gradient(circle,rgba(232,169,59,.18),transparent 66%);animation:drift2 34s ease-in-out infinite}
+.cvs-aurora .a3{width:46vw;height:46vw;left:28vw;bottom:-16vw;background:radial-gradient(circle,rgba(0,62,232,.18),transparent 68%);animation:drift1 40s ease-in-out infinite reverse}
+.cvs-aurora .a4{width:34vw;height:34vw;right:18vw;bottom:8vh;background:radial-gradient(circle,rgba(212,146,43,.12),transparent 70%);animation:drift2 46s ease-in-out infinite}
+@keyframes drift1{0%,100%{transform:translate(0,0)}50%{transform:translate(7vw,5vh)}}
+@keyframes drift2{0%,100%{transform:translate(0,0)}50%{transform:translate(-7vw,-4vh)}}
+
+/* ── 3. Lightbar ── */
+.lightbar{width:min(1180px,calc(100% - 48px));height:1px;margin:0 auto;border:0;background:linear-gradient(90deg,transparent,rgba(47,139,255,.5),rgba(243,213,133,.55),rgba(212,146,43,.5),transparent);position:relative;z-index:1}
+.lightbar::after{content:'';position:absolute;left:50%;top:50%;width:6px;height:6px;border-radius:50%;background:#f2d878;transform:translate(-50%,-50%);box-shadow:0 0 12px #f2d878,0 0 28px rgba(47,139,255,.55)}
+
+/* ── 4. Premium Buttons ── */
+.btn-cvs{position:relative;display:inline-flex;align-items:center;gap:10px;font-family:'Syne',sans-serif;font-weight:800;font-size:15px;letter-spacing:.5px;padding:17px 36px;border-radius:14px;text-decoration:none;cursor:pointer;white-space:nowrap;transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s cubic-bezier(.16,1,.3,1),border-color .3s}
+.btn-cvs i{font-style:normal;display:inline-flex;align-items:center;vertical-align:middle;transition:transform .3s cubic-bezier(.16,1,.3,1)}
+.btn-cvs:hover i{transform:translateX(5px)}
+.btn-cvs--gold{background:linear-gradient(180deg,#fff7a8 0%,#ffe15a 18%,#ffc21f 48%,#f59a00 78%,#d97900 100%);color:#100700;font-weight:900;box-shadow:0 8px 30px rgba(232,169,59,.28),0 0 0 1px rgba(255,255,255,.08),inset 0 1px 0 rgba(255,255,255,.6)}
+.btn-cvs--gold:hover{transform:translateY(-3px);box-shadow:0 18px 48px rgba(232,169,59,.45),0 0 0 1px rgba(255,255,255,.12),inset 0 1px 0 rgba(255,255,255,.7)}
+.btn-cvs--ghost{background:rgba(8,11,22,.86);color:#ffffff;font-weight:800;border:1px solid transparent;background-image:linear-gradient(rgba(8,11,22,.86),rgba(8,11,22,.86)),linear-gradient(120deg,#4da0ff,#e8c355);background-origin:border-box;background-clip:padding-box,border-box;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.btn-cvs--ghost:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(24,114,255,.25),0 0 0 1px rgba(24,114,255,.1);color:#fff}
+
+/* ── 5. Footer ── */
+.cvs-footer-master{margin-top:20px;background:linear-gradient(180deg,rgba(2,2,6,0),rgba(2,2,6,.98) 22%);position:relative;z-index:1}
+.cvs-footer-master .footer-inner{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:44px;padding:68px clamp(20px,6vw,80px) 52px;max-width:1180px;margin:0 auto}
+.cvs-footer-master .footer-brand h3{font-family:'Syne',sans-serif;font-size:25px;letter-spacing:.5px;color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22);margin-bottom:14px}
+.cvs-footer-master .footer-brand p{color:rgba(255,255,255,.90);font-size:16px;line-height:1.74;max-width:300px}
+.cvs-footer-master .footer-col h4{font-family:'Syne',sans-serif;font-size:15px;margin-bottom:16px;letter-spacing:2px;text-transform:uppercase;font-weight:900;opacity:1;color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+.cvs-footer-master .footer-col a{display:block;font-size:14.5px;padding:6px 0;color:rgba(255,255,255,.88);opacity:1;transition:color .2s,text-shadow .2s,transform .2s;text-decoration:none}
+.cvs-footer-master .footer-col a:hover{color:#ffc21f;text-shadow:0 0 12px rgba(255,194,31,.45);transform:translateX(3px)}
+.cvs-footer-master .footer-bottom{padding:24px clamp(20px,6vw,80px);font-size:14px;border-top:1px solid rgba(255,255,255,.09);max-width:1180px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.cvs-footer-master .footer-copy{font-size:14px;color:rgba(255,255,255,.80)}
+.cvs-footer-master .footer-legal a{font-size:14px;padding:0 9px;color:rgba(255,255,255,.80);transition:color .2s,text-shadow .2s;text-decoration:none}
+.cvs-footer-master .footer-legal a:hover{color:#ffc21f;text-shadow:0 0 10px rgba(255,194,31,.45)}
+@media(max-width:768px){
+  .cvs-footer-master .footer-inner{grid-template-columns:1fr 1fr}
+  .cvs-footer-master .footer-bottom{flex-direction:column;text-align:center}
+}
+@media(max-width:520px){
+  .cvs-footer-master .footer-inner{grid-template-columns:1fr}
+}
+
+/* ── 6. Scroll Progress ── */
+#cvs-progress{position:fixed;top:0;left:0;width:0%;height:2px;z-index:9999;pointer-events:none;background:linear-gradient(90deg,#4da0ff,#ecca63,#d4a93c);box-shadow:0 0 8px rgba(232,195,85,.6),0 0 2px rgba(77,160,255,.5);transform-origin:left}
+
+/* ── 7. Nav Override (.cvs-nav-simple) ── */
+#main-nav.cvs-nav-simple{background:linear-gradient(180deg,rgba(3,4,10,.92) 0%,rgba(3,4,10,.74) 58%,rgba(3,4,10,0) 100%);border-bottom:0;backdrop-filter:blur(18px) saturate(115%);-webkit-backdrop-filter:blur(18px) saturate(115%);padding-bottom:18px}
+#main-nav.cvs-nav-simple::after{content:'';position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,transparent,rgba(24,114,255,.45),rgba(232,195,85,.4),transparent);opacity:.7}
+#main-nav.cvs-nav-simple.scrolled{background:linear-gradient(180deg,rgba(2,2,6,.96) 0%,rgba(2,2,6,.86) 70%,rgba(2,2,6,.55) 100%)}
+#main-nav.cvs-nav-simple .nav-logo-img-wrap{flex-direction:row;align-items:center;gap:12px}
+#main-nav.cvs-nav-simple .nav-logo-img{height:68px;width:68px;object-fit:contain;animation:none;transform:scale(1.06);filter:drop-shadow(0 0 14px rgba(24,114,255,.28)) drop-shadow(0 0 30px rgba(232,195,85,.14))}
+#main-nav.cvs-nav-simple .nav-logo-text{background:none;-webkit-text-fill-color:initial;color:#fff;font-size:20px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;text-shadow:none;line-height:1.15;filter:none}
+#main-nav.cvs-nav-simple .nav-logo-text span{display:block;font-size:10px;letter-spacing:4px;font-weight:800;text-transform:uppercase;opacity:1;color:#4da0ff;-webkit-text-fill-color:#4da0ff;margin-top:3px}
+#main-nav.cvs-nav-simple .nav-links{gap:2px}
+#main-nav.cvs-nav-simple .nav-links a{font-family:'Syne',sans-serif;font-size:12px;letter-spacing:.2px;padding:6px 7px;position:relative;color:#fff;font-weight:700;opacity:.96;transition:color .2s ease,text-shadow .2s ease}
+#main-nav.cvs-nav-simple .nav-links a:hover{color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+#main-nav.cvs-nav-simple .nav-links a.active{color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+#main-nav.cvs-nav-simple .nav-links a::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%) scale(0);width:4px;height:4px;background:#1872ff;border-radius:50%;box-shadow:0 0 6px rgba(59,130,246,.6);transition:transform .2s}
+#main-nav.cvs-nav-simple .nav-links a:hover::after{transform:translateX(-50%) scale(1)}
+#main-nav.cvs-nav-simple .nav-actions{gap:10px}
+#main-nav.cvs-nav-simple .nav-cta{font-family:'Syne',sans-serif;font-size:12px;font-weight:800;letter-spacing:.3px;padding:8px 14px;border-radius:11px;white-space:nowrap;transition:transform .25s cubic-bezier(.16,1,.3,1),box-shadow .25s cubic-bezier(.16,1,.3,1),color .2s,opacity .2s;background:linear-gradient(180deg,#fff7a8 0%,#ffe15a 18%,#ffc21f 48%,#f59a00 78%,#d97900 100%);color:#100700!important;font-weight:900;border:0;box-shadow:0 6px 20px rgba(232,169,59,.3),inset 0 1px 0 rgba(255,255,255,.55);-webkit-text-fill-color:#100700!important;margin-left:0}
+#main-nav.cvs-nav-simple .nav-cta:hover{opacity:1;transform:translateY(-2px);box-shadow:0 12px 30px rgba(232,169,59,.5),inset 0 1px 0 rgba(255,255,255,.65)}
+#main-nav.cvs-nav-simple + .mobile-nav a{font-family:'Syne',sans-serif;font-weight:700;font-size:1.3rem}
+#main-nav.cvs-nav-simple + .mobile-nav a:hover,#main-nav.cvs-nav-simple + .mobile-nav a.active{color:#ffc21f;text-shadow:0 0 12px rgba(255,194,31,.45)}
+
+/* ── 8. Eyebrow Override ── */
+.hero-eyebrow{color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22);font-family:'Syne',sans-serif;font-size:13px;font-weight:900;letter-spacing:2.5px;text-transform:uppercase}
+.hero-eyebrow::before{background:linear-gradient(90deg,transparent,#4da0ff)}
+.hero-eyebrow::after{background:linear-gradient(90deg,#e8c355,transparent)}
+
+/* ── 9. Hero Title Gold ── */
+.hero-h1 .line-2{color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+
+/* ── 10. Cursor Disable ── */
+html,body{cursor:auto!important}
+a,button,[role=button],label,.nav-burger{cursor:pointer!important}
+#cursor,#cursor-ring{display:none!important}
+
+/* ── 11. Reveal Animation (Reference uses .in not .visible) ── */
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal.in{opacity:1;transform:none}
+
+/* ── 12. Content Safety Layer ── */
+#hero,section{position:relative;z-index:1}
+
+/* ── 13. Mobile CTA Button ── */
+#main-nav.cvs-nav-simple + .mobile-nav .mob-cta{color:#100700!important;font-weight:900;background:linear-gradient(180deg,#fff7a8 0%,#ffe15a 18%,#ffc21f 48%,#f59a00 78%,#d97900 100%);border-radius:10px;margin-top:8px;-webkit-text-fill-color:#100700!important}
+#main-nav.cvs-nav-simple + .mobile-nav .mob-cta:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(232,169,59,.3)}
+
+/* ── Cursor-Disable (Master-Reference-Level) ── */
+html,body{cursor:auto!important}
+a,button,[role=button],label,.nav-burger{cursor:pointer!important}
+#cursor,#cursor-ring{display:none!important}
 </style>
 </head>
 <body>
-<canvas id="bg-aurora"></canvas>
+
+<div class="cvs-aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span><span class="a4"></span></div>
 
 <!-- ╔══════════════════════════════════════════════════════╗
      ║  CINEMATIC VISION STUDIO — FINAL MASTER v1.0        ║
      ║  Design-Basis für die echte Website                 ║
      ║  Letzte Änderung: 2025                              ║
      ╚══════════════════════════════════════════════════════╝ -->
-<div id="cursor"></div>
-<div id="cursor-ring"></div>
 
 <!-- ══════════════════════════════════
      NAVIGATION
 ══════════════════════════════════ -->
-<nav id="main-nav">
+<nav class="cvs-nav-simple" id="main-nav">
   <a href="scene-editor-test.html" class="nav-logo-img-wrap">
-    <img src="assets/cvs-logo.png" alt="CVS Logo" class="nav-logo-img">
+    <img src="assets/cvs-logo-icon.png" alt="CVS" class="nav-logo-img">
     <span class="nav-logo-text">Cinematic Vision<span>Studios</span></span>
   </a>
   <ul class="nav-links">
-    <li><a href="#hero">Home</a></li>
+    <li><a href="scene-editor-test.html">Home</a></li>
     <li><a href="https://cinematic-studio-family.onrender.com/studio-demo.php">Studio</a></li>
+    <li><a href="prompt-generator.html">Prompts</a></li>
+    <li><a href="portfolio.html">Portfolio</a></li>
+    <li><a href="ki-videos.html">KI Videos</a></li>
     <li><a href="crystals.html">Kristalle</a></li>
+    <li><a href="shop.html">Shop</a></li>
+    <li><a href="academy.html">Academy</a></li>
     <li><a href="contact.php">Kontakt</a></li>
     <li><a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="nav-cta">🎬 Studio starten</a></li>
     <li><a href="https://cinematic-studio-family.onrender.com/login.php" style="-webkit-text-fill-color:rgba(237,242,255,.5);font-size:.72rem;padding:7px 8px">Login</a></li>
@@ -1207,12 +1313,17 @@ footer{background:rgba(2,2,5,.98);border-top:1px solid rgba(24,114,255,.09);padd
 </nav>
 
 <nav class="mobile-nav" id="mobile-nav">
-  <a href="#hero" class="mn-link">Home</a>
-  <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="mn-link">Studio</a>
-  <a href="crystals.html" class="mn-link">Kristalle</a>
-  <a href="contact.php" class="mn-link">Kontakt</a>
-  <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="mn-link" style="color:var(--gold-bright)">🎬 Studio starten</a>
-  <a href="https://cinematic-studio-family.onrender.com/login.php" class="mn-link" style="color:var(--blue-bright)">Login</a>
+  <a href="scene-editor-test.html" class="mn-link mob-link">Home</a>
+  <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="mn-link mob-link">Studio</a>
+  <a href="prompt-generator.html" class="mn-link mob-link">Prompts</a>
+  <a href="portfolio.html" class="mn-link mob-link">Portfolio</a>
+  <a href="ki-videos.html" class="mn-link mob-link">KI Videos</a>
+  <a href="crystals.html" class="mn-link mob-link">Kristalle</a>
+  <a href="shop.html" class="mn-link mob-link">Shop</a>
+  <a href="academy.html" class="mn-link mob-link">Academy</a>
+  <a href="contact.php" class="mn-link mob-link">Kontakt</a>
+  <a href="https://cinematic-studio-family.onrender.com/login.php" class="mn-link mob-link">Login</a>
+  <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="mn-link mob-link mob-cta">🎬 Studio starten</a>
 </nav>
 
 <!-- ══════════════════════════════════
@@ -1253,12 +1364,12 @@ footer{background:rgba(2,2,5,.98);border-top:1px solid rgba(24,114,255,.09);padd
       High-End KI-Videos, Transformationen, Anime-Sequenzen, Werbeclips und visuelle Markenwelten. Premium-Look, klare Strategie, schnelle Umsetzung.
     </p>
     <div class="hero-actions">
-      <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="btn-primary">
+      <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="btn-cvs btn-cvs--gold">
         <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 1l6 7-6 7M2 8h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         Studio starten
       </a>
-      <a href="#portfolio" class="btn-secondary">Portfolio ansehen</a>
-      <a href="https://cinematic-studio-family.onrender.com/contact.php" class="btn-ghost">⚡ Projekt anfragen</a>
+      <a href="#portfolio" class="btn-cvs btn-cvs--ghost">Portfolio ansehen</a>
+      <a href="https://cinematic-studio-family.onrender.com/contact.php" class="btn-cvs btn-cvs--ghost">⚡ Projekt anfragen</a>
     </div>
     <div style="margin-top:28px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap;animation:fadeUp 1s .7s both">
       <a href="academy.html" style="font-size:12px;font-weight:600;color:var(--gold-warm);text-decoration:none;opacity:.65;transition:opacity .15s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.65'">🎓 Academy</a>
@@ -1278,6 +1389,8 @@ footer{background:rgba(2,2,5,.98);border-top:1px solid rgba(24,114,255,.09);padd
   <div class="stat-item reveal reveal-delay-3"><div class="stat-num">99%</div><div class="stat-label">Kundenzufriedenheit</div></div>
   <div class="stat-item reveal reveal-delay-4"><div class="stat-num">6</div><div class="stat-label">Cinematic Disziplinen</div></div>
 </div>
+
+<hr class="lightbar">
 
 <!-- ══════════════════════════════════
      CREATOR TEMPLATES
@@ -1390,6 +1503,8 @@ footer{background:rgba(2,2,5,.98);border-top:1px solid rgba(24,114,255,.09);padd
   </div>
 </section>
 
+<hr class="lightbar">
+
 <!-- ══════════════════════════════════
      CREATOR JOURNEY
 ══════════════════════════════════ -->
@@ -1432,6 +1547,8 @@ footer{background:rgba(2,2,5,.98);border-top:1px solid rgba(24,114,255,.09);padd
     </div>
   </div>
 </section>
+
+<hr class="lightbar">
 
 <!-- ══════════════════════════════════
      SERVICES
@@ -1497,6 +1614,8 @@ footer{background:rgba(2,2,5,.98);border-top:1px solid rgba(24,114,255,.09);padd
 
   </div>
 </section>
+
+<hr class="lightbar">
 
 <!-- ══════════════════════════════════
      PORTFOLIO
@@ -1651,6 +1770,8 @@ footer{background:rgba(2,2,5,.98);border-top:1px solid rgba(24,114,255,.09);padd
   </div>
 </section>
 
+<hr class="lightbar">
+
 <!-- ══════════════════════════════════
      WHY CVS
 ══════════════════════════════════ -->
@@ -1680,6 +1801,8 @@ footer{background:rgba(2,2,5,.98);border-top:1px solid rgba(24,114,255,.09);padd
     </div>
   </div>
 </section>
+
+<hr class="lightbar">
 
 <!-- ══════════════════════════════════
      PROCESS
@@ -1711,6 +1834,8 @@ footer{background:rgba(2,2,5,.98);border-top:1px solid rgba(24,114,255,.09);padd
   </div>
 </section>
 
+<hr class="lightbar">
+
 <!-- ══════════════════════════════════
      BOOKING
 ══════════════════════════════════ -->
@@ -1738,7 +1863,7 @@ footer{background:rgba(2,2,5,.98);border-top:1px solid rgba(24,114,255,.09);padd
           <div><h4>Revisionen inbegriffen</h4><p>Jeder Auftrag enthält definierte Korrekturschleifen. Bis das Ergebnis stimmt.</p></div>
         </div>
       </div>
-      <a href="calendar.html" class="btn-primary">
+      <a href="calendar.html" class="btn-cvs btn-cvs--gold">
         <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 1l6 7-6 7M2 8h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         Projekt anfragen
       </a>
@@ -1765,6 +1890,8 @@ footer{background:rgba(2,2,5,.98);border-top:1px solid rgba(24,114,255,.09);padd
     </div>
   </div>
 </section>
+
+<hr class="lightbar">
 
 <!-- ══════════════════════════════════
      CRYSTALS
@@ -1793,31 +1920,32 @@ footer{background:rgba(2,2,5,.98);border-top:1px solid rgba(24,114,255,.09);padd
     <span class="mq-gold">ist Kunst.</span>
   </div>
   <div class="manifesto-cta">
-    <a href="#booking" class="btn-primary reveal"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 1l6 7-6 7M2 8h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Projekt starten</a>
-    <a href="#booking" class="btn-ghost reveal reveal-delay-1">⚡ Express anfragen</a>
-    <a href="#portfolio" class="btn-secondary reveal reveal-delay-2">Portfolio ansehen</a>
+    <a href="#booking" class="btn-cvs btn-cvs--gold reveal"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 1l6 7-6 7M2 8h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Projekt starten</a>
+    <a href="#booking" class="btn-cvs btn-cvs--ghost reveal reveal-delay-1">⚡ Express anfragen</a>
+    <a href="#portfolio" class="btn-cvs btn-cvs--ghost reveal reveal-delay-2">Portfolio ansehen</a>
   </div>
 </section>
 
 <!-- ══════════════════════════════════
      FOOTER
 ══════════════════════════════════ -->
-<footer>
-  <div class="footer-grid">
+<footer class="cvs-footer-master">
+  <div class="footer-inner">
     <div class="footer-brand">
-      <h3>CINEMATIC VISION STUDIO</h3>
-      <p>Kein Standard-KI-Service. Ein cinematic Creator-Studio für High-End KI-Videos, Transformationen und visuelle Markenwelten – für Creator, Marken und Visionäre.</p>
+      <h3>Cinematic Vision Studio</h3>
+      <p>Deine Vision. Als cinematic KI-Erlebnis. Premium AI-Cinematic-Produktion für Creator und Marken.</p>
     </div>
     <div class="footer-col">
       <h4>Studio</h4>
-      <a href="#why">Über uns</a>
-      <a href="#process">Prozess</a>
+      <a href="scene-editor-test.html">Über uns</a>
+      <a href="scene-editor-test.html#process">Prozess</a>
       <a href="academy.html">Academy</a>
-      <a href="#booking">Buchung</a>
+      <a href="calendar.html">Buchung</a>
     </div>
     <div class="footer-col">
       <h4>Services</h4>
-      <a href="ki-videos.html">KI-Videos &amp; Trailer</a>
+      <a href="ki-videos.html">KI Videos</a>
+      <a href="portfolio.html">Trailer</a>
       <a href="shop.html">Shop</a>
       <a href="prompt-generator.html">Prompt Studio</a>
       <a href="portfolio.html">Portfolio</a>
@@ -1825,22 +1953,25 @@ footer{background:rgba(2,2,5,.98);border-top:1px solid rgba(24,114,255,.09);padd
     </div>
     <div class="footer-col">
       <h4>Kontakt</h4>
-      <a href="https://cinematic-studio-family.onrender.com/contact.php">Projekt anfragen</a>
+      <a href="contact.php">Projekt anfragen</a>
       <a href="https://cinematic-studio-family.onrender.com/studio-demo.php">Studio starten</a>
-      <a href="impressum.html">Impressum</a>
-      <a href="datenschutz.html">Datenschutz</a>
     </div>
   </div>
   <div class="footer-bottom">
-    <p>© 2026 Cinematic Vision Studio. Alle Rechte vorbehalten.</p>
-    <div class="footer-socials">
-      <a href="https://tiktok.com" target="_blank" rel="noopener" class="social-btn" aria-label="TikTok">TK</a>
-      <a href="https://instagram.com" target="_blank" rel="noopener" class="social-btn" aria-label="Instagram">IG</a>
-      <a href="https://youtube.com" target="_blank" rel="noopener" class="social-btn" aria-label="YouTube">YT</a>
-      <a href="https://discord.com" target="_blank" rel="noopener" class="social-btn" aria-label="Discord">DC</a>
+    <div class="footer-copy">© 2026 Cinematic Vision Studio · Alle Rechte vorbehalten</div>
+    <div class="footer-legal">
+      <a href="impressum.html">Impressum</a>
+      <a href="datenschutz.html">Datenschutz</a>
+      <a href="agb.html">AGB</a>
+      <a href="widerruf.html">Widerruf</a>
+      <a href="cookies.html">Cookies</a>
+      <a href="contact.php">Kontakt</a>
     </div>
   </div>
 </footer>
+
+<div id="cvs-progress" aria-hidden="true"></div>
+<div id="cursor"></div><div id="cursor-ring"></div>
 
 <!-- ══════════════════════════════════
      JAVASCRIPT
@@ -2053,7 +2184,7 @@ if (sb) {
 
 // ── Magnetic Buttons ──
 if (isDesktop && !prefersReduced) {
-  document.querySelectorAll('.btn-primary,.btn-secondary,.nav-cta').forEach(btn => {
+  document.querySelectorAll('.btn-primary,.btn-secondary,.btn-cvs,.nav-cta').forEach(btn => {
     btn.style.transition = 'transform .38s cubic-bezier(.23,1,.32,1),box-shadow .38s,background .2s,border-color .2s,color .2s';
     btn.addEventListener('mousemove', e => {
       const r  = btn.getBoundingClientRect();
@@ -2067,71 +2198,17 @@ if (isDesktop && !prefersReduced) {
 
 })();
 
-/* ── Aurora Canvas Background ── */
+/* ── Gold Scroll-Progress-Bar ── */
 (function(){
-  const c=document.getElementById('bg-aurora'),ctx=c.getContext('2d');
-  let W,H,t=0,stars=[];
-  function resize(){W=c.width=innerWidth;H=c.height=innerHeight;}
-  function initStars(){
-    stars=[];
-    for(let i=0;i<180;i++){
-      stars.push({x:Math.random()*W,y:Math.random()*H*.75,r:Math.random()<.85?.25+Math.random()*.55:.7+Math.random()*.7,a:.08+Math.random()*.7,da:(.0004+Math.random()*.002)*(Math.random()<.5?1:-1),blue:Math.random()<.22});
-    }
+  var bar=document.getElementById('cvs-progress');if(!bar)return;
+  var raf=null;
+  function update(){
+    var h=document.documentElement.scrollHeight-window.innerHeight;
+    bar.style.width=(h>0?(window.scrollY/h*100):0)+'%';
+    raf=null;
   }
-  function drawStars(){
-    stars.forEach(s=>{
-      s.a+=s.da;if(s.a>1){s.a=1;s.da*=-1;}if(s.a<.04){s.a=.04;s.da*=-1;}
-      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-      ctx.fillStyle=s.blue?`rgba(160,200,255,${s.a.toFixed(2)})`:`rgba(255,248,228,${s.a.toFixed(2)})`;
-      ctx.fill();
-    });
-  }
-  const CURTAINS=[
-    {hf:.13,amp:40,freq:.005, spd:.52,ph:0.0, col:'232,195,85', al:.28},
-    {hf:.20,amp:48,freq:.0034,spd:.36,ph:2.2, col:'24,114,255', al:.30},
-    {hf:.32,amp:44,freq:.0042,spd:.28,ph:1.1, col:'232,195,85', al:.18},
-    {hf:.42,amp:36,freq:.0058,spd:.42,ph:3.4, col:'60,130,255', al:.20},
-    {hf:.54,amp:50,freq:.0027,spd:.23,ph:0.6, col:'232,195,85', al:.11},
-    {hf:.63,amp:32,freq:.0052,spd:.33,ph:1.8, col:'24,114,255', al:.13},
-  ];
-  function drawAurora(){
-    CURTAINS.forEach(r=>{
-      const topY=H-r.hf*H,alP=r.al*(.68+Math.sin(t*r.spd*.55+r.ph)*.32);
-      ctx.beginPath();ctx.moveTo(0,H);
-      for(let x=0;x<=W;x+=6)ctx.lineTo(x,topY+Math.sin(x*r.freq+t*r.spd+r.ph)*r.amp);
-      ctx.lineTo(W,H);ctx.closePath();
-      const g=ctx.createLinearGradient(0,topY-r.amp,0,H);
-      g.addColorStop(0,`rgba(${r.col},0)`);
-      g.addColorStop(.28,`rgba(${r.col},${(alP*.3).toFixed(3)})`);
-      g.addColorStop(.65,`rgba(${r.col},${alP.toFixed(3)})`);
-      g.addColorStop(1,`rgba(${r.col},${(alP*.5).toFixed(3)})`);
-      ctx.fillStyle=g;ctx.fill();
-    });
-  }
-  function drawHorizon(){
-    const gG=ctx.createRadialGradient(W*.3,H,0,W*.3,H,H*.55);
-    gG.addColorStop(0,'rgba(232,195,85,.45)');gG.addColorStop(.5,'rgba(232,195,85,.12)');gG.addColorStop(1,'rgba(232,195,85,0)');
-    ctx.fillStyle=gG;ctx.fillRect(0,H*.5,W,H*.5);
-    const gB=ctx.createRadialGradient(W*.7,H,0,W*.7,H,H*.55);
-    gB.addColorStop(0,'rgba(24,114,255,.42)');gB.addColorStop(.5,'rgba(24,114,255,.12)');gB.addColorStop(1,'rgba(24,114,255,0)');
-    ctx.fillStyle=gB;ctx.fillRect(0,H*.5,W,H*.5);
-  }
-  function vignette(){
-    const g=ctx.createLinearGradient(0,0,0,H);
-    g.addColorStop(0,'rgba(2,2,5,.97)');
-    g.addColorStop(.25,'rgba(2,2,5,.45)');
-    g.addColorStop(.5,'rgba(2,2,5,.08)');
-    g.addColorStop(1,'rgba(2,2,5,0)');
-    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-  }
-  function frame(){
-    t+=.013;ctx.clearRect(0,0,W,H);
-    ctx.fillStyle='#020205';ctx.fillRect(0,0,W,H);
-    drawStars();drawHorizon();drawAurora();vignette();
-    requestAnimationFrame(frame);
-  }
-  resize();initStars();frame();
-  addEventListener('resize',()=>{resize();initStars();});
+  window.addEventListener('scroll',function(){if(!raf)raf=requestAnimationFrame(update);},{passive:true});
+  update();
 })();
 </script>
 </body>

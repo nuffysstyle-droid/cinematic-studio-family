@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1909" height="824" viewBox="0 0 1909 824" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#02060b"/>
+      <stop offset="48%" stop-color="#030303"/>
+      <stop offset="100%" stop-color="#050300"/>
+    </linearGradient>
+
+    <linearGradient id="blueGold" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#00a8ff"/>
+      <stop offset="45%" stop-color="#111827"/>
+      <stop offset="55%" stop-color="#2a1b05"/>
+      <stop offset="100%" stop-color="#f4a51c"/>
+    </linearGradient>
+
+    <linearGradient id="goldText" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffe9a3"/>
+      <stop offset="45%" stop-color="#e3a733"/>
+      <stop offset="100%" stop-color="#b36a09"/>
+    </linearGradient>
+
+    <filter id="blueGlow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feFlood flood-color="#00a8ff" flood-opacity="0.9"/>
+      <feComposite in2="blur" operator="in"/>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+
+    <filter id="goldGlow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feFlood flood-color="#ffb21c" flood-opacity="0.9"/>
+      <feComposite in2="blur" operator="in"/>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+
+    <filter id="softShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#000000" flood-opacity="0.8"/>
+    </filter>
+
+    <style>
+      .headline {
+        font-family: "Montserrat", "Arial", sans-serif;
+        font-size: 38px;
+        font-weight: 800;
+        letter-spacing: 8px;
+        fill: url(#goldText);
+        text-anchor: middle;
+      }
+      .body {
+        font-family: "Montserrat", "Arial", sans-serif;
+        font-size: 27px;
+        font-weight: 400;
+        fill: #f2f2f2;
+        text-anchor: middle;
+      }
+      .thin {
+        stroke-width: 2;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .icon {
+        stroke-width: 5;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .divider {
+        stroke: rgba(255,185,55,0.32);
+        stroke-width: 1.4;
+      }
+    </style>
+
+    <symbol id="icon-person" viewBox="-60 -60 120 120">
+      <circle cx="-18" cy="5" r="18" class="icon" stroke="#f5b739"/>
+      <path d="M-50 48 C-44 25 -29 22 -18 22 C-6 22 8 26 14 48" class="icon" stroke="#f5b739"/>
+      <circle cx="23" cy="-18" r="6" fill="#f5b739"/>
+      <circle cx="41" cy="-18" r="6" fill="#f5b739"/>
+      <circle cx="59" cy="-18" r="6" fill="#f5b739"/>
+      <path d="M12 -38 H72 Q82 -38 82 -28 V-6 Q82 4 72 4 H45 L25 22 V4 H12 Q2 4 2 -6 V-28 Q2 -38 12 -38 Z" class="icon" stroke="#f5b739"/>
+    </symbol>
+
+    <symbol id="icon-clipboard" viewBox="-60 -60 120 120">
+      <path d="M-30 -38 H30 Q39 -38 39 -29 V44 Q39 53 30 53 H-30 Q-39 53 -39 44 V-29 Q-39 -38 -30 -38 Z" class="icon" stroke="#12b7ff"/>
+      <path d="M-16 -43 H16 V-28 H-16 Z" class="icon" stroke="#12b7ff"/>
+      <path d="M-20 -5 L-9 6 L10 -16" class="icon" stroke="#f5b739"/>
+      <path d="M-20 22 L-9 33 L10 11" class="icon" stroke="#f5b739"/>
+      <path d="M22 -11 H32 M22 17 H32" class="icon" stroke="#12b7ff"/>
+    </symbol>
+
+    <symbol id="icon-bolt" viewBox="-60 -60 120 120">
+      <path d="M10 -50 L-28 6 H5 L-9 54 L38 -12 H5 Z" class="icon" stroke="#12b7ff"/>
+      <path d="M9 -50 L-4 -2 H29" class="icon" stroke="#f5b739" opacity="0.85"/>
+    </symbol>
+
+    <symbol id="icon-shield" viewBox="-60 -60 120 120">
+      <path d="M0 -48 C20 -34 39 -33 48 -30 V1 C48 30 28 47 0 57 C-28 47 -48 30 -48 1 V-30 C-39 -33 -20 -34 0 -48 Z" class="icon" stroke="#12b7ff"/>
+      <path d="M-20 4 L-4 20 L25 -18" class="icon" stroke="#f5b739"/>
+    </symbol>
+  </defs>
+
+  <rect width="1909" height="824" fill="#000"/>
+  <rect x="0" y="150" width="1909" height="520" fill="url(#bgGrad)" opacity="0.95"/>
+
+  <!-- subtle center dark vignette -->
+  <radialGradient id="vignette" cx="50%" cy="50%" r="70%">
+    <stop offset="0%" stop-color="#101010" stop-opacity="0.55"/>
+    <stop offset="62%" stop-color="#030303" stop-opacity="0.96"/>
+    <stop offset="100%" stop-color="#000000" stop-opacity="1"/>
+  </radialGradient>
+  <rect x="0" y="120" width="1909" height="580" fill="url(#vignette)" opacity="0.7"/>
+
+  <!-- Outer HUD lines -->
+  <path d="M32 214 L66 180 H525 L548 160 H830 M1046 160 H1848 L1888 201 V639 L1848 679 H1380 M725 679 H71 L32 640 Z"
+        class="thin" stroke="url(#blueGold)" filter="url(#softShadow)" opacity="0.95"/>
+  <path d="M50 232 L79 203 H520 M1790 193 L1865 193 L1865 618 L1838 646 H1650"
+        class="thin" stroke="url(#blueGold)" opacity="0.85"/>
+  <path d="M63 255 V595 L86 620 H546" class="thin" stroke="#00a8ff" opacity="0.7" filter="url(#blueGlow)"/>
+  <path d="M1866 255 V596 L1843 620 H1688" class="thin" stroke="#ffb21c" opacity="0.8" filter="url(#goldGlow)"/>
+  <path d="M92 642 H542 M1380 642 H1810" class="thin" stroke="url(#blueGold)" opacity="0.75"/>
+  <path d="M92 186 H540 M1120 186 H1810" class="thin" stroke="url(#blueGold)" opacity="0.55"/>
+
+  <!-- small tech ornaments -->
+  <g opacity="0.72">
+    <circle cx="58" cy="197" r="4" fill="#00a8ff" filter="url(#blueGlow)"/>
+    <circle cx="96" cy="177" r="3" fill="#00a8ff"/>
+    <circle cx="720" cy="160" r="3" fill="#00a8ff"/>
+    <circle cx="742" cy="160" r="3" fill="#00a8ff"/>
+    <circle cx="764" cy="160" r="3" fill="#00a8ff"/>
+    <circle cx="1248" cy="160" r="3" fill="#ffb21c"/>
+    <circle cx="1269" cy="160" r="3" fill="#ffb21c"/>
+    <circle cx="1290" cy="160" r="3" fill="#ffb21c"/>
+    <circle cx="1845" cy="188" r="4" fill="#ffb21c" filter="url(#goldGlow)"/>
+    <circle cx="70" cy="644" r="4" fill="#00a8ff" filter="url(#blueGlow)"/>
+    <circle cx="1838" cy="644" r="4" fill="#ffb21c" filter="url(#goldGlow)"/>
+  </g>
+
+  <!-- vertical dividers -->
+  <line x1="510" y1="240" x2="590" y2="594" class="divider" opacity="0.30"/>
+  <line x1="955" y1="230" x2="955" y2="610" class="divider"/>
+  <line x1="1435" y1="230" x2="1435" y2="610" class="divider"/>
+  <line x1="0" y1="0" x2="0" y2="0" stroke="none"/>
+
+  <!-- card dividers -->
+  <line x1="503" y1="265" x2="503" y2="595" class="divider"/>
+  <line x1="958" y1="265" x2="958" y2="595" class="divider"/>
+  <line x1="1412" y1="265" x2="1412" y2="595" class="divider"/>
+
+  <!-- Modules -->
+  <g transform="translate(270 315)">
+    <circle cx="0" cy="0" r="68" stroke="#f5b739" stroke-width="3" fill="rgba(0,0,0,0.32)" filter="url(#goldGlow)" opacity="0.85"/>
+    <circle cx="0" cy="0" r="76" stroke="#00a8ff" stroke-width="2" fill="none" opacity="0.55"/>
+    <use href="#icon-person" x="-48" y="-48" width="96" height="96"/>
+  </g>
+  <text x="270" y="432" class="headline">
+    <tspan x="270">PERSÖNLICHE</tspan><tspan x="270" dy="48">BERATUNG</tspan>
+  </text>
+  <line x1="140" y1="510" x2="445" y2="510" stroke="#c78314" stroke-width="2" opacity="0.55"/>
+  <circle cx="292" cy="510" r="6" fill="#ffb21c" filter="url(#goldGlow)"/>
+  <text x="270" y="560" class="body">
+    <tspan x="270">Kompetent, transparent</tspan><tspan x="270" dy="36">und auf Augenhöhe.</tspan>
+  </text>
+
+  <g transform="translate(725 315)">
+    <circle cx="0" cy="0" r="68" stroke="#f5b739" stroke-width="3" fill="rgba(0,0,0,0.32)" filter="url(#goldGlow)" opacity="0.85"/>
+    <circle cx="0" cy="0" r="76" stroke="#00a8ff" stroke-width="2" fill="none" opacity="0.55"/>
+    <use href="#icon-clipboard" x="-48" y="-48" width="96" height="96"/>
+  </g>
+  <text x="725" y="432" class="headline">
+    <tspan x="725">INDIVIDUELLE</tspan><tspan x="725" dy="48">KONZEPTE</tspan>
+  </text>
+  <line x1="570" y1="510" x2="892" y2="510" stroke="#c78314" stroke-width="2" opacity="0.55"/>
+  <circle cx="731" cy="510" r="6" fill="#ffb21c" filter="url(#goldGlow)"/>
+  <text x="725" y="560" class="body">
+    <tspan x="725">Perfekt abgestimmt</tspan><tspan x="725" dy="36">auf Objekt und Zielgruppe.</tspan>
+  </text>
+
+  <g transform="translate(1180 315)">
+    <circle cx="0" cy="0" r="68" stroke="#f5b739" stroke-width="3" fill="rgba(0,0,0,0.32)" filter="url(#goldGlow)" opacity="0.85"/>
+    <circle cx="0" cy="0" r="76" stroke="#00a8ff" stroke-width="2" fill="none" opacity="0.55"/>
+    <use href="#icon-bolt" x="-48" y="-48" width="96" height="96"/>
+  </g>
+  <text x="1180" y="432" class="headline">
+    <tspan x="1180">SCHNELLE</tspan><tspan x="1180" dy="48">UMSETZUNG</tspan>
+  </text>
+  <line x1="1018" y1="510" x2="1335" y2="510" stroke="#c78314" stroke-width="2" opacity="0.55"/>
+  <circle cx="1178" cy="510" r="6" fill="#ffb21c" filter="url(#goldGlow)"/>
+  <text x="1180" y="560" class="body">
+    <tspan x="1180">Schnell produziert.</tspan><tspan x="1180" dy="36">Hochwertig geliefert.</tspan>
+  </text>
+
+  <g transform="translate(1635 315)">
+    <circle cx="0" cy="0" r="68" stroke="#f5b739" stroke-width="3" fill="rgba(0,0,0,0.32)" filter="url(#goldGlow)" opacity="0.85"/>
+    <circle cx="0" cy="0" r="76" stroke="#00a8ff" stroke-width="2" fill="none" opacity="0.55"/>
+    <use href="#icon-shield" x="-48" y="-48" width="96" height="96"/>
+  </g>
+  <text x="1635" y="432" class="headline">
+    <tspan x="1635">ZUFRIEDENHEIT</tspan><tspan x="1635" dy="48">GARANTIERT</tspan>
+  </text>
+  <line x1="1465" y1="510" x2="1782" y2="510" stroke="#c78314" stroke-width="2" opacity="0.55"/>
+  <circle cx="1623" cy="510" r="6" fill="#ffb21c" filter="url(#goldGlow)"/>
+  <text x="1635" y="560" class="body">
+    <tspan x="1635">Qualität, auf die Sie sich</tspan><tspan x="1635" dy="36">verlassen können.</tspan>
+  </text>
+
+  <!-- edge light bursts -->
+  <g opacity="0.55">
+    <path d="M22 420 H110" stroke="#00a8ff" stroke-width="3" filter="url(#blueGlow)"/>
+    <path d="M1798 420 H1888" stroke="#ffb21c" stroke-width="3" filter="url(#goldGlow)"/>
+    <path d="M65 652 H170" stroke="#00a8ff" stroke-width="2" filter="url(#blueGlow)"/>
+    <path d="M1735 652 H1840" stroke="#ffb21c" stroke-width="2" filter="url(#goldGlow)"/>
+  </g>
+</svg>
