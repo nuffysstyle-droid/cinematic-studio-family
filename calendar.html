@@ -7,8 +7,7 @@
 <meta name="theme-color" content="#020205">
 <link rel="icon" type="image/png" href="assets/cvs-logo.png">
 <title>Buchung – Cinematic Vision Studio</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
 <link rel="stylesheet" href="assets/css/cvs-core.css">
 <style>
 /* ╔══════════════════════════════════════════════════════╗
@@ -49,7 +48,6 @@ html{scroll-behavior:smooth}
 body{background:var(--black);color:var(--white);font-family:'DM Sans',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 /* ── Cinematic Film Grain ── */
 body::before{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.028'/%3E%3C/svg%3E");opacity:.5;}
-#bg-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
 
 /* ── UTILITY ── */
 .syne{font-family:'Syne',sans-serif}
@@ -317,7 +315,6 @@ section{position:relative;overflow:hidden}
   box-shadow:0 28px 80px rgba(0,35,160,.15),0 0 0 1px rgba(200,160,60,.05) inset;
   backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
 }
-@media(max-width:720px){.trust-inner{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:420px){.trust-inner{grid-template-columns:1fr}}
 .trust-item{display:flex;align-items:flex-start;gap:12px;padding:24px 26px;border-right:1px solid rgba(255,255,255,.05)}
 .trust-item:last-child{border-right:none}
@@ -375,16 +372,13 @@ section{position:relative;overflow:hidden}
   .hero h1{font-size:2rem}
   .dp-cta{flex-direction:column;text-align:center}
 }
+#cvs-progress{position:fixed;top:0;left:0;width:0%;height:2px;z-index:9999;pointer-events:none;background:linear-gradient(90deg,#4da0ff,#ecca63,#d4a93c);box-shadow:0 0 8px rgba(232,195,85,.6),0 0 2px rgba(77,160,255,.5);transform-origin:left}
+#cursor,#cursor-ring{display:none!important}
 </style>
 </head>
 <body>
 
-<canvas id="bg-canvas"></canvas>
-<div class="glow-orb orb-1"></div>
-<div class="glow-orb orb-2"></div>
-<div class="glow-orb orb-3"></div>
-<div class="glow-orb orb-4"></div>
-<div class="glow-orb orb-5"></div>
+<div class="cvs-aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span><span class="a4"></span></div>
 <div id="cursor"></div>
 <div id="cursor-ring"></div>
 
@@ -393,17 +387,18 @@ section{position:relative;overflow:hidden}
 ══════════════════════════════════ -->
 <nav id="main-nav">
   <a href="scene-editor-test.html" class="nav-logo-img-wrap">
-    <img src="assets/cvs-logo.png" alt="CVS Logo" class="nav-logo-img">
+    <img src="assets/cvs-logo-icon.png" alt="CVS Logo" class="nav-logo-img">
     <span class="nav-logo-text">Cinematic Vision<span>Studio</span></span>
   </a>
   <ul class="nav-links">
     <li><a href="scene-editor-test.html">Home</a></li>
-    <li><a href="scene-editor-test.html#services">Services</a></li>
-    <li><a href="scene-editor-test.html#portfolio">Portfolio</a></li>
-    <li><a href="academy.html">Academy</a></li>
-    <li><a href="calendar.html" class="active">Buchung</a></li>
+    <li><a href="https://cinematic-studio-family.onrender.com/studio-demo.php">Studio</a></li>
+    <li><a href="prompt-generator.html">Prompts</a></li>
+    <li><a href="portfolio.html">Portfolio</a></li>
+    <li><a href="ki-videos.html">KI Videos</a></li>
     <li><a href="crystals.html">Kristalle</a></li>
     <li><a href="shop.html">Shop</a></li>
+    <li><a href="academy.html">Academy</a></li>
     <li><a href="contact.php">Kontakt</a></li>
     <li><a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="nav-cta">Studio starten</a></li>
     <li><a href="https://cinematic-studio-family.onrender.com/login.php" style="-webkit-text-fill-color:rgba(237,242,255,.5);font-size:.72rem;padding:7px 8px">Login</a></li>
@@ -412,19 +407,17 @@ section{position:relative;overflow:hidden}
 </nav>
 
 <nav class="mobile-nav" id="mobile-nav">
-  <a href="scene-editor-test.html">Home</a>
-  <a href="scene-editor-test.html#services">Services</a>
-  <a href="scene-editor-test.html#portfolio">Portfolio</a>
-  <a href="academy.html">Academy</a>
-  <a href="calendar.html" style="color:var(--gold-bright)">Buchung</a>
-  <a href="crystals.html">Kristalle</a>
-  <a href="shop.html">Shop</a>
-  <a href="contact.php">Kontakt</a>
+  <a href="scene-editor-test.html">🏠 Home</a>
   <a href="https://cinematic-studio-family.onrender.com/studio-demo.php">🎬 Studio</a>
-  <a href="ki-videos.html">🎥 KI Videos</a>
   <a href="prompt-generator.html">✍️ Prompts</a>
-  <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" style="color:var(--gold-bright)">Studio starten</a>
-  <a href="https://cinematic-studio-family.onrender.com/login.php" style="color:var(--blue-bright)">Login →</a>
+  <a href="portfolio.html">🎞️ Portfolio</a>
+  <a href="ki-videos.html">🎥 KI Videos</a>
+  <a href="crystals.html">💎 Kristalle</a>
+  <a href="shop.html">🛍️ Shop</a>
+  <a href="academy.html">🎓 Academy</a>
+  <a href="contact.php">📞 Kontakt</a>
+  <a href="https://cinematic-studio-family.onrender.com/login.php" style="color:var(--blue-bright)">🔑 Login</a>
+  <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" style="color:var(--gold-bright)">🎬 Studio starten</a>
 </nav>
 
 <!-- ══════════════════════════════════
@@ -435,6 +428,8 @@ section{position:relative;overflow:hidden}
   <h1>Dein Termin.<br><em>Dein Kinofilm.</em></h1>
   <p>Wähle einen freien Tag — wir produzieren deinen KI-Film. Professionell, persönlich, unvergesslich.</p>
 </section>
+
+<hr class="lightbar">
 
 <!-- ══════════════════════════════════
      MAIN GRID
@@ -517,37 +512,40 @@ section{position:relative;overflow:hidden}
 
 </div>
 
+<hr class="lightbar">
+
 <!-- ══════════════════════════════════
    TRUST BAR
 ══════════════════════════════════ -->
 <div class="trust-bar">
   <div class="trust-inner">
-    <div class="trust-item"><div class="trust-icon">🛡️</div><div><h5>Sichere Buchung</h5><p>SSL-verschlüsselt &amp; sicher</p></div></div>
-    <div class="trust-item"><div class="trust-icon">🚀</div><div><h5>Sofort bestätigt</h5><p>Dein Termin ist sofort reserviert</p></div></div>
-    <div class="trust-item"><div class="trust-icon">⭐</div><div><h5>KI-Optimierung</h5><p>Beste Ergebnisse garantiert</p></div></div>
-    <div class="trust-item"><div class="trust-icon">🎧</div><div><h5>Premium Support</h5><p>Persönliche Betreuung</p></div></div>
+    <div class="trust-item reveal"><div class="trust-icon">🛡️</div><div><h5>Sichere Buchung</h5><p>SSL-verschlüsselt &amp; sicher</p></div></div>
+    <div class="trust-item reveal reveal-delay-1"><div class="trust-icon">🚀</div><div><h5>Sofort bestätigt</h5><p>Dein Termin ist sofort reserviert</p></div></div>
+    <div class="trust-item reveal reveal-delay-2"><div class="trust-icon">⭐</div><div><h5>KI-Optimierung</h5><p>Beste Ergebnisse garantiert</p></div></div>
+    <div class="trust-item reveal reveal-delay-3"><div class="trust-icon">🎧</div><div><h5>Premium Support</h5><p>Persönliche Betreuung</p></div></div>
   </div>
 </div>
 
 <!-- ══════════════════════════════════
    FOOTER
 ══════════════════════════════════ -->
-<footer>
-  <div class="footer-grid">
+<footer class="cvs-footer-master">
+  <div class="footer-inner">
     <div class="footer-brand">
-      <h3>CINEMATIC VISION STUDIO</h3>
-      <p>Kein Standard-KI-Service. Ein cinematic Creator-Studio für High-End KI-Videos, Transformationen und visuelle Markenwelten – für Creator, Marken und Visionäre.</p>
+      <h3>Cinematic Vision Studio</h3>
+      <p>Deine Vision. Als cinematic KI-Erlebnis. Premium AI-Cinematic-Produktion für Creator und Marken.</p>
     </div>
     <div class="footer-col">
       <h4>Studio</h4>
-      <a href="scene-editor-test.html#why">Über uns</a>
+      <a href="scene-editor-test.html">Über uns</a>
       <a href="scene-editor-test.html#process">Prozess</a>
       <a href="academy.html">Academy</a>
       <a href="calendar.html">Buchung</a>
     </div>
     <div class="footer-col">
       <h4>Services</h4>
-      <a href="ki-videos.html">KI-Videos &amp; Trailer</a>
+      <a href="ki-videos.html">KI Videos</a>
+      <a href="portfolio.html">Trailer</a>
       <a href="shop.html">Shop</a>
       <a href="prompt-generator.html">Prompt Studio</a>
       <a href="portfolio.html">Portfolio</a>
@@ -557,17 +555,17 @@ section{position:relative;overflow:hidden}
       <h4>Kontakt</h4>
       <a href="contact.php">Projekt anfragen</a>
       <a href="https://cinematic-studio-family.onrender.com/studio-demo.php">Studio starten</a>
-      <a href="impressum.html">Impressum</a>
-      <a href="datenschutz.html">Datenschutz</a>
     </div>
   </div>
   <div class="footer-bottom">
-    <p>© 2026 Cinematic Vision Studio. Alle Rechte vorbehalten.</p>
-    <div class="footer-socials">
-      <a href="https://tiktok.com" target="_blank" rel="noopener" class="social-btn" aria-label="TikTok">TK</a>
-      <a href="https://instagram.com" target="_blank" rel="noopener" class="social-btn" aria-label="Instagram">IG</a>
-      <a href="https://youtube.com" target="_blank" rel="noopener" class="social-btn" aria-label="YouTube">YT</a>
-      <a href="https://discord.com" target="_blank" rel="noopener" class="social-btn" aria-label="Discord">DC</a>
+    <div class="footer-copy">© 2026 Cinematic Vision Studio · Alle Rechte vorbehalten</div>
+    <div class="footer-legal">
+      <a href="impressum.html">Impressum</a>
+      <a href="datenschutz.html">Datenschutz</a>
+      <a href="agb.html">AGB</a>
+      <a href="widerruf.html">Widerruf</a>
+      <a href="cookies.html">Cookies</a>
+      <a href="contact.php">Kontakt</a>
     </div>
   </div>
 </footer>
@@ -609,64 +607,6 @@ section{position:relative;overflow:hidden}
 
 <script src="assets/js/nav.js" defer></script>
 <script>
-/* ══ AURORA CANVAS ════════════════════════════════════════════════════ */
-(function(){
-  const c=document.getElementById('bg-canvas'),ctx=c.getContext('2d');
-  let W,H,t=0,stars=[];
-  function resize(){W=c.width=innerWidth;H=c.height=innerHeight;}
-  function initStars(){
-    stars=[];
-    for(let i=0;i<220;i++){
-      stars.push({x:Math.random()*W,y:Math.random()*H*.78,r:Math.random()<.85?.3+Math.random()*.65:.9+Math.random()*.8,a:.12+Math.random()*.88,da:(.0005+Math.random()*.0026)*(Math.random()<.5?1:-1),blue:Math.random()<.18});
-    }
-  }
-  function drawStars(){
-    stars.forEach(s=>{
-      s.a+=s.da;if(s.a>1){s.a=1;s.da*=-1;}if(s.a<.05){s.a=.05;s.da*=-1;}
-      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-      ctx.fillStyle=s.blue?`rgba(180,210,255,${s.a.toFixed(2)})`:`rgba(255,248,228,${s.a.toFixed(2)})`;
-      ctx.fill();
-    });
-  }
-  const CURTAINS=[
-    {hf:.17,amp:44,freq:.0048,spd:.55,ph:0.0,col:'245,215,40',al:.32},
-    {hf:.23,amp:50,freq:.0033,spd:.38,ph:2.3,col:'50,100,255',al:.32},
-    {hf:.36,amp:46,freq:.0041,spd:.30,ph:1.2,col:'245,215,40',al:.22},
-    {hf:.45,amp:38,freq:.0056,spd:.45,ph:3.5,col:'70,120,255',al:.24},
-    {hf:.57,amp:52,freq:.0026,spd:.25,ph:0.7,col:'245,215,40',al:.14},
-    {hf:.66,amp:34,freq:.0050,spd:.35,ph:1.9,col:'50,100,255',al:.16},
-  ];
-  function drawAurora(){
-    CURTAINS.forEach(r=>{
-      const topY=H-r.hf*H,alP=r.al*(.70+Math.sin(t*r.spd*.55+r.ph)*.30);
-      ctx.beginPath();ctx.moveTo(0,H);
-      for(let x=0;x<=W;x+=5)ctx.lineTo(x,topY+Math.sin(x*r.freq+t*r.spd+r.ph)*r.amp);
-      ctx.lineTo(W,H);ctx.closePath();
-      const g=ctx.createLinearGradient(0,topY-r.amp,0,H);
-      g.addColorStop(0,`rgba(${r.col},0)`);g.addColorStop(.26,`rgba(${r.col},${(alP*.35).toFixed(3)})`);
-      g.addColorStop(.65,`rgba(${r.col},${alP.toFixed(3)})`);g.addColorStop(1,`rgba(${r.col},${(alP*.52).toFixed(3)})`);
-      ctx.fillStyle=g;ctx.fill();
-    });
-  }
-  function drawHorizon(){
-    const gY=ctx.createRadialGradient(W*.32,H,0,W*.32,H,H*.62);
-    gY.addColorStop(0,'rgba(232,195,85,.5)');gY.addColorStop(.45,'rgba(232,195,85,.16)');gY.addColorStop(1,'rgba(232,195,85,0)');
-    ctx.fillStyle=gY;ctx.fillRect(0,H*.45,W,H*.55);
-    const gB=ctx.createRadialGradient(W*.68,H,0,W*.68,H,H*.62);
-    gB.addColorStop(0,'rgba(24,114,255,.45)');gB.addColorStop(.45,'rgba(24,114,255,.14)');gB.addColorStop(1,'rgba(24,114,255,0)');
-    ctx.fillStyle=gB;ctx.fillRect(0,H*.45,W,H*.55);
-  }
-  function vignette(){
-    const g=ctx.createLinearGradient(0,0,0,H);
-    g.addColorStop(0,'rgba(2,2,5,.96)');g.addColorStop(.30,'rgba(2,2,5,.38)');
-    g.addColorStop(.52,'rgba(2,2,5,.04)');g.addColorStop(1,'rgba(2,2,5,0)');
-    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-  }
-  function frame(){t+=.014;ctx.clearRect(0,0,W,H);ctx.fillStyle='#020205';ctx.fillRect(0,0,W,H);drawStars();drawHorizon();drawAurora();vignette();requestAnimationFrame(frame);}
-  resize();initStars();frame();
-  addEventListener('resize',()=>{resize();initStars();});
-})();
-
 /* ══ CALENDAR ════════════════════════════════════════════════════════ */
 const MONTHS=['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
 const DAYS_DE=['Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag','Sonntag'];
@@ -753,6 +693,14 @@ document.getElementById('mSubmit').addEventListener('click',()=>{
 
 /* Init */
 (function(){const n=new Date();cy=n.getFullYear();cm=n.getMonth();renderCal();})();
+
+// ── Scroll reveal ──
+const ro=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.07,rootMargin:'0px 0px -44px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+/* ── Gold Scroll-Progress-Bar ── */
+(function(){var bar=document.getElementById('cvs-progress');if(!bar)return;var raf=null;function update(){var h=document.documentElement.scrollHeight-window.innerHeight;bar.style.width=(h>0?(window.scrollY/h*100):0)+'%';raf=null;}window.addEventListener('scroll',function(){if(!raf)raf=requestAnimationFrame(update);},{passive:true});update();})();
 </script>
+<div id="cvs-progress" aria-hidden="true"></div>
 </body>
 </html>
