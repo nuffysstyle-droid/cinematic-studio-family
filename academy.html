@@ -4,10 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Cinematic Vision Studio Academy — Lerne KI-Filmproduktion, Prompting, Editing und Visual Storytelling.">
-<link rel="icon" type="image/png" href="assets/cvs-logo.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="assets/cvs-logo-icon.png">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
 <link rel="stylesheet" href="assets/css/cvs-core.css">
+<meta property="og:title" content="Academy – Cinematic Vision Studio">
+<meta property="og:description" content="Lerne KI-Filmproduktion, Prompting, Editing und Visual Storytelling. 24 Guides. 14 Themen. Kostenlos.">
+<meta property="og:type" content="website">
 <title>Academy – Cinematic Vision Studio</title>
 <style>
 /* ── Marketing-page variables ── */
@@ -104,43 +106,68 @@ h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.pf-title
 .page-eyebrow{color:#d4a93c;background:rgba(212,169,60,.1);border-color:rgba(212,169,60,.28)}
 .page-h1 span{background:linear-gradient(112deg,#d4a93c,#e8c355);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .page::before{height:520px;background:radial-gradient(ellipse 85% 140% at 8% 0%,rgba(0,40,165,.14) 0%,transparent 55%),radial-gradient(ellipse 65% 100% at 94% 12%,rgba(180,130,20,.09) 0%,transparent 50%),radial-gradient(ellipse 55% 65% at 50% 0%,rgba(0,25,110,.07) 0%,transparent 60%)}
+/* ── Aurora (CSS-Orbs) ── */
+.cvs-aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.cvs-aurora span{position:absolute;border-radius:50%;filter:blur(120px);will-change:transform}
+.cvs-aurora .a1{width:56vw;height:56vw;left:-14vw;top:-12vw;background:radial-gradient(circle,rgba(24,114,255,.26),transparent 66%);animation:drift1 28s ease-in-out infinite}
+.cvs-aurora .a2{width:50vw;height:50vw;right:-14vw;top:34vh;background:radial-gradient(circle,rgba(232,169,59,.18),transparent 66%);animation:drift2 34s ease-in-out infinite}
+.cvs-aurora .a3{width:46vw;height:46vw;left:28vw;bottom:-16vw;background:radial-gradient(circle,rgba(0,62,232,.18),transparent 68%);animation:drift1 40s ease-in-out infinite reverse}
+.cvs-aurora .a4{width:34vw;height:34vw;right:18vw;bottom:8vh;background:radial-gradient(circle,rgba(212,146,43,.12),transparent 70%);animation:drift2 46s ease-in-out infinite}
+@keyframes drift1{0%,100%{transform:translate(0,0)}50%{transform:translate(7vw,5vh)}}
+@keyframes drift2{0%,100%{transform:translate(0,0)}50%{transform:translate(-7vw,-4vh)}}
+/* ── Lightbar ── */
+.lightbar{width:min(1180px,calc(100% - 48px));height:1px;margin:0 auto;border:0;background:linear-gradient(90deg,transparent,rgba(47,139,255,.5),rgba(243,213,133,.55),rgba(212,146,43,.5),transparent);position:relative;z-index:1}
+.lightbar::after{content:'';position:absolute;left:50%;top:50%;width:6px;height:6px;border-radius:50%;background:#f2d878;transform:translate(-50%,-50%);box-shadow:0 0 12px #f2d878,0 0 28px rgba(47,139,255,.55)}
+/* ── Scroll Progress ── */
+#cvs-progress{position:fixed;top:0;left:0;width:0%;height:2px;z-index:9999;pointer-events:none;background:linear-gradient(90deg,#4da0ff,#ecca63,#d4a93c);box-shadow:0 0 8px rgba(232,195,85,.6),0 0 2px rgba(77,160,255,.5);transform-origin:left}
+/* ── Reveal Animations ── */
+.reveal{opacity:0;transform:translateY(36px);transition:opacity .9s cubic-bezier(.23,1,.32,1),transform .9s cubic-bezier(.23,1,.32,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:.12s}
+.reveal-delay-2{transition-delay:.22s}
+.reveal-delay-3{transition-delay:.32s}
+.reveal-delay-4{transition-delay:.44s}
+/* ── Cursor Disable ── */
+html,body{cursor:auto!important}
+a,button,[role=button],label,.nav-burger{cursor:pointer!important}
+#cursor,#cursor-ring{display:none!important}
 </style>
 </head>
 <body>
-<nav class="cvs-nav-simple">
-  <a href="scene-editor-test.html" class="nav-logo"><img src="assets/cvs-logo.png" alt="CVS" class="cvs-nav-img"><span class="cvs-nav-txt">Cinematic Vision<span class="cvs-nav-sub">Studios</span></span></a>
-  <div class="nav-links">
-    <a href="scene-editor-test.html" class="nav-link">Home</a>
-    <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="nav-link">Studio</a>
-    <a href="shop.html" class="nav-link">Shop</a>
-    <a href="academy.html" class="nav-link active">Academy</a>
-    <a href="portfolio.html" class="nav-link">Portfolio</a>
-    <a href="ki-videos.html" class="nav-link">KI Videos</a>
-    <a href="prompt-generator.html" class="nav-link">Prompts</a>
-    <a href="calendar.html" class="nav-link">Buchung</a>
-    <a href="crystals.html" class="nav-link">Kristalle</a>
-    <a href="contact.php" class="nav-link">Kontakt</a>
-  </div>
+<div class="cvs-aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span><span class="a4"></span></div>
+
+<nav class="cvs-nav-simple" id="main-nav">
+  <a href="scene-editor-test.html" class="nav-logo-img-wrap">
+    <img src="assets/cvs-logo-icon.png" alt="CVS" class="nav-logo-img">
+    <span class="nav-logo-text">Cinematic Vision<span>Studios</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="scene-editor-test.html">Home</a></li>
+    <li><a href="https://cinematic-studio-family.onrender.com/studio-demo.php">Studio</a></li>
+    <li><a href="prompt-generator.html">Prompts</a></li>
+    <li><a href="portfolio.html">Portfolio</a></li>
+    <li><a href="ki-videos.html">KI Videos</a></li>
+    <li><a href="shop.html">Shop</a></li>
+    <li><a href="academy.html" class="active">Academy</a></li>
+    <li><a href="calendar.html" class="nav-cta">Buchen</a></li>
+  </ul>
   <div class="nav-actions">
     <a href="https://cinematic-studio-family.onrender.com/login.php" class="nav-btn-ghost">Login</a>
     <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="nav-btn-gold">Studio starten</a>
-    <a href="crystals.html" class="wallet-pill">💎 Free</a>
   </div>
   <button class="nav-burger" id="mobBurger" aria-label="Menü öffnen" aria-expanded="false"><span></span><span></span><span></span></button>
 </nav>
 <div class="mob-menu" id="mobMenu" role="navigation" aria-label="Navigation">
   <a href="scene-editor-test.html" class="mob-link">🏠 Home</a>
   <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="mob-link">🎬 Studio</a>
-  <a href="shop.html" class="mob-link">🛍️ Shop</a>
-  <a href="academy.html" class="mob-link active">🎓 Academy</a>
+  <a href="prompt-generator.html" class="mob-link">✍️ Prompts</a>
   <a href="portfolio.html" class="mob-link">🎞️ Portfolio</a>
   <a href="ki-videos.html" class="mob-link">🎥 KI Videos</a>
-  <a href="prompt-generator.html" class="mob-link">✍️ Prompts</a>
+  <a href="shop.html" class="mob-link">🛍️ Shop</a>
+  <a href="academy.html" class="mob-link active">🎓 Academy</a>
   <a href="calendar.html" class="mob-link">📅 Buchung</a>
-  <a href="crystals.html" class="mob-link">💎 Kristalle</a>
-  <a href="contact.php" class="mob-link">📞 Kontakt</a>
   <div class="mob-sep"></div>
-  <a href="https://cinematic-studio-family.onrender.com/login.php" class="mob-link">🔑 Login / Registrieren</a>
+  <a href="https://cinematic-studio-family.onrender.com/login.php" class="mob-link">🔑 Login</a>
   <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="mob-cta">🎬 Studio starten</a>
 </div>
 
@@ -149,16 +176,16 @@ h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.pf-title
     <div class="ac-page">
 
       <!-- Hero -->
-      <div class="ac-hero">
+      <div class="ac-hero reveal">
         <div class="ac-hero__text">
-          <div class="ac-hero__eyebrow">📚 Cinematic Academy</div>
-          <h2 class="ac-hero__title">Academy</h2>
-          <p class="ac-hero__sub text-muted">
+          <div class="ac-hero__eyebrow reveal">📚 Cinematic Academy</div>
+          <h2 class="ac-hero__title reveal reveal-delay-1">Academy</h2>
+          <p class="ac-hero__sub text-muted reveal reveal-delay-2">
             Lerne, wie du bessere Bilder, Videos, Startframes,<br>
             Sticker und TikTok-Inhalte erstellst.
           </p>
         </div>
-        <div class="ac-hero__stats">
+        <div class="ac-hero__stats reveal reveal-delay-3">
           <div class="ac-stat">
             <div class="ac-stat__num">24</div>
             <div class="ac-stat__label">Guides</div>
@@ -174,8 +201,10 @@ h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.pf-title
         </div>
       </div>
 
+      <hr class="lightbar">
+
       <!-- Filter -->
-      <div class="ac-filters">
+      <div class="ac-filters reveal">
         <button class="ac-filter-btn ac-filter-btn--active" data-filter="all">📚 Alle</button>
         <button class="ac-filter-btn" data-filter="api_credits">🔑 API &amp; Credits</button>
         <button class="ac-filter-btn" data-filter="seedance">🎬 Seedance 2.0</button>
@@ -194,13 +223,15 @@ h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.pf-title
       </div>
 
       <!-- Results bar -->
-      <div class="ac-results-bar">
+      <div class="ac-results-bar reveal">
         <span id="ac-count" class="text-muted text-sm"></span>
         <span id="ac-filter-label" class="text-sm" style="color:var(--accent-blue);"></span>
       </div>
-      <div style="margin-bottom:16px;">
+      <div style="margin-bottom:16px;" class="reveal reveal-delay-1">
         <a href="prompt-generator.html" style="font-size:12px;font-weight:600;color:var(--accent);text-decoration:none;opacity:.7;transition:opacity .15s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.7'">✍️ Noch keinen Prompt? Zum Prompt Generator →</a>
       </div>
+
+      <hr class="lightbar">
 
       <!-- Grid -->
       <div id="ac-grid" class="ac-grid"></div>
@@ -215,6 +246,8 @@ h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.pf-title
     </div><!-- .ac-page -->
   </div><!-- .wrap -->
 </div><!-- .page -->
+
+<hr class="lightbar">
 
 
 <!-- Card Template -->
@@ -268,36 +301,49 @@ h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.pf-title
 </div>
 
 
-<footer class="cvs-footer-simple">
+<footer class="cvs-footer-master">
   <div class="footer-inner">
-    <div class="footer-brand">
-      <div class="footer-logo">Cinematic Vision Studio</div>
-      <p class="footer-brand-sub">Premium KI-Filmproduktion — Trailer, Transformationen, Anime &amp; Markenwelten.</p>
+    <div class="footer-brand reveal">
+      <h3>Cinematic Vision Studio</h3>
+      <p>Deine Vision. Als cinematic KI-Erlebnis. Premium AI-Cinematic-Produktion für Creator und Marken.</p>
     </div>
-    <div class="footer-cols">
-      <div class="footer-col">
-        <a href="scene-editor-test.html">Home</a>
-        <a href="https://cinematic-studio-family.onrender.com/studio-demo.php">Studio</a>
-        <a href="portfolio.html">Portfolio</a>
-        <a href="academy.html">Academy</a>
-      </div>
-      <div class="footer-col">
-        <a href="shop.html">Shop</a>
-        <a href="crystals.html">Kristalle</a>
-        <a href="calendar.html">Buchung</a>
-        <a href="contact.php">Kontakt</a>
-      </div>
+    <div class="footer-col reveal reveal-delay-1">
+      <h4>Studio</h4>
+      <a href="scene-editor-test.html">Über uns</a>
+      <a href="scene-editor-test.html#process">Prozess</a>
+      <a href="academy.html">Academy</a>
+      <a href="calendar.html">Buchung</a>
     </div>
-  </div>
-  <div class="footer-bottom">
-    <nav class="footer-legal">
+    <div class="footer-col reveal reveal-delay-2">
+      <h4>Services</h4>
+      <a href="ki-videos.html">KI Videos</a>
+      <a href="portfolio.html">Trailer</a>
+      <a href="shop.html">Shop</a>
+      <a href="prompt-generator.html">Prompt Studio</a>
+      <a href="portfolio.html">Portfolio</a>
+      <a href="crystals.html">Kristalle</a>
+    </div>
+    <div class="footer-col reveal reveal-delay-3">
+      <h4>Kontakt</h4>
+      <a href="contact.php">Projekt anfragen</a>
+      <a href="https://cinematic-studio-family.onrender.com/studio-demo.php">Studio starten</a>
       <a href="impressum.html">Impressum</a>
       <a href="datenschutz.html">Datenschutz</a>
       <a href="agb.html">AGB</a>
       <a href="widerruf.html">Widerruf</a>
       <a href="cookies.html">Cookies</a>
-    </nav>
+    </div>
+  </div>
+  <div class="footer-bottom">
     <div class="footer-copy">© 2026 Cinematic Vision Studio · Alle Rechte vorbehalten</div>
+    <div class="footer-legal">
+      <a href="impressum.html">Impressum</a>
+      <a href="datenschutz.html">Datenschutz</a>
+      <a href="agb.html">AGB</a>
+      <a href="widerruf.html">Widerruf</a>
+      <a href="cookies.html">Cookies</a>
+      <a href="contact.php">Kontakt</a>
+    </div>
   </div>
 </footer>
 
@@ -356,9 +402,12 @@ const mTime     = document.getElementById('ac-modal-time');
 const mSteps    = document.getElementById('ac-modal-steps');
 const mCta      = document.getElementById('ac-modal-cta');
 
-function renderCard(guide) {
+function renderCard(guide, index) {
   const clone = tpl.content.cloneNode(true);
   const card  = clone.querySelector('.ac-card');
+  card.classList.add('reveal');
+  if (index % 3 === 1) card.classList.add('reveal-delay-1');
+  if (index % 3 === 2) card.classList.add('reveal-delay-2');
   card.dataset.category = guide.category ?? '';
   card.dataset.id       = guide.id ?? '';
   clone.querySelector('.ac-card__icon').textContent = guide.icon ?? '📚';
@@ -372,6 +421,7 @@ function renderCard(guide) {
   clone.querySelector('.ac-card__read-time').textContent = guide.read_time ?? '';
   clone.querySelector('.ac-card__open-btn').addEventListener('click', () => openGuide(guide));
   grid.appendChild(clone);
+  ro.observe(card);
 }
 
 function openGuide(guide) {
@@ -419,7 +469,7 @@ function applyFilter(filter) {
     filterEl.textContent = '';
   } else {
     emptyEl.hidden = true;
-    filtered.forEach(renderCard);
+    filtered.forEach((g, i) => renderCard(g, i));
     countEl.textContent = filtered.length + ' Guide' + (filtered.length !== 1 ? 's' : '');
     filterEl.textContent = filter !== 'all' ? '— ' + (CAT_LABELS[filter] ?? filter) : '';
   }
@@ -429,13 +479,32 @@ function applyFilter(filter) {
     btn.setAttribute('aria-pressed', String(isActive));
   });
 }
+/* ── Scroll reveal ── */
+const ro = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.07, rootMargin: '0px 0px -44px 0px' });
+document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+
 filterBtns.forEach(btn => btn.addEventListener('click', () => applyFilter(btn.dataset.filter)));
 showAllBtn?.addEventListener('click', () => applyFilter('all'));
 applyFilter('all');
 
+/* ── Gold Scroll-Progress-Bar ── */
+(function(){
+  var bar=document.getElementById('cvs-progress');if(!bar)return;
+  var raf=null;
+  function update(){
+    var h=document.documentElement.scrollHeight-window.innerHeight;
+    bar.style.width=(h<=0?'0':(window.scrollY/h*100).toFixed(2))+'%';
+    raf=null;
+  }
+  window.addEventListener('scroll',function(){if(!raf)raf=requestAnimationFrame(update);},{passive:true});
+  update();
+})();
+
 })();
 </script>
-<div id="cursor"></div><div id="cursor-ring"></div>
+<div id="cvs-progress" aria-hidden="true"></div>
 <script src="assets/js/nav.js" defer></script>
 </body>
 </html>
