@@ -1,39 +1,152 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="de">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Cinematic Vision Studio Prompt Generator — Optimierte Prompts für KI-Filmproduktion und visuelle Generierung.">
+<meta name="theme-color" content="#020205">
+<link rel="canonical" href="https://cinematic-vision-studio.de/prompt-generator.html">
 <link rel="icon" type="image/png" href="assets/cvs-logo.png">
-<title>Prompt Generator – Cinematic Vision Studio</title>
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Cinematic Vision Studio">
+<meta property="og:title" content="Prompt Generator — Cinematic Vision Studio">
+<meta property="og:description" content="Bessere KI-Videos. In 30 Sekunden. Optimierte Prompts für Runway, Sora oder Kling.">
+<meta property="og:url" content="https://cinematic-vision-studio.de/prompt-generator.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="og:image" content="https://cinematic-vision-studio.de/assets/cvs-logo.png">
+<meta name="twitter:title" content="Prompt Generator — Cinematic Vision Studio">
+<meta name="twitter:description" content="Bessere KI-Videos. In 30 Sekunden. Optimierte Prompts für Runway, Sora oder Kling.">
+<meta name="twitter:image" content="https://cinematic-vision-studio.de/assets/cvs-logo.png">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
 <link rel="stylesheet" href="assets/css/cvs-core.css">
+<title>Prompt Generator – Cinematic Vision Studio</title>
 <style>
-:root{--bg:#020205;--card:#0f0f1e;--card2:#161628;--text:#f0f0ff;--muted:#8888aa;--muted2:#5a5a7a;--accent:#d4a93c;--accent2:#e8c355;--blue:#3b82f6;--blue-bright:#1872ff;--purple:#9333ea;--ok:#4ade80;--danger:#ff5c7a;--border:rgba(255,255,255,.09);--gold:linear-gradient(135deg,#d4a93c,#e8c355);--radius:18px;}
-*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-/* ── Cinematic Film Grain ── */
-body::before{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.028'/%3E%3C/svg%3E");opacity:.5;}
-.page{padding:90px 0 60px;position:relative;}.page::before{content:"";position:absolute;top:0;left:0;right:0;height:380px;background:radial-gradient(ellipse 70% 120% at 15% 0%,rgba(59,130,246,.07) 0%,transparent 60%),radial-gradient(ellipse 50% 80% at 85% 20%,rgba(147,51,234,.05) 0%,transparent 55%);pointer-events:none;z-index:0;}.wrap{width:min(860px,calc(100% - 48px));margin:0 auto;position:relative;z-index:1;}
-.page-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--accent);background:rgba(212,169,60,.1);border:1px solid rgba(212,169,60,.28);border-radius:999px;padding:6px 14px;margin-bottom:18px;}
-.page-h1{font-size:clamp(28px,5vw,48px);font-weight:900;letter-spacing:-1.5px;margin-bottom:10px;line-height:1.1;}
-.page-h1 span{background:var(--gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.page-sub{color:var(--muted);font-size:15px;line-height:1.6;max-width:560px;margin-bottom:36px;}
-.gen-card{background:rgba(5,8,24,0.78);border:1px solid rgba(24,114,255,0.18);border-radius:var(--radius);padding:28px;margin-bottom:16px;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);box-shadow:0 8px 32px rgba(0,35,160,.15),0 0 0 1px rgba(200,160,60,.06) inset;transition:border-color .22s,transform .22s,box-shadow .22s;}
-.gen-card:hover{border-color:rgba(212,169,60,.28);transform:translateY(-3px);box-shadow:0 16px 48px rgba(0,35,160,.20),0 0 30px rgba(212,169,60,.10),0 0 0 1px rgba(212,169,60,.10) inset;}
-.gen-card h2{font-size:11px;font-weight:800;color:var(--muted2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:20px;}
+/* ════════════════════════════════════════════════════════════
+   PROMPT GENERATOR · Cinematic Brand Experience
+   DNA: Electric Blue ⇄ Metallic Gold · Black Void · HUD-Energie
+   ════════════════════════════════════════════════════════════ */
+:root{
+  --bg:#020205;
+  --blue:#1872ff;--blue-glow:#4da0ff;--blue-deep:#003ee8;
+  --gold:#e8c355;--gold-light:#f2d878;--gold-warm:#d4922b;
+  --ink:#eef2ff;--ink-dim:rgba(216,226,250,.82);--ink-faint:rgba(198,211,238,.68);
+  --maxw:1180px;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --card:#0f0f1e;--card2:#161628;--text:#f0f0ff;--muted:#8888aa;--muted2:#5a5a7a;
+  --accent:#f5c542;--accent2:#ff8c00;--purple:#9333ea;--ok:#4ade80;--danger:#ff5c7a;
+  --border:rgba(255,255,255,.09);
+  --radius:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans','Segoe UI',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
+h1,h2,h3,h4{font-family:'Syne',sans-serif}
+.wrap{width:min(var(--maxw),calc(100% - 48px));margin:0 auto;position:relative;z-index:1}
+
+/* ── Cinematic Aurora (Blau ⇄ Gold fließt durch Black Void) ── */
+.cvs-aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.cvs-aurora span{position:absolute;border-radius:50%;filter:blur(120px);will-change:transform}
+.cvs-aurora .a1{width:56vw;height:56vw;left:-14vw;top:-12vw;background:radial-gradient(circle,rgba(24,114,255,.26),transparent 66%);animation:drift1 28s ease-in-out infinite}
+.cvs-aurora .a2{width:50vw;height:50vw;right:-14vw;top:34vh;background:radial-gradient(circle,rgba(232,169,59,.18),transparent 66%);animation:drift2 34s ease-in-out infinite}
+.cvs-aurora .a3{width:46vw;height:46vw;left:28vw;bottom:-16vw;background:radial-gradient(circle,rgba(0,62,232,.18),transparent 68%);animation:drift1 40s ease-in-out infinite reverse}
+.cvs-aurora .a4{width:34vw;height:34vw;right:18vw;bottom:8vh;background:radial-gradient(circle,rgba(212,146,43,.12),transparent 70%);animation:drift2 46s ease-in-out infinite}
+@keyframes drift1{0%,100%{transform:translate(0,0)}50%{transform:translate(7vw,5vh)}}
+@keyframes drift2{0%,100%{transform:translate(0,0)}50%{transform:translate(-7vw,-4vh)}}
+
+/* Film grain */
+body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E");opacity:.28}
+
+/* Content über Aurora */
+.page,.section,.cvs-footer-master{position:relative;z-index:1}
+
+/* ── Reveal-on-scroll ── */
+.reveal{opacity:0;transform:translateY(34px);transition:opacity 1s var(--ease),transform 1s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+.reveal[data-d="1"]{transition-delay:.1s}.reveal[data-d="2"]{transition-delay:.2s}.reveal[data-d="3"]{transition-delay:.3s}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}*{animation:none!important}}
+
+/* ── Atoms ── */
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:'Syne',sans-serif;font-size:13px;font-weight:900;letter-spacing:2.5px;text-transform:uppercase;color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+.eyebrow::before,.eyebrow::after{content:'';height:1px;width:34px}
+.eyebrow::before{background:linear-gradient(90deg,transparent,var(--blue-glow))}
+.eyebrow::after{background:linear-gradient(90deg,var(--gold),transparent)}
+
+.lightbar{width:min(var(--maxw),calc(100% - 48px));height:1px;margin:0 auto;border:0;background:linear-gradient(90deg,transparent,rgba(47,139,255,.5),rgba(243,213,133,.55),rgba(212,146,43,.5),transparent)}
+.lightbar::after{content:'';position:absolute;left:50%;top:50%;width:6px;height:6px;border-radius:50%;background:var(--gold-light);transform:translate(-50%,-50%);box-shadow:0 0 12px var(--gold-light),0 0 28px rgba(47,139,255,.55)}
+
+/* ── Premium buttons ── */
+.btn-cvs{position:relative;display:inline-flex;align-items:center;gap:10px;font-family:'Syne',sans-serif;font-weight:800;font-size:15px;letter-spacing:.5px;padding:17px 36px;border-radius:14px;text-decoration:none;cursor:pointer;white-space:nowrap;transition:transform .3s var(--ease),box-shadow .3s var(--ease),border-color .3s}
+.btn-cvs i{font-style:normal;display:inline-flex;align-items:center;vertical-align:middle;transition:transform .3s var(--ease)}
+.btn-cvs:hover i{transform:translateX(5px)}
+.btn-cvs--gold{background:linear-gradient(180deg,#fff7a8 0%,#ffe15a 18%,#ffc21f 48%,#f59a00 78%,#d97900 100%);color:#100700;font-weight:900;box-shadow:0 8px 30px rgba(232,169,59,.28),0 0 0 1px rgba(255,255,255,.08),inset 0 1px 0 rgba(255,255,255,.6)}
+.btn-cvs--gold:hover{transform:translateY(-3px);box-shadow:0 18px 48px rgba(232,169,59,.45),0 0 0 1px rgba(255,255,255,.12),inset 0 1px 0 rgba(255,255,255,.7)}
+.btn-cvs--ghost{background:rgba(8,11,22,.86);color:#ffffff;font-weight:800;border:1px solid transparent;background-image:linear-gradient(rgba(8,11,22,.86),rgba(8,11,22,.86)),linear-gradient(120deg,var(--blue-glow),var(--gold));background-origin:border-box;background-clip:padding-box,border-box;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.btn-cvs--ghost:hover{color:#fff;transform:translateY(-3px);box-shadow:0 16px 40px rgba(24,114,255,.25),0 0 0 1px rgba(24,114,255,.1)}
+
+/* ════════ NAV / FOOTER (Marken-DNA) ════════ */
+/* Nav als cinematischer Top-Fade statt flacher schwarzer Kasten:
+   oben dicht, nach unten transparent auslaufend + Gradient-Haarlinie. */
+.cvs-nav-simple{background:linear-gradient(180deg,rgba(3,4,10,.92) 0%,rgba(3,4,10,.74) 58%,rgba(3,4,10,0) 100%);border-bottom:0;backdrop-filter:blur(18px) saturate(115%);-webkit-backdrop-filter:blur(18px) saturate(115%);padding-bottom:18px}
+.cvs-nav-simple::after{content:'';position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,transparent,rgba(24,114,255,.45),rgba(232,195,85,.4),transparent);opacity:.7}
+.cvs-nav-simple.scrolled{background:linear-gradient(180deg,rgba(2,2,6,.96) 0%,rgba(2,2,6,.86) 70%,rgba(2,2,6,.55) 100%)}
+.cvs-nav-simple .nav-logo{flex-direction:row;align-items:center;gap:12px}
+.cvs-nav-simple .nav-logo .cvs-nav-img{display:block;height:68px;width:68px;object-fit:contain;animation:none;transform:scale(1.06);filter:drop-shadow(0 0 14px rgba(24,114,255,.28)) drop-shadow(0 0 30px rgba(232,195,85,.14))}
+/* Drei klar getrennte Marken-Farben erzwingen (text-fill aus cvs-core resetten) */
+.cvs-nav-simple .nav-logo .cvs-nav-txt{background:none;-webkit-text-fill-color:initial;color:#fff;font-size:20px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;text-shadow:none;line-height:1.15;filter:none}
+.cvs-nav-simple .nav-logo .nav-t1{color:#4da0ff;-webkit-text-fill-color:#4da0ff;text-shadow:0 0 16px rgba(77,160,255,.4)}
+.cvs-nav-simple .nav-logo .nav-t2{color:#ffc21f!important;-webkit-text-fill-color:#ffc21f!important;background:none!important;margin-left:4px;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+.cvs-nav-simple .nav-logo .cvs-nav-sub{display:block;background:none;-webkit-text-fill-color:initial;margin-top:3px;color:#fff;font-size:10px;font-weight:800;letter-spacing:4px;text-transform:uppercase;opacity:1;filter:none}
+.cvs-nav-simple .nav-logo .nav-t3{color:#4da0ff;-webkit-text-fill-color:#4da0ff;opacity:1}
+.cvs-nav-simple{padding-left:18px;padding-right:18px}
+.cvs-nav-simple .nav-links{gap:2px}
+/* Nav-Links in Syne (gleiche Schriftfamilie wie das Logo) für einheitliche Anmutung */
+.cvs-nav-simple .nav-links a{font-family:'Syne',sans-serif;font-size:12px;letter-spacing:.2px;padding:6px 7px;position:relative;color:#fff;font-weight:700;opacity:.96;transition:color .2s ease,text-shadow .2s ease}
+.cvs-nav-simple .nav-links a:hover{color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+.cvs-nav-simple .nav-links a.active{color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+.cvs-nav-simple .nav-links a::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%) scale(0);width:4px;height:4px;background:var(--blue);border-radius:50%;box-shadow:0 0 6px rgba(59,130,246,.6);transition:transform .2s}
+.cvs-nav-simple .nav-links a:hover::after{transform:translateX(-50%) scale(1)}
+.cvs-nav-simple .nav-actions{gap:10px}
+/* Nav-CTAs: gleiche Premium-DNA wie Hero-Buttons (Syne) + konsistenter Hover */
+.cvs-nav-simple .nav-btn-ghost,.cvs-nav-simple .nav-btn-gold{font-family:'Syne',sans-serif;font-size:12px;font-weight:800;letter-spacing:.3px;padding:8px 14px;border-radius:11px;white-space:nowrap;transition:transform .25s var(--ease),box-shadow .25s var(--ease),color .2s,opacity .2s}
+/* Login = edler Glas-Ghost mit Blau→Gold-Rand; Hover wie der Rest: Gold + Glow + Lift */
+.cvs-nav-simple .nav-btn-ghost{color:#ffffff;border:1px solid transparent;background:linear-gradient(rgba(9,12,24,.88),rgba(9,12,24,.88)) padding-box,linear-gradient(120deg,var(--blue-glow),var(--gold)) border-box;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.cvs-nav-simple .nav-btn-ghost:hover{color:var(--gold);transform:translateY(-2px);box-shadow:0 8px 24px rgba(24,114,255,.25),0 0 18px rgba(232,195,85,.22);text-shadow:0 0 14px rgba(232,195,85,.5)}
+/* Studio starten = Premium-Gold mit dunkler Ink-Schrift (kein hartes Schwarz) + Hover-Lift */
+.cvs-nav-simple .nav-btn-gold{color:#100700!important;font-weight:900;background:linear-gradient(180deg,#fff7a8 0%,#ffe15a 18%,#ffc21f 48%,#f59a00 78%,#d97900 100%);border:0;box-shadow:0 6px 20px rgba(232,169,59,.3),inset 0 1px 0 rgba(255,255,255,.55)}
+.cvs-nav-simple .nav-btn-gold:hover{opacity:1;transform:translateY(-2px);box-shadow:0 12px 30px rgba(232,169,59,.5),inset 0 1px 0 rgba(255,255,255,.65)}
+
+/* ── Hero ── */
+.hero{padding:clamp(150px,24vh,220px) 0 40px;overflow:hidden;text-align:center}
+.hero-orb{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;will-change:transform}
+.hero-orb--blue{width:580px;height:580px;background:radial-gradient(circle,rgba(24,114,255,.20),transparent 70%);top:-170px;left:-100px;animation:drift1 18s ease-in-out infinite}
+.hero-orb--gold{width:480px;height:480px;background:radial-gradient(circle,rgba(232,169,59,.13),transparent 70%);top:-70px;right:-80px;animation:drift2 22s ease-in-out infinite}
+.hero-title{font-weight:800;font-size:clamp(40px,6.8vw,86px);line-height:1.04;letter-spacing:-2px;color:#fff;margin:24px auto 0;max-width:18ch;text-shadow:0 0 20px rgba(24,114,255,.25),0 0 40px rgba(236,202,99,.12)}
+.hero-title .grad{color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+.hero-sub{max-width:600px;margin:28px auto 44px;font-size:clamp(16px,1.55vw,19px);line-height:1.65;color:rgba(255,255,255,.92);font-weight:300;letter-spacing:.2px}
+.hero-cta{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.hero-trust{display:flex;gap:14px 22px;justify-content:center;align-items:center;flex-wrap:wrap;margin-top:40px;font-size:12.5px;font-weight:700;letter-spacing:3.5px;text-transform:uppercase;color:rgba(255,255,255,.95)}
+.hero-trust .dot{width:5px;height:5px;border-radius:50%;background:linear-gradient(90deg,var(--blue-glow),var(--gold))}
+
+/* ── Section System ── */
+.section{padding:clamp(64px,10vh,100px) 0}
+.sec-head{width:min(760px,calc(100% - 48px));margin:0 auto 56px;text-align:center}
+.sec-title{font-weight:800;font-size:clamp(30px,3.9vw,52px);line-height:1.08;letter-spacing:-1.1px;color:#fff;margin:20px 0 0;text-shadow:0 0 16px rgba(24,114,255,.20),0 0 32px rgba(236,202,99,.10)}
+.sec-title .g{color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+.sec-lead{margin:20px auto 0;max-width:520px;font-size:17px;line-height:1.65;color:rgba(255,255,255,.92);font-weight:300;letter-spacing:.15px}
+
+/* ── Generator Cards ── */
+.gen-card{background:rgba(8,10,22,.88);border:1px solid rgba(24,114,255,.18);border-radius:var(--radius);padding:28px;margin-bottom:24px;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);box-shadow:0 8px 32px rgba(0,35,160,.15),0 0 0 1px rgba(200,160,60,.06) inset;transition:border-color .35s,transform .35s var(--ease),box-shadow .35s}
+.gen-card:hover{border-color:rgba(212,169,60,.28);transform:translateY(-4px);box-shadow:0 24px 64px rgba(0,35,160,.22),0 0 36px rgba(212,169,60,.12),0 0 0 1px rgba(212,169,60,.12) inset}
+.gen-card h2{font-size:11px;font-weight:800;color:rgba(255,255,255,.75);text-transform:uppercase;letter-spacing:.08em;margin-bottom:20px;font-family:'Syne',sans-serif}
 .field-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 .field-group{display:flex;flex-direction:column;gap:6px;}
 .field-group.full{grid-column:1/-1;}
-.field-group label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;}
-.field-group select,.field-group input,.field-group textarea{background:var(--card2);border:1px solid var(--border);border-radius:9px;color:var(--text);font-size:13px;padding:10px 12px;outline:none;transition:border-color .15s,box-shadow .15s;font-family:inherit;width:100%;}
+.field-group label{font-size:11px;font-weight:700;color:rgba(255,255,255,.88);text-transform:uppercase;letter-spacing:.06em;font-family:'Syne',sans-serif}
+.field-group select,.field-group input,.field-group textarea{background:rgba(18,20,38,.95);border:1px solid rgba(255,255,255,.14);border-radius:9px;color:#fff;font-size:13px;padding:10px 12px;outline:none;transition:border-color .15s,box-shadow .15s;font-family:inherit;width:100%;}
 .field-group select:focus,.field-group input:focus,.field-group textarea:focus{border-color:rgba(24,114,255,.55);box-shadow:0 0 0 3px rgba(24,114,255,.12),0 0 14px rgba(24,114,255,.18);}
 .field-group textarea{resize:vertical;min-height:80px;}
-.btn-row{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;}
-.btn-gold{background:var(--gold);color:#1a0e00;border:0;border-radius:12px;padding:13px 22px;font-size:14px;font-weight:900;cursor:pointer;transition:transform .15s,box-shadow .15s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;box-shadow:0 6px 22px rgba(212,169,60,.22);}
-.btn-gold:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(212,169,60,.36);}
-.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border);border-radius:12px;padding:13px 22px;font-size:14px;font-weight:700;cursor:pointer;transition:border-color .15s,background .15s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;}
-.btn-ghost:hover{border-color:rgba(255,255,255,.28);background:rgba(255,255,255,.05);}
-.output-box{background:rgba(5,8,24,0.78);border:1px solid rgba(24,114,255,0.18);border-radius:12px;padding:20px;min-height:130px;font-size:13px;line-height:1.7;color:var(--text);white-space:pre-wrap;word-break:break-word;transition:border-color .22s,box-shadow .22s;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);box-shadow:0 8px 32px rgba(0,35,160,.15),0 0 0 1px rgba(200,160,60,.06) inset;}
+.btn-row{display:flex;gap:12px;margin-top:22px;flex-wrap:wrap;}
+.output-box{background:rgba(8,10,22,.88);border:1px solid rgba(24,114,255,.18);border-radius:12px;padding:20px;min-height:130px;font-size:13px;line-height:1.7;color:var(--text);white-space:pre-wrap;word-break:break-word;transition:border-color .22s,box-shadow .22s;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);box-shadow:0 8px 32px rgba(0,35,160,.15),0 0 0 1px rgba(200,160,60,.06) inset;}
 .output-box:hover{border-color:rgba(212,169,60,.25);box-shadow:0 12px 40px rgba(0,35,160,.18),0 0 20px rgba(212,169,60,.08),0 0 0 1px rgba(212,169,60,.08) inset;}
 .output-box.generating{animation:glowPulse .8s ease;}
 @keyframes glowPulse{0%{box-shadow:0 0 0 0 rgba(24,114,255,.3),0 8px 32px rgba(0,35,160,.15),0 0 0 1px rgba(200,160,60,.06) inset;}70%{box-shadow:0 0 0 10px rgba(24,114,255,0),0 8px 32px rgba(0,35,160,.15),0 0 0 1px rgba(200,160,60,.06) inset;}100%{box-shadow:0 0 0 0 rgba(24,114,255,0),0 8px 32px rgba(0,35,160,.15),0 0 0 1px rgba(200,160,60,.06) inset;}}
@@ -42,68 +155,128 @@ body::before{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;bac
 .copy-toast.show{opacity:1;}
 .gen-error{color:var(--danger);font-size:12px;font-weight:700;margin-top:10px;padding:10px 14px;background:rgba(255,92,122,.08);border:1px solid rgba(255,92,122,.22);border-radius:9px;display:none;}
 .gen-error.visible{display:block;}
-.studio-cta{display:inline-flex !important;}
-@media(max-width:600px){.field-grid{grid-template-columns:1fr;}.field-group.full{grid-column:1;}}
+
+/* Quick Start */
 .qs-section{margin-bottom:32px;}
-.qs-title{font-size:18px;font-weight:900;margin-bottom:6px;font-family:'Syne',sans-serif;}
-.qs-intro{font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.5;}
-.qs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.qs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
 @media(max-width:720px){.qs-grid{grid-template-columns:repeat(2,1fr);}}
 @media(max-width:480px){.qs-grid{grid-template-columns:1fr;}}
-.qs-card{background:rgba(5,8,24,0.60);border:1px solid rgba(24,114,255,0.15);border-radius:12px;padding:12px 14px;cursor:pointer;transition:transform .22s,border-color .22s,background .22s,box-shadow .22s;}
-.qs-card:hover{background:rgba(5,8,24,0.85);border-color:rgba(212,169,60,.35);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,35,160,.15),0 0 16px rgba(212,169,60,.10);}
-.qs-cat{font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--blue-bright);margin-bottom:4px;}
-.qs-name{font-size:14px;font-weight:800;margin-bottom:4px;color:var(--text);}
-.qs-hint{font-size:11px;color:var(--muted2);line-height:1.4;}
+.qs-card{background:rgba(12,14,30,.82);border:1px solid rgba(24,114,255,.22);border-radius:14px;padding:16px 18px;cursor:pointer;transition:transform .3s var(--ease),border-color .3s,background .3s,box-shadow .3s;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}
+.qs-card:hover{background:rgba(8,10,22,.90);border-color:rgba(212,169,60,.35);transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,35,160,.18),0 0 20px rgba(212,169,60,.10);}
+.qs-cat{font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--blue-glow);margin-bottom:5px;font-family:'Syne',sans-serif}
+.qs-name{font-size:15px;font-weight:800;margin-bottom:5px;color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22);font-family:'Syne',sans-serif}
+.qs-hint{font-size:11px;color:rgba(255,255,255,.82);line-height:1.4;}
+
+/* ════════ FOOTER / MOBILE (Marken-DNA) ════════ */
+.cvs-footer-master{margin-top:20px;background:linear-gradient(180deg,rgba(2,2,6,0),rgba(2,2,6,.98) 22%)}
+.cvs-footer-master .footer-brand h3{font-size:25px;letter-spacing:.5px;color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+.cvs-footer-master .footer-brand p{color:rgba(255,255,255,.90);font-size:16px;line-height:1.74;max-width:300px}
+.cvs-footer-master .footer-col h4{font-size:15px;margin-bottom:16px;letter-spacing:2px;text-transform:uppercase;font-weight:900;opacity:1;color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+.cvs-footer-master .footer-col a{font-size:14.5px;padding:6px 0;color:rgba(255,255,255,.88);opacity:1;transition:color .2s,text-shadow .2s,transform .2s}
+.cvs-footer-master .footer-col a:hover{color:#ffc21f;text-shadow:0 0 12px rgba(255,194,31,.45);transform:translateX(3px)}
+.cvs-footer-master .footer-bottom{padding-top:24px;font-size:14px;border-top:1px solid rgba(255,255,255,.09)}
+.cvs-footer-master .footer-copy{font-size:14px;color:rgba(255,255,255,.80)}
+.cvs-footer-master .footer-legal a{font-size:14px;padding:0 9px;color:rgba(255,255,255,.80);transition:color .2s,text-shadow .2s}
+.cvs-footer-master .footer-legal a:hover{color:#ffc21f;text-shadow:0 0 10px rgba(255,194,31,.45)}
+
+.mob-menu .mob-link{font-family:'Syne',sans-serif;font-weight:700}
+.mob-menu .mob-link:hover,.mob-menu .mob-link.active{color:#ffc21f;text-shadow:0 0 12px rgba(255,194,31,.45)}
+.mob-menu .mob-cta{font-family:'Syne',sans-serif;color:#100700;font-weight:900;background:linear-gradient(180deg,#fff7a8 0%,#ffe15a 18%,#ffc21f 48%,#f59a00 78%,#d97900 100%)}
+
+#cvs-progress{position:fixed;top:0;left:0;width:0%;height:2px;z-index:9999;pointer-events:none;background:linear-gradient(90deg,var(--blue-glow),#ecca63,var(--gold-warm));box-shadow:0 0 8px rgba(232,195,85,.6),0 0 2px rgba(77,160,255,.5);transform-origin:left}
+
+html,body{cursor:auto!important}
+a,button,[role=button],label,.nav-burger{cursor:pointer!important}
+#cursor,#cursor-ring{display:none!important}
+
+@media(max-width:1530px){
+  .cvs-nav-simple .nav-links{display:none}
+  .cvs-nav-simple .nav-burger{display:flex}
+  .mob-menu{display:block}
+}
+@media(max-width:720px){
+  .qs-grid{grid-template-columns:repeat(2,1fr);}
+  .field-grid{grid-template-columns:1fr;}
+  .field-group.full{grid-column:1;}
+}
+@media(max-width:560px){
+  .hero{padding-top:120px}
+  .hero-title{font-size:clamp(32px,8.8vw,56px);letter-spacing:-1.2px;max-width:none}
+  .qs-grid{grid-template-columns:1fr;}
+  .btn-cvs{width:100%;justify-content:center;text-align:center}
+}
 </style>
 </head>
 <body>
-<nav class="cvs-nav-simple">
-  <a href="scene-editor-test.html" class="nav-logo">Cinematic Vision Studio<span>Premium KI-Filmstudio</span></a>
+
+<div class="cvs-aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span><span class="a4"></span></div>
+
+<nav class="cvs-nav-simple" id="main-nav">
+  <a href="scene-editor-test.html" class="nav-logo"><img src="assets/cvs-logo-icon.png" alt="CVS" class="cvs-nav-img"><span class="cvs-nav-txt"><span class="nav-t1">Cinematic</span> <span class="nav-t2">Vision</span><span class="cvs-nav-sub"><span class="nav-t3">Studio</span></span></span></a>
   <div class="nav-links">
     <a href="scene-editor-test.html" class="nav-link">Home</a>
     <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="nav-link">Studio</a>
-    <a href="shop.html" class="nav-link">Shop</a>
-    <a href="academy.html" class="nav-link">Academy</a>
-    <a href="portfolio.html" class="nav-link">Portfolio</a>
-    <a href="ki-videos.html" class="nav-link">KI Videos</a>
-    <a href="prompt-generator.html" class="nav-link">Prompts</a>
-    <a href="calendar.html" class="nav-link">Buchung</a>
     <a href="crystals.html" class="nav-link">Kristalle</a>
     <a href="contact.php" class="nav-link">Kontakt</a>
+    <a href="calendar.html" class="nav-link">Buchung</a>
+    <a href="prompt-generator.html" class="nav-link active">Prompts</a>
+    <a href="ki-videos.html" class="nav-link">KI Videos</a>
+    <a href="portfolio.html" class="nav-link">Portfolio</a>
+    <a href="academy.html" class="nav-link">Academy</a>
+    <a href="shop.html" class="nav-link">Shop</a>
   </div>
   <div class="nav-actions">
     <a href="https://cinematic-studio-family.onrender.com/login.php" class="nav-btn-ghost">Login</a>
     <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="nav-btn-gold">Studio starten</a>
-    <a href="crystals.html" class="wallet-pill">💎 Free</a>
   </div>
   <button class="nav-burger" id="mobBurger" aria-label="Menü öffnen" aria-expanded="false"><span></span><span></span><span></span></button>
 </nav>
 <div class="mob-menu" id="mobMenu" role="navigation" aria-label="Navigation">
   <a href="scene-editor-test.html" class="mob-link">🏠 Home</a>
   <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="mob-link">🎬 Studio</a>
-  <a href="shop.html" class="mob-link">🛍️ Shop</a>
-  <a href="academy.html" class="mob-link">🎓 Academy</a>
-  <a href="portfolio.html" class="mob-link">🎞️ Portfolio</a>
-  <a href="ki-videos.html" class="mob-link">🎥 KI Videos</a>
-  <a href="prompt-generator.html" class="mob-link active">✍️ Prompts</a>
-  <a href="calendar.html" class="mob-link">📅 Buchung</a>
   <a href="crystals.html" class="mob-link">💎 Kristalle</a>
   <a href="contact.php" class="mob-link">📞 Kontakt</a>
+  <a href="calendar.html" class="mob-link">📅 Buchung</a>
+  <a href="prompt-generator.html" class="mob-link active">✍️ Prompts</a>
+  <a href="ki-videos.html" class="mob-link">🎥 KI Videos</a>
+  <a href="portfolio.html" class="mob-link">🎞️ Portfolio</a>
+  <a href="academy.html" class="mob-link">🎓 Academy</a>
+  <a href="shop.html" class="mob-link">🛍️ Shop</a>
   <div class="mob-sep"></div>
-  <a href="https://cinematic-studio-family.onrender.com/login.php" class="mob-link">🔑 Login / Registrieren</a>
+  <a href="https://cinematic-studio-family.onrender.com/login.php" class="mob-link">🔑 Login</a>
   <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="mob-cta">🎬 Studio starten</a>
 </div>
 
-<div class="page">
-  <div class="wrap">
-    <div class="page-eyebrow">✦ Kostenlos · Kein Account</div>
-    <h1 class="page-h1">Bessere KI-Videos.<br><span>In 30 Sekunden.</span></h1>
-    <p class="page-sub">Kein Prompt-Wissen nötig. Wähle Genre, Kamerastil und Atmosphäre — der Generator baut den fertigen Cinematic Prompt für Runway, Sora oder Kling.</p>
+<!-- ══════════ HERO ══════════ -->
+<header class="hero">
+  <span class="hero-orb hero-orb--blue" aria-hidden="true"></span>
+  <span class="hero-orb hero-orb--gold" aria-hidden="true"></span>
+  <div class="wrap reveal">
+    <span class="eyebrow">Kostenlos · Kein Account</span>
+    <h1 class="hero-title">Bessere KI-Videos.<br><span class="grad">In 30 Sekunden.</span></h1>
+    <p class="hero-sub">Kein Prompt-Wissen nötig. Wähle Genre, Kamerastil und Atmosphäre — der Generator baut den fertigen Cinematic Prompt für Runway, Sora oder Kling.</p>
+    <div class="hero-cta">
+      <a href="#generator" class="btn-cvs btn-cvs--gold">Prompt erstellen <i>→</i></a>
+      <a href="academy.html" class="btn-cvs btn-cvs--ghost">Academy</a>
+    </div>
+    <div class="hero-trust">
+      <span>Runway</span><span class="dot"></span><span>Sora</span><span class="dot"></span><span>Kling</span>
+    </div>
+  </div>
+</header>
 
-    <div class="qs-section">
-      <div class="qs-title">Quick Start Templates</div>
-      <div class="qs-intro">Nutze ein fertiges Setup und passe es an deine Idee an.</div>
+<hr class="lightbar">
+
+<!-- ══════════ QUICK START ══════════ -->
+<section class="section" id="generator">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Quick Start</span>
+      <h2 class="sec-title">Fertige Templates. <span class="g">Sofort loslegen.</span></h2>
+      <p class="sec-lead">Nutze ein fertiges Setup und passe es an deine Idee an.</p>
+    </div>
+
+    <div class="qs-section reveal">
       <div class="qs-grid">
         <div class="qs-card" onclick="applyTemplate('viral')">
           <div class="qs-cat">Viral Hook</div>
@@ -133,11 +306,11 @@ body::before{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;bac
       </div>
     </div>
 
-    <div class="gen-card">
+    <div class="gen-card reveal">
       <h2>Szenen-Parameter</h2>
       <div class="field-grid">
         <div class="field-group">
-          <label>Genre</label>
+          <label for="genre">Genre</label>
           <select id="genre">
             <option value="">– wählen –</option>
             <option value="Thriller">Thriller</option>
@@ -151,7 +324,7 @@ body::before{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;bac
           </select>
         </div>
         <div class="field-group">
-          <label>Kamerastil</label>
+          <label for="camstyle">Kamerastil</label>
           <select id="camstyle">
             <option value="">– wählen –</option>
             <option value="slow-motion dolly shot">Slow Motion Dolly</option>
@@ -164,7 +337,7 @@ body::before{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;bac
           </select>
         </div>
         <div class="field-group">
-          <label>Licht & Atmosphäre</label>
+          <label for="lighting">Licht & Atmosphäre</label>
           <select id="lighting">
             <option value="">– wählen –</option>
             <option value="golden hour cinematic lighting">Golden Hour</option>
@@ -181,7 +354,7 @@ body::before{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;bac
           </select>
         </div>
         <div class="field-group">
-          <label>Farbgrading</label>
+          <label for="color">Farbgrading</label>
           <select id="color">
             <option value="">– wählen –</option>
             <option value="teal and orange grade">Teal & Orange</option>
@@ -194,7 +367,7 @@ body::before{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;bac
           </select>
         </div>
         <div class="field-group">
-          <label>Objektiv</label>
+          <label for="lens">Objektiv</label>
           <select id="lens">
             <option value="">– wählen –</option>
             <option value="24mm wide-angle lens">24mm Wide — Umgebung</option>
@@ -204,7 +377,7 @@ body::before{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;bac
           </select>
         </div>
         <div class="field-group">
-          <label>Negativer Prompt</label>
+          <label for="negative">Negativer Prompt</label>
           <select id="negative">
             <option value="">– wählen –</option>
             <option value="blurry, low quality, deformed hands, oversaturated, watermark, text, cropped">Standard (Empfohlen)</option>
@@ -214,11 +387,11 @@ body::before{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;bac
           </select>
         </div>
         <div class="field-group full">
-          <label>Szene beschreiben (optional)</label>
+          <label for="scene">Szene beschreiben (optional)</label>
           <textarea id="scene" placeholder="z.B. Ein Detektiv betritt eine verlassene Lagerhalle im Regen …"></textarea>
         </div>
         <div class="field-group">
-          <label>Technische Qualität</label>
+          <label for="quality">Technische Qualität</label>
           <select id="quality">
             <option value="8K ultra-detailed, professional cinematography">8K Ultra HD</option>
             <option value="4K cinematic, film look">4K Cinematic</option>
@@ -227,67 +400,76 @@ body::before{content:'';position:fixed;inset:0;z-index:2;pointer-events:none;bac
           </select>
         </div>
         <div class="field-group">
-          <label>Zusatz-Tags</label>
+          <label for="extra">Zusatz-Tags</label>
           <input type="text" id="extra" placeholder="z.B. slow zoom, rain, fog machine">
         </div>
       </div>
       <div class="btn-row">
-        <button class="btn-gold" onclick="generatePrompt()">✦ Prompt generieren</button>
-        <button class="btn-ghost" onclick="clearPrompt()">Leeren</button>
+        <button class="btn-cvs btn-cvs--gold" onclick="generatePrompt()">✦ Prompt generieren</button>
+        <button class="btn-cvs btn-cvs--ghost" onclick="clearPrompt()">Leeren</button>
       </div>
-      <div class="gen-error" id="genError"></div>
+      <div class="gen-error" id="genError" role="alert" aria-live="assertive"></div>
     </div>
 
-    <div class="gen-card">
+    <div class="gen-card reveal">
       <h2>Dein fertiger Prompt</h2>
       <div class="output-box empty" id="output">Wähle Genre, Kamera &amp; Stil — dein cinematic Prompt erscheint hier.</div>
       <div class="btn-row">
-        <button class="btn-gold" onclick="copyPrompt()" id="copyBtn">📋 Prompt kopieren</button>
-        <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="btn-ghost studio-cta" id="studioLink">🎬 Im Studio verwenden →</a>
+        <button class="btn-cvs btn-cvs--gold" onclick="copyPrompt()" id="copyBtn">📋 Prompt kopieren</button>
+        <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="btn-cvs btn-cvs--ghost" id="studioLink">🎬 Im Studio verwenden →</a>
       </div>
-      <p style="margin-top:12px;font-size:12px;color:var(--muted2);">
-        <a href="academy.html" style="color:var(--accent);text-decoration:none;">📚 Mehr zu Cinematic Prompting in der Academy →</a>
+      <p style="margin-top:14px;font-size:12px;color:var(--muted2);">
+        <a href="academy.html" style="color:var(--gold);text-decoration:none;font-weight:700;">📚 Mehr zu Cinematic Prompting in der Academy →</a>
       </p>
     </div>
 
   </div>
-</div>
+</section>
 
-<div class="copy-toast" id="toast">✓ Prompt kopiert!</div>
-
-<footer class="cvs-footer-simple">
+<footer class="cvs-footer-master">
   <div class="footer-inner">
-    <div class="footer-brand">
-      <div class="footer-logo">Cinematic Vision Studio</div>
-      <p class="footer-brand-sub">Premium KI-Filmproduktion — Trailer, Transformationen, Anime &amp; Markenwelten.</p>
+    <div class="footer-brand reveal">
+      <h3>Cinematic Vision Studio</h3>
+      <p>Deine Vision. Als cinematic KI-Erlebnis. Premium AI-Cinematic-Produktion für Creator und Marken.</p>
     </div>
-    <div class="footer-cols">
-      <div class="footer-col">
-        <a href="scene-editor-test.html">Home</a>
-        <a href="https://cinematic-studio-family.onrender.com/studio-demo.php">Studio</a>
-        <a href="portfolio.html">Portfolio</a>
-        <a href="academy.html">Academy</a>
-      </div>
-      <div class="footer-col">
-        <a href="shop.html">Shop</a>
-        <a href="crystals.html">Kristalle</a>
-        <a href="calendar.html">Buchung</a>
-        <a href="contact.php">Kontakt</a>
-      </div>
+    <div class="footer-col reveal reveal-delay-1">
+      <h4>Studio</h4>
+      <a href="scene-editor-test.html">Über uns</a>
+      <a href="scene-editor-test.html#process">Prozess</a>
+      <a href="academy.html">Academy</a>
+      <a href="calendar.html">Buchung</a>
+    </div>
+    <div class="footer-col reveal reveal-delay-2">
+      <h4>Services</h4>
+      <a href="ki-videos.html">KI Videos</a>
+      <a href="portfolio.html">Trailer</a>
+      <a href="shop.html">Shop</a>
+      <a href="prompt-generator.html">Prompt Studio</a>
+      <a href="portfolio.html">Portfolio</a>
+      <a href="crystals.html">Kristalle</a>
+    </div>
+    <div class="footer-col reveal reveal-delay-3">
+      <h4>Kontakt</h4>
+      <a href="contact.php">Projekt anfragen</a>
+      <a href="https://cinematic-studio-family.onrender.com/studio-demo.php">Studio starten</a>
     </div>
   </div>
   <div class="footer-bottom">
-    <nav class="footer-legal">
+    <div class="footer-copy">© 2026 Cinematic Vision Studio · Alle Rechte vorbehalten</div>
+    <div class="footer-legal">
       <a href="impressum.html">Impressum</a>
       <a href="datenschutz.html">Datenschutz</a>
       <a href="agb.html">AGB</a>
       <a href="widerruf.html">Widerruf</a>
       <a href="cookies.html">Cookies</a>
-    </nav>
-    <div class="footer-copy">© 2026 Cinematic Vision Studio · Alle Rechte vorbehalten</div>
+      <a href="contact.php">Kontakt</a>
+    </div>
   </div>
 </footer>
 
+<div class="copy-toast" id="toast" role="status" aria-live="polite">✓ Prompt kopiert!</div>
+<div id="cvs-progress" aria-hidden="true"></div>
+<script src="assets/js/nav.js" defer></script>
 <script>
 function applyTemplate(key){
   const templates={
@@ -357,8 +539,31 @@ function clearPrompt(){
   el.classList.add('empty');
   var ge=document.getElementById('genError');if(ge)ge.classList.remove('visible');
 }
+
+/* Reveal on scroll */
+(function(){
+  var els=document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion:reduce)').matches){
+    els.forEach(function(e){e.classList.add('in');});return;
+  }
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});
+  },{threshold:.12,rootMargin:'0px 0px -8% 0px'});
+  els.forEach(function(e){io.observe(e);});
+})();
+
+/* Scroll Progress Bar */
+(function(){
+  var bar=document.getElementById('cvs-progress');if(!bar)return;
+  var raf=null;
+  function update(){
+    var h=document.documentElement.scrollHeight-window.innerHeight;
+    bar.style.width=(h>0?(window.scrollY/h*100):0)+'%';
+    raf=null;
+  }
+  window.addEventListener('scroll',function(){if(!raf)raf=requestAnimationFrame(update);},{passive:true});
+  update();
+})();
 </script>
-<div id="cursor"></div><div id="cursor-ring"></div>
-<script src="assets/js/nav.js" defer></script>
 </body>
 </html>
