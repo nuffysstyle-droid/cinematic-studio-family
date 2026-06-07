@@ -15,6 +15,16 @@
 declare(strict_types=1);
 
 /**
+ * Prüft ob E-Mail-Versand konfiguriert ist.
+ *
+ * @return bool true wenn SMTP_HOST gesetzt ist
+ */
+function csf_mail_is_configured(): bool
+{
+    return !empty(getenv('SMTP_HOST'));
+}
+
+/**
  * Sendet eine E-Mail.
  *
  * @param string $to       Empfänger (validierte E-Mail-Adresse)

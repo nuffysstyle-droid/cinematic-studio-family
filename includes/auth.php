@@ -32,6 +32,19 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/db.php';
 
+// Session-Cookie-Hardening für Seiten die config.php nicht einbinden
+if (session_status() === PHP_SESSION_NONE) {
+    $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+        || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
+    session_set_cookie_params([
+        'lifetime' => 0,
+        'path'     => '/',
+        'secure'   => $isHttps,
+        'httponly' => true,
+        'samesite' => 'Lax',
+    ]);
+}
+
 // ── Konstanten ────────────────────────────────────────────────────────────────
 
 const CSF_AUTH_SESSION_KEY       = 'csf_user';
@@ -528,13 +541,22 @@ function csf_auth_set_remember_cookie(int $userId): void
  */
 function csf_auth_get_ip(): string
 {
-    foreach (['HTTP_CF_CONNECTING_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_REAL_IP', 'REMOTE_ADDR'] as $h) {
-        $val = $_SERVER[$h] ?? '';
-        if ($val === '') continue;
-        $ip = trim(explode(',', $val)[0]);
-        if (filter_var($ip, FILTER_VALIDATE_IP)) {
-            return $ip;
+    // Render fügt die echte Client-IP rechts an X-Forwarded-For an.
+    // Das rechteiste (letzte) valide IP ist daher verlässlich;
+    // linksstehende IPs können vom Client gespooft werden.
+    $xff = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? '';
+    if ($xff !== '') {
+        $parts = array_map('trim', explode(',', $xff));
+        for ($i = count($parts) - 1; $i >= 0; $i--) {
+            if (filter_var($parts[$i], FILTER_VALIDATE_IP)) {
+                return $parts[$i];
+            }
         }
+    }
+
+    $ip = $_SERVER['REMOTE_ADDR'] ?? '';
+    if ($ip !== '' && filter_var($ip, FILTER_VALIDATE_IP)) {
+        return $ip;
     }
     return 'unknown';
 }

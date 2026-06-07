@@ -170,33 +170,22 @@ function csf_rate_limit_ensure_dir(): void {
  * @return string IP-Adresse (oder 'unknown')
  */
 function csf_rate_limit_get_ip(): string {
-    // Render.com sendet echte IP in X-Forwarded-For
-    $headers = [
-        'HTTP_CF_CONNECTING_IP',   // Cloudflare (falls später vorgeschaltet)
-        'HTTP_X_FORWARDED_FOR',    // Render / Load Balancer
-        'HTTP_X_REAL_IP',          // Nginx-Proxy
-        'REMOTE_ADDR',             // Direkt (lokale Dev-Umgebung)
-    ];
-
-    foreach ($headers as $h) {
-        $val = $_SERVER[$h] ?? '';
-        if ($val === '') {
-            continue;
-        }
-
-        // X-Forwarded-For kann kommagetrennte Liste sein → erste IP nehmen
-        $ip = trim(explode(',', $val)[0]);
-
-        // Valide IPv4 oder IPv6?
-        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
-            return $ip;
-        }
-
-        // Lokale IPs (Render internal, Dev-Loopback): REMOTE_ADDR direkt verwenden
-        if (filter_var($ip, FILTER_VALIDATE_IP)) {
-            return $ip;
+    // Render fügt die echte Client-IP rechts an X-Forwarded-For an.
+    // Das rechteiste (letzte) valide IP ist daher verlässlich;
+    // linksstehende IPs können vom Client gespooft werden.
+    $xff = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? '';
+    if ($xff !== '') {
+        $parts = array_map('trim', explode(',', $xff));
+        for ($i = count($parts) - 1; $i >= 0; $i--) {
+            if (filter_var($parts[$i], FILTER_VALIDATE_IP)) {
+                return $parts[$i];
+            }
         }
     }
 
+    $ip = $_SERVER['REMOTE_ADDR'] ?? '';
+    if ($ip !== '' && filter_var($ip, FILTER_VALIDATE_IP)) {
+        return $ip;
+    }
     return 'unknown';
 }

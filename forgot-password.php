@@ -11,6 +11,9 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/includes/functions.php';
 require_once __DIR__ . '/includes/auth.php';
+require_once __DIR__ . '/includes/mailer.php';
+
+$mailConfigured = csf_mail_is_configured();
 
 // Bereits eingeloggt → Dashboard
 if (csf_auth_user() !== null) {
@@ -74,7 +77,17 @@ $tokenMode = $token !== '' && preg_match('/^[a-f0-9]{64}$/', $token);
 </a>
 
 <div class="card">
-    <?php if ($tokenMode): ?>
+    <?php if (!$mailConfigured && !$tokenMode): ?>
+        <!-- ── E-Mail-Reset deaktiviert (Beta) ── -->
+        <div class="card-title">Passwort vergessen?</div>
+        <div class="card-sub">
+            Passwort-Reset ist in der Beta-Phase nicht verfügbar.
+        </div>
+        <div class="msg info show">
+            Bitte kontaktiere den Support, wenn du Hilfe beim Zugang brauchst.
+        </div>
+
+    <?php elseif ($tokenMode): ?>
         <!-- ── Neues Passwort setzen (Token-Modus) ── -->
         <div class="card-title">Neues Passwort setzen</div>
         <div class="card-sub">Token erkannt. Gib dein neues Passwort ein.</div>

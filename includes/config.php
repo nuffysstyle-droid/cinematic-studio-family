@@ -24,6 +24,15 @@ define('API_KEY_MIN_LENGTH', 20);
 // Session-Name konsistent über alle Seiten — muss VOR session_start() gesetzt werden.
 if (session_status() === PHP_SESSION_NONE) {
     $sessionName = getenv('PHP_SESSION_NAME') ?: 'csf_session';
+    $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+        || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
+    session_set_cookie_params([
+        'lifetime' => 0,
+        'path'     => '/',
+        'secure'   => $isHttps,
+        'httponly' => true,
+        'samesite' => 'Lax',
+    ]);
     session_name($sessionName);
     session_start();
 }

@@ -64,6 +64,7 @@ $token = trim((string)($body['token'] ?? ''));
 
 if ($token !== '') {
     // ── Modus 2: Passwort mit Token zurücksetzen ──────────────────────────────
+    // Token-Redemption darf NICHT durch fehlendes SMTP blockiert werden
 
     $newPassword        = (string)($body['new_password']         ?? '');
     $newPasswordConfirm = (string)($body['new_password_confirm'] ?? '');
@@ -118,6 +119,16 @@ if ($token !== '') {
 }
 
 // ── Modus 1: Reset-Link anfordern ─────────────────────────────────────────────
+// SMTP muss für Versand konfiguriert sein
+if (!csf_mail_is_configured()) {
+    http_response_code(503);
+    echo json_encode([
+        'status'  => 'error',
+        'message' => 'Passwort-Reset ist aktuell nicht verfügbar. Kontaktiere den Support.',
+    ], JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
 $email = strtolower(trim((string)($body['email'] ?? '')));
 
 // Immer 200 zurückgeben (User-Enumeration verhindern)
