@@ -10,49 +10,156 @@ $authUser = csf_auth_user();
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta name="theme-color" content="#020205">
   <title>Studio Demo – Cinematic Vision Studio</title>
+  <meta property="og:title" content="Studio Demo – Cinematic Vision Studio">
+  <meta property="og:description" content="Scene Replacement Editor — lade ein Video hoch, ersetze Szenen mit KI-Bildern und rendere dein finales Video.">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/png" href="assets/cvs-logo-icon.png">
+  <link rel="stylesheet" href="assets/fonts/fonts.css">
   <style>
-    :root{--bg:#06060f;--card:#0f0f1e;--card2:#161628;--text:#f0f0ff;--muted:#8888aa;--muted2:#5a5a7a;--accent:#f5c542;--accent2:#ff8c00;--blue:#3b82f6;--purple:#9333ea;--ok:#4ade80;--danger:#ff5c7a;--border:rgba(255,255,255,.09);--gold:linear-gradient(135deg,#f5c542,#ff8c00);--radius:18px;}
+    :root {
+      --black:       #020205;
+      --black-2:     #06060f;
+      --black-3:     #09091a;
+      --glass-bg:    rgba(5,8,24,0.78);
+      --glass-border:rgba(24,114,255,0.18);
+      --blue-core:   #003ee8;
+      --blue-bright: #1872ff;
+      --blue-glow:   #4da0ff;
+      --blue-pale:   rgba(77,160,255,0.10);
+      --gold:        #b8942e;
+      --gold-warm:   #d4a93c;
+      --gold-bright: #e8c355;
+      --gold-light:  #f2d878;
+      --gold-glow:   rgba(200,160,60,0.4);
+      --white:       #edf2ff;
+      --white-dim:   rgba(237,242,255,0.52);
+      --white-faint: rgba(237,242,255,0.10);
+      --radius-sm:   6px;
+      --radius-md:   14px;
+      --radius-lg:   26px;
+      --perspective: 1400px;
+      /* Legacy aliases for functional JS-referenced styles */
+      --bg:#06060f;--card:#0f0f1e;--card2:#161628;--text:#f0f0ff;--muted:#8888aa;--muted2:#5a5a7a;
+      --accent:#f5c542;--accent2:#ff8c00;--blue:#3b82f6;--purple:#9333ea;--ok:#4ade80;--danger:#ff5c7a;
+      --border:rgba(255,255,255,.09);--gold:linear-gradient(135deg,#f5c542,#ff8c00);--radius:18px;
+    }
     *{box-sizing:border-box;margin:0;padding:0;}
     html{scroll-behavior:smooth;}
-    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
-    /* Nav */
-    .nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 28px;background:rgba(6,6,15,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
-    .nav-logo{font-size:13px;font-weight:900;letter-spacing:2px;background:var(--gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-transform:uppercase;flex-shrink:0;text-decoration:none;}
-    .nav-logo span{font-size:10px;display:block;letter-spacing:4px;font-weight:400;opacity:.6;margin-top:1px;}
-    .nav-links{display:flex;align-items:center;gap:2px;flex:1;justify-content:center;}
-    .nav-link{color:var(--muted);text-decoration:none;font-size:13px;font-weight:600;padding:7px 10px;border-radius:9px;transition:color .15s,background .15s;}
-    .nav-link:hover,.nav-link.active{color:var(--text);background:rgba(255,255,255,.06);}
+    body{background:var(--black);color:var(--white);font-family:'DM Sans',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+
+    /* Film grain */
+    body::before{
+      content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.028'/%3E%3C/svg%3E");
+      opacity:.28;
+    }
+
+    /* Aurora */
+    .cvs-aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+    .orb{position:absolute;border-radius:50%;filter:blur(100px);pointer-events:none}
+    .orb-1{width:600px;height:600px;background:radial-gradient(circle,rgba(0,42,175,.08),transparent 60%);top:-10%;left:-10%;animation:orbFloat1 20s ease-in-out infinite}
+    .orb-2{width:500px;height:500px;background:radial-gradient(circle,rgba(160,118,22,.06),transparent 60%);top:20%;right:-15%;animation:orbFloat2 25s ease-in-out infinite}
+    .orb-3{width:400px;height:400px;background:radial-gradient(circle,rgba(70,22,162,.05),transparent 60%);bottom:10%;left:30%;animation:orbFloat3 18s ease-in-out infinite}
+    @keyframes orbFloat1{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,20px)}}
+    @keyframes orbFloat2{0%,100%{transform:translate(0,0)}50%{transform:translate(-20px,30px)}}
+    @keyframes orbFloat3{0%,100%{transform:translate(0,0)}50%{transform:translate(20px,-25px)}}
+
+    /* Scroll progress */
+    #cvs-progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--gold-warm),var(--gold-bright));z-index:10000;width:0%;transition:width .1s}
+
+    /* Reveal */
+    .reveal{opacity:0;transform:translateY(36px);transition:opacity .9s cubic-bezier(.23,1,.32,1),transform .9s cubic-bezier(.23,1,.32,1)}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+    .reveal-delay-1{transition-delay:.12s}
+    .reveal-delay-2{transition-delay:.22s}
+    .reveal-delay-3{transition-delay:.32s}
+
+    /* Lightbar */
+    .lightbar{height:1px;background:linear-gradient(90deg,transparent,rgba(24,114,255,.18),rgba(200,160,60,.14),transparent);margin:0 auto;max-width:1160px;width:90%}
+    /* ── NAVIGATION ── */
+    nav{
+      position:fixed;top:0;left:0;right:0;z-index:1000;
+      padding:0 clamp(24px,4vw,64px);
+      height:76px;display:flex;align-items:center;justify-content:space-between;
+      background:linear-gradient(180deg,rgba(2,2,5,.94) 0%,rgba(2,2,5,0) 100%);
+      backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+      border-bottom:1px solid rgba(255,255,255,.03);
+      transition:background .4s,border-color .4s;
+    }
+    nav.scrolled{background:rgba(2,2,5,.98);border-bottom-color:rgba(24,114,255,.1)}
+
+    .nav-logo{
+      font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;letter-spacing:.1em;
+      background:linear-gradient(130deg,var(--white) 10%,var(--blue-glow) 85%);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      text-decoration:none;flex-shrink:0;
+    }
+    .nav-logo span{-webkit-text-fill-color:var(--gold-bright)}
+
+    .nav-links{display:flex;gap:0;list-style:none;align-items:center}
+    .nav-links a{color:rgba(237,242,255,.4);text-decoration:none;font-size:.72rem;font-weight:500;letter-spacing:.07em;padding:7px 10px;transition:color .22s;text-transform:uppercase;white-space:nowrap}
+    .nav-links a:hover{color:rgba(237,242,255,.88)}
+    .nav-links .nav-cta{margin-left:10px;background:rgba(0,62,232,.15);border:1px solid rgba(24,114,255,.35);color:var(--blue-glow);padding:8px 22px;border-radius:50px;font-weight:600;-webkit-text-fill-color:var(--blue-glow);transition:all .25s}
+    .nav-links .nav-cta:hover{background:rgba(0,62,232,.28);border-color:rgba(24,114,255,.6);color:var(--white);-webkit-text-fill-color:var(--white)}
+
     .nav-actions{display:flex;align-items:center;gap:8px;flex-shrink:0;}
-    .nav-btn-ghost{color:var(--muted);text-decoration:none;font-size:13px;font-weight:700;padding:8px 13px;border-radius:10px;border:1px solid var(--border);transition:color .15s,border-color .15s;}
-    .nav-btn-ghost:hover{color:var(--text);border-color:rgba(255,255,255,.25);}
-    .nav-btn-gold{background:var(--gold);color:#1a0e00;text-decoration:none;font-size:13px;font-weight:800;padding:9px 16px;border-radius:10px;}
+    .nav-btn-ghost{color:var(--white-dim);text-decoration:none;font-size:.72rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:7px 10px;transition:color .22s;white-space:nowrap;}
+    .nav-btn-ghost:hover{color:var(--white);}
+
+    .nav-btn-gold{background:linear-gradient(135deg,var(--gold-warm),var(--gold-bright));color:#1a0e00;text-decoration:none;font-size:.72rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:8px 16px;border-radius:50px;transition:opacity .15s;}
+    .nav-btn-gold:hover{opacity:.88;}
+
     .wallet-pill{display:flex;align-items:center;gap:6px;background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.3);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:800;color:var(--accent);cursor:pointer;text-decoration:none;}
-    @media(max-width:900px){.nav-links{display:none;}}
-    @media(max-width:640px){.nav{padding:12px 16px;gap:8px;}.nav-logo span{display:none;}.nav-btn-ghost{display:none;}.nav-btn-gold{display:none;}.wallet-pill{display:none;}}
-    .mob-burger{display:none;flex-direction:column;justify-content:center;gap:5px;width:40px;height:40px;padding:8px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:10px;cursor:pointer;flex-shrink:0;}
-    .mob-burger span{display:block;height:2px;border-radius:2px;background:var(--text);transition:transform .22s,opacity .22s;}
-    .mob-burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
-    .mob-burger.open span:nth-child(2){opacity:0;}
-    .mob-burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
-    .mob-menu{position:fixed;left:0;right:0;z-index:99;background:rgba(6,6,15,.97);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);max-height:0;overflow:hidden;opacity:0;pointer-events:none;transition:max-height .3s cubic-bezier(.4,0,.2,1),opacity .22s;display:none;}
-    .mob-menu.open{max-height:560px;opacity:1;pointer-events:auto;}
-    .mob-link{display:block;padding:14px 24px;color:var(--muted);text-decoration:none;font-size:15px;font-weight:700;border-left:3px solid transparent;transition:color .15s,border-color .15s,background .15s;}
-    .mob-link.active{color:var(--accent);border-left-color:var(--accent);}
-    .mob-sep{height:1px;background:var(--border);margin:10px 20px;}
-    .mob-cta{display:block;margin:12px 20px 8px;padding:15px;background:var(--gold);color:#1a0e00;text-decoration:none;font-size:15px;font-weight:900;border-radius:13px;text-align:center;}
-    @media(max-width:900px){.mob-burger{display:flex;}.mob-menu{display:block;}}
+
+    .mob-burger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:none;border:none}
+    .mob-burger span{display:block;width:24px;height:2px;background:var(--blue-bright);border-radius:2px;transition:transform .3s,opacity .3s}
+
+    .mob-menu{
+      display:none;position:fixed;inset:0;z-index:999;
+      background:rgba(2,2,5,.98);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+      flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:76px 40px 40px;
+      overflow-y:auto;
+    }
+    .mob-menu.open{display:flex}
+    .mob-link{
+      font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:700;
+      color:var(--white);text-decoration:none;
+      padding:11px 0;width:100%;text-align:center;
+      border-bottom:1px solid rgba(24,114,255,.06);
+      transition:color .22s;letter-spacing:-.01em;
+    }
+    .mob-link:hover{color:var(--blue-bright)}
+    .mob-link.active{color:var(--blue-bright)}
+    .mob-link:last-child{border-bottom:none;margin-top:8px}
+    .mob-cta{
+      margin-top:12px;background:rgba(0,62,232,.15);border:1px solid rgba(24,114,255,.35);color:var(--blue-glow);
+      padding:12px 28px;border-radius:50px;font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;
+      text-decoration:none;transition:all .25s;text-align:center;
+    }
+    .mob-cta:hover{background:rgba(0,62,232,.28);border-color:rgba(24,114,255,.6);color:var(--white);}
+    @media(max-width:900px){.nav-links{display:none}.mob-burger{display:flex}}
     /* Page */
-    .page{padding:100px 0 60px;}
-    .wrap{width:min(1160px,calc(100% - 48px));margin:0 auto;}
+    .page{padding:120px 0 60px;position:relative;z-index:1;}
+    .page{
+      background:
+        radial-gradient(ellipse 80% 50% at 50% 0%,rgba(0,38,148,.08) 0%,transparent 55%),
+        radial-gradient(ellipse 60% 40% at 85% 20%,rgba(170,130,30,.05) 0%,transparent 50%),
+        var(--black);
+    }
+    .wrap{width:min(1160px,calc(100% - 48px));margin:0 auto;position:relative;z-index:1;}
     /* Demo header */
     .demo-header{margin-bottom:32px;}
-    .demo-eyebrow{font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--blue);background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.25);border-radius:999px;padding:6px 14px;display:inline-flex;align-items:center;gap:8px;margin-bottom:14px;}
-    .demo-eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok);animation:rblink 2s ease-in-out infinite;}
-    @keyframes rblink{0%,100%{opacity:1}50%{opacity:.2}}
-    .demo-header h1{font-size:clamp(28px,4vw,48px);font-weight:900;letter-spacing:-1.5px;margin-bottom:8px;}
-    .demo-header h1 span{background:linear-gradient(135deg,#3b82f6,#9333ea);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-    .demo-header p{color:var(--muted);font-size:15px;line-height:1.6;max-width:600px;}
+    .demo-eyebrow{
+      display:inline-flex;align-items:center;gap:12px;
+      font-size:.62rem;font-weight:600;letter-spacing:.26em;text-transform:uppercase;
+      color:rgba(77,160,255,.6);margin-bottom:22px;
+    }
+    .demo-eyebrow::before{content:'';width:24px;height:1px;background:linear-gradient(90deg,var(--gold-warm),transparent);opacity:.72}
+    .demo-header h1{font-size:clamp(28px,4vw,48px);font-weight:900;letter-spacing:-1.5px;margin-bottom:8px;font-family:'Syne',sans-serif;}
+    .demo-header h1 span{background:linear-gradient(110deg,var(--blue-bright) 0%,var(--blue-glow) 45%,var(--gold-warm) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .demo-header p{color:var(--white-dim);font-size:15px;line-height:1.6;max-width:600px;}
     /* Demo module */
     .demo-module{background:linear-gradient(145deg,rgba(59,130,246,.05),rgba(147,51,234,.03));border:1px solid rgba(59,130,246,.18);border-radius:22px;padding:32px;}
     .demo-note{margin-top:20px;padding:12px 16px;background:rgba(245,197,66,.05);border:1px solid rgba(245,197,66,.15);border-radius:12px;color:var(--muted);font-size:13px;line-height:1.5;}
@@ -123,65 +230,99 @@ $authUser = csf_auth_user();
     .back-link{display:inline-flex;align-items:center;gap:6px;color:var(--muted);text-decoration:none;font-size:13px;font-weight:600;margin-bottom:28px;transition:color .15s;}
     .back-link:hover{color:var(--text);}
     /* Footer */
-    .footer{border-top:1px solid var(--border);padding:32px 0;margin-top:60px;}
-    .footer-inner{width:min(1160px,calc(100% - 48px));margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
-    .footer-logo{font-size:13px;font-weight:900;letter-spacing:2px;background:var(--gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-    .footer-copy{font-size:12px;color:var(--muted2);}
-    @media(max-width:900px){.slots{grid-template-columns:repeat(3,1fr);}.meta{grid-template-columns:repeat(2,1fr);}}
-    @media(max-width:560px){.slots{grid-template-columns:repeat(2,1fr);}.meta{grid-template-columns:1fr;}}
+    footer{background:rgba(2,2,5,.98);border-top:1px solid rgba(24,114,255,.09);padding:68px clamp(20px,6vw,80px) 34px;position:relative;z-index:1;}
+    .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:44px;margin-bottom:52px}
+    .footer-brand h3{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;margin-bottom:14px;background:linear-gradient(130deg,var(--blue-bright),var(--gold-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:.02em}
+    .footer-brand p{font-size:.86rem;color:var(--white-dim);line-height:1.78;max-width:280px}
+    .footer-col h4{font-family:'Syne',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--blue-glow);margin-bottom:18px;opacity:.75}
+    .footer-col a{display:block;color:var(--white-dim);text-decoration:none;font-size:.86rem;padding:5px 0;transition:color .22s;opacity:.7}
+    .footer-col a:hover{color:var(--blue-bright);opacity:1}
+    .footer-bottom{border-top:1px solid rgba(255,255,255,.05);padding-top:26px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+    .footer-bottom p{font-size:.76rem;color:rgba(237,242,255,.25)}
+    .footer-socials{display:flex;gap:10px}
+    .social-btn{width:36px;height:36px;background:rgba(24,114,255,.07);border:1px solid rgba(24,114,255,.18);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;text-decoration:none;color:var(--blue-glow);font-size:.8rem;font-weight:700;transition:all .3s;opacity:.7}
+    .social-btn:hover{background:rgba(24,114,255,.18);border-color:var(--blue-bright);opacity:1}
+    @media(max-width:1100px){
+      .footer-grid{grid-template-columns:1fr 1fr}
+    }
+    @media(max-width:900px){
+      .slots{grid-template-columns:repeat(3,1fr);}
+      .meta{grid-template-columns:repeat(2,1fr);}
+    }
+    @media(max-width:768px){
+      .footer-grid{grid-template-columns:1fr}
+    }
+    @media(max-width:560px){
+      .slots{grid-template-columns:repeat(2,1fr);}
+      .meta{grid-template-columns:1fr;}
+    }
   </style>
 </head>
 <body>
 
-  <nav class="nav">
-    <a href="https://cinematic-vision-studio.de/scene-editor-test.html" class="nav-logo">Cinematic Vision Studio<span>Premium KI-Filmstudio</span></a>
-    <div class="nav-links">
-      <a href="https://cinematic-vision-studio.de/scene-editor-test.html" class="nav-link">Home</a>
-      <a href="studio-demo.php" class="nav-link active">Studio</a>
-      <a href="https://cinematic-vision-studio.de/shop.html" class="nav-link">Shop Beta</a>
-      <a href="https://cinematic-vision-studio.de/academy.html" class="nav-link">Academy</a>
-      <a href="https://cinematic-vision-studio.de/crystals.html" class="nav-link">Kristalle</a>
-    </div>
-    <div class="nav-actions">
-      <?php if ($authUser): ?>
-        <a href="https://cinematic-vision-studio.de/crystals.html" class="wallet-pill">💎 <?= htmlspecialchars((string)($authUser['crystals_balance'] ?? 0)) ?></a>
-        <form method="POST" action="/api/auth/logout.php" style="display:inline" id="logoutForm">
-          <input type="hidden" name="redirect" value="studio-demo.php">
-          <button type="submit" class="nav-btn-ghost" style="cursor:pointer;font-family:inherit">Logout</button>
-        </form>
-      <?php else: ?>
-        <a href="login.php?redirect=studio-demo.php" class="nav-btn-ghost">Login</a>
-        <a href="login.php?tab=register&redirect=studio-demo.php" class="nav-btn-gold">Kostenlos starten</a>
-        <a href="https://cinematic-vision-studio.de/crystals.html" class="wallet-pill">💎 Free</a>
-      <?php endif; ?>
-    </div>
-    <button class="mob-burger" id="mobBurger" aria-label="Menü öffnen" aria-expanded="false"><span></span><span></span><span></span></button>
-  </nav>
-  <div class="mob-menu" id="mobMenu">
-    <a href="https://cinematic-vision-studio.de/scene-editor-test.html" class="mob-link">🏠 Home</a>
-    <a href="studio-demo.php" class="mob-link active">🎬 Studio</a>
-    <a href="https://cinematic-vision-studio.de/shop.html" class="mob-link">🛍️ Shop Beta</a>
-    <a href="https://cinematic-vision-studio.de/academy.html" class="mob-link">🎓 Academy</a>
-    <a href="https://cinematic-vision-studio.de/crystals.html" class="mob-link">💎 Kristalle</a>
-    <div class="mob-sep"></div>
+<div id="cvs-progress"></div>
+
+<div class="cvs-aurora">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<nav>
+  <a href="https://cinematic-vision-studio.de/scene-editor-test.html" class="nav-logo">Cinematic Vision <span>Studio</span></a>
+  <div class="nav-links">
+    <a href="https://cinematic-vision-studio.de/scene-editor-test.html">Home</a>
+    <a href="studio-demo.php" class="nav-cta">Studio</a>
+    <a href="https://cinematic-vision-studio.de/prompt-generator.html">Prompts</a>
+    <a href="https://cinematic-vision-studio.de/portfolio.html">Portfolio</a>
+    <a href="https://cinematic-vision-studio.de/crystals.html">Kristalle</a>
+    <a href="https://cinematic-vision-studio.de/shop.html">Shop</a>
+    <a href="https://cinematic-vision-studio.de/academy.html">Academy</a>
+    <a href="https://cinematic-vision-studio.de/contact.php">Kontakt</a>
+  </div>
+  <div class="nav-actions">
     <?php if ($authUser): ?>
-      <span class="mob-link" style="color:var(--accent)">💎 <?= htmlspecialchars((string)($authUser['crystals_balance'] ?? 0)) ?> Kristalle · <?= htmlspecialchars((string)($authUser['email'] ?? '')) ?></span>
-      <form method="POST" action="/api/auth/logout.php" style="margin:4px 0" id="logoutFormMob">
+      <a href="https://cinematic-vision-studio.de/crystals.html" class="wallet-pill"><?= htmlspecialchars((string)($authUser['crystals_balance'] ?? 0)) ?></a>
+      <form method="POST" action="/api/auth/logout.php" style="display:inline" id="logoutForm">
         <input type="hidden" name="redirect" value="studio-demo.php">
-        <button type="submit" class="mob-cta" style="width:100%;cursor:pointer;font-family:inherit;background:rgba(255,92,122,.15);color:#ff5c7a">🚪 Logout</button>
+        <button type="submit" class="nav-btn-ghost" style="cursor:pointer;font-family:inherit">Logout</button>
       </form>
     <?php else: ?>
-      <a href="login.php?redirect=studio-demo.php" class="mob-link">🔑 Login</a>
-      <a href="login.php?tab=register&redirect=studio-demo.php" class="mob-cta">✨ Kostenlos starten</a>
+      <a href="login.php?redirect=studio-demo.php" class="nav-btn-ghost">Login</a>
+      <a href="login.php?tab=register&redirect=studio-demo.php" class="nav-btn-gold">Studio starten</a>
+      <a href="https://cinematic-vision-studio.de/crystals.html" class="wallet-pill">Free</a>
     <?php endif; ?>
   </div>
+  <button class="mob-burger" id="mobBurger" aria-label="Menü öffnen" aria-expanded="false"><span></span><span></span><span></span></button>
+</nav>
+<div class="mob-menu" id="mobMenu">
+  <a href="https://cinematic-vision-studio.de/scene-editor-test.html" class="mob-link">Home</a>
+  <a href="studio-demo.php" class="mob-link active">Studio</a>
+  <a href="https://cinematic-vision-studio.de/prompt-generator.html" class="mob-link">Prompts</a>
+  <a href="https://cinematic-vision-studio.de/portfolio.html" class="mob-link">Portfolio</a>
+  <a href="https://cinematic-vision-studio.de/crystals.html" class="mob-link">Kristalle</a>
+  <a href="https://cinematic-vision-studio.de/shop.html" class="mob-link">Shop</a>
+  <a href="https://cinematic-vision-studio.de/academy.html" class="mob-link">Academy</a>
+  <a href="https://cinematic-vision-studio.de/contact.php" class="mob-link">Kontakt</a>
+  <div class="mob-sep"></div>
+  <?php if ($authUser): ?>
+    <span class="mob-link" style="color:var(--accent)"><?= htmlspecialchars((string)($authUser['crystals_balance'] ?? 0)) ?> Kristalle · <?= htmlspecialchars((string)($authUser['email'] ?? '')) ?></span>
+    <form method="POST" action="/api/auth/logout.php" style="margin:4px 0" id="logoutFormMob">
+      <input type="hidden" name="redirect" value="studio-demo.php">
+      <button type="submit" class="mob-cta" style="width:100%;cursor:pointer;font-family:inherit;background:rgba(255,92,122,.15);color:#ff5c7a">Logout</button>
+    </form>
+  <?php else: ?>
+    <a href="login.php?redirect=studio-demo.php" class="mob-link">Login</a>
+    <a href="login.php?tab=register&redirect=studio-demo.php" class="mob-cta">Studio starten</a>
+  <?php endif; ?>
+</div>
 
   <div class="page">
     <div class="wrap">
 
-      <a href="https://cinematic-vision-studio.de/scene-editor-test.html" class="back-link">← Zurück zur Startseite</a>
+      <a href="https://cinematic-vision-studio.de/scene-editor-test.html" class="back-link reveal reveal-delay-1">← Zurück zur Startseite</a>
 
-      <div class="demo-header">
+      <div class="demo-header reveal reveal-delay-1">
         <div class="demo-eyebrow">Demo aktiv</div>
         <h1>Scene <span>Replacement Editor</span></h1>
         <p>Lade ein Referenzvideo hoch — das Backend analysiert es, erzeugt Szenen-Slots und zeigt Thumbnails. Dann kannst du pro Slot Bilder, Videos oder Text ersetzen.</p>
@@ -255,12 +396,42 @@ $authUser = csf_auth_user();
     </div>
   </div>
 
-  <footer class="footer">
-    <div class="footer-inner">
-      <div class="footer-logo">Cinematic Vision Studio</div>
-      <div class="footer-copy">© 2026 · Demo-Version · <a href="scene-editor-test.html" style="color:var(--accent);text-decoration:none;">Startseite</a></div>
+  <footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <h3>Cinematic Vision Studio</h3>
+      <p>Deine Vision. Als cinematic KI-Erlebnis. Premium AI-Cinematic-Produktion für Creator und Marken.</p>
     </div>
-  </footer>
+    <div class="footer-col">
+      <h4>Produkt</h4>
+      <a href="https://cinematic-vision-studio.de/scene-editor-test.html">Home</a>
+      <a href="https://cinematic-vision-studio.de/portfolio.html">Portfolio</a>
+      <a href="https://cinematic-vision-studio.de/shop.html">Shop</a>
+      <a href="https://cinematic-vision-studio.de/crystals.html">Kristalle</a>
+    </div>
+    <div class="footer-col">
+      <h4>Ressourcen</h4>
+      <a href="https://cinematic-vision-studio.de/academy.html">Academy</a>
+      <a href="https://cinematic-vision-studio.de/prompt-generator.html">Prompts</a>
+      <a href="https://cinematic-vision-studio.de/contact.php">Kontakt</a>
+    </div>
+    <div class="footer-col">
+      <h4>Rechtliches</h4>
+      <a href="https://cinematic-vision-studio.de/impressum.html">Impressum</a>
+      <a href="https://cinematic-vision-studio.de/datenschutz.html">Datenschutz</a>
+      <a href="https://cinematic-vision-studio.de/agb.html">AGB</a>
+      <a href="https://cinematic-vision-studio.de/cookies.html">Cookies</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Cinematic Vision Studio · Alle Rechte vorbehalten</p>
+    <div class="footer-socials">
+      <a href="#" class="social-btn" aria-label="Instagram">IG</a>
+      <a href="#" class="social-btn" aria-label="YouTube">YT</a>
+      <a href="#" class="social-btn" aria-label="TikTok">TT</a>
+    </div>
+  </div>
+</footer>
 
   <script>
     "use strict";
@@ -660,6 +831,64 @@ $authUser = csf_auth_user();
       }
     })();
   </script>
-  <script>(function(){var b=document.getElementById('mobBurger'),m=document.getElementById('mobMenu');if(!b||!m)return;function t(){m.style.top=document.querySelector('.nav').offsetHeight+'px';}t();window.addEventListener('resize',t);b.addEventListener('click',function(e){e.stopPropagation();var o=m.classList.toggle('open');b.classList.toggle('open',o);b.setAttribute('aria-expanded',o?'true':'false');b.setAttribute('aria-label',o?'Menü schließen':'Menü öffnen');});m.querySelectorAll('.mob-link,.mob-cta').forEach(function(l){l.addEventListener('click',function(){m.classList.remove('open');b.classList.remove('open');b.setAttribute('aria-expanded','false');b.setAttribute('aria-label','Menü öffnen');});});document.addEventListener('click',function(e){if(!b.contains(e.target)&&!m.contains(e.target)){m.classList.remove('open');b.classList.remove('open');b.setAttribute('aria-expanded','false');}});document.addEventListener('keydown',function(e){if(e.key==='Escape'){m.classList.remove('open');b.classList.remove('open');b.setAttribute('aria-expanded','false');}});})();</script>
+  <script>(function(){
+    "use strict";
+    var b=document.getElementById('mobBurger'),m=document.getElementById('mobMenu');
+    if(b&&m){
+      function t(){m.style.top=document.querySelector('nav').offsetHeight+'px';}
+      t();window.addEventListener('resize',t);
+      b.addEventListener('click',function(e){
+        e.stopPropagation();
+        var o=m.classList.toggle('open');
+        b.classList.toggle('open',o);
+        b.setAttribute('aria-expanded',o?'true':'false');
+        b.setAttribute('aria-label',o?'Menü schließen':'Menü öffnen');
+        document.body.style.overflow=o?'hidden':'';
+      });
+      m.querySelectorAll('.mob-link,.mob-cta').forEach(function(l){
+        l.addEventListener('click',function(){
+          m.classList.remove('open');b.classList.remove('open');
+          b.setAttribute('aria-expanded','false');b.setAttribute('aria-label','Menü öffnen');
+          document.body.style.overflow='';
+        });
+      });
+      document.addEventListener('click',function(e){
+        if(!b.contains(e.target)&&!m.contains(e.target)){
+          m.classList.remove('open');b.classList.remove('open');
+          b.setAttribute('aria-expanded','false');document.body.style.overflow='';
+        }
+      });
+      document.addEventListener('keydown',function(e){
+        if(e.key==='Escape'){
+          m.classList.remove('open');b.classList.remove('open');
+          b.setAttribute('aria-expanded','false');document.body.style.overflow='';
+        }
+      });
+    }
+
+    var prog=document.getElementById('cvs-progress');
+    if(prog){
+      window.addEventListener('scroll',function(){
+        var h=document.documentElement;
+        prog.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';
+      });
+    }
+
+    var nav=document.querySelector('nav');
+    if(nav){
+      window.addEventListener('scroll',function(){
+        nav.classList.toggle('scrolled',window.scrollY>20);
+      });
+    }
+
+    if('IntersectionObserver' in window){
+      var ro=new IntersectionObserver(function(es){
+        es.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible');});
+      },{threshold:.1});
+      document.querySelectorAll('.reveal').forEach(function(el){ro.observe(el);});
+    }else{
+      document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('visible');});
+    }
+  })();</script>
 </body>
 </html>
