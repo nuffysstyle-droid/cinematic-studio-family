@@ -50,6 +50,19 @@ function csf_rate_limit_check(
 ): array {
     csf_rate_limit_ensure_dir();
 
+    // Verzeichnis konnte nicht angelegt werden → sicherheitshalber blocken
+    if (!is_dir(CSF_RATE_LIMIT_DIR)) {
+        $now = time();
+        $resetAt = ((int) floor($now / $windowSeconds) + 1) * $windowSeconds;
+        return [
+            'allowed'   => false,
+            'remaining' => 0,
+            'limit'     => $maxRequests,
+            'reset_at'  => $resetAt,
+            'reset_in'  => $resetAt - $now,
+        ];
+    }
+
     $ip     = csf_rate_limit_get_ip();
     $ipHash = hash('sha256', $ip . $action); // IP + Aktion kombiniert hashen
     $now    = time();
@@ -63,19 +76,57 @@ function csf_rate_limit_check(
     // Datei mit LOCK_EX öffnen (atomares Read-Modify-Write)
     $fp = @fopen($filename, 'c+');
     if ($fp === false) {
-        // Kann nicht schreiben → Limit als erlaubt annehmen (fail-open)
-        return ['allowed' => true, 'remaining' => $maxRequests - 1, 'limit' => $maxRequests,
-                'reset_at' => $resetAt, 'reset_in' => $resetAt - $now];
+        // Kann nicht schreiben → sicherheitshalber blocken (fail-closed)
+        return [
+            'allowed'   => false,
+            'remaining' => 0,
+            'limit'     => $maxRequests,
+            'reset_at'  => $resetAt,
+            'reset_in'  => $resetAt - $now,
+        ];
     }
 
     if (!flock($fp, LOCK_EX)) {
         fclose($fp);
-        return ['allowed' => true, 'remaining' => $maxRequests - 1, 'limit' => $maxRequests,
-                'reset_at' => $resetAt, 'reset_in' => $resetAt - $now];
+        // Lock nicht erhalten → sicherheitshalber blocken (fail-closed)
+        return [
+            'allowed'   => false,
+            'remaining' => 0,
+            'limit'     => $maxRequests,
+            'reset_at'  => $resetAt,
+            'reset_in'  => $resetAt - $now,
+        ];
     }
 
-    $raw   = stream_get_contents($fp);
-    $data  = ($raw !== false && $raw !== '') ? (json_decode($raw, true) ?? []) : [];
+    $raw  = stream_get_contents($fp);
+    if ($raw === false) {
+        flock($fp, LOCK_UN);
+        fclose($fp);
+        return [
+            'allowed'   => false,
+            'remaining' => 0,
+            'limit'     => $maxRequests,
+            'reset_at'  => $resetAt,
+            'reset_in'  => $resetAt - $now,
+        ];
+    }
+
+    $data = [];
+    if ($raw !== '') {
+        $decoded = json_decode($raw, true);
+        if (!is_array($decoded)) {
+            flock($fp, LOCK_UN);
+            fclose($fp);
+            return [
+                'allowed'   => false,
+                'remaining' => 0,
+                'limit'     => $maxRequests,
+                'reset_at'  => $resetAt,
+                'reset_in'  => $resetAt - $now,
+            ];
+        }
+        $data = $decoded;
+    }
 
     $count = (int)($data['count'] ?? 0);
     $count++;
