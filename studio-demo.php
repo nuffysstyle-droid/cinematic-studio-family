@@ -15,6 +15,14 @@ $authUser = csf_auth_user();
   <meta property="og:title" content="Studio Demo – Cinematic Vision Studio">
   <meta property="og:description" content="Scene Replacement Editor — lade ein Video hoch, ersetze Szenen mit KI-Bildern und rendere dein finales Video.">
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Cinematic Vision Studio">
+  <meta property="og:url" content="https://cinematic-studio-family.onrender.com/studio-demo.php">
+  <meta property="og:image" content="https://cinematic-vision-studio.de/assets/cvs-logo-icon.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Studio Demo – Cinematic Vision Studio">
+  <meta name="twitter:description" content="Scene Replacement Editor — lade ein Video hoch, ersetze Szenen mit KI-Bildern und rendere dein finales Video.">
+  <meta name="twitter:image" content="https://cinematic-vision-studio.de/assets/cvs-logo-icon.png">
+  <link rel="canonical" href="https://cinematic-studio-family.onrender.com/studio-demo.php">
   <link rel="icon" type="image/png" href="assets/cvs-logo-icon.png">
   <link rel="stylesheet" href="assets/fonts/fonts.css">
   <style>
@@ -55,16 +63,20 @@ $authUser = csf_auth_user();
       background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.028'/%3E%3C/svg%3E");
       opacity:.28;
     }
+    /* Cursor disable */
+    html,body{cursor:auto!important}
+    a,button,[role=button],label,.nav-burger{cursor:pointer!important}
+    #cursor,#cursor-ring{display:none!important}
 
     /* Aurora */
     .cvs-aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-    .orb{position:absolute;border-radius:50%;filter:blur(100px);pointer-events:none}
-    .orb-1{width:600px;height:600px;background:radial-gradient(circle,rgba(0,42,175,.08),transparent 60%);top:-10%;left:-10%;animation:orbFloat1 20s ease-in-out infinite}
-    .orb-2{width:500px;height:500px;background:radial-gradient(circle,rgba(160,118,22,.06),transparent 60%);top:20%;right:-15%;animation:orbFloat2 25s ease-in-out infinite}
-    .orb-3{width:400px;height:400px;background:radial-gradient(circle,rgba(70,22,162,.05),transparent 60%);bottom:10%;left:30%;animation:orbFloat3 18s ease-in-out infinite}
-    @keyframes orbFloat1{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,20px)}}
-    @keyframes orbFloat2{0%,100%{transform:translate(0,0)}50%{transform:translate(-20px,30px)}}
-    @keyframes orbFloat3{0%,100%{transform:translate(0,0)}50%{transform:translate(20px,-25px)}}
+    .cvs-aurora .orb{position:absolute;border-radius:50%;filter:blur(120px);will-change:transform}
+    .orb-1{width:56vw;height:56vw;left:-14vw;top:-12vw;background:radial-gradient(circle,rgba(24,114,255,.26),transparent 66%);animation:drift1 28s ease-in-out infinite}
+    .orb-2{width:50vw;height:50vw;right:-14vw;top:34vh;background:radial-gradient(circle,rgba(232,169,59,.18),transparent 66%);animation:drift2 34s ease-in-out infinite}
+    .orb-3{width:46vw;height:46vw;left:28vw;bottom:-16vw;background:radial-gradient(circle,rgba(0,62,232,.18),transparent 68%);animation:drift1 40s ease-in-out infinite reverse}
+    .orb-4{width:34vw;height:34vw;right:18vw;bottom:8vh;background:radial-gradient(circle,rgba(212,146,43,.12),transparent 70%);animation:drift2 46s ease-in-out infinite}
+    @keyframes drift1{0%,100%{transform:translate(0,0)}50%{transform:translate(7vw,5vh)}}
+    @keyframes drift2{0%,100%{transform:translate(0,0)}50%{transform:translate(-7vw,-4vh)}}
 
     /* Scroll progress */
     #cvs-progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--gold-warm),var(--gold-bright));z-index:10000;width:0%;transition:width .1s}
@@ -116,6 +128,15 @@ $authUser = csf_auth_user();
     .mob-burger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:none;border:none}
     .mob-burger span{display:block;width:24px;height:2px;background:var(--blue-bright);border-radius:2px;transition:transform .3s,opacity .3s}
 
+    /* ── Cinematic Nav (Master) ── */
+    .cvs-nav-simple{background:linear-gradient(180deg,rgba(3,4,10,.92) 0%,rgba(3,4,10,.74) 58%,rgba(3,4,10,0) 100%);border-bottom:0;backdrop-filter:blur(18px) saturate(115%);-webkit-backdrop-filter:blur(18px) saturate(115%);padding-bottom:18px}
+    .cvs-nav-simple::after{content:'';position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,transparent,rgba(24,114,255,.45),rgba(232,195,85,.4),transparent);opacity:.7}
+    .cvs-nav-simple.scrolled{background:linear-gradient(180deg,rgba(2,2,6,.96) 0%,rgba(2,2,6,.86) 70%,rgba(2,2,6,.55) 100%)}
+    .nav-logo-img-wrap{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
+    .nav-logo-img{height:40px;width:40px;object-fit:contain;display:block}
+    .nav-logo-text{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;letter-spacing:.1em;color:var(--white);text-decoration:none;}
+    .nav-logo-text span{color:var(--gold-bright);margin-left:4px}
+
     .mob-menu{
       display:none;position:fixed;inset:0;z-index:999;
       background:rgba(2,2,5,.98);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
@@ -152,11 +173,15 @@ $authUser = csf_auth_user();
     /* Demo header */
     .demo-header{margin-bottom:32px;}
     .demo-eyebrow{
-      display:inline-flex;align-items:center;gap:12px;
-      font-size:.62rem;font-weight:600;letter-spacing:.26em;text-transform:uppercase;
-      color:rgba(77,160,255,.6);margin-bottom:22px;
+      display:inline-flex;align-items:center;gap:10px;
+      font-family:'Syne',sans-serif;font-size:13px;font-weight:900;letter-spacing:2.5px;text-transform:uppercase;
+      color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;
+      text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22);
+      margin-bottom:22px;
     }
-    .demo-eyebrow::before{content:'';width:24px;height:1px;background:linear-gradient(90deg,var(--gold-warm),transparent);opacity:.72}
+    .demo-eyebrow::before,.demo-eyebrow::after{content:'';height:1px;width:34px}
+    .demo-eyebrow::before{background:linear-gradient(90deg,transparent,var(--blue-glow))}
+    .demo-eyebrow::after{background:linear-gradient(90deg,var(--gold-warm),transparent)}
     .demo-header h1{font-size:clamp(28px,4vw,48px);font-weight:900;letter-spacing:-1.5px;margin-bottom:8px;font-family:'Syne',sans-serif;}
     .demo-header h1 span{background:linear-gradient(110deg,var(--blue-bright) 0%,var(--blue-glow) 45%,var(--gold-warm) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
     .demo-header p{color:var(--white-dim);font-size:15px;line-height:1.6;max-width:600px;}
@@ -229,21 +254,21 @@ $authUser = csf_auth_user();
     /* Back link */
     .back-link{display:inline-flex;align-items:center;gap:6px;color:var(--muted);text-decoration:none;font-size:13px;font-weight:600;margin-bottom:28px;transition:color .15s;}
     .back-link:hover{color:var(--text);}
-    /* Footer */
-    footer{background:rgba(2,2,5,.98);border-top:1px solid rgba(24,114,255,.09);padding:68px clamp(20px,6vw,80px) 34px;position:relative;z-index:1;}
-    .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:44px;margin-bottom:52px}
+    /* Footer (Master) */
+    .cvs-footer-master{position:relative;z-index:1;background:linear-gradient(180deg,rgba(2,2,5,.98) 0%,rgba(2,2,5,.88) 100%);border-top:1px solid rgba(24,114,255,.09);padding:80px clamp(20px,5vw,80px) 32px}
+    .footer-inner{width:min(1160px,calc(100% - 48px));margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px}
     .footer-brand h3{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;margin-bottom:14px;background:linear-gradient(130deg,var(--blue-bright),var(--gold-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:.02em}
     .footer-brand p{font-size:.86rem;color:var(--white-dim);line-height:1.78;max-width:280px}
     .footer-col h4{font-family:'Syne',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--blue-glow);margin-bottom:18px;opacity:.75}
     .footer-col a{display:block;color:var(--white-dim);text-decoration:none;font-size:.86rem;padding:5px 0;transition:color .22s;opacity:.7}
     .footer-col a:hover{color:var(--blue-bright);opacity:1}
-    .footer-bottom{border-top:1px solid rgba(255,255,255,.05);padding-top:26px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
-    .footer-bottom p{font-size:.76rem;color:rgba(237,242,255,.25)}
-    .footer-socials{display:flex;gap:10px}
-    .social-btn{width:36px;height:36px;background:rgba(24,114,255,.07);border:1px solid rgba(24,114,255,.18);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;text-decoration:none;color:var(--blue-glow);font-size:.8rem;font-weight:700;transition:all .3s;opacity:.7}
-    .social-btn:hover{background:rgba(24,114,255,.18);border-color:var(--blue-bright);opacity:1}
+    .footer-bottom{border-top:1px solid rgba(255,255,255,.05);padding-top:26px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;margin-top:40px}
+    .footer-copy{font-size:.76rem;color:rgba(237,242,255,.25)}
+    .footer-legal{display:flex;gap:18px;flex-wrap:wrap}
+    .footer-legal a{font-size:.72rem;color:rgba(237,242,255,.35);text-decoration:none;transition:color .22s}
+    .footer-legal a:hover{color:var(--blue-bright)}
     @media(max-width:1100px){
-      .footer-grid{grid-template-columns:1fr 1fr}
+      .footer-inner{grid-template-columns:1fr 1fr}
     }
     @media(max-width:900px){
       .slots{grid-template-columns:repeat(3,1fr);}
@@ -266,20 +291,24 @@ $authUser = csf_auth_user();
   <div class="orb orb-1"></div>
   <div class="orb orb-2"></div>
   <div class="orb orb-3"></div>
+  <div class="orb orb-4"></div>
 </div>
 
-<nav>
-  <a href="https://cinematic-vision-studio.de/scene-editor-test.html" class="nav-logo">Cinematic Vision <span>Studio</span></a>
-  <div class="nav-links">
-    <a href="https://cinematic-vision-studio.de/scene-editor-test.html">Home</a>
-    <a href="studio-demo.php" class="nav-cta">Studio</a>
-    <a href="https://cinematic-vision-studio.de/prompt-generator.html">Prompts</a>
-    <a href="https://cinematic-vision-studio.de/portfolio.html">Portfolio</a>
-    <a href="https://cinematic-vision-studio.de/crystals.html">Kristalle</a>
-    <a href="https://cinematic-vision-studio.de/shop.html">Shop</a>
-    <a href="https://cinematic-vision-studio.de/academy.html">Academy</a>
-    <a href="https://cinematic-vision-studio.de/contact.php">Kontakt</a>
-  </div>
+<nav class="cvs-nav-simple" id="main-nav">
+  <a href="https://cinematic-vision-studio.de/scene-editor-test.html" class="nav-logo-img-wrap">
+    <img src="assets/cvs-logo-icon.png" alt="CVS" class="nav-logo-img">
+    <span class="nav-logo-text">Cinematic Vision<span>Studios</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="https://cinematic-vision-studio.de/scene-editor-test.html">Home</a></li>
+    <li><a href="studio-demo.php" class="nav-cta">Studio</a></li>
+    <li><a href="https://cinematic-vision-studio.de/prompt-generator.html">Prompts</a></li>
+    <li><a href="https://cinematic-vision-studio.de/portfolio.html">Portfolio</a></li>
+    <li><a href="https://cinematic-vision-studio.de/crystals.html">Kristalle</a></li>
+    <li><a href="https://cinematic-vision-studio.de/shop.html">Shop</a></li>
+    <li><a href="https://cinematic-vision-studio.de/academy.html">Academy</a></li>
+    <li><a href="https://cinematic-vision-studio.de/contact.php">Kontakt</a></li>
+  </ul>
   <div class="nav-actions">
     <?php if ($authUser): ?>
       <a href="https://cinematic-vision-studio.de/crystals.html" class="wallet-pill"><?= htmlspecialchars((string)($authUser['crystals_balance'] ?? 0)) ?></a>
@@ -293,9 +322,9 @@ $authUser = csf_auth_user();
       <a href="https://cinematic-vision-studio.de/crystals.html" class="wallet-pill">Free</a>
     <?php endif; ?>
   </div>
-  <button class="mob-burger" id="mobBurger" aria-label="Menü öffnen" aria-expanded="false"><span></span><span></span><span></span></button>
+  <button class="mob-burger nav-burger" id="mobBurger" aria-label="Menü öffnen" aria-expanded="false"><span></span><span></span><span></span></button>
 </nav>
-<div class="mob-menu" id="mobMenu">
+<div class="mob-menu" id="mobMenu" role="navigation" aria-label="Navigation">
   <a href="https://cinematic-vision-studio.de/scene-editor-test.html" class="mob-link">Home</a>
   <a href="studio-demo.php" class="mob-link active">Studio</a>
   <a href="https://cinematic-vision-studio.de/prompt-generator.html" class="mob-link">Prompts</a>
@@ -396,42 +425,50 @@ $authUser = csf_auth_user();
     </div>
   </div>
 
-  <footer>
-  <div class="footer-grid">
-    <div class="footer-brand">
-      <h3>Cinematic Vision Studio</h3>
-      <p>Deine Vision. Als cinematic KI-Erlebnis. Premium AI-Cinematic-Produktion für Creator und Marken.</p>
+  <footer class="cvs-footer-master">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <h3>Cinematic Vision Studio</h3>
+        <p>Deine Vision. Als cinematic KI-Erlebnis. Premium AI-Cinematic-Produktion für Creator und Marken.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Studio</h4>
+        <a href="https://cinematic-vision-studio.de/scene-editor-test.html">Über uns</a>
+        <a href="https://cinematic-vision-studio.de/scene-editor-test.html#process">Prozess</a>
+        <a href="https://cinematic-vision-studio.de/academy.html">Academy</a>
+        <a href="https://cinematic-vision-studio.de/calendar.html">Buchung</a>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <a href="https://cinematic-vision-studio.de/portfolio.html">Trailer</a>
+        <a href="https://cinematic-vision-studio.de/shop.html">Shop</a>
+        <a href="https://cinematic-vision-studio.de/prompt-generator.html">Prompt Studio</a>
+        <a href="https://cinematic-vision-studio.de/portfolio.html">Portfolio</a>
+        <a href="https://cinematic-vision-studio.de/crystals.html">Kristalle</a>
+      </div>
+      <div class="footer-col">
+        <h4>Kontakt</h4>
+        <a href="https://cinematic-vision-studio.de/contact.php">Projekt anfragen</a>
+        <a href="studio-demo.php">Studio starten</a>
+        <a href="https://cinematic-vision-studio.de/impressum.html">Impressum</a>
+        <a href="https://cinematic-vision-studio.de/datenschutz.html">Datenschutz</a>
+        <a href="https://cinematic-vision-studio.de/agb.html">AGB</a>
+        <a href="https://cinematic-vision-studio.de/widerruf.html">Widerruf</a>
+        <a href="https://cinematic-vision-studio.de/cookies.html">Cookies</a>
+      </div>
     </div>
-    <div class="footer-col">
-      <h4>Produkt</h4>
-      <a href="https://cinematic-vision-studio.de/scene-editor-test.html">Home</a>
-      <a href="https://cinematic-vision-studio.de/portfolio.html">Portfolio</a>
-      <a href="https://cinematic-vision-studio.de/shop.html">Shop</a>
-      <a href="https://cinematic-vision-studio.de/crystals.html">Kristalle</a>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Cinematic Vision Studio · Alle Rechte vorbehalten</div>
+      <div class="footer-legal">
+        <a href="https://cinematic-vision-studio.de/impressum.html">Impressum</a>
+        <a href="https://cinematic-vision-studio.de/datenschutz.html">Datenschutz</a>
+        <a href="https://cinematic-vision-studio.de/agb.html">AGB</a>
+        <a href="https://cinematic-vision-studio.de/widerruf.html">Widerruf</a>
+        <a href="https://cinematic-vision-studio.de/cookies.html">Cookies</a>
+        <a href="https://cinematic-vision-studio.de/contact.php">Kontakt</a>
+      </div>
     </div>
-    <div class="footer-col">
-      <h4>Ressourcen</h4>
-      <a href="https://cinematic-vision-studio.de/academy.html">Academy</a>
-      <a href="https://cinematic-vision-studio.de/prompt-generator.html">Prompts</a>
-      <a href="https://cinematic-vision-studio.de/contact.php">Kontakt</a>
-    </div>
-    <div class="footer-col">
-      <h4>Rechtliches</h4>
-      <a href="https://cinematic-vision-studio.de/impressum.html">Impressum</a>
-      <a href="https://cinematic-vision-studio.de/datenschutz.html">Datenschutz</a>
-      <a href="https://cinematic-vision-studio.de/agb.html">AGB</a>
-      <a href="https://cinematic-vision-studio.de/cookies.html">Cookies</a>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <p>© 2026 Cinematic Vision Studio · Alle Rechte vorbehalten</p>
-    <div class="footer-socials">
-      <a href="#" class="social-btn" aria-label="Instagram">IG</a>
-      <a href="#" class="social-btn" aria-label="YouTube">YT</a>
-      <a href="#" class="social-btn" aria-label="TikTok">TT</a>
-    </div>
-  </div>
-</footer>
+  </footer>
 
   <script>
     "use strict";
