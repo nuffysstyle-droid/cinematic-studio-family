@@ -70,13 +70,13 @@ $authUser = csf_auth_user();
 
     /* Aurora */
     .cvs-aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-    .cvs-aurora .orb{position:absolute;border-radius:50%;filter:blur(120px);will-change:transform}
-    .orb-1{width:56vw;height:56vw;left:-14vw;top:-12vw;background:radial-gradient(circle,rgba(24,114,255,.26),transparent 66%);animation:drift1 28s ease-in-out infinite}
-    .orb-2{width:50vw;height:50vw;right:-14vw;top:34vh;background:radial-gradient(circle,rgba(232,169,59,.18),transparent 66%);animation:drift2 34s ease-in-out infinite}
-    .orb-3{width:46vw;height:46vw;left:28vw;bottom:-16vw;background:radial-gradient(circle,rgba(0,62,232,.18),transparent 68%);animation:drift1 40s ease-in-out infinite reverse}
-    .orb-4{width:34vw;height:34vw;right:18vw;bottom:8vh;background:radial-gradient(circle,rgba(212,146,43,.12),transparent 70%);animation:drift2 46s ease-in-out infinite}
-    @keyframes drift1{0%,100%{transform:translate(0,0)}50%{transform:translate(7vw,5vh)}}
-    @keyframes drift2{0%,100%{transform:translate(0,0)}50%{transform:translate(-7vw,-4vh)}}
+    .cvs-aurora span{position:absolute;border-radius:50%;filter:blur(120px);will-change:transform}
+    .cvs-aurora .a1{width:56vw;height:56vw;left:-14vw;top:-12vw;background:radial-gradient(circle,rgba(24,114,255,.26),transparent 66%);animation:drift1 28s ease-in-out infinite}
+    .cvs-aurora .a2{width:50vw;height:50vw;right:-14vw;top:34vh;background:radial-gradient(circle,rgba(232,169,59,.18),transparent 66%);animation:drift2 34s ease-in-out infinite}
+    .cvs-aurora .a3{width:46vw;height:46vw;left:28vw;bottom:-16vw;background:radial-gradient(circle,rgba(0,62,232,.18),transparent 68%);animation:drift1 40s ease-in-out infinite reverse}
+    .cvs-aurora .a4{width:34vw;height:34vw;right:18vw;bottom:8vh;background:radial-gradient(circle,rgba(212,146,43,.12),transparent 70%);animation:drift2 46s ease-in-out infinite}
+    @keyframes drift1{0%,100%{transform:translate(0,0)}50%{transform:translate(8vw,6vh)}}
+    @keyframes drift2{0%,100%{transform:translate(0,0)}50%{transform:translate(-6vw,-4vh)}}
 
     /* Scroll progress */
     #cvs-progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--gold-warm),var(--gold-bright));z-index:10000;width:0%;transition:width .1s}
@@ -287,11 +287,11 @@ $authUser = csf_auth_user();
 
 <div id="cvs-progress"></div>
 
-<div class="cvs-aurora">
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
-  <div class="orb orb-4"></div>
+<div class="cvs-aurora" aria-hidden="true">
+  <span class="a1"></span>
+  <span class="a2"></span>
+  <span class="a3"></span>
+  <span class="a4"></span>
 </div>
 
 <nav class="cvs-nav-simple" id="main-nav">

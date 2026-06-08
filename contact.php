@@ -94,13 +94,13 @@ body::before{
 
 /* Aurora */
 .cvs-aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-.orb{position:absolute;border-radius:50%;filter:blur(100px);pointer-events:none}
-.orb-1{width:600px;height:600px;background:radial-gradient(circle,rgba(0,42,175,.08),transparent 60%);top:-10%;left:-10%;animation:orbFloat1 20s ease-in-out infinite}
-.orb-2{width:500px;height:500px;background:radial-gradient(circle,rgba(160,118,22,.06),transparent 60%);top:20%;right:-15%;animation:orbFloat2 25s ease-in-out infinite}
-.orb-3{width:400px;height:400px;background:radial-gradient(circle,rgba(70,22,162,.05),transparent 60%);bottom:10%;left:30%;animation:orbFloat3 18s ease-in-out infinite}
-@keyframes orbFloat1{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,20px)}}
-@keyframes orbFloat2{0%,100%{transform:translate(0,0)}50%{transform:translate(-20px,30px)}}
-@keyframes orbFloat3{0%,100%{transform:translate(0,0)}50%{transform:translate(20px,-25px)}}
+.cvs-aurora span{position:absolute;border-radius:50%;filter:blur(120px);will-change:transform}
+.cvs-aurora .a1{width:56vw;height:56vw;left:-14vw;top:-12vw;background:radial-gradient(circle,rgba(24,114,255,.26),transparent 66%);animation:drift1 28s ease-in-out infinite}
+.cvs-aurora .a2{width:50vw;height:50vw;right:-14vw;top:34vh;background:radial-gradient(circle,rgba(232,169,59,.18),transparent 66%);animation:drift2 34s ease-in-out infinite}
+.cvs-aurora .a3{width:46vw;height:46vw;left:28vw;bottom:-16vw;background:radial-gradient(circle,rgba(0,62,232,.18),transparent 68%);animation:drift1 40s ease-in-out infinite reverse}
+.cvs-aurora .a4{width:34vw;height:34vw;right:18vw;bottom:8vh;background:radial-gradient(circle,rgba(212,146,43,.12),transparent 70%);animation:drift2 46s ease-in-out infinite}
+@keyframes drift1{0%,100%{transform:translate(0,0)}50%{transform:translate(8vw,6vh)}}
+@keyframes drift2{0%,100%{transform:translate(0,0)}50%{transform:translate(-6vw,-4vh)}}
 
 /* Scroll progress */
 #cvs-progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--gold-warm),var(--gold-bright));z-index:10000;width:0%;transition:width .1s}
@@ -288,10 +288,11 @@ footer{background:rgba(2,2,5,.98);border-top:1px solid rgba(24,114,255,.09);padd
 
 <div id="cvs-progress"></div>
 
-<div class="cvs-aurora">
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
+<div class="cvs-aurora" aria-hidden="true">
+  <span class="a1"></span>
+  <span class="a2"></span>
+  <span class="a3"></span>
+  <span class="a4"></span>
 </div>
 
 <!-- NAV -->
@@ -305,6 +306,7 @@ footer{background:rgba(2,2,5,.98);border-top:1px solid rgba(24,114,255,.09);padd
     <a href="crystals.html">Kristalle</a>
     <a href="shop.html">Shop</a>
     <a href="academy.html">Academy</a>
+    <a href="calendar.html">Buchung</a>
     <a href="contact.php" class="nav-cta">Kontakt</a>
   </div>
   <div class="nav-actions">
@@ -323,6 +325,7 @@ footer{background:rgba(2,2,5,.98);border-top:1px solid rgba(24,114,255,.09);padd
   <a href="crystals.html">Kristalle</a>
   <a href="shop.html">Shop</a>
   <a href="academy.html">Academy</a>
+  <a href="calendar.html">Buchung</a>
   <a href="contact.php">Kontakt</a>
   <a href="<?= $renderBase ?>/login.php" class="nav-cta-mobile">Login</a>
   <a href="<?= $renderBase ?>/studio-demo.php" class="nav-cta-mobile">Studio starten</a>

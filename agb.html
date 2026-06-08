@@ -28,6 +28,14 @@ h1,h2,h3,.page-h1{font-family:'Syne',sans-serif}
 .page::before{height:520px;background:radial-gradient(ellipse 85% 140% at 8% 0%,rgba(0,40,165,.14) 0%,transparent 55%),radial-gradient(ellipse 65% 100% at 94% 12%,rgba(180,130,20,.09) 0%,transparent 50%),radial-gradient(ellipse 55% 65% at 50% 0%,rgba(0,25,110,.07) 0%,transparent 60%)}
 #cvs-progress{position:fixed;top:0;left:0;width:0%;height:2px;z-index:9999;pointer-events:none;background:linear-gradient(90deg,#4da0ff,#ecca63,#d4a93c);box-shadow:0 0 8px rgba(232,195,85,.6),0 0 2px rgba(77,160,255,.5);transform-origin:left}
 #cursor,#cursor-ring{display:none!important}
+.cvs-aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.cvs-aurora span{position:absolute;border-radius:50%;filter:blur(120px);will-change:transform}
+.cvs-aurora .a1{width:56vw;height:56vw;left:-14vw;top:-12vw;background:radial-gradient(circle,rgba(24,114,255,.26),transparent 66%);animation:drift1 28s ease-in-out infinite}
+.cvs-aurora .a2{width:50vw;height:50vw;right:-14vw;top:34vh;background:radial-gradient(circle,rgba(232,169,59,.18),transparent 66%);animation:drift2 34s ease-in-out infinite}
+.cvs-aurora .a3{width:46vw;height:46vw;left:28vw;bottom:-16vw;background:radial-gradient(circle,rgba(0,62,232,.18),transparent 68%);animation:drift1 40s ease-in-out infinite reverse}
+.cvs-aurora .a4{width:34vw;height:34vw;right:18vw;bottom:8vh;background:radial-gradient(circle,rgba(212,146,43,.12),transparent 70%);animation:drift2 46s ease-in-out infinite}
+@keyframes drift1{0%,100%{transform:translate(0,0)}50%{transform:translate(8vw,6vh)}}
+@keyframes drift2{0%,100%{transform:translate(0,0)}50%{transform:translate(-6vw,-4vh)}}
 </style>
 </head>
 <body>
