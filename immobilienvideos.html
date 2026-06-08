@@ -1,0 +1,572 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Immobilien in Kinoqualität. Cinematic Vision Studio – cinematische Immobilienfilme für Häuser, Wohnungen und Luxusobjekte.">
+<meta name="theme-color" content="#020205">
+<link rel="canonical" href="https://cinematic-vision-studio.de/immobilienvideos.html">
+<link rel="icon" type="image/png" href="assets/cvs-logo.png">
+<!-- Social / Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Cinematic Vision Studio">
+<meta property="og:title" content="Immobilienvideos in Kinoqualität – Cinematic Vision Studio">
+<meta property="og:description" content="Häuser, Wohnungen und Luxusobjekte cinematisch in Szene gesetzt. 4K · Drohne · 360°.">
+<meta property="og:url" content="https://cinematic-vision-studio.de/immobilienvideos.html">
+<meta property="og:image" content="https://cinematic-vision-studio.de/assets/portfolio/Immobilienvideos.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Immobilienvideos in Kinoqualität – Cinematic Vision Studio">
+<meta name="twitter:description" content="Häuser, Wohnungen und Luxusobjekte cinematisch in Szene gesetzt.">
+<meta name="twitter:image" content="https://cinematic-vision-studio.de/assets/portfolio/Immobilienvideos.png">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<link rel="stylesheet" href="assets/css/cvs-core.css">
+<title>Immobilienvideos – Cinematic Vision Studio</title>
+<style>
+/* ════════════════════════════════════════════════════════════
+   IMMOBILIENVIDEOS · Cinematic Brand Experience
+   DNA: Electric Blue ⇄ Metallic Gold · Black Void · HUD-Energie
+   ════════════════════════════════════════════════════════════ */
+:root{
+  --bg:#020205;
+  --blue:#1872ff;--blue-glow:#4da0ff;--blue-deep:#003ee8;
+  --gold:#e8c355;--gold-light:#f2d878;--gold-warm:#d4922b;
+  --ink:#eef2ff;--ink-dim:rgba(216,226,250,.82);--ink-faint:rgba(198,211,238,.68);
+  --maxw:1180px;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans','Segoe UI',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
+h1,h2,h3,h4{font-family:'Syne',sans-serif}
+.wrap{width:min(var(--maxw),calc(100% - 48px));margin:0 auto;position:relative;z-index:1}
+.cvs-defs{position:absolute;width:0;height:0;overflow:hidden}
+
+/* ── Cinematic Aurora (Blau ⇄ Gold fließt durch Black Void) ── */
+.cvs-aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.cvs-aurora span{position:absolute;border-radius:50%;filter:blur(120px);will-change:transform}
+.cvs-aurora .a1{width:56vw;height:56vw;left:-14vw;top:-12vw;background:radial-gradient(circle,rgba(24,114,255,.26),transparent 66%);animation:drift1 28s ease-in-out infinite}
+.cvs-aurora .a2{width:50vw;height:50vw;right:-14vw;top:34vh;background:radial-gradient(circle,rgba(232,169,59,.18),transparent 66%);animation:drift2 34s ease-in-out infinite}
+.cvs-aurora .a3{width:46vw;height:46vw;left:28vw;bottom:-16vw;background:radial-gradient(circle,rgba(0,62,232,.18),transparent 68%);animation:drift1 40s ease-in-out infinite reverse}
+.cvs-aurora .a4{width:34vw;height:34vw;right:18vw;bottom:8vh;background:radial-gradient(circle,rgba(212,146,43,.12),transparent 70%);animation:drift2 46s ease-in-out infinite}
+@keyframes drift1{0%,100%{transform:translate(0,0)}50%{transform:translate(7vw,5vh)}}
+@keyframes drift2{0%,100%{transform:translate(0,0)}50%{transform:translate(-7vw,-4vh)}}
+
+/* film grain */
+/* Film-Grain dezent + unter dem Text (z-index niedrig), damit Schrift gestochen scharf bleibt */
+body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E");opacity:.28}
+
+/* Content über Aurora */
+.hero,.section,.final-cta,.cvs-footer-master,.lightbar{position:relative;z-index:1}
+
+/* ── Reveal-on-scroll ── */
+.reveal{opacity:0;transform:translateY(34px);transition:opacity 1s var(--ease),transform 1s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+.reveal[data-d="1"]{transition-delay:.1s}.reveal[data-d="2"]{transition-delay:.2s}.reveal[data-d="3"]{transition-delay:.3s}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}*{animation:none!important}}
+
+/* ── Atoms ── */
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:'Syne',sans-serif;font-size:13px;font-weight:900;letter-spacing:2.5px;text-transform:uppercase;color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+.eyebrow::before,.eyebrow::after{content:'';height:1px;width:34px}
+.eyebrow::before{background:linear-gradient(90deg,transparent,var(--blue-glow))}
+.eyebrow::after{background:linear-gradient(90deg,var(--gold),transparent)}
+
+.lightbar{width:min(var(--maxw),calc(100% - 48px));height:1px;margin:0 auto;border:0;background:linear-gradient(90deg,transparent,rgba(47,139,255,.5),rgba(243,213,133,.55),rgba(212,146,43,.5),transparent)}
+.lightbar::after{content:'';position:absolute;left:50%;top:50%;width:6px;height:6px;border-radius:50%;background:var(--gold-light);transform:translate(-50%,-50%);box-shadow:0 0 12px var(--gold-light),0 0 28px rgba(47,139,255,.55)}
+
+/* ── Premium buttons ── */
+.btn-cvs{position:relative;display:inline-flex;align-items:center;gap:10px;font-family:'Syne',sans-serif;font-weight:800;font-size:15px;letter-spacing:.5px;padding:17px 36px;border-radius:14px;text-decoration:none;cursor:pointer;white-space:nowrap;transition:transform .3s var(--ease),box-shadow .3s var(--ease),border-color .3s}
+.btn-cvs i{font-style:normal;display:inline-flex;align-items:center;vertical-align:middle;transition:transform .3s var(--ease)}
+.btn-cvs:hover i{transform:translateX(5px)}
+.btn-cvs--gold{background:linear-gradient(180deg,#fff7a8 0%,#ffe15a 18%,#ffc21f 48%,#f59a00 78%,#d97900 100%);color:#100700;font-weight:900;box-shadow:0 8px 30px rgba(232,169,59,.28),0 0 0 1px rgba(255,255,255,.08),inset 0 1px 0 rgba(255,255,255,.6)}
+.btn-cvs--gold:hover{transform:translateY(-3px);box-shadow:0 18px 48px rgba(232,169,59,.45),0 0 0 1px rgba(255,255,255,.12),inset 0 1px 0 rgba(255,255,255,.7)}
+.btn-cvs--ghost{background:rgba(8,11,22,.86);color:#ffffff;font-weight:800;border:1px solid transparent;background-image:linear-gradient(rgba(8,11,22,.86),rgba(8,11,22,.86)),linear-gradient(120deg,var(--blue-glow),var(--gold));background-origin:border-box;background-clip:padding-box,border-box;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.btn-cvs--ghost:hover{color:#fff}
+.btn-cvs--ghost:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(24,114,255,.25),0 0 0 1px rgba(24,114,255,.1)}
+
+/* ════════ HERO ════════ */
+.hero{padding:clamp(150px,24vh,220px) 0 90px;overflow:hidden;text-align:center}
+.hero-orb{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;will-change:transform}
+.hero-orb--blue{width:580px;height:580px;background:radial-gradient(circle,rgba(24,114,255,.20),transparent 70%);top:-170px;left:-100px;animation:drift1 18s ease-in-out infinite}
+.hero-orb--gold{width:480px;height:480px;background:radial-gradient(circle,rgba(232,169,59,.13),transparent 70%);top:-70px;right:-80px;animation:drift2 22s ease-in-out infinite}
+.hero-title{font-weight:800;font-size:clamp(40px,6.8vw,86px);line-height:1.04;letter-spacing:-2px;color:#fff;margin:24px auto 0;max-width:15ch;text-shadow:0 0 20px rgba(24,114,255,.25),0 0 40px rgba(236,202,99,.12)}
+.hero-title .grad{color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+.hero-sub{max-width:540px;margin:28px auto 44px;font-size:clamp(16px,1.55vw,19px);line-height:1.65;color:rgba(255,255,255,.92);font-weight:300;letter-spacing:.2px}
+.hero-cta{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.hero-trust{display:flex;gap:14px 22px;justify-content:center;align-items:center;flex-wrap:wrap;margin-top:40px;font-size:12.5px;font-weight:700;letter-spacing:3.5px;text-transform:uppercase;color:rgba(255,255,255,.95)}
+.hero-trust .dot{width:5px;height:5px;border-radius:50%;background:linear-gradient(90deg,var(--blue-glow),var(--gold))}
+
+/* ════════ SECTION SYSTEM ════════ */
+.section{padding:clamp(84px,13vh,140px) 0}
+.sec-head{width:min(760px,calc(100% - 48px));margin:0 auto 72px;text-align:center}
+.sec-title{font-weight:800;font-size:clamp(30px,3.9vw,52px);line-height:1.08;letter-spacing:-1.1px;color:#fff;margin:20px 0 0;text-shadow:0 0 16px rgba(24,114,255,.20),0 0 32px rgba(236,202,99,.10)}
+.sec-title .g{color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+.sec-lead{margin:20px auto 0;max-width:460px;font-size:17px;line-height:1.65;color:rgba(255,255,255,.92);font-weight:300;letter-spacing:.15px}
+
+/* ── Cinematic Showreel Frame ──
+   Frame-PNG ist 1536×1024 (3:2). Container exakt auf dieses Seitenverhältnis
+   gelockt → object-fit:contain füllt randlos, KEIN schwarzer Kasten mehr.
+   Echte Innenöffnung (Flood-/Kantenmessung am PNG, Oberkante an den Seiten,
+   NICHT unter dem Medaillon): x 5.14–94.86 % · y 15.14–82.62 %.
+   Video mit ~0.6 % Bleed je Seite → LED-Rahmen überlappt das Video überall,
+   Medaillon (oben) & Banner (unten) decken die Mitte. Nirgends Schwarz. */
+.cvs-video-frame{position:relative;width:min(1040px,calc(100% - 40px));margin:0 auto;aspect-ratio:1536/1024;background:transparent;overflow:hidden}
+.cvs-video-frame::before{content:'';position:absolute;left:50%;top:50%;width:80%;height:66%;transform:translate(-50%,-50%);z-index:0;pointer-events:none;border-radius:40px;background:radial-gradient(ellipse at center,rgba(24,114,255,.18),rgba(232,169,59,.07) 55%,transparent 75%);filter:blur(48px)}
+.property-video{position:absolute;left:4%;top:17.42%;width:92.00%;height:67.55%;object-fit:cover;z-index:1;background:#020205;border-radius:22px;cursor:pointer}
+.cvs-frame-overlay{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:2;pointer-events:none;opacity:1}
+/* Eigener Premium-Play-Button (ersetzt billige native Controls → Video endet sauber im Rahmen) */
+.cvs-play{position:absolute;left:50%;top:51%;transform:translate(-50%,-50%);z-index:4;width:84px;height:84px;border-radius:50%;border:0;cursor:pointer;display:grid;place-items:center;background:radial-gradient(circle at 50% 36%,rgba(22,30,56,.82),rgba(6,10,24,.92));box-shadow:0 0 0 1px rgba(255,255,255,.12),0 12px 44px rgba(0,0,0,.55),0 0 52px rgba(24,114,255,.32);transition:transform .35s var(--ease),opacity .4s,box-shadow .35s}
+.cvs-play::before{content:'';width:0;height:0;margin-left:6px;border-style:solid;border-width:14px 0 14px 24px;border-color:transparent transparent transparent #f4dd8a;filter:drop-shadow(0 0 7px rgba(232,195,85,.55))}
+.cvs-play::after{content:'';position:absolute;inset:-3px;border-radius:50%;padding:2px;background:linear-gradient(120deg,var(--blue-glow),var(--gold));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.92}
+.cvs-play:hover{transform:translate(-50%,-50%) scale(1.08);box-shadow:0 0 0 1px rgba(255,255,255,.2),0 16px 54px rgba(0,0,0,.6),0 0 76px rgba(24,114,255,.5)}
+.cvs-video-frame.playing .cvs-play{opacity:0;pointer-events:none;transform:translate(-50%,-50%) scale(.62)}
+
+/* ════════ LEISTUNGEN · randlose Icon-Konstellation (keine Karten) ════════ */
+.feat-grid{width:min(1080px,calc(100% - 48px));margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.feat{position:relative;padding:52px 30px;text-align:center;transition:transform .5s var(--ease)}
+.feat:not(:nth-child(3n+1))::before{content:'';position:absolute;left:0;top:20%;bottom:20%;width:1px;background:linear-gradient(180deg,transparent,rgba(120,150,220,.26),rgba(232,195,85,.22),transparent)}
+.feat:nth-child(n+4)::after{content:'';position:absolute;top:0;left:16%;right:16%;height:1px;background:linear-gradient(90deg,transparent,rgba(140,170,230,.2),rgba(232,195,85,.16),transparent)}
+.feat:hover{transform:translateY(-7px)}
+.feat-ico{position:relative;width:165px;height:165px;margin:0 auto 16px;display:grid;place-items:center}
+.feat-ico::after{content:'';position:absolute;inset:26px;border-radius:50%;background:radial-gradient(circle,rgba(47,139,255,.32),rgba(232,169,59,.15) 52%,transparent 72%);filter:blur(18px);transition:transform .55s var(--ease),opacity .55s}
+.feat:hover .feat-ico::after{transform:scale(1.28);opacity:1}
+.feat-ico .i3d{position:relative;width:112px;height:112px;display:block;filter:drop-shadow(0 5px 11px rgba(0,0,0,.55));transition:transform .5s var(--ease)}
+.feat:hover .feat-ico .i3d{transform:scale(1.14)}
+/* Render-Asset (übernimmt automatisch, sobald die Datei existiert) — frei schwebend, kein Rahmen */
+.ico-asset{display:none;object-fit:contain;transition:transform .55s var(--ease),filter .55s var(--ease)}
+.feat-ico .ico-asset{position:relative;width:163px;height:163px;object-fit:contain;filter:drop-shadow(0 8px 18px rgba(0,0,0,.45)) drop-shadow(0 0 28px rgba(120,170,255,.3)) drop-shadow(0 0 50px rgba(232,169,59,.16))}
+.feat:hover .feat-ico .ico-asset{transform:scale(1.14);filter:drop-shadow(0 12px 26px rgba(0,0,0,.5)) drop-shadow(0 0 40px rgba(10,51,254,.85)) drop-shadow(0 0 84px rgba(10,51,254,.5))}
+.adv-disc .ico-asset{position:relative;width:163px;height:163px;object-fit:contain;filter:drop-shadow(0 8px 18px rgba(0,0,0,.45)) drop-shadow(0 0 28px rgba(120,170,255,.3)) drop-shadow(0 0 50px rgba(232,169,59,.16))}
+.adv:hover .adv-disc .ico-asset{transform:scale(1.14);filter:drop-shadow(0 12px 26px rgba(0,0,0,.5)) drop-shadow(0 0 40px rgba(10,51,254,.85)) drop-shadow(0 0 84px rgba(10,51,254,.5))}
+/* Render mit eingebackenem dunklem Hintergrund → weich in den Seiten-BG einschmelzen */
+.ico-blend{mix-blend-mode:screen}
+/* Icon-Normalisierung: jedes PNG füllt seinen 1024er-Canvas unterschiedlich aus
+   (Kamera 70 %, 360°-Kugel 94 % …). Pro-Icon-Breite gleicht die optische Größe an. */
+.ico-asset[src*="Kamera"]{width:191px}
+.ico-asset[src*="Drohne"]{width:186px}
+.ico-asset[src*="360"]{width:143px}
+.ico-asset[src*="Post-Production"]{width:146px}
+.ico-asset[src*="Reichweite"]{width:151px}
+.ico-asset[src*="Monitor"]{width:165px}
+.ico-asset[src*="Beratung"]{width:146px}
+.ico-asset[src*="Konzept"]{width:176px}
+.ico-asset[src*="Tempo"]{width:165px}
+.ico-asset[src*="Qualit"]{width:156px}
+.feat h3{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;letter-spacing:.4px;margin-bottom:10px;color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+.feat p{font-size:11.5px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.95)}
+
+/* ════════ ABLAUF · Cinematic Timeline ════════ */
+.steps{position:relative;width:min(900px,calc(100% - 48px));margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:40px}
+.steps::before{display:none}
+.step{position:relative;z-index:1;text-align:center;padding:0 12px}
+.step-img{display:block;width:165px;height:165px;object-fit:contain;margin:0 auto 18px;filter:drop-shadow(0 8px 18px rgba(0,0,0,.45)) drop-shadow(0 0 28px rgba(120,170,255,.3)) drop-shadow(0 0 50px rgba(232,169,59,.16));transition:transform .55s var(--ease),filter .55s var(--ease)}
+.step:hover .step-img{transform:scale(1.14);filter:drop-shadow(0 12px 26px rgba(0,0,0,.5)) drop-shadow(0 0 40px rgba(10,51,254,.85)) drop-shadow(0 0 84px rgba(10,51,254,.5))}
+.step h3{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;letter-spacing:.3px;margin-bottom:6px;color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+.step p{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.95)}
+
+/* ════════ VORTEILE · Orbit-Module mit Blau→Gold-Ring ════════ */
+.adv-row{position:relative;width:min(var(--maxw),calc(100% - 48px));margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:34px}
+.adv-row::before{content:'';position:absolute;top:94px;left:9%;right:9%;height:1px;background:linear-gradient(90deg,transparent,#2f8bff,#8fc4ff 35%,#f3d585 65%,#d4922b,transparent);opacity:.18;z-index:0}
+.adv{position:relative;z-index:1;text-align:center}
+.adv-orbit{position:relative;width:165px;height:165px;margin:0 auto 18px;display:grid;place-items:center}
+.adv-orbit::after{content:'';position:absolute;inset:26px;border-radius:50%;background:radial-gradient(circle,rgba(47,139,255,.32),rgba(232,169,59,.15) 52%,transparent 72%);filter:blur(18px);z-index:0;transition:transform .55s var(--ease),opacity .55s}
+.adv:hover .adv-orbit::after{transform:scale(1.28);opacity:1}
+.adv-disc{position:relative;z-index:1;display:grid;place-items:center}
+.adv-disc .i3d{width:112px;height:112px;display:block;filter:drop-shadow(0 5px 11px rgba(0,0,0,.5));transition:transform .5s var(--ease)}
+.adv:hover .adv-disc .i3d{transform:scale(1.14)}
+.adv-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;letter-spacing:.4px;color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+.adv-desc{margin-top:10px;font-size:11.5px;letter-spacing:2.2px;text-transform:uppercase;color:rgba(255,255,255,.95)}
+
+/* ════════ FINAL CTA ════════ */
+.final-cta{position:relative;width:min(1100px,calc(100% - 48px));margin:clamp(50px,9vh,100px) auto;padding:clamp(64px,10vw,120px) 48px;text-align:center;overflow:hidden}
+.final-cta::before{content:'';position:absolute;inset:0;border-radius:30px;background:radial-gradient(ellipse 70% 130% at 50% 0%,rgba(24,114,255,.16),transparent 58%),radial-gradient(ellipse 70% 130% at 50% 100%,rgba(232,169,59,.10),transparent 58%);pointer-events:none}
+.final-cta h2{position:relative;font-weight:800;font-size:clamp(30px,4.4vw,58px);line-height:1.08;letter-spacing:-1.2px;color:#fff;max-width:15ch;margin:0 auto;text-shadow:0 0 16px rgba(24,114,255,.20),0 0 32px rgba(236,202,99,.10)}
+.final-cta h2 .g{color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+.final-cta p{position:relative;margin:24px auto 44px;max-width:460px;font-size:17px;line-height:1.65;color:rgba(255,255,255,.92);font-weight:300;letter-spacing:.15px}
+.final-cta .hero-cta{position:relative}
+
+/* ════════ NAV / FOOTER (Marken-DNA) ════════ */
+/* Nav als cinematischer Top-Fade statt flacher schwarzer Kasten:
+   oben dicht, nach unten transparent auslaufend + Gradient-Haarlinie. */
+.cvs-nav-simple{background:linear-gradient(180deg,rgba(3,4,10,.92) 0%,rgba(3,4,10,.74) 58%,rgba(3,4,10,0) 100%);border-bottom:0;backdrop-filter:blur(18px) saturate(115%);-webkit-backdrop-filter:blur(18px) saturate(115%);padding-bottom:18px}
+.cvs-nav-simple::after{content:'';position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,transparent,rgba(24,114,255,.45),rgba(232,195,85,.4),transparent);opacity:.7}
+.cvs-nav-simple.scrolled{background:linear-gradient(180deg,rgba(2,2,6,.96) 0%,rgba(2,2,6,.86) 70%,rgba(2,2,6,.55) 100%)}
+.cvs-nav-simple .nav-logo{flex-direction:row;align-items:center;gap:12px}
+.cvs-nav-simple .nav-logo .cvs-nav-img{display:block;height:68px;width:68px;object-fit:contain;animation:none;transform:scale(1.06);filter:drop-shadow(0 0 14px rgba(24,114,255,.28)) drop-shadow(0 0 30px rgba(232,195,85,.14))}
+/* Drei klar getrennte Marken-Farben erzwingen (text-fill aus cvs-core resetten) */
+.cvs-nav-simple .nav-logo .cvs-nav-txt{background:none;-webkit-text-fill-color:initial;color:#fff;font-size:20px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;text-shadow:none;line-height:1.15;filter:none}
+.cvs-nav-simple .nav-logo .nav-t1{color:#4da0ff;-webkit-text-fill-color:#4da0ff;text-shadow:0 0 16px rgba(77,160,255,.4)}
+.cvs-nav-simple .nav-logo .nav-t2{color:#ffc21f!important;-webkit-text-fill-color:#ffc21f!important;background:none!important;margin-left:4px;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+.cvs-nav-simple .nav-logo .cvs-nav-sub{display:block;background:none;-webkit-text-fill-color:initial;margin-top:3px;color:#fff;font-size:10px;font-weight:800;letter-spacing:4px;text-transform:uppercase;opacity:1;filter:none}
+.cvs-nav-simple .nav-logo .nav-t3{color:#4da0ff;-webkit-text-fill-color:#4da0ff;opacity:1}
+.cvs-nav-simple{padding-left:18px;padding-right:18px}
+.cvs-nav-simple .nav-links{gap:2px}
+/* Nav-Links in Syne (gleiche Schriftfamilie wie das Logo) für einheitliche Anmutung */
+.cvs-nav-simple .nav-links a{font-family:'Syne',sans-serif;font-size:12px;letter-spacing:.2px;padding:6px 7px;position:relative;color:#fff;font-weight:700;opacity:.96;transition:color .2s ease,text-shadow .2s ease}
+.cvs-nav-simple .nav-links a:hover{color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+.cvs-nav-simple .nav-links a.active{color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+.cvs-nav-simple .nav-links a::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%) scale(0);width:4px;height:4px;background:var(--blue);border-radius:50%;box-shadow:0 0 6px rgba(59,130,246,.6);transition:transform .2s}
+.cvs-nav-simple .nav-links a:hover::after{transform:translateX(-50%) scale(1)}
+.cvs-nav-simple .nav-actions{gap:10px}
+/* Nav-CTAs: gleiche Premium-DNA wie Hero-Buttons (Syne) + konsistenter Hover */
+.cvs-nav-simple .nav-btn-ghost,.cvs-nav-simple .nav-btn-gold{font-family:'Syne',sans-serif;font-size:12px;font-weight:800;letter-spacing:.3px;padding:8px 14px;border-radius:11px;white-space:nowrap;transition:transform .25s var(--ease),box-shadow .25s var(--ease),color .2s,opacity .2s}
+/* Login = edler Glas-Ghost mit Blau→Gold-Rand; Hover wie der Rest: Gold + Glow + Lift */
+.cvs-nav-simple .nav-btn-ghost{color:#ffffff;border:1px solid transparent;background:linear-gradient(rgba(9,12,24,.88),rgba(9,12,24,.88)) padding-box,linear-gradient(120deg,var(--blue-glow),var(--gold)) border-box;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.cvs-nav-simple .nav-btn-ghost:hover{color:var(--gold);transform:translateY(-2px);box-shadow:0 8px 24px rgba(24,114,255,.25),0 0 18px rgba(232,195,85,.22);text-shadow:0 0 14px rgba(232,195,85,.5)}
+/* Studio starten = Premium-Gold mit dunkler Ink-Schrift (kein hartes Schwarz) + Hover-Lift */
+.cvs-nav-simple .nav-btn-gold{color:#100700!important;font-weight:900;background:linear-gradient(180deg,#fff7a8 0%,#ffe15a 18%,#ffc21f 48%,#f59a00 78%,#d97900 100%);border:0;box-shadow:0 6px 20px rgba(232,169,59,.3),inset 0 1px 0 rgba(255,255,255,.55)}
+.cvs-nav-simple .nav-btn-gold:hover{opacity:1;transform:translateY(-2px);box-shadow:0 12px 30px rgba(232,169,59,.5),inset 0 1px 0 rgba(255,255,255,.65)}
+.cvs-footer-master{margin-top:20px;background:linear-gradient(180deg,rgba(2,2,6,0),rgba(2,2,6,.98) 22%)}
+.cvs-footer-master .footer-brand h3{font-size:25px;letter-spacing:.5px;color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+.cvs-footer-master .footer-brand p{color:rgba(255,255,255,.90);font-size:16px;line-height:1.74;max-width:300px}
+/* Spalten-Überschriften 1:1 wie das Gold von „VISION" — hell, metallisch, voll deckend */
+.cvs-footer-master .footer-col h4{font-size:15px;margin-bottom:16px;letter-spacing:2px;text-transform:uppercase;font-weight:900;opacity:1;color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+.cvs-footer-master .footer-col a{font-size:14.5px;padding:6px 0;color:rgba(255,255,255,.88);opacity:1;transition:color .2s,text-shadow .2s,transform .2s}
+.cvs-footer-master .footer-col a:hover{color:#ffc21f;text-shadow:0 0 12px rgba(255,194,31,.45);transform:translateX(3px)}
+.cvs-footer-master .footer-bottom{padding-top:24px;font-size:14px;border-top:1px solid rgba(255,255,255,.09)}
+.cvs-footer-master .footer-copy{font-size:14px;color:rgba(255,255,255,.80)}
+.cvs-footer-master .footer-legal a{font-size:14px;padding:0 9px;color:rgba(255,255,255,.80);transition:color .2s,text-shadow .2s}
+.cvs-footer-master .footer-legal a:hover{color:#ffc21f;text-shadow:0 0 10px rgba(255,194,31,.45)}
+/* Mobile-Menü: Hover/Active klar gold, CTA gut lesbar */
+.mob-menu .mob-link{font-family:'Syne',sans-serif;font-weight:700}
+.mob-menu .mob-link:hover,.mob-menu .mob-link.active{color:#ffc21f;text-shadow:0 0 12px rgba(255,194,31,.45)}
+.mob-menu .mob-cta{font-family:'Syne',sans-serif;color:#100700;font-weight:900;background:linear-gradient(180deg,#fff7a8 0%,#ffe15a 18%,#ffc21f 48%,#f59a00 78%,#d97900 100%)}
+
+/* ════════ SCROLL-PROGRESS-BAR (Gold-Linie oben) ════════ */
+#cvs-progress{position:fixed;top:0;left:0;width:0%;height:2px;z-index:9999;pointer-events:none;background:linear-gradient(90deg,var(--blue-glow),#ecca63,var(--gold-warm));box-shadow:0 0 8px rgba(232,195,85,.6),0 0 2px rgba(77,160,255,.5);transform-origin:left}
+
+/* Globalen Custom-Cursor (cvs-core: body{cursor:none}) überschreiben → echter Mauszeiger sichtbar */
+html,body{cursor:auto!important}
+a,button,[role=button],label,.cvs-play,.cvs-seek,.property-video,.nav-burger{cursor:pointer!important}
+#cursor,#cursor-ring{display:none!important}
+
+/* ════════ RESPONSIVE ════════ */
+/* Unter 1180px die volle Linkleiste gegen das elegante Burger-Menü tauschen,
+   damit nichts überläuft / abgeschnitten wird (CTAs bleiben sichtbar bis 640px). */
+@media(max-width:1530px){
+  .cvs-nav-simple .nav-links{display:none}
+  .cvs-nav-simple .nav-burger{display:flex}
+  .mob-menu{display:block}
+}
+@media(max-width:980px){
+  .feat-grid{grid-template-columns:repeat(2,1fr);gap:10px 0}
+  .feat:not(:nth-child(3n+1))::before,.feat:nth-child(n+4)::after{display:none}
+  .feat:not(:nth-child(2n+1))::before{content:'';position:absolute;left:0;top:20%;bottom:20%;width:1px;background:linear-gradient(180deg,transparent,rgba(120,150,220,.26),rgba(232,195,85,.22),transparent)}
+  .steps{grid-template-columns:1fr;gap:30px;max-width:300px}
+  .steps::before{display:none}
+  .adv-row{grid-template-columns:repeat(2,1fr);gap:40px 20px;max-width:560px}
+  .adv-row::before{display:none}
+}
+@media(max-width:860px){
+  .cvs-video-frame{width:calc(100% - 24px)}
+  /* Innenfenster-% sind seitenverhältnisstabil → keine Sonderwerte mehr nötig */
+  .cvs-nav-simple .nav-logo .cvs-nav-img{height:60px;width:60px;transform:scale(1.08)}
+  .cvs-nav-simple .nav-logo .cvs-nav-txt{font-size:15px}
+}
+@media(max-width:560px){
+  .hero{padding-top:120px}
+  .hero-title{font-size:clamp(32px,8.8vw,56px);letter-spacing:-1.2px;max-width:none}
+  .cvs-nav-simple .nav-logo .cvs-nav-img{height:52px;width:52px;transform:scale(1.1)}
+  .cvs-nav-simple .nav-logo .cvs-nav-txt{font-size:13px;letter-spacing:.4px}
+  .cvs-nav-simple .nav-logo .cvs-nav-sub{font-size:9.5px;letter-spacing:3px}
+  .feat-grid{grid-template-columns:1fr;max-width:340px}
+  .feat:not(:nth-child(2n+1))::before{display:none}
+  .feat{padding:36px 24px}
+  .adv-row{grid-template-columns:1fr;gap:36px;max-width:320px}
+  .sec-head{margin-bottom:48px}
+  .btn-cvs{width:100%;justify-content:center;white-space:normal;text-align:center;line-height:1.35;padding:16px 22px}
+}
+</style>
+</head>
+<body>
+<svg class="cvs-defs" aria-hidden="true" focusable="false" width="0" height="0"><defs>
+  <linearGradient id="cvsFlow" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#2f8bff"/><stop offset=".4" stop-color="#8fc4ff"/><stop offset=".62" stop-color="#f3d585"/><stop offset="1" stop-color="#d4922b"/>
+  </linearGradient>
+  <!-- Metallic Gold -->
+  <linearGradient id="gMetal" x1=".2" y1="0" x2=".7" y2="1">
+    <stop offset="0" stop-color="#fff6d6"/><stop offset=".26" stop-color="#f7da82"/><stop offset=".52" stop-color="#e3ad42"/><stop offset=".78" stop-color="#b9821e"/><stop offset="1" stop-color="#7e560f"/>
+  </linearGradient>
+  <linearGradient id="gEdge" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#fff1c0"/><stop offset="1" stop-color="#9c6a13"/>
+  </linearGradient>
+  <!-- Electric Blue Glass -->
+  <radialGradient id="bGlass" cx=".36" cy=".3" r=".95">
+    <stop offset="0" stop-color="#eaf5ff"/><stop offset=".3" stop-color="#5fa8ff"/><stop offset=".7" stop-color="#1b54d6"/><stop offset="1" stop-color="#06163f"/>
+  </radialGradient>
+  <!-- Chrome -->
+  <linearGradient id="chrome" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#f2f6ff"/><stop offset=".48" stop-color="#9fb1d2"/><stop offset=".52" stop-color="#6c83aa"/><stop offset="1" stop-color="#dde7f7"/>
+  </linearGradient>
+  <!-- Glossy sheen -->
+  <linearGradient id="sheen" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#ffffff" stop-opacity=".85"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+  </linearGradient>
+  <!-- Volumetric bloom -->
+  <filter id="bloom" x="-60%" y="-60%" width="220%" height="220%">
+    <feGaussianBlur stdDeviation="1.3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <!-- Depth shadow -->
+  <filter id="depth" x="-40%" y="-40%" width="180%" height="180%">
+    <feDropShadow dx="0" dy="1.4" stdDeviation="1.5" flood-color="#02030a" flood-opacity=".55"/>
+  </filter>
+</defs></svg>
+
+<div class="cvs-aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span><span class="a4"></span></div>
+
+<nav class="cvs-nav-simple">
+  <a href="scene-editor-test.html" class="nav-logo"><img src="assets/cvs-logo-icon.png" alt="CVS" class="cvs-nav-img"><span class="cvs-nav-txt"><span class="nav-t1">Cinematic</span> <span class="nav-t2">Vision</span><span class="cvs-nav-sub"><span class="nav-t3">Studio</span></span></span></a>
+  <div class="nav-links">
+    <a href="scene-editor-test.html" class="nav-link">Home</a>
+    <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="nav-link">Studio</a>
+    <a href="crystals.html" class="nav-link">Kristalle</a>
+    <a href="contact.php" class="nav-link">Kontakt</a>
+    <a href="calendar.html" class="nav-link">Buchung</a>
+    <a href="prompt-generator.html" class="nav-link">Prompts</a>
+    <a href="portfolio.html" class="nav-link active">Portfolio</a>
+    <a href="academy.html" class="nav-link">Academy</a>
+    <a href="shop.html" class="nav-link">Shop</a>
+  </div>
+  <div class="nav-actions">
+    <a href="https://cinematic-studio-family.onrender.com/login.php" class="nav-btn-ghost">Login</a>
+    <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="nav-btn-gold">Studio starten</a>
+  </div>
+  <button class="nav-burger" id="mobBurger" aria-label="Menü öffnen" aria-expanded="false"><span></span><span></span><span></span></button>
+</nav>
+<div class="mob-menu" id="mobMenu" role="navigation" aria-label="Navigation">
+  <a href="scene-editor-test.html" class="mob-link">🏠 Home</a>
+  <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="mob-link">🎬 Studio</a>
+  <a href="crystals.html" class="mob-link">💎 Kristalle</a>
+  <a href="contact.php" class="mob-link">📞 Kontakt</a>
+  <a href="calendar.html" class="mob-link">📅 Buchung</a>
+  <a href="prompt-generator.html" class="mob-link">✍️ Prompts</a>
+  <a href="portfolio.html" class="mob-link active">🎞️ Portfolio</a>
+  <a href="academy.html" class="mob-link">🎓 Academy</a>
+  <a href="shop.html" class="mob-link">🛍️ Shop</a>
+  <div class="mob-sep"></div>
+  <a href="https://cinematic-studio-family.onrender.com/login.php" class="mob-link">🔑 Login</a>
+  <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="mob-cta">🎬 Studio starten</a>
+</div>
+
+<!-- ══════════ HERO ══════════ -->
+<header class="hero">
+  <span class="hero-orb hero-orb--blue" aria-hidden="true"></span>
+  <span class="hero-orb hero-orb--gold" aria-hidden="true"></span>
+  <div class="wrap reveal">
+    <span class="eyebrow">Cinematic Real Estate</span>
+    <h1 class="hero-title">Immobilien wie im <span class="grad">Kino.</span></h1>
+    <p class="hero-sub">Häuser. Wohnungen. Luxusobjekte. Cinematisch in Szene gesetzt.</p>
+    <div class="hero-cta">
+      <a href="contact.php" class="btn-cvs btn-cvs--gold">Projekt anfragen <i>→</i></a>
+      <a href="#showreel" class="btn-cvs btn-cvs--ghost">Showreel</a>
+    </div>
+    <div class="hero-trust">
+      <span>4K</span><span class="dot"></span><span>Drohne</span><span class="dot"></span><span>360°</span>
+    </div>
+  </div>
+</header>
+
+<hr class="lightbar">
+
+<!-- ══════════ SHOWREEL ══════════ -->
+<section id="showreel" class="section">
+  <div class="sec-head reveal">
+    <span class="eyebrow">Showreel</span>
+    <h2 class="sec-title">Sehen Sie den <span class="g">Unterschied.</span></h2>
+  </div>
+  <div class="cvs-video-frame reveal">
+    <video class="property-video" preload="metadata" playsinline poster="assets/portfolio/Immobilienvideos.png">
+      <source src="videos/Immobilienvideo.mp4" type="video/mp4">
+      Dein Browser unterstützt dieses Video nicht.
+    </video>
+    <img src="assets/portfolio/CVS Rahmen.png" class="cvs-frame-overlay" alt="" aria-hidden="true">
+    <button class="cvs-play" type="button" aria-label="Showreel abspielen"></button>
+  </div>
+</section>
+
+<!-- ══════════ LEISTUNGEN ══════════ -->
+<section class="section">
+  <div class="sec-head reveal">
+    <span class="eyebrow">Leistungen</span>
+    <h2 class="sec-title">Alles aus <span class="g">einer Hand.</span></h2>
+  </div>
+  <div class="feat-grid">
+    <article class="feat reveal" data-d="1">
+      <span class="feat-ico"><img class="ico-asset" src="assets/portfolio/icons/Kamera.png" alt="" decoding="async" onload="this.style.display='block';this.nextElementSibling.style.display='none'"><svg class="i3d" viewBox="0 0 64 64"><g filter="url(#depth)"><circle cx="22" cy="17" r="7.5" fill="url(#gMetal)"/><circle cx="22" cy="17" r="3" fill="#5a3f0e"/><circle cx="36" cy="18" r="6" fill="url(#gMetal)"/><circle cx="36" cy="18" r="2.4" fill="#5a3f0e"/><path d="M42 30 L55 25 v16 l-13 -5 z" fill="url(#chrome)"/><rect x="9" y="24" width="34" height="23" rx="5" fill="url(#gMetal)"/><rect x="11" y="26" width="30" height="6" rx="3" fill="url(#sheen)" opacity=".55"/><circle cx="31" cy="36" r="7.5" fill="url(#bGlass)"/><circle cx="31" cy="36" r="7.5" fill="none" stroke="url(#gEdge)" stroke-width="1.8"/><circle cx="28.5" cy="33" r="2.2" fill="#fff" opacity=".85" filter="url(#bloom)"/><circle cx="14" cy="43" r="2" fill="#5fa8ff" filter="url(#bloom)"/></g></svg></span>
+      <h3>Video &amp; Foto</h3>
+      <p>Erster Eindruck</p>
+    </article>
+    <article class="feat reveal" data-d="2">
+      <span class="feat-ico"><img class="ico-asset ico-blend" src="assets/portfolio/icons/Drohne.png" alt="" decoding="async" onload="this.style.display='block';this.nextElementSibling.style.display='none'"><svg class="i3d" viewBox="0 0 64 64"><g filter="url(#depth)"><path d="M32 32 L15 19 M32 32 L49 19 M32 32 L15 45 M32 32 L49 45" stroke="url(#gEdge)" stroke-width="3.4" stroke-linecap="round"/><ellipse cx="15" cy="19" rx="10" ry="3.2" fill="url(#bGlass)" opacity=".9" filter="url(#bloom)"/><ellipse cx="49" cy="19" rx="10" ry="3.2" fill="url(#bGlass)" opacity=".9" filter="url(#bloom)"/><ellipse cx="15" cy="45" rx="10" ry="3.2" fill="url(#bGlass)" opacity=".82"/><ellipse cx="49" cy="45" rx="10" ry="3.2" fill="url(#bGlass)" opacity=".82"/><rect x="23" y="25" width="18" height="13" rx="5" fill="url(#gMetal)"/><rect x="25" y="26.5" width="11" height="3" rx="1.5" fill="url(#sheen)" opacity=".6"/><circle cx="32" cy="41" r="4.5" fill="url(#chrome)"/><circle cx="32" cy="41" r="2.2" fill="#1b54d6"/><circle cx="30.5" cy="40" r="1" fill="#fff" opacity=".8"/></g></svg></span>
+      <h3>Luftaufnahmen</h3>
+      <p>Aus jeder Höhe</p>
+    </article>
+    <article class="feat reveal" data-d="3">
+      <span class="feat-ico"><img class="ico-asset ico-blend" src="assets/portfolio/icons/cvs kugel in 360.png" alt="" decoding="async" onload="this.style.display='block';this.nextElementSibling.style.display='none'"><svg class="i3d" viewBox="0 0 64 64"><g filter="url(#depth)"><circle cx="32" cy="33" r="17" fill="url(#bGlass)"/><ellipse cx="32" cy="33" rx="17" ry="6.5" fill="none" stroke="url(#gEdge)" stroke-width="1.4" opacity=".9"/><ellipse cx="32" cy="33" rx="6.5" ry="17" fill="none" stroke="#cfe8ff" stroke-width="1" opacity=".55"/><circle cx="32" cy="33" r="17" fill="none" stroke="url(#gEdge)" stroke-width="1.8"/><ellipse cx="26" cy="26" rx="5" ry="3.5" fill="#fff" opacity=".3"/><path d="M13 23 a21 9 0 0 0 38 0" fill="none" stroke="url(#gMetal)" stroke-width="2.6" stroke-linecap="round" filter="url(#bloom)"/><path d="M51 23 l1.5 -4.5 l-4.5 1.2 z" fill="#f7da82" filter="url(#bloom)"/><circle cx="25" cy="25" r="2.4" fill="#fff" opacity=".85" filter="url(#bloom)"/></g></svg></span>
+      <h3>360°-Touren</h3>
+      <p>Virtuelle Rundgänge</p>
+    </article>
+    <article class="feat reveal" data-d="1">
+      <span class="feat-ico"><img class="ico-asset ico-blend" src="assets/portfolio/icons/Post-Production.png" alt="" decoding="async" onload="this.style.display='block';this.nextElementSibling.style.display='none'"><svg class="i3d" viewBox="0 0 64 64"><g filter="url(#depth)"><circle cx="32" cy="33" r="15" fill="none" stroke="url(#gMetal)" stroke-width="5.5"/><circle cx="32" cy="33" r="17.7" fill="none" stroke="url(#gEdge)" stroke-width="1" opacity=".7"/><circle cx="32" cy="18" r="2.4" fill="#fff" filter="url(#bloom)"/><path d="M28 27 l10 6 l-10 6 z" fill="url(#bGlass)"/><path d="M28 27 l10 6 l-10 6 z" fill="none" stroke="#cfe8ff" stroke-width=".8" opacity=".7"/><circle cx="51" cy="20" r="2.2" fill="#5fa8ff" filter="url(#bloom)"/><circle cx="13" cy="45" r="1.8" fill="#f7da82" filter="url(#bloom)"/><circle cx="49" cy="47" r="1.5" fill="#bfe2ff" filter="url(#bloom)"/><circle cx="18" cy="14" r="1.4" fill="#f7da82" filter="url(#bloom)"/><circle cx="54" cy="38" r="1.3" fill="#cfe8ff" filter="url(#bloom)"/></g></svg></span>
+      <h3>Post-Production</h3>
+      <p>Licht &amp; Farbe</p>
+    </article>
+    <article class="feat reveal" data-d="2">
+      <span class="feat-ico"><img class="ico-asset ico-blend" src="assets/portfolio/icons/Reichweite.png" alt="" decoding="async" onload="this.style.display='block';this.nextElementSibling.style.display='none'"><svg class="i3d" viewBox="0 0 64 64"><g filter="url(#depth)"><rect x="13" y="39" width="9" height="13" fill="url(#gMetal)"/><path d="M13 39 l3 -3 h9 l-3 3 z" fill="#fff6d6" opacity=".85"/><path d="M22 39 l3 -3 v13 l-3 3 z" fill="#7e560f"/><rect x="27.5" y="31" width="9" height="21" fill="url(#gMetal)"/><path d="M27.5 31 l3 -3 h9 l-3 3 z" fill="#fff6d6" opacity=".85"/><path d="M36.5 31 l3 -3 v21 l-3 3 z" fill="#7e560f"/><rect x="42" y="22" width="9" height="30" fill="url(#gMetal)"/><path d="M42 22 l3 -3 h9 l-3 3 z" fill="#fff6d6" opacity=".85"/><path d="M51 22 l3 -3 v30 l-3 3 z" fill="#7e560f"/><path d="M11 37 L26 27 L36 32 L55 14" fill="none" stroke="#5fa8ff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" filter="url(#bloom)"/><path d="M55 14 h-6 m6 0 v6" stroke="#bfe2ff" stroke-width="2.8" stroke-linecap="round" filter="url(#bloom)"/></g></svg></span>
+      <h3>Reichweite</h3>
+      <p>Mehr Anfragen</p>
+    </article>
+    <article class="feat reveal" data-d="3">
+      <span class="feat-ico"><img class="ico-asset ico-blend" src="assets/portfolio/icons/Monitor.png" alt="" decoding="async" onload="this.style.display='block';this.nextElementSibling.style.display='none'"><svg class="i3d" viewBox="0 0 64 64"><g filter="url(#depth)"><circle cx="32" cy="32" r="19" fill="url(#bGlass)"/><circle cx="32" cy="32" r="19" fill="none" stroke="url(#gEdge)" stroke-width="1.8"/><ellipse cx="26" cy="23" rx="7" ry="4" fill="#fff" opacity=".28"/><path d="M26 21 l17 11 l-17 11 z" fill="url(#gMetal)" filter="url(#bloom)"/><path d="M26 21 l17 11 l-17 11 z" fill="none" stroke="url(#gEdge)" stroke-width="1.1"/><path d="M27 23 l5 3.2" stroke="#fff6d6" stroke-width="1.4" opacity=".7" stroke-linecap="round"/></g></svg></span>
+      <h3>Storytelling</h3>
+      <p>Emotion, die bleibt</p>
+    </article>
+  </div>
+</section>
+
+<hr class="lightbar">
+
+<!-- ══════════ ABLAUF ══════════ -->
+<section class="section">
+  <div class="sec-head reveal">
+    <span class="eyebrow">Ablauf</span>
+    <h2 class="sec-title">Drei Schritte <span class="g">zum Film.</span></h2>
+  </div>
+  <div class="steps">
+    <article class="step reveal" data-d="1">
+      <img class="step-img ico-blend" src="assets/portfolio/icons/01.png" alt="Schritt 1" width="768" height="768" decoding="async">
+      <h3>Beratung</h3>
+      <p>Konzept &amp; Vision</p>
+    </article>
+    <article class="step reveal" data-d="2">
+      <img class="step-img ico-blend" src="assets/portfolio/icons/02.png" alt="Schritt 2" width="768" height="768" decoding="async">
+      <h3>Produktion</h3>
+      <p>Dreh &amp; Drohne</p>
+    </article>
+    <article class="step reveal" data-d="3">
+      <img class="step-img" src="assets/portfolio/icons/03.png" alt="Schritt 3" width="768" height="768" decoding="async">
+      <h3>Lieferung</h3>
+      <p>Schnitt &amp; Export</p>
+    </article>
+  </div>
+</section>
+
+<!-- ══════════ VORTEILE ══════════ -->
+<section class="section">
+  <div class="sec-head reveal">
+    <span class="eyebrow">Warum CVS</span>
+    <h2 class="sec-title">Premium <span class="g">ohne Kompromiss.</span></h2>
+  </div>
+  <div class="adv-row">
+    <div class="adv reveal" data-d="1">
+      <div class="adv-orbit"><span class="adv-disc"><img class="ico-asset ico-blend" src="assets/portfolio/icons/Beratung.png" alt="" decoding="async" onload="this.style.display='block';this.nextElementSibling.style.display='none'"><svg class="i3d" viewBox="0 0 64 64"><g filter="url(#depth)"><circle cx="23" cy="25" r="7" fill="url(#gMetal)"/><circle cx="21" cy="23" r="2" fill="#fff" opacity=".5"/><path d="M11 47 a12 12 0 0 1 24 0 z" fill="url(#gMetal)"/><path d="M14 44 a9 9 0 0 1 18 0" fill="#7e560f" opacity=".22"/><path d="M34 15 h15 a4 4 0 0 1 4 4 v8 a4 4 0 0 1 -4 4 h-7 l-5 5 v-5 h-3 a4 4 0 0 1 -4 -4 v-8 a4 4 0 0 1 4 -4 z" fill="url(#bGlass)" opacity=".92" filter="url(#bloom)"/><circle cx="39" cy="23.5" r="1.5" fill="#fff"/><circle cx="44.5" cy="23.5" r="1.5" fill="#fff"/><circle cx="50" cy="23.5" r="1.5" fill="#fff"/></g></svg></span></div>
+      <h3 class="adv-title">Beratung</h3>
+      <p class="adv-desc">Auf Augenhöhe</p>
+    </div>
+    <div class="adv reveal" data-d="2">
+      <div class="adv-orbit"><span class="adv-disc"><img class="ico-asset ico-blend" src="assets/portfolio/icons/Konzept.png" alt="" decoding="async" onload="this.style.display='block';this.nextElementSibling.style.display='none'"><svg class="i3d" viewBox="0 0 64 64"><g filter="url(#depth)"><path d="M32 11 L51 22 L32 33 L13 22 Z" fill="url(#bGlass)"/><path d="M13 22 L32 33 L32 54 L13 43 Z" fill="#0c2f8a"/><path d="M51 22 L32 33 L32 54 L51 43 Z" fill="url(#gMetal)"/><path d="M32 11 L51 22 L32 33 L13 22 Z M13 22 V43 L32 54 L51 43 V22 M32 33 V54" fill="none" stroke="url(#gEdge)" stroke-width="1.3" opacity=".9"/><path d="M22.5 16.5 L41.5 27.5 M41.5 16.5 L22.5 27.5" stroke="#cfe8ff" stroke-width=".8" opacity=".5"/><circle cx="32" cy="22" r="2" fill="#fff" filter="url(#bloom)"/></g></svg></span></div>
+      <h3 class="adv-title">Konzept</h3>
+      <p class="adv-desc">Maßgeschneidert</p>
+    </div>
+    <div class="adv reveal" data-d="3">
+      <div class="adv-orbit"><span class="adv-disc"><img class="ico-asset ico-blend" src="assets/portfolio/icons/Tempo.png" alt="" decoding="async" onload="this.style.display='block';this.nextElementSibling.style.display='none'"><svg class="i3d" viewBox="0 0 64 64"><g filter="url(#depth)"><path d="M9 27 h10 M6 36 h13 M11 45 h8" stroke="#5fa8ff" stroke-width="2.6" stroke-linecap="round" opacity=".7" filter="url(#bloom)"/><path d="M39 9 L20 37 h12 l-6 18 L49 26 H35 z" fill="url(#gMetal)" filter="url(#bloom)"/><path d="M39 9 L20 37 h12 l-6 18 L49 26 H35 z" fill="none" stroke="url(#gEdge)" stroke-width="1.1"/><path d="M37 14 L26 31 h7" fill="none" stroke="#fff6d6" stroke-width="1.5" opacity=".7" stroke-linecap="round"/></g></svg></span></div>
+      <h3 class="adv-title">Tempo</h3>
+      <p class="adv-desc">Termingerecht</p>
+    </div>
+    <div class="adv reveal" data-d="3">
+      <div class="adv-orbit"><span class="adv-disc"><img class="ico-asset ico-blend" src="assets/portfolio/icons/Qualität.png" alt="" decoding="async" onload="this.style.display='block';this.nextElementSibling.style.display='none'"><svg class="i3d" viewBox="0 0 64 64"><g filter="url(#depth)"><path d="M32 8 L51 15 V31 C51 44 43 51 32 56 C21 51 13 44 13 31 V15 Z" fill="url(#gMetal)"/><path d="M32 8 L51 15 V31 C51 44 43 51 32 56 C21 51 13 44 13 31 V15 Z" fill="none" stroke="url(#gEdge)" stroke-width="1.6"/><path d="M32 8 V56 C21 51 13 44 13 31 V15 Z" fill="#02030a" opacity=".14"/><path d="M32 21 L41 31 L32 45 L23 31 Z" fill="url(#bGlass)" filter="url(#bloom)"/><path d="M32 21 L41 31 L32 45 L23 31 Z" fill="none" stroke="#cfe8ff" stroke-width="1"/><path d="M32 21 V45 M23 31 H41" stroke="#eaf5ff" stroke-width=".8" opacity=".7"/><circle cx="29" cy="28" r="1.6" fill="#fff" opacity=".85" filter="url(#bloom)"/></g></svg></span></div>
+      <h3 class="adv-title">Qualität</h3>
+      <p class="adv-desc">Kompromisslos</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ FINAL CTA ══════════ -->
+<section class="final-cta reveal">
+  <h2>Ihre Immobilie. <span class="g">Ins beste Licht.</span></h2>
+  <p>Lassen Sie uns gemeinsam den Film erschaffen, der verkauft.</p>
+  <div class="hero-cta">
+    <a href="contact.php" class="btn-cvs btn-cvs--gold">Jetzt anfragen <i>→</i></a>
+    <a href="portfolio.html" class="btn-cvs btn-cvs--ghost">Portfolio</a>
+  </div>
+</section>
+
+<footer class="cvs-footer-master">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <h3>Cinematic Vision Studio</h3>
+      <p>Deine Vision. Als cinematic KI-Erlebnis. Premium AI-Cinematic-Produktion für Creator und Marken.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Studio</h4>
+      <a href="scene-editor-test.html">Über uns</a>
+      <a href="scene-editor-test.html#process">Prozess</a>
+      <a href="academy.html">Academy</a>
+      <a href="calendar.html">Buchung</a>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <a href="portfolio.html">Trailer</a>
+      <a href="shop.html">Shop</a>
+      <a href="prompt-generator.html">Prompt Studio</a>
+      <a href="portfolio.html">Portfolio</a>
+      <a href="crystals.html">Kristalle</a>
+    </div>
+    <div class="footer-col">
+      <h4>Kontakt</h4>
+      <a href="contact.php">Projekt anfragen</a>
+      <a href="https://cinematic-studio-family.onrender.com/studio-demo.php">Studio starten</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 Cinematic Vision Studio · Alle Rechte vorbehalten</div>
+    <div class="footer-legal">
+      <a href="impressum.html">Impressum</a>
+      <a href="datenschutz.html">Datenschutz</a>
+      <a href="agb.html">AGB</a>
+      <a href="widerruf.html">Widerruf</a>
+      <a href="cookies.html">Cookies</a>
+      <a href="contact.php">Kontakt</a>
+    </div>
+  </div>
+</footer>
+<div id="cvs-progress" aria-hidden="true"></div>
+<div id="cursor"></div><div id="cursor-ring"></div>
+<script src="assets/js/nav.js" defer></script>
+<script>
+(function(){
+  var els=document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion:reduce)').matches){
+    els.forEach(function(e){e.classList.add('in');});return;
+  }
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});
+  },{threshold:.12,rootMargin:'0px 0px -8% 0px'});
+  els.forEach(function(e){io.observe(e);});
+})();
+/* Showreel: eigener Play-Button + Klick-Toggle (keine nativen Controls) */
+(function(){
+  var vf=document.querySelector('.cvs-video-frame');if(!vf)return;
+  var pv=vf.querySelector('.property-video'),pb=vf.querySelector('.cvs-play');if(!pv)return;
+  function sync(){vf.classList.toggle('playing',!pv.paused&&!pv.ended);}
+  function play(){pv.muted=false;pv.volume=1;pv.play();}
+  if(pb)pb.addEventListener('click',play);
+  pv.addEventListener('click',function(){pv.paused?pv.play():pv.pause();});
+  pv.addEventListener('play',sync);pv.addEventListener('pause',sync);pv.addEventListener('ended',sync);
+})();
+
+/* Feature 3: Gold Scroll-Progress-Bar */
+(function(){
+  var bar=document.getElementById('cvs-progress');if(!bar)return;
+  var raf=null;
+  function update(){
+    var h=document.documentElement.scrollHeight-window.innerHeight;
+    bar.style.width=(h>0?(window.scrollY/h*100):0)+'%';
+    raf=null;
+  }
+  window.addEventListener('scroll',function(){if(!raf)raf=requestAnimationFrame(update);},{passive:true});
+  update();
+})();
+
+</script>
+</body>
+</html>

@@ -123,3 +123,25 @@ WORKSPACE_CLEANUP_*.md
 # Lokale Tools
 ionos-upload*.mjs
 docs/superpowers/
+
+# --- CVS Repo Hygiene (2026-06-08) ---
+# Local runtime / database
+ruvector.db
+
+# Claude Code local state (catch-all, superseding partial entries above)
+.claude/
+
+# Rate limit runtime data
+storage/rate_limits/
+
+# Screenshot artifacts (QA / approval / verification)
+approval-*.png
+verify-*.png
+contact-verify-*.png
+studio-demo-verify-*.png
+analysis-*.png
+chk-*.png
+reference-*.png
+scene-editor-check-*.png
+live-*.png
+prompt-gen-*.png
