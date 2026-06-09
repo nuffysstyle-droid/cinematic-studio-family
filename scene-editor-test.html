@@ -68,7 +68,7 @@ button{touch-action:manipulation}
 section{position:relative;overflow:hidden}
 
 /* ── CINEMATIC FILM GRAIN ── */
-body::before{
+body::after{
   content:'';position:fixed;inset:0;z-index:2;pointer-events:none;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.028'/%3E%3C/svg%3E");
   opacity:.5;
@@ -1180,7 +1180,7 @@ footer{background:rgba(2,2,5,.98);border-top:1px solid rgba(24,114,255,.09);padd
    ════════════════════════════════════════════════════════════ */
 
 /* ── 1. Grain auf Referenz-Level ── */
-body::before{z-index:0;opacity:.28}
+body::after{z-index:0;opacity:.28}
 
 /* ── 2. Aurora (CSS-Orbs statt Canvas) ── */
 .cvs-aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
@@ -1292,39 +1292,42 @@ a,button,[role=button],label,.nav-burger{cursor:pointer!important}
      NAVIGATION
 ══════════════════════════════════ -->
 <nav class="cvs-nav-simple" id="main-nav">
-  <a href="scene-editor-test.html" class="nav-logo-img-wrap">
-    <img src="assets/cvs-logo-icon.png" alt="CVS" class="nav-logo-img">
-    <span class="nav-logo-text">Cinematic Vision<span>Studios</span></span>
+  <a href="scene-editor-test.html" class="nav-logo">
+    <img src="assets/cvs-logo-icon.png" alt="CVS" class="cvs-nav-img">
+    <span class="cvs-nav-txt"><span class="nav-t1">Cinematic</span> <span class="nav-t2">Vision</span><span class="cvs-nav-sub"><span class="nav-t3">Studio</span></span></span>
   </a>
-  <ul class="nav-links">
-    <li><a href="scene-editor-test.html">Home</a></li>
-    <li><a href="https://cinematic-studio-family.onrender.com/studio-demo.php">Studio</a></li>
-    <li><a href="prompt-generator.html">Prompts</a></li>
-    <li><a href="portfolio.html">Portfolio</a></li>
-    <li><a href="crystals.html">Kristalle</a></li>
-    <li><a href="shop.html">Shop</a></li>
-    <li><a href="academy.html">Academy</a></li>
-    <li><a href="calendar.html">Buchung</a></li>
-    <li><a href="contact.php">Kontakt</a></li>
-    <li><a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="nav-cta">🎬 Studio starten</a></li>
-    <li><a href="https://cinematic-studio-family.onrender.com/login.php" style="-webkit-text-fill-color:rgba(237,242,255,.5);font-size:.72rem;padding:7px 8px">Login</a></li>
-  </ul>
+  <div class="nav-links">
+    <a href="scene-editor-test.html" class="nav-link active">Home</a>
+    <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="nav-link">Studio</a>
+    <a href="crystals.html" class="nav-link">Kristalle</a>
+    <a href="contact.php" class="nav-link">Kontakt</a>
+    <a href="calendar.html" class="nav-link">Buchung</a>
+    <a href="prompt-generator.html" class="nav-link">Prompts</a>
+    <a href="portfolio.html" class="nav-link">Portfolio</a>
+    <a href="academy.html" class="nav-link">Academy</a>
+    <a href="shop.html" class="nav-link">Shop</a>
+  </div>
+  <div class="nav-actions">
+    <a href="https://cinematic-studio-family.onrender.com/login.php" class="nav-btn-ghost">Login</a>
+    <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="nav-btn-gold">Studio starten</a>
+  </div>
   <button class="nav-burger" id="burger-btn" aria-label="Menü"><span></span><span></span><span></span></button>
 </nav>
 
-<nav class="mobile-nav" id="mobile-nav">
-  <a href="scene-editor-test.html" class="mn-link mob-link">Home</a>
-  <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="mn-link mob-link">Studio</a>
-  <a href="prompt-generator.html" class="mn-link mob-link">Prompts</a>
-  <a href="portfolio.html" class="mn-link mob-link">Portfolio</a>
-  <a href="crystals.html" class="mn-link mob-link">Kristalle</a>
-  <a href="shop.html" class="mn-link mob-link">Shop</a>
-  <a href="academy.html" class="mn-link mob-link">Academy</a>
-  <a href="calendar.html" class="mn-link mob-link">Buchung</a>
-  <a href="contact.php" class="mn-link mob-link">Kontakt</a>
-  <a href="https://cinematic-studio-family.onrender.com/login.php" class="mn-link mob-link">Login</a>
-  <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="mn-link mob-link mob-cta">🎬 Studio starten</a>
-</nav>
+<div class="mob-menu" id="mobMenu" role="navigation" aria-label="Navigation">
+  <a href="scene-editor-test.html" class="mob-link active">🏠 Home</a>
+  <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="mob-link">🎬 Studio</a>
+  <a href="crystals.html" class="mob-link">💎 Kristalle</a>
+  <a href="contact.php" class="mob-link">📞 Kontakt</a>
+  <a href="calendar.html" class="mob-link">📅 Buchung</a>
+  <a href="prompt-generator.html" class="mob-link">✍️ Prompts</a>
+  <a href="portfolio.html" class="mob-link">🎞️ Portfolio</a>
+  <a href="academy.html" class="mob-link">🎓 Academy</a>
+  <a href="shop.html" class="mob-link">🛍️ Shop</a>
+  <div class="mob-sep"></div>
+  <a href="https://cinematic-studio-family.onrender.com/login.php" class="mob-link">🔑 Login</a>
+  <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="mob-cta">🎬 Studio starten</a>
+</div>
 
 <!-- ══════════════════════════════════
      HERO — LEGENDARY STAGE
