@@ -358,7 +358,7 @@ if (str_starts_with($redirect, '//') || str_contains($redirect, ':')) {
 
 <div class="auth-footer">
     <a href="https://cinematic-vision-studio.de/crystals.html">Pläne & Preise</a> ·
-    <a href="https://cinematic-vision-studio.de/contact.php">Support</a> ·
+    <a href="https://cinematic-vision-studio.de/kontakt.html">Support</a> ·
     <a href="https://cinematic-vision-studio.de/scene-editor-test.html">Ohne Login testen</a>
 </div>
 

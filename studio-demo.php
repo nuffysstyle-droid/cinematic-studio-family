@@ -307,7 +307,7 @@ $authUser = csf_auth_user();
     <li><a href="https://cinematic-vision-studio.de/crystals.html">Kristalle</a></li>
     <li><a href="https://cinematic-vision-studio.de/shop.html">Shop</a></li>
     <li><a href="https://cinematic-vision-studio.de/academy.html">Academy</a></li>
-    <li><a href="https://cinematic-vision-studio.de/contact.php">Kontakt</a></li>
+    <li><a href="https://cinematic-vision-studio.de/kontakt.html">Kontakt</a></li>
   </ul>
   <div class="nav-actions">
     <?php if ($authUser): ?>
@@ -332,7 +332,7 @@ $authUser = csf_auth_user();
   <a href="https://cinematic-vision-studio.de/crystals.html" class="mob-link">Kristalle</a>
   <a href="https://cinematic-vision-studio.de/shop.html" class="mob-link">Shop</a>
   <a href="https://cinematic-vision-studio.de/academy.html" class="mob-link">Academy</a>
-  <a href="https://cinematic-vision-studio.de/contact.php" class="mob-link">Kontakt</a>
+  <a href="https://cinematic-vision-studio.de/kontakt.html" class="mob-link">Kontakt</a>
   <div class="mob-sep"></div>
   <?php if ($authUser): ?>
     <span class="mob-link" style="color:var(--accent)"><?= htmlspecialchars((string)($authUser['crystals_balance'] ?? 0)) ?> Kristalle · <?= htmlspecialchars((string)($authUser['email'] ?? '')) ?></span>
@@ -448,7 +448,7 @@ $authUser = csf_auth_user();
       </div>
       <div class="footer-col">
         <h4>Kontakt</h4>
-        <a href="https://cinematic-vision-studio.de/contact.php">Projekt anfragen</a>
+        <a href="https://cinematic-vision-studio.de/kontakt.html">Projekt anfragen</a>
         <a href="studio-demo.php">Studio starten</a>
         <a href="https://cinematic-vision-studio.de/impressum.html">Impressum</a>
         <a href="https://cinematic-vision-studio.de/datenschutz.html">Datenschutz</a>
@@ -465,7 +465,7 @@ $authUser = csf_auth_user();
         <a href="https://cinematic-vision-studio.de/agb.html">AGB</a>
         <a href="https://cinematic-vision-studio.de/widerruf.html">Widerruf</a>
         <a href="https://cinematic-vision-studio.de/cookies.html">Cookies</a>
-        <a href="https://cinematic-vision-studio.de/contact.php">Kontakt</a>
+        <a href="https://cinematic-vision-studio.de/kontakt.html">Kontakt</a>
       </div>
     </div>
   </footer>
