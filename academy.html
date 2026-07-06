@@ -15,8 +15,9 @@
 /* ── Marketing-page variables ── */
 :root{
   --bg:#020205;--card:#0f0f1e;--card2:#161628;--text:#f0f0ff;--muted:#8888aa;--muted2:#5a5a7a;
-  --accent:#f5c542;--accent2:#ff8c00;--blue:#3b82f6;--blue-bright:#1872ff;--purple:#9333ea;--ok:#4ade80;--danger:#ff5c7a;
-  --border:rgba(255,255,255,.09);--gold:linear-gradient(135deg,#f5c542,#ff8c00);--radius-page:18px;
+  --accent:#d4a93c;--accent2:#e8c355;--blue:#1872ff;--blue-glow:#4da0ff;--blue-deep:#003ee8;--ok:#4ade80;--danger:#ff5c7a;
+  --gold-light:#f2d878;--gold-warm:#d4922b;
+  --border:rgba(255,255,255,.09);--gold:linear-gradient(135deg,#d4a93c,#e8c355);--radius-page:18px;
   /* App-css variables (used by academy styles) */
   --bg-main:#0d0f14;--bg-panel:#161a22;--bg-elevated:#1e2330;--bg-hover:#252b3a;
   --text-primary:#e8eaf0;--text-secondary:#8b93a8;--text-muted:#505870;
@@ -47,16 +48,16 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;back
 /* ── Academy ── */
 .ac-page{color:var(--text-primary);}
 .ac-hero{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin-bottom:32px;flex-wrap:wrap;}
-.ac-hero__eyebrow{font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent-blue);margin-bottom:8px;}
+.ac-hero__eyebrow{margin-bottom:10px;}
 .ac-hero__title{font-size:2rem;font-weight:800;color:var(--text-primary);margin-bottom:10px;}
 .ac-hero__sub{font-size:0.95rem;line-height:1.7;}
 .ac-hero__stats{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-start;padding-top:4px;}
 .ac-stat{background:var(--bg-panel);border:1px solid var(--border-color);border-radius:var(--radius);padding:14px 20px;text-align:center;min-width:90px;}
-.ac-stat__num{font-size:1.5rem;font-weight:800;color:var(--accent-blue);line-height:1;margin-bottom:4px;}
+.ac-stat__num{font-size:1.5rem;font-weight:800;color:#ffc21f;-webkit-text-fill-color:#ffc21f;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22);line-height:1;margin-bottom:4px;}
 .ac-stat__label{font-size:0.7rem;color:var(--text-muted);font-weight:500;}
 .ac-filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
 .ac-filter-btn{padding:6px 13px;background:var(--bg-panel);border:1px solid var(--border-color);border-radius:999px;font-size:0.8rem;font-weight:500;color:var(--text-secondary);cursor:pointer;white-space:nowrap;transition:background var(--transition),border-color var(--transition),color var(--transition);}
-.ac-filter-btn:hover{background:var(--bg-elevated);border-color:var(--accent-blue);color:var(--text-primary);box-shadow:0 0 16px rgba(61,142,245,.2);}
+.ac-filter-btn:hover{background:var(--bg-elevated);border-color:#1872ff;color:var(--text-primary);box-shadow:0 0 16px rgba(24,114,255,.2);}
 .ac-filter-btn--active{background:rgba(200,160,60,.08);border-color:var(--accent);color:var(--accent);font-weight:600;box-shadow:0 0 20px rgba(200,160,60,.15);}
 .ac-results-bar{display:flex;align-items:center;gap:12px;margin-bottom:16px;min-height:20px;}
 .ac-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
@@ -131,6 +132,64 @@ h1,h2,h3,.page-h1,.section-title,.plan-tier,.plan-price,.pack-crystals,.pf-title
 html,body{cursor:auto!important}
 a,button,[role=button],label,.nav-burger{cursor:pointer!important}
 #cursor,#cursor-ring{display:none!important}
+/* ── Eyebrow Atom (prompt-generator DNA) ── */
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:'Syne',sans-serif;font-size:13px;font-weight:900;letter-spacing:2.5px;text-transform:uppercase;color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+.eyebrow::before,.eyebrow::after{content:'';height:1px;width:34px}
+.eyebrow::before{background:linear-gradient(90deg,transparent,var(--blue-glow))}
+.eyebrow::after{background:linear-gradient(90deg,var(--gold),transparent)}
+/* ── Gold text span ── */
+.grad{color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+/* ── Premium Buttons (CVS DNA) ── */
+.btn-cvs{position:relative;display:inline-flex;align-items:center;gap:10px;font-family:'Syne',sans-serif;font-weight:800;font-size:15px;letter-spacing:.5px;padding:17px 36px;border-radius:14px;text-decoration:none;cursor:pointer;white-space:nowrap;transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s cubic-bezier(.16,1,.3,1),border-color .3s;border:none}
+.btn-cvs--gold{background:linear-gradient(180deg,#fff7a8 0%,#ffe15a 18%,#ffc21f 48%,#f59a00 78%,#d97900 100%);color:#100700;font-weight:900;box-shadow:0 8px 30px rgba(232,169,59,.28),0 0 0 1px rgba(255,255,255,.08),inset 0 1px 0 rgba(255,255,255,.6)}
+.btn-cvs--gold:hover{transform:translateY(-3px);box-shadow:0 18px 48px rgba(232,169,59,.45),0 0 0 1px rgba(255,255,255,.12),inset 0 1px 0 rgba(255,255,255,.7)}
+.btn-cvs--ghost{background:rgba(8,11,22,.86);color:#ffffff;font-weight:800;border:1px solid transparent;background-image:linear-gradient(rgba(8,11,22,.86),rgba(8,11,22,.86)),linear-gradient(120deg,var(--blue-glow),var(--gold));background-origin:border-box;background-clip:padding-box,border-box;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.btn-cvs--ghost:hover{color:#fff;transform:translateY(-3px);box-shadow:0 16px 40px rgba(24,114,255,.25),0 0 0 1px rgba(24,114,255,.1)}
+/* Card button compact */
+.ac-card .btn-cvs{padding:7px 16px;font-size:12px;border-radius:10px;letter-spacing:0}
+/* ── Hero Orbs ── */
+.hero-orb{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;will-change:transform;z-index:0}
+.hero-orb--blue{width:560px;height:560px;background:radial-gradient(circle,rgba(24,114,255,.18),transparent 70%);top:-130px;left:-80px;animation:drift1 22s ease-in-out infinite}
+.hero-orb--gold{width:400px;height:400px;background:radial-gradient(circle,rgba(232,169,59,.12),transparent 70%);top:-60px;right:-60px;animation:drift2 26s ease-in-out infinite}
+/* ════════ NAV / FOOTER (Marken-DNA — 1:1 immobilienvideos.html) ════════ */
+.cvs-nav-simple{background:linear-gradient(180deg,rgba(3,4,10,.92) 0%,rgba(3,4,10,.74) 58%,rgba(3,4,10,0) 100%);border-bottom:0;backdrop-filter:blur(18px) saturate(115%);-webkit-backdrop-filter:blur(18px) saturate(115%);padding-bottom:18px;padding-left:18px;padding-right:18px}
+.cvs-nav-simple::after{content:'';position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,transparent,rgba(24,114,255,.45),rgba(232,195,85,.4),transparent);opacity:.7}
+.cvs-nav-simple.scrolled{background:linear-gradient(180deg,rgba(2,2,6,.96) 0%,rgba(2,2,6,.86) 70%,rgba(2,2,6,.55) 100%)}
+.cvs-nav-simple .nav-logo{flex-direction:row;align-items:center;gap:12px}
+.cvs-nav-simple .nav-logo .cvs-nav-img{display:block;height:68px;width:68px;object-fit:contain;animation:none;transform:scale(1.06);filter:drop-shadow(0 0 14px rgba(24,114,255,.28)) drop-shadow(0 0 30px rgba(232,195,85,.14))}
+.cvs-nav-simple .nav-logo .cvs-nav-txt{background:none;-webkit-text-fill-color:initial;color:#fff;font-size:20px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;text-shadow:none;line-height:1.15;filter:none}
+.cvs-nav-simple .nav-logo .nav-t1{color:#4da0ff;-webkit-text-fill-color:#4da0ff;text-shadow:0 0 16px rgba(77,160,255,.4)}
+.cvs-nav-simple .nav-logo .nav-t2{color:#ffc21f!important;-webkit-text-fill-color:#ffc21f!important;background:none!important;margin-left:4px;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+.cvs-nav-simple .nav-logo .cvs-nav-sub{display:block;background:none;-webkit-text-fill-color:initial;margin-top:3px;color:#fff;font-size:10px;font-weight:800;letter-spacing:4px;text-transform:uppercase;opacity:1;filter:none}
+.cvs-nav-simple .nav-logo .nav-t3{color:#4da0ff;-webkit-text-fill-color:#4da0ff;opacity:1}
+.cvs-nav-simple .nav-links{gap:2px}
+.cvs-nav-simple .nav-links a{font-family:'Syne',sans-serif;font-size:12px;letter-spacing:.2px;padding:6px 7px;position:relative;color:#fff;font-weight:700;opacity:.96;transition:color .2s ease,text-shadow .2s ease}
+.cvs-nav-simple .nav-links a:hover{color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+.cvs-nav-simple .nav-links a.active{color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+.cvs-nav-simple .nav-links a::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%) scale(0);width:4px;height:4px;background:#1872ff;border-radius:50%;box-shadow:0 0 6px rgba(59,130,246,.6);transition:transform .2s}
+.cvs-nav-simple .nav-links a:hover::after{transform:translateX(-50%) scale(1)}
+.cvs-nav-simple .nav-actions{gap:10px}
+.cvs-nav-simple .nav-btn-ghost,.cvs-nav-simple .nav-btn-gold{font-family:'Syne',sans-serif;font-size:12px;font-weight:800;letter-spacing:.3px;padding:8px 14px;border-radius:11px;white-space:nowrap;transition:transform .25s cubic-bezier(.16,1,.3,1),box-shadow .25s cubic-bezier(.16,1,.3,1),color .2s,opacity .2s}
+.cvs-nav-simple .nav-btn-ghost{color:#ffffff;border:1px solid transparent;background:linear-gradient(rgba(9,12,24,.88),rgba(9,12,24,.88)) padding-box,linear-gradient(120deg,var(--blue-glow),var(--gold)) border-box;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.cvs-nav-simple .nav-btn-ghost:hover{color:var(--gold);transform:translateY(-2px);box-shadow:0 8px 24px rgba(24,114,255,.25),0 0 18px rgba(232,195,85,.22);text-shadow:0 0 14px rgba(232,195,85,.5)}
+.cvs-nav-simple .nav-btn-gold{color:#100700!important;font-weight:900;background:linear-gradient(180deg,#fff7a8 0%,#ffe15a 18%,#ffc21f 48%,#f59a00 78%,#d97900 100%);border:0;box-shadow:0 6px 20px rgba(232,169,59,.3),inset 0 1px 0 rgba(255,255,255,.55)}
+.cvs-nav-simple .nav-btn-gold:hover{opacity:1;transform:translateY(-2px);box-shadow:0 12px 30px rgba(232,169,59,.5),inset 0 1px 0 rgba(255,255,255,.65)}
+.cvs-footer-master{margin-top:20px;background:linear-gradient(180deg,rgba(2,2,6,0),rgba(2,2,6,.98) 22%)}
+.cvs-footer-master .footer-brand h3{font-size:25px;letter-spacing:.5px;color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+.cvs-footer-master .footer-brand p{color:rgba(255,255,255,.90);font-size:16px;line-height:1.74;max-width:300px}
+.cvs-footer-master .footer-col h4{font-size:15px;margin-bottom:16px;letter-spacing:2px;text-transform:uppercase;font-weight:900;opacity:1;color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+.cvs-footer-master .footer-col a{font-size:14.5px;padding:6px 0;color:rgba(255,255,255,.88);opacity:1;transition:color .2s,text-shadow .2s,transform .2s}
+.cvs-footer-master .footer-col a:hover{color:#ffc21f;text-shadow:0 0 12px rgba(255,194,31,.45);transform:translateX(3px)}
+.cvs-footer-master .footer-bottom{padding-top:24px;font-size:14px;border-top:1px solid rgba(255,255,255,.09)}
+.cvs-footer-master .footer-copy{font-size:14px;color:rgba(255,255,255,.80)}
+.cvs-footer-master .footer-legal a{font-size:14px;padding:0 9px;color:rgba(255,255,255,.80);transition:color .2s,text-shadow .2s}
+.cvs-footer-master .footer-legal a:hover{color:#ffc21f;text-shadow:0 0 10px rgba(255,194,31,.45)}
+.mob-menu .mob-link{font-family:'Syne',sans-serif;font-weight:700}
+.mob-menu .mob-link:hover,.mob-menu .mob-link.active{color:#ffc21f;text-shadow:0 0 12px rgba(255,194,31,.45)}
+.mob-menu .mob-cta{font-family:'Syne',sans-serif;color:#100700;font-weight:900;background:linear-gradient(180deg,#fff7a8 0%,#ffe15a 18%,#ffc21f 48%,#f59a00 78%,#d97900 100%)}
+@media(max-width:1530px){.cvs-nav-simple .nav-links{display:none}.cvs-nav-simple .nav-burger{display:flex}.mob-menu{display:block}}
+@media(max-width:860px){.cvs-nav-simple .nav-logo .cvs-nav-img{height:60px;width:60px;transform:scale(1.08)}.cvs-nav-simple .nav-logo .cvs-nav-txt{font-size:15px}}
+@media(max-width:560px){.cvs-nav-simple .nav-logo .cvs-nav-img{height:52px;width:52px;transform:scale(1.1)}.cvs-nav-simple .nav-logo .cvs-nav-txt{font-size:13px;letter-spacing:.4px}.cvs-nav-simple .nav-logo .cvs-nav-sub{font-size:9.5px;letter-spacing:3px}}
 </style>
 </head>
 <body>
@@ -145,7 +204,7 @@ a,button,[role=button],label,.nav-burger{cursor:pointer!important}
     <a href="scene-editor-test.html" class="nav-link">Home</a>
     <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="nav-link">Studio</a>
     <a href="crystals.html" class="nav-link">Kristalle</a>
-    <a href="contact.php" class="nav-link">Kontakt</a>
+    <a href="kontakt.html" class="nav-link">Kontakt</a>
     <a href="calendar.html" class="nav-link">Buchung</a>
     <a href="prompt-generator.html" class="nav-link">Prompts</a>
     <a href="portfolio.html" class="nav-link">Portfolio</a>
@@ -162,7 +221,7 @@ a,button,[role=button],label,.nav-burger{cursor:pointer!important}
   <a href="scene-editor-test.html" class="mob-link">🏠 Home</a>
   <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="mob-link">🎬 Studio</a>
   <a href="crystals.html" class="mob-link">💎 Kristalle</a>
-  <a href="contact.php" class="mob-link">📞 Kontakt</a>
+  <a href="kontakt.html" class="mob-link">📞 Kontakt</a>
   <a href="calendar.html" class="mob-link">📅 Buchung</a>
   <a href="prompt-generator.html" class="mob-link">✍️ Prompts</a>
   <a href="portfolio.html" class="mob-link">🎞️ Portfolio</a>
@@ -174,14 +233,16 @@ a,button,[role=button],label,.nav-burger{cursor:pointer!important}
 </div>
 
 <div class="page">
+  <span class="hero-orb hero-orb--blue" aria-hidden="true"></span>
+  <span class="hero-orb hero-orb--gold" aria-hidden="true"></span>
   <div class="wrap">
     <div class="ac-page">
 
       <!-- Hero -->
       <div class="ac-hero reveal">
         <div class="ac-hero__text">
-          <div class="ac-hero__eyebrow reveal">📚 Cinematic Academy</div>
-          <h2 class="ac-hero__title reveal reveal-delay-1">Academy</h2>
+          <span class="eyebrow ac-hero__eyebrow reveal">📚 Cinematic Academy</span>
+          <h2 class="ac-hero__title reveal reveal-delay-1"><span class="grad">Academy</span></h2>
           <p class="ac-hero__sub text-muted reveal reveal-delay-2">
             Lerne, wie du bessere Bilder, Videos, Startframes,<br>
             Sticker und TikTok-Inhalte erstellst.
@@ -266,7 +327,7 @@ a,button,[role=button],label,.nav-burger{cursor:pointer!important}
     <div class="ac-card__short text-muted text-sm"></div>
     <div class="ac-card__footer">
       <span class="ac-card__read-time text-muted text-sm"></span>
-      <button class="btn btn-primary btn-sm ac-card__open-btn">Guide öffnen →</button>
+      <button class="btn-cvs btn-cvs--gold ac-card__open-btn">Guide öffnen →</button>
     </div>
   </div>
 </template>
@@ -296,8 +357,8 @@ a,button,[role=button],label,.nav-burger{cursor:pointer!important}
       </div>
     </div>
     <div class="modal-footer">
-      <a id="ac-modal-cta" class="btn btn-primary" href="#">→</a>
-      <button class="btn btn-secondary" id="ac-modal-close-2">Schließen</button>
+      <a id="ac-modal-cta" class="btn-cvs btn-cvs--gold" href="#">→</a>
+      <button class="btn-cvs btn-cvs--ghost" id="ac-modal-close-2">Schließen</button>
     </div>
   </div>
 </div>
@@ -326,7 +387,7 @@ a,button,[role=button],label,.nav-burger{cursor:pointer!important}
     </div>
     <div class="footer-col reveal reveal-delay-3">
       <h4>Kontakt</h4>
-      <a href="contact.php">Projekt anfragen</a>
+      <a href="kontakt.html">Projekt anfragen</a>
       <a href="https://cinematic-studio-family.onrender.com/studio-demo.php">Studio starten</a>
     </div>
   </div>
@@ -338,7 +399,7 @@ a,button,[role=button],label,.nav-burger{cursor:pointer!important}
       <a href="agb.html">AGB</a>
       <a href="widerruf.html">Widerruf</a>
       <a href="cookies.html">Cookies</a>
-      <a href="contact.php">Kontakt</a>
+      <a href="kontakt.html">Kontakt</a>
     </div>
   </div>
 </footer>

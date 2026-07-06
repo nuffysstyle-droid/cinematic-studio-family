@@ -6,9 +6,17 @@
 <meta name="description" content="Cinematic Vision Studio – High-End KI-Videos, Transformationen, Anime-Sequenzen, Werbeclips und visuelle Markenwelten. Premium AI-Cinematic-Produktion für Creator und Marken.">
 <meta name="theme-color" content="#020205">
 <link rel="icon" type="image/png" href="assets/cvs-logo.png">
+<link rel="canonical" href="https://cinematic-vision-studio.de/scene-editor-test.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Cinematic Vision Studio">
 <meta property="og:title" content="Cinematic Vision Studio – Deine Vision. Als cinematic KI-Erlebnis.">
 <meta property="og:description" content="High-End KI-Videos, Transformationen, Anime-Sequenzen und visuelle Markenwelten. Express-Lieferung in 24–48h.">
-<meta property="og:type" content="website">
+<meta property="og:url" content="https://cinematic-vision-studio.de/scene-editor-test.html">
+<meta property="og:image" content="https://cinematic-vision-studio.de/assets/cvs-logo.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cinematic Vision Studio – Deine Vision. Als cinematic KI-Erlebnis.">
+<meta name="twitter:description" content="High-End KI-Videos, Transformationen, Anime-Sequenzen und visuelle Markenwelten. Express-Lieferung in 24–48h.">
+<meta name="twitter:image" content="https://cinematic-vision-studio.de/assets/cvs-logo.png">
 <title>Cinematic Vision Studio – Deine Vision. Als cinematic KI-Erlebnis.</title>
 <link rel="stylesheet" href="assets/fonts/fonts.css">
 <style>
@@ -37,6 +45,14 @@
   --white:       #edf2ff;
   --white-dim:   rgba(237,242,255,0.52);
   --white-faint: rgba(237,242,255,0.10);
+
+  /* Aliases used by Templates/Journey/Cards (kept in sync with palette) */
+  --accent:      #d4a93c;
+  --text:        #edf2ff;
+  --muted:       rgba(237,242,255,0.50);
+  --muted2:      rgba(237,242,255,0.34);
+  --border:      rgba(255,255,255,0.08);
+  --danger:      #ff5c7a;
 
   --radius-sm:   6px;
   --radius-md:   14px;
@@ -934,24 +950,48 @@ footer{background:rgba(2,2,5,.98);border-top:1px solid rgba(24,114,255,.09);padd
 .social-btn:hover{background:rgba(24,114,255,.18);border-color:var(--blue-bright);opacity:1}
 
 /* ──────────────────────────────────────────
-   MOBILE NAV
+   MOBILE NAV  (matches HTML: .mob-menu / .mob-link)
 ────────────────────────────────────────── */
-.mobile-nav{
-  display:none;position:fixed;inset:0;z-index:999;
-  background:rgba(2,2,5,.98);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
-  flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:76px 40px 40px;
-  overflow-y:auto;
+.mob-menu{
+  position:fixed;inset:0;z-index:1200;
+  background:radial-gradient(ellipse 90% 60% at 50% 0%,rgba(0,30,120,.35),transparent 60%),rgba(2,2,6,.97);
+  backdrop-filter:blur(26px);-webkit-backdrop-filter:blur(26px);
+  display:flex;flex-direction:column;align-items:stretch;justify-content:center;
+  gap:2px;padding:96px clamp(28px,8vw,64px) 48px;overflow-y:auto;
+  opacity:0;visibility:hidden;transform:translateY(-12px);
+  transition:opacity .42s ease,transform .42s cubic-bezier(.16,1,.3,1),visibility .42s;
 }
-.mobile-nav.open{display:flex}
-.mobile-nav a{
-  font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:700;
-  color:var(--white);text-decoration:none;
-  padding:11px 0;width:100%;text-align:center;
-  border-bottom:1px solid rgba(24,114,255,.06);
-  transition:color .22s;letter-spacing:-.01em;
+.mob-menu.open{opacity:1;visibility:visible;transform:translateY(0)}
+.mob-link{
+  font-family:'Syne',sans-serif;font-size:1.45rem;font-weight:800;
+  color:var(--white);text-decoration:none;letter-spacing:-.01em;
+  padding:14px 6px;border-bottom:1px solid rgba(255,255,255,.06);
+  display:flex;align-items:center;gap:14px;
+  opacity:0;transform:translateX(-18px);
+  transition:color .2s,text-shadow .2s;
 }
-.mobile-nav a:hover{color:var(--blue-bright)}
-.mobile-nav a:last-child{border-bottom:none;margin-top:8px}
+.mob-menu.open .mob-link{animation:mobLinkIn .5s cubic-bezier(.16,1,.3,1) forwards}
+.mob-menu.open .mob-link:nth-child(1){animation-delay:.05s}
+.mob-menu.open .mob-link:nth-child(2){animation-delay:.09s}
+.mob-menu.open .mob-link:nth-child(3){animation-delay:.13s}
+.mob-menu.open .mob-link:nth-child(4){animation-delay:.17s}
+.mob-menu.open .mob-link:nth-child(5){animation-delay:.21s}
+.mob-menu.open .mob-link:nth-child(6){animation-delay:.25s}
+.mob-menu.open .mob-link:nth-child(7){animation-delay:.29s}
+.mob-menu.open .mob-link:nth-child(8){animation-delay:.33s}
+.mob-menu.open .mob-link:nth-child(9){animation-delay:.37s}
+.mob-menu.open .mob-link:nth-child(n+10){animation-delay:.41s}
+@keyframes mobLinkIn{to{opacity:1;transform:translateX(0)}}
+.mob-link:hover,.mob-link.active{color:#ffc21f;text-shadow:0 0 14px rgba(255,194,31,.45)}
+.mob-sep{height:1px;margin:14px 0;background:linear-gradient(90deg,transparent,rgba(232,195,85,.4),rgba(24,114,255,.4),transparent)}
+.mob-cta{
+  font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:900;
+  text-decoration:none;text-align:center;padding:16px;border-radius:12px;margin-top:10px;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  opacity:0;transform:translateX(-18px);
+  transition:transform .25s,box-shadow .25s;
+}
+.mob-menu.open .mob-cta{animation:mobLinkIn .5s cubic-bezier(.16,1,.3,1) .45s forwards}
 
 /* ──────────────────────────────────────────
    RESPONSIVE
@@ -1182,6 +1222,9 @@ footer{background:rgba(2,2,5,.98);border-top:1px solid rgba(24,114,255,.09);padd
 /* ── 1. Grain auf Referenz-Level ── */
 body::after{z-index:0;opacity:.28}
 
+/* ── 1b. Content Wrapper (Templates/Journey waren randlos) ── */
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(20px,6vw,80px);position:relative;z-index:1}
+
 /* ── 2. Aurora (CSS-Orbs statt Canvas) ── */
 .cvs-aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
 .cvs-aurora span{position:absolute;border-radius:50%;filter:blur(120px);will-change:transform}
@@ -1232,10 +1275,13 @@ body::after{z-index:0;opacity:.28}
 #main-nav.cvs-nav-simple{background:linear-gradient(180deg,rgba(3,4,10,.92) 0%,rgba(3,4,10,.74) 58%,rgba(3,4,10,0) 100%);border-bottom:0;backdrop-filter:blur(18px) saturate(115%);-webkit-backdrop-filter:blur(18px) saturate(115%);padding-bottom:18px}
 #main-nav.cvs-nav-simple::after{content:'';position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,transparent,rgba(24,114,255,.45),rgba(232,195,85,.4),transparent);opacity:.7}
 #main-nav.cvs-nav-simple.scrolled{background:linear-gradient(180deg,rgba(2,2,6,.96) 0%,rgba(2,2,6,.86) 70%,rgba(2,2,6,.55) 100%)}
-#main-nav.cvs-nav-simple .nav-logo-img-wrap{flex-direction:row;align-items:center;gap:12px}
-#main-nav.cvs-nav-simple .nav-logo-img{height:68px;width:68px;object-fit:contain;animation:none;transform:scale(1.06);filter:drop-shadow(0 0 14px rgba(24,114,255,.28)) drop-shadow(0 0 30px rgba(232,195,85,.14))}
-#main-nav.cvs-nav-simple .nav-logo-text{background:none;-webkit-text-fill-color:initial;color:#fff;font-size:20px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;text-shadow:none;line-height:1.15;filter:none}
-#main-nav.cvs-nav-simple .nav-logo-text span{display:block;font-size:10px;letter-spacing:4px;font-weight:800;text-transform:uppercase;opacity:1;color:#4da0ff;-webkit-text-fill-color:#4da0ff;margin-top:3px}
+#main-nav.cvs-nav-simple .nav-logo{display:flex;flex-direction:row;align-items:center;gap:12px;text-decoration:none;flex-shrink:0;background:none;-webkit-text-fill-color:initial}
+#main-nav.cvs-nav-simple .nav-logo .cvs-nav-img{display:block;height:68px;width:68px;object-fit:contain;animation:none;transform:scale(1.06);filter:drop-shadow(0 0 14px rgba(24,114,255,.28)) drop-shadow(0 0 30px rgba(232,195,85,.14))}
+#main-nav.cvs-nav-simple .nav-logo .cvs-nav-txt{background:none;-webkit-text-fill-color:initial;color:#fff;font-size:20px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;text-shadow:none;line-height:1.15;filter:none}
+#main-nav.cvs-nav-simple .nav-logo .nav-t1{color:#4da0ff;-webkit-text-fill-color:#4da0ff;text-shadow:0 0 16px rgba(77,160,255,.4)}
+#main-nav.cvs-nav-simple .nav-logo .nav-t2{color:#ffc21f!important;-webkit-text-fill-color:#ffc21f!important;background:none!important;margin-left:4px;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
+#main-nav.cvs-nav-simple .nav-logo .cvs-nav-sub{display:block;background:none;-webkit-text-fill-color:initial;margin-top:3px;color:#fff;font-size:10px;font-weight:800;letter-spacing:4px;text-transform:uppercase;opacity:1;filter:none}
+#main-nav.cvs-nav-simple .nav-logo .nav-t3{color:#4da0ff;-webkit-text-fill-color:#4da0ff;opacity:1}
 #main-nav.cvs-nav-simple .nav-links{gap:2px}
 #main-nav.cvs-nav-simple .nav-links a{font-family:'Syne',sans-serif;font-size:12px;letter-spacing:.2px;padding:6px 7px;position:relative;color:#fff;font-weight:700;opacity:.96;transition:color .2s ease,text-shadow .2s ease}
 #main-nav.cvs-nav-simple .nav-links a:hover{color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22)}
@@ -1245,8 +1291,15 @@ body::after{z-index:0;opacity:.28}
 #main-nav.cvs-nav-simple .nav-actions{gap:10px}
 #main-nav.cvs-nav-simple .nav-cta{font-family:'Syne',sans-serif;font-size:12px;font-weight:800;letter-spacing:.3px;padding:8px 14px;border-radius:11px;white-space:nowrap;transition:transform .25s cubic-bezier(.16,1,.3,1),box-shadow .25s cubic-bezier(.16,1,.3,1),color .2s,opacity .2s;background:linear-gradient(180deg,#fff7a8 0%,#ffe15a 18%,#ffc21f 48%,#f59a00 78%,#d97900 100%);color:#100700!important;font-weight:900;border:0;box-shadow:0 6px 20px rgba(232,169,59,.3),inset 0 1px 0 rgba(255,255,255,.55);-webkit-text-fill-color:#100700!important;margin-left:0}
 #main-nav.cvs-nav-simple .nav-cta:hover{opacity:1;transform:translateY(-2px);box-shadow:0 12px 30px rgba(232,169,59,.5),inset 0 1px 0 rgba(255,255,255,.65)}
-#main-nav.cvs-nav-simple + .mobile-nav a{font-family:'Syne',sans-serif;font-weight:700;font-size:1.3rem}
-#main-nav.cvs-nav-simple + .mobile-nav a:hover,#main-nav.cvs-nav-simple + .mobile-nav a.active{color:#ffc21f;text-shadow:0 0 12px rgba(255,194,31,.45)}
+#main-nav.cvs-nav-simple .nav-btn-ghost{color:#ffffff;border:1px solid transparent;background:linear-gradient(rgba(9,12,24,.88),rgba(9,12,24,.88)) padding-box,linear-gradient(120deg,#4da0ff,#e8c355) border-box;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);font-family:'Syne',sans-serif;font-size:12px;font-weight:800;letter-spacing:.3px;padding:8px 14px;border-radius:11px;white-space:nowrap;transition:transform .25s,box-shadow .25s,color .2s;text-decoration:none}
+#main-nav.cvs-nav-simple .nav-btn-ghost:hover{color:#e8c355;transform:translateY(-2px);box-shadow:0 8px 24px rgba(24,114,255,.25),0 0 18px rgba(232,195,85,.22);text-shadow:0 0 14px rgba(232,195,85,.5)}
+#main-nav.cvs-nav-simple .nav-btn-gold{color:#100700!important;-webkit-text-fill-color:#100700!important;font-family:'Syne',sans-serif;font-size:12px;font-weight:900;letter-spacing:.3px;padding:8px 14px;border-radius:11px;white-space:nowrap;background:linear-gradient(180deg,#fff7a8 0%,#ffe15a 18%,#ffc21f 48%,#f59a00 78%,#d97900 100%);border:0;box-shadow:0 6px 20px rgba(232,169,59,.3),inset 0 1px 0 rgba(255,255,255,.55);transition:transform .25s,box-shadow .25s;text-decoration:none}
+#main-nav.cvs-nav-simple .nav-btn-gold:hover{opacity:1;transform:translateY(-2px);box-shadow:0 12px 30px rgba(232,169,59,.5),inset 0 1px 0 rgba(255,255,255,.65)}
+#main-nav.cvs-nav-simple .nav-logo:hover .cvs-nav-img{transform:scale(1.1) rotate(-2deg);filter:drop-shadow(0 0 20px rgba(24,114,255,.55)) drop-shadow(0 0 40px rgba(232,195,85,.4))}
+#main-nav.cvs-nav-simple .cvs-nav-img{transition:filter .4s,transform .4s cubic-bezier(.16,1,.3,1)}
+
+#main-nav.cvs-nav-simple + .mob-menu .mob-link{font-family:'Syne',sans-serif;font-weight:800;font-size:1.45rem}
+#main-nav.cvs-nav-simple + .mob-menu .mob-link:hover,#main-nav.cvs-nav-simple + .mob-menu .mob-link.active{color:#ffc21f;text-shadow:0 0 12px rgba(255,194,31,.45)}
 
 /* ── 8. Eyebrow Override ── */
 .hero-eyebrow{color:#ffc21f;-webkit-text-fill-color:#ffc21f;background:none;text-shadow:0 1px 0 rgba(255,255,255,.22),0 2px 5px rgba(0,0,0,.55),0 0 14px rgba(255,194,31,.22);font-family:'Syne',sans-serif;font-size:13px;font-weight:900;letter-spacing:2.5px;text-transform:uppercase}
@@ -1269,13 +1322,38 @@ a,button,[role=button],label,.nav-burger{cursor:pointer!important}
 #hero,section{position:relative;z-index:1}
 
 /* ── 13. Mobile CTA Button ── */
-#main-nav.cvs-nav-simple + .mobile-nav .mob-cta{color:#100700!important;font-weight:900;background:linear-gradient(180deg,#fff7a8 0%,#ffe15a 18%,#ffc21f 48%,#f59a00 78%,#d97900 100%);border-radius:10px;margin-top:8px;-webkit-text-fill-color:#100700!important}
-#main-nav.cvs-nav-simple + .mobile-nav .mob-cta:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(232,169,59,.3)}
+.mob-menu .mob-cta{color:#100700!important;font-weight:900;background:linear-gradient(180deg,#fff7a8 0%,#ffe15a 18%,#ffc21f 48%,#f59a00 78%,#d97900 100%);-webkit-text-fill-color:#100700!important;box-shadow:0 6px 20px rgba(232,169,59,.3),inset 0 1px 0 rgba(255,255,255,.55)}
+.mob-menu .mob-cta:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(232,169,59,.5),inset 0 1px 0 rgba(255,255,255,.65)}
 
-/* ── Cursor-Disable (Master-Reference-Level) ── */
+/* ── 14. Burger → X Animation ── */
+.nav-burger{position:relative;z-index:1300}
+.nav-burger span{transition:transform .35s cubic-bezier(.16,1,.3,1),opacity .25s}
+.nav-burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-burger.open span:nth-child(2){opacity:0;transform:scaleX(.3)}
+.nav-burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+body.menu-open{overflow:hidden}
+
+/* ── 15. Hero Title Split-Reveal (per-word mask rise) ── */
+.hero-h1 .word{display:inline-block;overflow:hidden;vertical-align:top}
+.hero-h1 .word i{display:inline-block;font-style:inherit;transform:translateY(108%);animation:wordRise .9s cubic-bezier(.16,1,.3,1) forwards}
+@keyframes wordRise{to{transform:translateY(0)}}
+
+/* ── 16. Spotlight cursor-follow glow on cards ── */
+.service-world,.why-card,.crystal-card,.template-card,.journey-step,.portfolio-item{--mx:50%;--my:50%}
+.service-world::after,.why-card::after{}
+.spotlight-layer{position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .4s;background:radial-gradient(380px circle at var(--mx) var(--my),rgba(232,195,85,.10),transparent 60%);z-index:0}
+.service-world:hover .spotlight-layer,.why-card:hover .spotlight-layer,.template-card:hover .spotlight-layer,.journey-step:hover .spotlight-layer{opacity:1}
+
+/* ── 17. Cursor-Disable (Master-Reference-Level) ── */
 html,body{cursor:auto!important}
-a,button,[role=button],label,.nav-burger{cursor:pointer!important}
+a,button,[role=button],label,.nav-burger,.slot,.pf-btn,.portfolio-item{cursor:pointer!important}
 #cursor,#cursor-ring{display:none!important}
+
+/* ── 18. Scroll-reveal initial state for grouped cards ── */
+@media(prefers-reduced-motion:reduce){
+  .hero-h1 .word i{animation:none;transform:none}
+  .mob-menu.open .mob-link,.mob-menu.open .mob-cta{animation:none;opacity:1;transform:none}
+}
 </style>
 </head>
 <body>
@@ -1300,7 +1378,7 @@ a,button,[role=button],label,.nav-burger{cursor:pointer!important}
     <a href="scene-editor-test.html" class="nav-link active">Home</a>
     <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="nav-link">Studio</a>
     <a href="crystals.html" class="nav-link">Kristalle</a>
-    <a href="contact.php" class="nav-link">Kontakt</a>
+    <a href="kontakt.html" class="nav-link">Kontakt</a>
     <a href="calendar.html" class="nav-link">Buchung</a>
     <a href="prompt-generator.html" class="nav-link">Prompts</a>
     <a href="portfolio.html" class="nav-link">Portfolio</a>
@@ -1311,14 +1389,14 @@ a,button,[role=button],label,.nav-burger{cursor:pointer!important}
     <a href="https://cinematic-studio-family.onrender.com/login.php" class="nav-btn-ghost">Login</a>
     <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="nav-btn-gold">Studio starten</a>
   </div>
-  <button class="nav-burger" id="burger-btn" aria-label="Menü"><span></span><span></span><span></span></button>
+  <button class="nav-burger" id="mobBurger" aria-label="Menü" aria-controls="mobMenu" aria-expanded="false"><span></span><span></span><span></span></button>
 </nav>
 
 <div class="mob-menu" id="mobMenu" role="navigation" aria-label="Navigation">
   <a href="scene-editor-test.html" class="mob-link active">🏠 Home</a>
   <a href="https://cinematic-studio-family.onrender.com/studio-demo.php" class="mob-link">🎬 Studio</a>
   <a href="crystals.html" class="mob-link">💎 Kristalle</a>
-  <a href="contact.php" class="mob-link">📞 Kontakt</a>
+  <a href="kontakt.html" class="mob-link">📞 Kontakt</a>
   <a href="calendar.html" class="mob-link">📅 Buchung</a>
   <a href="prompt-generator.html" class="mob-link">✍️ Prompts</a>
   <a href="portfolio.html" class="mob-link">🎞️ Portfolio</a>
@@ -1372,7 +1450,7 @@ a,button,[role=button],label,.nav-burger{cursor:pointer!important}
         Studio starten
       </a>
       <a href="#portfolio" class="btn-cvs btn-cvs--ghost">Portfolio ansehen</a>
-      <a href="https://cinematic-studio-family.onrender.com/contact.php" class="btn-cvs btn-cvs--ghost">⚡ Projekt anfragen</a>
+      <a href="https://cinematic-studio-family.onrender.com/kontakt.html" class="btn-cvs btn-cvs--ghost">⚡ Projekt anfragen</a>
     </div>
     <div style="margin-top:28px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap;animation:fadeUp 1s .7s both">
       <a href="academy.html" style="font-size:12px;font-weight:600;color:var(--gold-warm);text-decoration:none;opacity:.65;transition:opacity .15s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.65'">🎓 Academy</a>
@@ -1627,17 +1705,17 @@ a,button,[role=button],label,.nav-burger{cursor:pointer!important}
   <div class="section-label reveal">Unsere Arbeiten</div>
   <h2 class="section-title reveal reveal-delay-1">Cinematic <span>Showcase.</span></h2>
   <div class="portfolio-filter reveal reveal-delay-2">
-    <button class="pf-btn active">Alle</button>
-    <button class="pf-btn">Transformationen</button>
-    <button class="pf-btn">KI Video</button>
-    <button class="pf-btn">Werbung</button>
-    <button class="pf-btn">Anime</button>
-    <button class="pf-btn">Animation</button>
+    <button type="button" class="pf-btn active" data-cat="all">Alle</button>
+    <button type="button" class="pf-btn" data-cat="transform">Transformationen</button>
+    <button type="button" class="pf-btn" data-cat="ai">KI Video</button>
+    <button type="button" class="pf-btn" data-cat="ads">Werbung</button>
+    <button type="button" class="pf-btn" data-cat="anime">Anime</button>
+    <button type="button" class="pf-btn" data-cat="animation">Animation</button>
   </div>
 
   <div class="portfolio-grid reveal">
 
-    <div class="portfolio-item pi-1">
+    <div class="portfolio-item pi-1" data-cat="transform">
       <div class="portfolio-thumb">
         <div class="thumb-scene ts-transform">
           <div class="thumb-glow-core tgc-1"></div>
@@ -1668,7 +1746,7 @@ a,button,[role=button],label,.nav-burger{cursor:pointer!important}
       </div>
     </div>
 
-    <div class="portfolio-item pi-2">
+    <div class="portfolio-item pi-2" data-cat="ads">
       <div class="portfolio-thumb">
         <div class="thumb-scene ts-ads">
           <div class="thumb-glow-core tgc-gold"></div>
@@ -1689,7 +1767,7 @@ a,button,[role=button],label,.nav-burger{cursor:pointer!important}
       </div>
     </div>
 
-    <div class="portfolio-item pi-3">
+    <div class="portfolio-item pi-3" data-cat="anime">
       <div class="portfolio-thumb">
         <div class="thumb-scene ts-anime">
           <div class="thumb-glow-core tgc-purple"></div>
@@ -1710,7 +1788,7 @@ a,button,[role=button],label,.nav-burger{cursor:pointer!important}
       </div>
     </div>
 
-    <div class="portfolio-item pi-4">
+    <div class="portfolio-item pi-4" data-cat="ai">
       <div class="portfolio-thumb">
         <div class="thumb-scene ts-cinematic">
           <div class="thumb-glow-core tgc-gold"></div>
@@ -1730,7 +1808,7 @@ a,button,[role=button],label,.nav-burger{cursor:pointer!important}
       </div>
     </div>
 
-    <div class="portfolio-item pi-5">
+    <div class="portfolio-item pi-5" data-cat="animation">
       <div class="portfolio-thumb">
         <div class="thumb-scene ts-ai">
           <div class="thumb-glow-core tgc-1"></div>
@@ -1750,7 +1828,7 @@ a,button,[role=button],label,.nav-burger{cursor:pointer!important}
       </div>
     </div>
 
-    <div class="portfolio-item pi-6">
+    <div class="portfolio-item pi-6" data-cat="animation">
       <div class="portfolio-thumb">
         <div class="thumb-scene ts-workflow">
           <div class="thumb-glow-core tgc-orange"></div>
@@ -1934,18 +2012,18 @@ a,button,[role=button],label,.nav-burger{cursor:pointer!important}
 ══════════════════════════════════ -->
 <footer class="cvs-footer-master">
   <div class="footer-inner">
-    <div class="footer-brand">
+    <div class="footer-brand reveal">
       <h3>Cinematic Vision Studio</h3>
       <p>Deine Vision. Als cinematic KI-Erlebnis. Premium AI-Cinematic-Produktion für Creator und Marken.</p>
     </div>
-    <div class="footer-col">
+    <div class="footer-col reveal reveal-delay-1">
       <h4>Studio</h4>
       <a href="scene-editor-test.html">Über uns</a>
       <a href="scene-editor-test.html#process">Prozess</a>
       <a href="academy.html">Academy</a>
       <a href="calendar.html">Buchung</a>
     </div>
-    <div class="footer-col">
+    <div class="footer-col reveal reveal-delay-2">
       <h4>Services</h4>
       <a href="portfolio.html">Trailer</a>
       <a href="shop.html">Shop</a>
@@ -1953,9 +2031,9 @@ a,button,[role=button],label,.nav-burger{cursor:pointer!important}
       <a href="portfolio.html">Portfolio</a>
       <a href="crystals.html">Kristalle</a>
     </div>
-    <div class="footer-col">
+    <div class="footer-col reveal reveal-delay-3">
       <h4>Kontakt</h4>
-      <a href="contact.php">Projekt anfragen</a>
+      <a href="kontakt.html">Projekt anfragen</a>
       <a href="https://cinematic-studio-family.onrender.com/studio-demo.php">Studio starten</a>
     </div>
   </div>
@@ -1967,7 +2045,7 @@ a,button,[role=button],label,.nav-burger{cursor:pointer!important}
       <a href="agb.html">AGB</a>
       <a href="widerruf.html">Widerruf</a>
       <a href="cookies.html">Cookies</a>
-      <a href="contact.php">Kontakt</a>
+      <a href="kontakt.html">Kontakt</a>
     </div>
   </div>
 </footer>
@@ -2001,27 +2079,43 @@ if (pc && !prefersReduced && window.innerWidth > 768) {
   }
 }
 
-// ── Custom cursor ──
 const isDesktop = window.matchMedia('(pointer: fine)').matches;
-if (isDesktop) {
-  const cursor = document.getElementById('cursor');
-  const ring   = document.getElementById('cursor-ring');
-  let mx=0,my=0,rx=0,ry=0,active=false;
-  document.addEventListener('mousemove', e => {
-    mx=e.clientX; my=e.clientY;
-    cursor.style.left=mx+'px'; cursor.style.top=my+'px';
-    if (!active){active=true;document.body.classList.add('cursor-active')}
-  });
-  (function loop(){
-    rx+=(mx-rx)*.1; ry+=(my-ry)*.1;
-    ring.style.left=rx+'px'; ring.style.top=ry+'px';
-    requestAnimationFrame(loop);
-  })();
-  document.querySelectorAll('a,button,.portfolio-item,.service-world,.crystal-card,.slot,.why-card').forEach(el=>{
-    el.addEventListener('mouseenter',()=>{cursor.style.width='20px';cursor.style.height='20px';ring.style.width='52px';ring.style.height='52px'});
-    el.addEventListener('mouseleave',()=>{cursor.style.width='8px';cursor.style.height='8px';ring.style.width='32px';ring.style.height='32px'});
-  });
 
+// ── Hero headline: split into words for staggered mask-rise reveal ──
+{
+  let wi = 0;
+  document.querySelectorAll('.hero-h1 .line-1,.hero-h1 .line-2').forEach((line, li) => {
+    const words = line.textContent.trim().split(/\s+/);
+    line.textContent = '';
+    words.forEach((w, idx) => {
+      const span = document.createElement('span');
+      span.className = 'word';
+      const inner = document.createElement('i');
+      inner.textContent = w;
+      inner.style.animationDelay = (0.35 + wi * 0.075) + 's';
+      span.appendChild(inner);
+      line.appendChild(span);
+      if (idx < words.length - 1) line.appendChild(document.createTextNode(' '));
+      wi++;
+    });
+  });
+}
+
+// ── Spotlight glow that follows the cursor across cards ──
+if (isDesktop && !prefersReduced) {
+  document.querySelectorAll('.service-world,.why-card,.crystal-card,.template-card,.journey-step,.portfolio-item').forEach(card => {
+    const layer = document.createElement('div');
+    layer.className = 'spotlight-layer';
+    card.insertBefore(layer, card.firstChild);
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    });
+  });
+}
+
+if (isDesktop) {
   // 3D card tilts
   function addTilt(sel, maxDeg) {
     document.querySelectorAll(sel).forEach(el => {
@@ -2053,16 +2147,40 @@ if (isDesktop) {
 const nav = document.getElementById('main-nav');
 window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 60), {passive:true});
 
-// ── Mobile nav ──
-const burger = document.getElementById('burger-btn');
-const mobileNav = document.getElementById('mobile-nav');
-burger.addEventListener('click', () => mobileNav.classList.toggle('open'));
-document.querySelectorAll('.mn-link').forEach(a => a.addEventListener('click', () => mobileNav.classList.remove('open')));
+// ── Mobile nav (matches HTML: #mobMenu / .mob-link) ──
+const burger = document.getElementById('mobBurger');
+const mobMenu = document.getElementById('mobMenu');
+if (burger && mobMenu) {
+  const setMenu = open => {
+    mobMenu.classList.toggle('open', open);
+    burger.classList.toggle('open', open);
+    document.body.classList.toggle('menu-open', open);
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  };
+  burger.addEventListener('click', () => setMenu(!mobMenu.classList.contains('open')));
+  mobMenu.querySelectorAll('.mob-link,.mob-cta').forEach(a => a.addEventListener('click', () => setMenu(false)));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
+}
 
-// ── Portfolio filter ──
-document.querySelectorAll('.pf-btn').forEach(btn => btn.addEventListener('click', () => {
-  document.querySelectorAll('.pf-btn').forEach(b => b.classList.remove('active'));
+// ── Portfolio filter (now actually filters) ──
+const pfBtns = document.querySelectorAll('.pf-btn');
+const pfItems = document.querySelectorAll('.portfolio-item');
+pfBtns.forEach(btn => btn.addEventListener('click', () => {
+  pfBtns.forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
+  const cat = (btn.dataset.cat || 'all');
+  pfItems.forEach(item => {
+    const show = cat === 'all' || item.dataset.cat === cat;
+    item.style.transition = 'opacity .45s ease,transform .45s cubic-bezier(.16,1,.3,1)';
+    if (show) {
+      item.style.display = '';
+      requestAnimationFrame(() => { item.style.opacity = '1'; item.style.transform = ''; });
+    } else {
+      item.style.opacity = '0';
+      item.style.transform = 'scale(.96)';
+      setTimeout(() => { if (!btn.classList.contains('active')) return; item.style.display = 'none'; }, 360);
+    }
+  });
 }));
 
 // ── Scroll reveal ──
@@ -2070,6 +2188,22 @@ const ro = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
 }, { threshold: 0.07, rootMargin: '0px 0px -44px 0px' });
 document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+
+// ── Dynamic booking dates (always in the future) ──
+{
+  const MON = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+  const fmt = d => `${d.getDate()}. ${MON[d.getMonth()]} ${d.getFullYear()}`;
+  const base = new Date(); base.setHours(0,0,0,0);
+  // next Monday from today
+  const nextMon = new Date(base);
+  nextMon.setDate(base.getDate() + ((8 - base.getDay()) % 7 || 7));
+  const dateSlots = document.querySelectorAll('.slot:not(.slot-express) .slot-date');
+  const emoji = ['🟢','🟢','🟡','🟡','🔒'];
+  dateSlots.forEach((el, i) => {
+    const d = new Date(nextMon); d.setDate(nextMon.getDate() + i * 7);
+    el.textContent = `${emoji[i] || ''} ${fmt(d)}`.trim();
+  });
+}
 
 // ── Slot interaction ──
 document.querySelectorAll('.slot-available,.slot-express').forEach(slot => slot.addEventListener('click', () => {

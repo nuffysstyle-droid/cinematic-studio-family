@@ -25,6 +25,7 @@ $authUser = csf_auth_user();
   <link rel="canonical" href="https://cinematic-studio-family.onrender.com/studio-demo.php">
   <link rel="icon" type="image/png" href="assets/cvs-logo-icon.png">
   <link rel="stylesheet" href="assets/fonts/fonts.css">
+  <link rel="stylesheet" href="assets/css/cvs-core.css">
   <style>
     :root {
       --black:       #020205;
@@ -50,8 +51,8 @@ $authUser = csf_auth_user();
       --perspective: 1400px;
       /* Legacy aliases for functional JS-referenced styles */
       --bg:#06060f;--card:#0f0f1e;--card2:#161628;--text:#f0f0ff;--muted:#8888aa;--muted2:#5a5a7a;
-      --accent:#f5c542;--accent2:#ff8c00;--blue:#3b82f6;--purple:#9333ea;--ok:#4ade80;--danger:#ff5c7a;
-      --border:rgba(255,255,255,.09);--gold:linear-gradient(135deg,#f5c542,#ff8c00);--radius:18px;
+      --accent:#d4a93c;--accent2:#e8c355;--blue:#1872ff;--ok:#4ade80;--danger:#ff5c7a;
+      --border:rgba(255,255,255,.09);--gold:linear-gradient(135deg,#d4a93c,#e8c355);--radius:18px;
     }
     *{box-sizing:border-box;margin:0;padding:0;}
     html{scroll-behavior:smooth;}
@@ -90,77 +91,7 @@ $authUser = csf_auth_user();
 
     /* Lightbar */
     .lightbar{height:1px;background:linear-gradient(90deg,transparent,rgba(24,114,255,.18),rgba(200,160,60,.14),transparent);margin:0 auto;max-width:1160px;width:90%}
-    /* ── NAVIGATION ── */
-    nav{
-      position:fixed;top:0;left:0;right:0;z-index:1000;
-      padding:0 clamp(24px,4vw,64px);
-      height:76px;display:flex;align-items:center;justify-content:space-between;
-      background:linear-gradient(180deg,rgba(2,2,5,.94) 0%,rgba(2,2,5,0) 100%);
-      backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-      border-bottom:1px solid rgba(255,255,255,.03);
-      transition:background .4s,border-color .4s;
-    }
-    nav.scrolled{background:rgba(2,2,5,.98);border-bottom-color:rgba(24,114,255,.1)}
-
-    .nav-logo{
-      font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;letter-spacing:.1em;
-      background:linear-gradient(130deg,var(--white) 10%,var(--blue-glow) 85%);
-      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-      text-decoration:none;flex-shrink:0;
-    }
-    .nav-logo span{-webkit-text-fill-color:var(--gold-bright)}
-
-    .nav-links{display:flex;gap:0;list-style:none;align-items:center}
-    .nav-links a{color:rgba(237,242,255,.4);text-decoration:none;font-size:.72rem;font-weight:500;letter-spacing:.07em;padding:7px 10px;transition:color .22s;text-transform:uppercase;white-space:nowrap}
-    .nav-links a:hover{color:rgba(237,242,255,.88)}
-    .nav-links .nav-cta{margin-left:10px;background:rgba(0,62,232,.15);border:1px solid rgba(24,114,255,.35);color:var(--blue-glow);padding:8px 22px;border-radius:50px;font-weight:600;-webkit-text-fill-color:var(--blue-glow);transition:all .25s}
-    .nav-links .nav-cta:hover{background:rgba(0,62,232,.28);border-color:rgba(24,114,255,.6);color:var(--white);-webkit-text-fill-color:var(--white)}
-
-    .nav-actions{display:flex;align-items:center;gap:8px;flex-shrink:0;}
-    .nav-btn-ghost{color:var(--white-dim);text-decoration:none;font-size:.72rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:7px 10px;transition:color .22s;white-space:nowrap;}
-    .nav-btn-ghost:hover{color:var(--white);}
-
-    .nav-btn-gold{background:linear-gradient(135deg,var(--gold-warm),var(--gold-bright));color:#1a0e00;text-decoration:none;font-size:.72rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:8px 16px;border-radius:50px;transition:opacity .15s;}
-    .nav-btn-gold:hover{opacity:.88;}
-
-    .wallet-pill{display:flex;align-items:center;gap:6px;background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.3);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:800;color:var(--accent);cursor:pointer;text-decoration:none;}
-
-    .mob-burger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:none;border:none}
-    .mob-burger span{display:block;width:24px;height:2px;background:var(--blue-bright);border-radius:2px;transition:transform .3s,opacity .3s}
-
-    /* ── Cinematic Nav (Master) ── */
-    .cvs-nav-simple{background:linear-gradient(180deg,rgba(3,4,10,.92) 0%,rgba(3,4,10,.74) 58%,rgba(3,4,10,0) 100%);border-bottom:0;backdrop-filter:blur(18px) saturate(115%);-webkit-backdrop-filter:blur(18px) saturate(115%);padding-bottom:18px}
-    .cvs-nav-simple::after{content:'';position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,transparent,rgba(24,114,255,.45),rgba(232,195,85,.4),transparent);opacity:.7}
-    .cvs-nav-simple.scrolled{background:linear-gradient(180deg,rgba(2,2,6,.96) 0%,rgba(2,2,6,.86) 70%,rgba(2,2,6,.55) 100%)}
-    .nav-logo-img-wrap{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
-    .nav-logo-img{height:40px;width:40px;object-fit:contain;display:block}
-    .nav-logo-text{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;letter-spacing:.1em;color:var(--white);text-decoration:none;}
-    .nav-logo-text span{color:var(--gold-bright);margin-left:4px}
-
-    .mob-menu{
-      display:none;position:fixed;inset:0;z-index:999;
-      background:rgba(2,2,5,.98);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
-      flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:76px 40px 40px;
-      overflow-y:auto;
-    }
-    .mob-menu.open{display:flex}
-    .mob-link{
-      font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:700;
-      color:var(--white);text-decoration:none;
-      padding:11px 0;width:100%;text-align:center;
-      border-bottom:1px solid rgba(24,114,255,.06);
-      transition:color .22s;letter-spacing:-.01em;
-    }
-    .mob-link:hover{color:var(--blue-bright)}
-    .mob-link.active{color:var(--blue-bright)}
-    .mob-link:last-child{border-bottom:none;margin-top:8px}
-    .mob-cta{
-      margin-top:12px;background:rgba(0,62,232,.15);border:1px solid rgba(24,114,255,.35);color:var(--blue-glow);
-      padding:12px 28px;border-radius:50px;font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;
-      text-decoration:none;transition:all .25s;text-align:center;
-    }
-    .mob-cta:hover{background:rgba(0,62,232,.28);border-color:rgba(24,114,255,.6);color:var(--white);}
-    @media(max-width:900px){.nav-links{display:none}.mob-burger{display:flex}}
+    /* ── Nav, Mobile-Menü & Footer: zentral aus assets/css/cvs-core.css (§14/§15, Master · Single Source) ── */
     /* Page */
     .page{padding:120px 0 60px;position:relative;z-index:1;}
     .page{
@@ -186,7 +117,7 @@ $authUser = csf_auth_user();
     .demo-header h1 span{background:linear-gradient(110deg,var(--blue-bright) 0%,var(--blue-glow) 45%,var(--gold-warm) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
     .demo-header p{color:var(--white-dim);font-size:15px;line-height:1.6;max-width:600px;}
     /* Demo module */
-    .demo-module{background:linear-gradient(145deg,rgba(59,130,246,.05),rgba(147,51,234,.03));border:1px solid rgba(59,130,246,.18);border-radius:22px;padding:32px;}
+    .demo-module{background:linear-gradient(145deg,rgba(24,114,255,.05),rgba(232,169,59,.03));border:1px solid rgba(24,114,255,.18);border-radius:22px;padding:32px;}
     .demo-note{margin-top:20px;padding:12px 16px;background:rgba(245,197,66,.05);border:1px solid rgba(245,197,66,.15);border-radius:12px;color:var(--muted);font-size:13px;line-height:1.5;}
     /* Panel, row, meta */
     .panel{margin-top:0;background:rgba(0,0,0,.28);border:1px solid var(--border);border-radius:16px;padding:18px;}
@@ -242,15 +173,15 @@ $authUser = csf_auth_user();
     .check-btn:hover:not(:disabled){background:rgba(245,197,66,.07);}
     .check-btn:disabled{opacity:.45;cursor:not-allowed;}
     /* KI-Bild Button */
-    .ai-prompt{width:100%;margin-top:8px;padding:8px 10px;border-radius:8px;border:1px solid rgba(147,51,234,.3);background:rgba(147,51,234,.05);color:var(--text);font-family:inherit;font-size:11px;resize:none;outline:none;}
-    .ai-prompt:focus{border-color:rgba(147,51,234,.6);background:rgba(147,51,234,.08);}
-    .ai-btn{margin-top:6px;width:100%;min-height:36px;padding:7px 10px;font-size:11px;font-weight:800;border-radius:8px;background:linear-gradient(135deg,#7c3aed,#2563eb);color:#fff;border:0;cursor:pointer;transition:opacity .15s,transform .15s;}
+    .ai-prompt{width:100%;margin-top:8px;padding:8px 10px;border-radius:8px;border:1px solid rgba(24,114,255,.3);background:rgba(24,114,255,.05);color:var(--text);font-family:inherit;font-size:11px;resize:none;outline:none;}
+    .ai-prompt:focus{border-color:rgba(24,114,255,.6);background:rgba(24,114,255,.08);}
+    .ai-btn{margin-top:6px;width:100%;min-height:36px;padding:7px 10px;font-size:11px;font-weight:800;border-radius:8px;background:linear-gradient(135deg,#1872ff,#003ee8);color:#fff;border:0;cursor:pointer;transition:opacity .15s,transform .15s;}
     .ai-btn:hover:not(:disabled){opacity:.88;transform:translateY(-1px);}
     .ai-btn:disabled{opacity:.45;cursor:not-allowed;transform:none;}
     .ai-status{margin-top:5px;font-size:10px;color:var(--muted);min-height:1em;word-break:break-word;}
     .ai-status.ai-ok{color:#a78bfa;}
     .ai-status.ai-err{color:var(--danger);}
-    .slot.ai-pending{box-shadow:0 0 0 1px rgba(147,51,234,.5),0 8px 22px rgba(0,0,0,.22);}
+    .slot.ai-pending{box-shadow:0 0 0 1px rgba(24,114,255,.5),0 8px 22px rgba(0,0,0,.22);}
     /* Back link */
     .back-link{display:inline-flex;align-items:center;gap:6px;color:var(--muted);text-decoration:none;font-size:13px;font-weight:600;margin-bottom:28px;transition:color .15s;}
     .back-link:hover{color:var(--text);}
@@ -295,20 +226,18 @@ $authUser = csf_auth_user();
 </div>
 
 <nav class="cvs-nav-simple" id="main-nav">
-  <a href="https://cinematic-vision-studio.de/scene-editor-test.html" class="nav-logo-img-wrap">
-    <img src="assets/cvs-logo-icon.png" alt="CVS" class="nav-logo-img">
-    <span class="nav-logo-text">Cinematic Vision<span>Studios</span></span>
-  </a>
-  <ul class="nav-links">
-    <li><a href="https://cinematic-vision-studio.de/scene-editor-test.html">Home</a></li>
-    <li><a href="studio-demo.php" class="nav-cta">Studio</a></li>
-    <li><a href="https://cinematic-vision-studio.de/prompt-generator.html">Prompts</a></li>
-    <li><a href="https://cinematic-vision-studio.de/portfolio.html">Portfolio</a></li>
-    <li><a href="https://cinematic-vision-studio.de/crystals.html">Kristalle</a></li>
-    <li><a href="https://cinematic-vision-studio.de/shop.html">Shop</a></li>
-    <li><a href="https://cinematic-vision-studio.de/academy.html">Academy</a></li>
-    <li><a href="https://cinematic-vision-studio.de/kontakt.html">Kontakt</a></li>
-  </ul>
+  <a href="https://cinematic-vision-studio.de/scene-editor-test.html" class="nav-logo"><img src="assets/cvs-logo-icon.png" alt="CVS" class="cvs-nav-img"><span class="cvs-nav-txt"><span class="nav-t1">Cinematic</span> <span class="nav-t2">Vision</span><span class="cvs-nav-sub"><span class="nav-t3">Studio</span></span></span></a>
+  <div class="nav-links">
+    <a href="https://cinematic-vision-studio.de/scene-editor-test.html" class="nav-link">Home</a>
+    <a href="studio-demo.php" class="nav-link active">Studio</a>
+    <a href="https://cinematic-vision-studio.de/crystals.html" class="nav-link">Kristalle</a>
+    <a href="https://cinematic-vision-studio.de/kontakt.html" class="nav-link">Kontakt</a>
+    <a href="https://cinematic-vision-studio.de/calendar.html" class="nav-link">Buchung</a>
+    <a href="https://cinematic-vision-studio.de/prompt-generator.html" class="nav-link">Prompts</a>
+    <a href="https://cinematic-vision-studio.de/portfolio.html" class="nav-link">Portfolio</a>
+    <a href="https://cinematic-vision-studio.de/academy.html" class="nav-link">Academy</a>
+    <a href="https://cinematic-vision-studio.de/shop.html" class="nav-link">Shop</a>
+  </div>
   <div class="nav-actions">
     <?php if ($authUser): ?>
       <a href="https://cinematic-vision-studio.de/crystals.html" class="wallet-pill"><?= htmlspecialchars((string)($authUser['crystals_balance'] ?? 0)) ?></a>
@@ -325,14 +254,15 @@ $authUser = csf_auth_user();
   <button class="mob-burger nav-burger" id="mobBurger" aria-label="Menü öffnen" aria-expanded="false"><span></span><span></span><span></span></button>
 </nav>
 <div class="mob-menu" id="mobMenu" role="navigation" aria-label="Navigation">
-  <a href="https://cinematic-vision-studio.de/scene-editor-test.html" class="mob-link">Home</a>
-  <a href="studio-demo.php" class="mob-link active">Studio</a>
-  <a href="https://cinematic-vision-studio.de/prompt-generator.html" class="mob-link">Prompts</a>
-  <a href="https://cinematic-vision-studio.de/portfolio.html" class="mob-link">Portfolio</a>
-  <a href="https://cinematic-vision-studio.de/crystals.html" class="mob-link">Kristalle</a>
-  <a href="https://cinematic-vision-studio.de/shop.html" class="mob-link">Shop</a>
-  <a href="https://cinematic-vision-studio.de/academy.html" class="mob-link">Academy</a>
-  <a href="https://cinematic-vision-studio.de/kontakt.html" class="mob-link">Kontakt</a>
+  <a href="https://cinematic-vision-studio.de/scene-editor-test.html" class="mob-link">🏠 Home</a>
+  <a href="studio-demo.php" class="mob-link active">🎬 Studio</a>
+  <a href="https://cinematic-vision-studio.de/crystals.html" class="mob-link">💎 Kristalle</a>
+  <a href="https://cinematic-vision-studio.de/kontakt.html" class="mob-link">📞 Kontakt</a>
+  <a href="https://cinematic-vision-studio.de/calendar.html" class="mob-link">📅 Buchung</a>
+  <a href="https://cinematic-vision-studio.de/prompt-generator.html" class="mob-link">✍️ Prompts</a>
+  <a href="https://cinematic-vision-studio.de/portfolio.html" class="mob-link">🎞️ Portfolio</a>
+  <a href="https://cinematic-vision-studio.de/academy.html" class="mob-link">🎓 Academy</a>
+  <a href="https://cinematic-vision-studio.de/shop.html" class="mob-link">🛍️ Shop</a>
   <div class="mob-sep"></div>
   <?php if ($authUser): ?>
     <span class="mob-link" style="color:var(--accent)"><?= htmlspecialchars((string)($authUser['crystals_balance'] ?? 0)) ?> Kristalle · <?= htmlspecialchars((string)($authUser['email'] ?? '')) ?></span>
@@ -400,9 +330,9 @@ $authUser = csf_auth_user();
           <div style="font-size:.8rem;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:6px;">
             <span>📺 720p Export</span>
             <?php if (!$authUser): ?>
-              · <a href="login.php?tab=register&redirect=studio-demo.php" style="color:var(--purple)">Registrieren für 1080p</a>
+              · <a href="login.php?tab=register&redirect=studio-demo.php" style="color:var(--blue)">Registrieren für 1080p</a>
             <?php else: ?>
-              · <a href="https://cinematic-vision-studio.de/crystals.html" style="color:var(--purple)">Starter+ für 1080p</a>
+              · <a href="https://cinematic-vision-studio.de/crystals.html" style="color:var(--blue)">Starter+ für 1080p</a>
             <?php endif; ?>
           </div>
           <?php endif; ?>
