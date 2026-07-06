@@ -70,6 +70,7 @@ FEHLER-UPDATE [DATUM]
 | `memory/current-problems.md` | Offene Bugs, Tech Debt, Limits | IMMER lesen |
 | `memory/error-bank.md` | Fehlergedächtnis mit Root Causes + Fixes | IMMER vor dem Coden lesen |
 | `memory/workflow-design-reference.md` | Design-Alignment-Workflow (immobilienvideos.html = Master) | Bei Design-/CSS-Tasks |
+| `memory/nav-footer-alignment-method.md` | KOMPLETTEN Nav/Footer-CSS-Block kopieren (nicht nur Logo-Farben) | Bei Nav/Footer-Angleichung an Master |
 
 ---
 
