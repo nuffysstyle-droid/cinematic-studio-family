@@ -409,6 +409,13 @@ $authUser = csf_auth_user();
     const RENDER_API     = BASE_URL + "/api/render-final.php";
     const AI_GEN_API     = BASE_URL + "/api/generate-ai.php";
     const AI_STATUS_API  = BASE_URL + "/api/ai-status.php";
+    // KI-Bildgenerierung ist in CVS 1.0 Free-Solid serverseitig abgeschaltet:
+    // CSF_AI_GENERATION_ENABLED in api/generate-ai.php und CSF_AI_STATUS_ENABLED
+    // in api/ai-status.php antworten beide mit 503, bevor ein Provider
+    // kontaktiert wird. Ohne diesen Schalter zeigt die Oberflaeche einen
+    // verfuegbaren Vorgang und meldet den Fehler erst nach dem Absenden.
+    // Nur gemeinsam mit den beiden Server-Konstanten wieder aktivieren.
+    const AI_ENABLED     = false;
     const LS_KEY      = "csf_last_job_id";
     const MAX_IMG_BYTES = 10  * 1024 * 1024;
     const MAX_VID_BYTES = 100 * 1024 * 1024;
@@ -507,12 +514,20 @@ $authUser = csf_auth_user();
       const aiBtn = document.createElement("button"); aiBtn.type = "button"; aiBtn.className = "ai-btn"; aiBtn.textContent = "✨ KI-Bild generieren"; body.appendChild(aiBtn);
       const aiStatusEl = document.createElement("div"); aiStatusEl.className = "ai-status"; body.appendChild(aiStatusEl);
 
+      // Deaktivierter Produktzustand sichtbar machen, bevor jemand absendet.
+      if (!AI_ENABLED) {
+        aiPrompt.disabled = true;
+        aiBtn.disabled = true;
+        aiBtn.textContent = "KI-Bild — vorübergehend nicht verfügbar";
+        aiStatusEl.textContent = "Die KI-Bildgenerierung ist in dieser Version vorübergehend nicht verfügbar. Szenen lassen sich weiterhin per Upload und Text ersetzen.";
+      }
+
       card.appendChild(body);
 
       saveBtn.addEventListener("click", function(){ saveSlot({card,fileInput,textField,slotStatus,saveBtn}); });
 
       // Auto-resume: Wenn Slot beim Laden bereits 'pending' ist → sofort pollen
-      if (slot.ai_status === "pending" && slot.ai_task_id) {
+      if (AI_ENABLED && slot.ai_status === "pending" && slot.ai_task_id) {
         card.classList.add("ai-pending");
         aiBtn.disabled = true; aiBtn.textContent = "⏳ Generiert…";
         aiStatusEl.textContent = "Generierung läuft (wiederhergestellt)…"; aiStatusEl.className = "ai-status";
@@ -520,6 +535,7 @@ $authUser = csf_auth_user();
       }
 
       aiBtn.addEventListener("click", function(){
+        if (!AI_ENABLED) { return; }
         const p = aiPrompt.value.trim();
         if (!p) { aiStatusEl.textContent = "Bitte Prompt eingeben."; aiStatusEl.className = "ai-status ai-err"; return; }
         generateAiImage(jobId, slot.slot, p, card, aiBtn, aiStatusEl);
