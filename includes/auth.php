@@ -152,10 +152,25 @@ function csf_auth_login(string $email, string $password, bool $remember = false)
     $tryCount = (int) $stmtCount->fetchColumn();
 
     if ($tryCount >= CSF_AUTH_LOGIN_MAX_TRIES) {
-        $remaining = CSF_AUTH_LOGIN_WINDOW_SECS - (time() - $since);
+        // Der Lockout endet, sobald wieder weniger als MAX_TRIES Versuche im
+        // Fenster liegen — massgeblich ist also der MAX_TRIES-neueste Versuch.
+        // (Die frühere Formel WINDOW - (time() - $since) ergab immer 0.)
+        $stmtNth = $pdo->prepare("
+            SELECT attempted_at FROM login_attempts
+            WHERE  ip_hash = :ip AND attempted_at >= :since
+            ORDER  BY attempted_at DESC
+            LIMIT  1 OFFSET " . (CSF_AUTH_LOGIN_MAX_TRIES - 1) . "
+        ");
+        $stmtNth->execute([':ip' => $ipHash, ':since' => $since]);
+        $nthNewest = (int) $stmtNth->fetchColumn();
+
+        $remaining = max(1, ($nthNewest + CSF_AUTH_LOGIN_WINDOW_SECS) - time());
+        $minutes   = max(1, (int) ceil($remaining / 60));
+
         return [
             'ok'    => false,
-            'error' => 'Zu viele Anmeldeversuche. Bitte ' . ceil($remaining / 60) . ' Minuten warten.',
+            'error' => 'Zu viele Anmeldeversuche. Bitte ' . $minutes
+                     . ($minutes === 1 ? ' Minute' : ' Minuten') . ' warten.',
         ];
     }
 
