@@ -148,3 +148,12 @@ prompt-gen-*.png
 
 # P0.1 DB-Backups (bin/backup-db.php) — Backup-Dateien NIEMALS committen
 render-data/
+
+# Lokale Dev-Datenbank — includes/db.php faellt auf storage/cinematic.db
+# zurueck, sobald keine Render-Disk gemountet ist. Die Datei enthaelt echte
+# Konten-, Kristall- und Token-Daten und darf niemals ins Repo gelangen.
+storage/*.db
+storage/*.db-wal
+storage/*.db-shm
+storage/*.sqlite
+storage/*.sqlite3
