@@ -1,0 +1,132 @@
+================================================================================
+IONOS POST-DEPLOY CHECKLIST - Cinematic Vision Studio 1.0 "Free Solid"
+================================================================================
+Stand:        2026-07-19
+Gehoert zu:   ionos-deploy-manifest.txt
+Auszufuehren: NACH dem Upload der 61 Manifest-Dateien
+
+Diese Datei enthaelt keine Zugangsdaten, Passwoerter oder Secrets.
+
+--------------------------------------------------------------------------------
+A. VOR DEM UPLOAD
+--------------------------------------------------------------------------------
+  [ ] A1  Ist-Zustand der Live-Domain protokollieren (Abschnitt 2/3 des Manifests).
+          Ohne diese Aufnahme gibt es keinen Vergleich und keinen Rueckweg.
+  [ ] A2  Bestehenden Stand des Webspace sichern (Download oder Provider-Snapshot).
+  [ ] A3  Ausschliesslich den validierten Staging-Ordner hochladen - niemals das
+          Repository-Verzeichnis direkt.
+  [ ] A4  Pruefen, dass .git/, *.php, *.md, *.db, *.log NICHT im Upload sind.
+  [ ] A5  Upload-Reihenfolge: erst Assets, dann HTML. So zeigt keine neue Seite
+          kurzzeitig auf ein noch fehlendes Bild.
+
+--------------------------------------------------------------------------------
+B. ERREICHBARKEIT DER PFLICHTSEITEN
+--------------------------------------------------------------------------------
+Jede Seite muss HTTP 200 liefern und im Browser vollstaendig rendern.
+
+  [ ] B1  /scene-editor-test.html      (Startseite)
+  [ ] B2  /index.html                  leitet auf die Startseite weiter
+  [ ] B3  /portfolio.html
+  [ ] B4  /prompt-generator.html
+  [ ] B5  /immobilienvideos.html
+  [ ] B6  /academy.html
+  [ ] B7  /kontakt.html
+  [ ] B8  /shop.html
+  [ ] B9  /crystals.html
+  [ ] B10 /calendar.html
+  [ ] B11 /impressum.html
+  [ ] B12 /datenschutz.html
+  [ ] B13 /agb.html
+  [ ] B14 /cookies.html
+  [ ] B15 /widerruf.html
+
+Schnelltest fuer alle auf einmal:
+    for p in scene-editor-test portfolio prompt-generator immobilienvideos academy kontakt shop crystals calendar impressum datenschutz agb cookies widerruf; do curl -s -o /dev/null -w "%{http_code} $p\n" "https://cinematic-vision-studio.de/$p.html"; done
+
+--------------------------------------------------------------------------------
+C. ASSETS
+--------------------------------------------------------------------------------
+  [ ] C1  Kein 404 in der Browser-Konsole auf den 15 Seiten (Netzwerk-Tab pruefen).
+  [ ] C2  Fonts laden: Syne und DM Sans werden angezeigt, keine Fallback-Serife.
+          Die 5 woff2-Dateien muessen 200 liefern.
+  [ ] C3  Dateinamen mit Leerzeichen und Umlauten liefern 200, insbesondere:
+            /assets/icon/1%20Kristall.png
+            /assets/portfolio/icons/Qualit%C3%A4t.png
+            /assets/showcase/portfolio/Anime%20und%20Comic%20und%20Zeichentrick.png
+          Schlagen diese fehl, hat der Upload die Namen veraendert.
+  [ ] C4  Hero-Video /assets/cvs-hero-loop.mp4 laedt und spielt.
+  [ ] C5  /videos/Immobilienvideo.mp4 laedt auf immobilienvideos.html.
+  [ ] C6  Kristall-Icons auf crystals.html sichtbar.
+  [ ] C7  Shop-Cover auf shop.html sichtbar.
+
+--------------------------------------------------------------------------------
+D. NAVIGATION UND VERLINKUNG
+--------------------------------------------------------------------------------
+  [ ] D1  Kopfnavigation auf allen 15 Seiten identisch, alle Links 200.
+  [ ] D2  Footer auf allen 15 Seiten identisch, alle Rechtslinks 200.
+  [ ] D3  Burger-Menue auf Mobil oeffnet und schliesst.
+  [ ] D4  Buchungs-Link zeigt ueberall auf /calendar.html.
+  [ ] D5  Login-Link zeigt auf die Render-App (onrender.com/login.php) und laedt.
+  [ ] D6  Studio-CTA zeigt auf die Render-App (studio-demo.php) und laedt.
+  [ ] D7  Kein interner Link zeigt auf availability.html.
+
+--------------------------------------------------------------------------------
+E. ROUTEN UND REDIRECTS
+--------------------------------------------------------------------------------
+  [ ] E1  Render: /availability.php liefert 301 auf /calendar.html.
+  [ ] E2  Das Ziel /calendar.html liefert danach 200 (nicht 404).
+  [ ] E3  Keine Redirect-Schleife: der Aufruf endet nach genau einem Sprung.
+  [ ] E4  /ki-videos.html ist entfernt oder leitet auf /portfolio.html.
+  [ ] E5  /claude-code-anleitung.html ist NICHT oeffentlich erreichbar.
+  [ ] E6  /availability.html ist entfernt (404 ist hier der Sollzustand).
+
+--------------------------------------------------------------------------------
+F. DASS NICHTS INTERNES OEFFENTLICH IST
+--------------------------------------------------------------------------------
+Jeder dieser Aufrufe MUSS 403 oder 404 liefern. Ein 200 ist ein Sicherheitsvorfall.
+
+  [ ] F1  /includes/config.php
+  [ ] F2  /includes/auth.php
+  [ ] F3  /api/contact-submit.php        (nur relevant, falls auf IONOS betrieben)
+  [ ] F4  /storage/cinematic.db
+  [ ] F5  /render-data/
+  [ ] F6  /Dockerfile
+  [ ] F7  /render.yaml
+  [ ] F8  /CLAUDE.md
+  [ ] F9  /SECURITY.md
+  [ ] F10 /archive/tools/generate-batch-a.php
+  [ ] F11 /bin/backup-db.php
+  [ ] F12 /.git/config
+  [ ] F13 Directory Listing: /assets/ zeigt KEIN Verzeichnislisting.
+
+--------------------------------------------------------------------------------
+G. KONTAKTFORMULAR
+--------------------------------------------------------------------------------
+  [ ] G1  kontakt.html sendet an den vorgesehenen Endpunkt, keine CORS-Fehler
+          in der Konsole.
+  [ ] G2  Absenden mit gueltigen Testdaten liefert die Erfolgsmeldung.
+  [ ] G3  Honeypot-Feld bleibt im Formular unsichtbar.
+  [ ] G4  Mehrfaches Absenden greift in das Rate Limit (kein unbegrenzter Versand).
+  [ ] G5  Die Nachricht kommt im Zielpostfach an.
+
+--------------------------------------------------------------------------------
+H. RENDER-APP NACH DEM IONOS-DEPLOY
+--------------------------------------------------------------------------------
+  [ ] H1  /api/health.php liefert 200.
+  [ ] H2  Login mit synthetischem Testkonto funktioniert.
+  [ ] H3  Session-Cookie heisst csf_session - NICHT PHPSESSID.
+          Pruefen im Browser unter Anwendung > Cookies.
+  [ ] H4  Nach dem Login ist der Nutzer auch im Studio erkannt
+          (Upload- und Render-Pfad sehen dasselbe Konto).
+  [ ] H5  Logout entfernt Session- und Remember-Cookie.
+  [ ] H6  Dashboard zeigt den korrekten Kristallstand.
+
+--------------------------------------------------------------------------------
+I. ABSCHLUSS
+--------------------------------------------------------------------------------
+  [ ] I1  Ergebnis aller Punkte dokumentieren (bestanden / nicht bestanden).
+  [ ] I2  Bei einem Fehlschlag in Abschnitt F: sofort zurueckrollen, Ursache
+          klaeren, erst danach erneut ausliefern.
+  [ ] I3  Live-Stand des Manifests aktualisieren (Abschnitte 2, 3, 5).
+  [ ] I4  Datum, Uhrzeit und hochgeladene Dateianzahl notieren.
+================================================================================

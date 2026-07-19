@@ -1,0 +1,221 @@
+================================================================================
+IONOS DEPLOY MANIFEST - Cinematic Vision Studio 1.0 "Free Solid"
+================================================================================
+Stand:            2026-07-19
+RC-Branch:        release/cvs-1.0-free-solid
+Erzeugt aus:      lokaler Referenz-Scan der 15 Pflichtseiten (Phase D)
+Status:           DOKUMENTATION - noch KEIN Upload durchgefuehrt
+
+Diese Datei enthaelt keine Zugangsdaten, Passwoerter oder Secrets.
+
+--------------------------------------------------------------------------------
+0. GRUNDPRINZIP: ZWEI-HOSTS-TRENNUNG
+--------------------------------------------------------------------------------
+IONOS  = ausschliesslich statische Dateien (HTML, CSS, JS, Bilder, Videos, Fonts).
+Render = die gesamte PHP-Anwendung (Studio, Login, Dashboard, API, Datenbank).
+
+Auf IONOS darf niemals PHP-Quellcode, Infrastruktur oder Laufzeitdaten liegen.
+Die statischen Seiten verlinken die App ueber absolute URLs auf
+cinematic-studio-family.onrender.com (Login, Studio) - es wird dort nichts
+gespiegelt.
+
+--------------------------------------------------------------------------------
+1. DATEIEN, DIE AUF IONOS VEROEFFENTLICHT WERDEN MUESSEN
+--------------------------------------------------------------------------------
+Umfang:        61 Dateien
+Gesamtgroesse: 64.289.532 Bytes (61,31 MB)
+
+Herleitung: Ausgangspunkt sind die 15 Pflichtseiten. Aus ihnen wurden alle
+src/href/poster/url()-Referenzen extrahiert, prozent-dekodiert und gegen die
+getrackte Arbeitskopie geprueft. Anschliessend wurden die von den referenzierten
+CSS-Dateien geladenen Assets (Fonts) aufgeloest. Jede Datei unten ist damit
+nachweislich von mindestens einer Pflichtseite erreichbar. Nicht referenzierte
+Dateien sind bewusst NICHT enthalten (siehe Abschnitt 6).
+
+Ergebnis der Pruefung: 61/61 vorhanden, 61/61 in Git getrackt, 0 Null-Byte-Dateien,
+0 unaufloesbare Referenzen.
+
+--- BEGIN FILE LIST ---
+academy.html
+agb.html
+calendar.html
+cookies.html
+crystals.html
+datenschutz.html
+immobilienvideos.html
+impressum.html
+index.html
+kontakt.html
+portfolio.html
+prompt-generator.html
+scene-editor-test.html
+shop.html
+widerruf.html
+assets/css/cvs-core.css
+assets/fonts/fonts.css
+assets/js/nav.js
+assets/cvs-hero-loop.mp4
+assets/cvs-hero-studio.jpg
+assets/cvs-logo.png
+assets/cvs-logo-icon.png
+assets/fonts/8vIH7w4qzmVxm25L9Hz_.woff2
+assets/fonts/8vIH7w4qzmVxm2BL9A.woff2
+assets/fonts/8vIH7w4qzmVxm2NL9Hz_.woff2
+assets/fonts/rP2Hp2ywxg089UriCZ2IHSeH.woff2
+assets/fonts/rP2Wp2ywxg089UriCZaSExdy3sGt9zz86D3wyKy58Q.woff2
+assets/icon/1 Kristall.png
+assets/icon/2 Kristalle.png
+assets/icon/3 Kristalle.png
+assets/portfolio/CVS Rahmen.png
+assets/portfolio/Immobilienvideos.png
+assets/portfolio/icons/01.png
+assets/portfolio/icons/02.png
+assets/portfolio/icons/03.png
+assets/portfolio/icons/Beratung.png
+assets/portfolio/icons/cvs kugel in 360.png
+assets/portfolio/icons/Drohne.png
+assets/portfolio/icons/Kamera.png
+assets/portfolio/icons/Konzept.png
+assets/portfolio/icons/Monitor.png
+assets/portfolio/icons/Post-Production.png
+assets/portfolio/icons/Qualität.png
+assets/portfolio/icons/Reichweite.png
+assets/portfolio/icons/Tempo.png
+assets/showcase/portfolio/Animationen.jpeg
+assets/showcase/portfolio/Anime und Comic und Zeichentrick.png
+assets/showcase/portfolio/Charakter Transformation.jpeg
+assets/showcase/portfolio/Cinematic Trailer.jpeg
+assets/showcase/portfolio/Immobilienvideos.png
+assets/showcase/portfolio/KI-Musik und Videos.jpeg
+assets/showcase/portfolio/Private Erinnerungen.png
+assets/showcase/portfolio/Produktwerbung.jpeg
+assets/showcase/portfolio/TikTok und Social Media.jpeg
+assets/showcase/portfolio/Unternehmensvideos.jpeg
+assets/showcase/shop/anime-shift-cover.jpg
+assets/showcase/shop/pro-bundle-cover.jpg
+assets/showcase/shop/product-ad-cover.jpg
+assets/showcase/shop/starter-crystal-cover.jpg
+assets/showcase/shop/tiktok-viral-cover.jpg
+videos/Immobilienvideo.mp4
+--- END FILE LIST ---
+
+Hinweis zu Dateinamen: Mehrere Assets enthalten Leerzeichen und Umlaute
+("1 Kristall.png", "Qualität.png", "Anime und Comic und Zeichentrick.png").
+Die HTML-Seiten referenzieren sie prozent-kodiert (%20, %C3%A4). Beim Upload
+muessen die Namen exakt so erhalten bleiben - Umbenennen oder Normalisieren
+erzeugt flaechendeckende 404s.
+
+--------------------------------------------------------------------------------
+2. DATEIEN, DIE AKTUELL LIVE 200 LIEFERN
+--------------------------------------------------------------------------------
+NICHT LOKAL ERMITTELBAR - offenes externes Gate.
+
+Diese Angabe erfordert HTTP-Abfragen gegen die Live-Domain. In dieser Session
+wurden bewusst keine externen Dienste kontaktiert. Der Ist-Zustand von IONOS ist
+damit unbekannt und darf nicht geraten werden.
+
+Read-only-Gegenprobe (aendert nichts, laedt nichts hoch), pro Pfad:
+    curl -s -o /dev/null -w "%{http_code} %{url_effective}\n" "https://cinematic-vision-studio.de/<pfad>"
+
+Zu pruefen sind alle 61 Pfade aus Abschnitt 1 (URL-kodiert).
+
+--------------------------------------------------------------------------------
+3. DATEIEN, DIE AKTUELL LIVE 404 ODER 403 LIEFERN
+--------------------------------------------------------------------------------
+NICHT LOKAL ERMITTELBAR - selbes externes Gate wie Abschnitt 2.
+
+Begruendete Erwartung (zu verifizieren, nicht als Fakt behandeln):
+  - /availability.html  -> 404 erwartet. Die Datei existiert in keinem Stand des
+    Repos. Das Alt-Skript ionos-upload.mjs referenziert sie fehlerhaft.
+  - /calendar.html      -> Status unbekannt. Muss nach dem Upload 200 liefern,
+    weil availability.php (Render) jetzt permanent dorthin umleitet.
+
+--------------------------------------------------------------------------------
+4. DATEIEN, DIE ERSETZT WERDEN MUESSEN
+--------------------------------------------------------------------------------
+Alle 61 Dateien aus Abschnitt 1 - vollstaendiger Abgleich, kein Teil-Upload.
+
+Begruendung: Der Live-Stand ist nicht versioniert und laesst sich lokal nicht
+mit dem Repo vergleichen. Ein selektiver Upload nach Vermutung wuerde einen
+Mischzustand aus alten und neuen Seiten erzeugen. Der vollstaendige Abgleich ist
+der einzige Weg zu einem definierten Zustand.
+
+Besonders kritisch, weil in diesem RC veraendert oder neu:
+  - calendar.html           Ziel des neuen 301 von availability.php
+  - kontakt.html            Formular gegen die abgesicherte contact-submit.php
+  - crystals.html           Kristall-Icons
+  - scene-editor-test.html  Startseite
+
+--------------------------------------------------------------------------------
+5. DATEIEN, DIE VON IONOS ENTFERNT WERDEN SOLLTEN
+--------------------------------------------------------------------------------
+Erst nach der Live-Pruefung aus Abschnitt 2/3 ausfuehren - nur entfernen, was
+dort tatsaechlich als vorhanden nachgewiesen wurde.
+
+  a) claude-code-anleitung.html
+     Interne Arbeitsanleitung. Gehoert nicht an die Oeffentlichkeit. Ist NICHT
+     Teil des Upload-Sets. Falls live vorhanden: entfernen.
+
+  b) ki-videos.html
+     Durch portfolio.html abgeloest. DEPLOYMENT.md sieht /ki-videos.* -> /portfolio
+     vor. Falls live vorhanden: entfernen oder auf portfolio.html umleiten.
+
+  c) availability.html
+     Existiert im Repo nicht. Falls live als Restbestand vorhanden: entfernen.
+     Bewusst NICHT neu anlegen - kanonisch ist calendar.html.
+
+  d) Alle PHP-Dateien, die je versehentlich auf IONOS gelandet sind.
+     Liefert der Webspace PHP nicht aus, sondern als Text, waere der Quelltext
+     offengelegt. Falls dort PHP-Dateien liegen: entfernen und Inhalt als
+     offengelegt behandeln.
+
+--------------------------------------------------------------------------------
+6. DATEIEN, DIE NIEMALS AUF IONOS HOCHGELADEN WERDEN DUERFEN
+--------------------------------------------------------------------------------
+233 der 293 getrackten Dateien sind vom Upload ausgeschlossen. Gruppen:
+
+  api/ (32)              Server-Endpunkte inkl. Auth, Upload, Render, Kontakt.
+                         Gehoeren ausschliesslich auf Render.
+  includes/ (13)         Auth-, DB-, Mailer- und Rate-Limit-Interna.
+  bin/ (3)               CLI-Werkzeuge: Backup, Cleanup, Asset-Generator.
+  docker/ (2)            apache.conf, entrypoint.sh.
+  archive/ (30)          Archivierte Alt-Werkzeuge und QA-Screenshots. Die
+                         Batch-Generatoren darin koennen Provider-Kosten ausloesen
+                         und sind auf Render per .htaccess gesperrt.
+  storage/ (13)          Laufzeitdaten und Schutz-.htaccess.
+  data/ (7)              Laufzeit-JSON und Schutz-.htaccess.
+  memory/ (11)           Interne Projektnotizen.
+  Dokumentation (28)     Alle .md-Dateien inkl. CLAUDE.md, SECURITY.md,
+                         DEPLOYMENT.md, DECISION_LOG.md.
+  PHP-Seiten (26)        login.php, dashboard.php, profile.php, studio-demo.php,
+                         Legacy-Studio-Suite und Redirect-Stubs. Nur Render.
+  Infrastruktur (4)      Dockerfile, render.yaml, .gitignore, .dockerignore.
+  assets/ ungenutzt (62) Nicht referenzierte Alt- und Duplikat-Assets, u. a. der
+                         Duplikat-Baum assets/portfolio/ vs assets/showcase/portfolio/,
+                         app.css, editor.js, upload.js, TTF-Fonts (durch woff2
+                         abgeloest) und ico-video_BG_alt.webp.bak.
+  sonstige (2)           claude-code-anleitung.html, ki-videos.html.
+
+Zusaetzlich - unabhaengig vom Tracking-Status - niemals hochladen:
+  - Datenbanken            storage/cinematic.db, render-data/, *.sqlite, *.db
+  - Backups                jede Backup- oder Dump-Datei
+  - Logs                   php-server.log, data/ffmpeg-debug.log,
+                           storage/temp/render.log
+  - Secrets                .env, Zugangsdaten, API-Keys, SMTP-Passwoerter
+  - Scratchpad/Testdateien lokale Testskripte und Staging-Ordner
+  - .git/                  komplettes Repository-Verzeichnis
+
+--------------------------------------------------------------------------------
+7. PRUEFUNGEN, DIE LOKAL BEREITS BESTANDEN SIND
+--------------------------------------------------------------------------------
+  [x] Alle 15 Pflichtseiten vorhanden und getrackt
+  [x] Alle 41 Seiten-Assetreferenzen aufloesbar
+  [x] Alle 5 woff2-Fonts aus fonts.css vorhanden und getrackt
+  [x] cvs-core.css laedt keine externen Dateien (nur Inline-Data-URI)
+  [x] nav.js referenziert keine Assets
+  [x] Keine Null-Byte-Datei im Upload-Set
+  [x] Keine PHP-, DB-, Log- oder Backup-Datei im Upload-Set
+  [x] Alle internen Seitenlinks der Pflichtseiten zeigen auf existierende Seiten
+
+Offen und nur live pruefbar: Abschnitte 2, 3 und 5.
+================================================================================
