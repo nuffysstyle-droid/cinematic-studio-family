@@ -231,7 +231,8 @@ function csf_auth_login(string $email, string $password, bool $remember = false)
  */
 function csf_auth_logout(): void
 {
-    // Remember-Me-Token aus DB löschen
+    // Remember-Me-Token aus DB löschen — nur das präsentierte Token;
+    // Tokens anderer Geräte desselben Users bleiben gültig
     $cookie = $_COOKIE[CSF_AUTH_REMEMBER_COOKIE] ?? '';
     if ($cookie !== '') {
         $tokenHash = hash('sha256', $cookie);
@@ -239,7 +240,7 @@ function csf_auth_logout(): void
             ->execute([':th' => $tokenHash]);
     }
 
-    // Cookie löschen
+    // Cookie löschen (gleiche Parameter wie beim Setzen in csf_auth_set_remember_cookie)
     if (isset($_COOKIE[CSF_AUTH_REMEMBER_COOKIE])) {
         setcookie(CSF_AUTH_REMEMBER_COOKIE, '', [
             'expires'  => time() - 3600,
@@ -248,11 +249,33 @@ function csf_auth_logout(): void
             'httponly' => true,
             'samesite' => 'Lax',
         ]);
+        unset($_COOKIE[CSF_AUTH_REMEMBER_COOKIE]);
     }
 
-    // Session zerstören
+    // Session muss aktiv sein, um sie zerstören zu können — logout.php ruft
+    // csf_auth_logout() auf, ohne dass vorher csf_auth_user() die Session
+    // gestartet hat (session_status() wäre hier PHP_SESSION_NONE und die
+    // Server-Session bliebe gültig)
+    if (session_status() === PHP_SESSION_NONE) {
+        @session_start();
+    }
+
     if (session_status() === PHP_SESSION_ACTIVE) {
         $_SESSION = [];
+
+        // Session-Cookie beim Client löschen — mit den aktiven Cookie-Parametern
+        if ((bool) ini_get('session.use_cookies')) {
+            $p = session_get_cookie_params();
+            setcookie(session_name(), '', [
+                'expires'  => time() - 3600,
+                'path'     => $p['path'],
+                'domain'   => $p['domain'],
+                'secure'   => $p['secure'],
+                'httponly' => $p['httponly'],
+                'samesite' => $p['samesite'] !== '' ? $p['samesite'] : 'Lax',
+            ]);
+        }
+
         session_destroy();
     }
 }
