@@ -282,6 +282,13 @@ body{background:var(--black);color:var(--white);font-family:'DM Sans',sans-serif
 
       <form id="briefForm" novalidate>
 
+        <!-- Honeypot: für Menschen unsichtbar, Bots füllen es aus.
+             Server (contact-submit.php) verwirft Anfragen mit Inhalt neutral. -->
+        <div style="position:absolute;left:-9999px;top:-9999px;height:0;width:0;overflow:hidden" aria-hidden="true">
+          <label for="b-website">Website</label>
+          <input type="text" id="b-website" name="website" tabindex="-1" autocomplete="off">
+        </div>
+
         <div class="form-row">
           <div class="field">
             <label for="b-name">Dein Name <span class="req">*</span></label>
@@ -646,7 +653,7 @@ body{background:var(--black);color:var(--white);font-family:'DM Sans',sans-serif
     submitBtn.disabled=true;
     submitBtn.classList.add('loading');
 
-    const payload={name,email,project_type:type,platform,length,style,message,audience,music,references,has_files:files.length>0};
+    const payload={name,email,project_type:type,platform,length,style,message,audience,music,references,has_files:files.length>0,website:document.getElementById('b-website').value};
 
     fetch('api/contact-submit.php',{
       method:'POST',
