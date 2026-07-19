@@ -145,3 +145,6 @@ reference-*.png
 scene-editor-check-*.png
 live-*.png
 prompt-gen-*.png
+
+# P0.1 DB-Backups (bin/backup-db.php) — Backup-Dateien NIEMALS committen
+render-data/
