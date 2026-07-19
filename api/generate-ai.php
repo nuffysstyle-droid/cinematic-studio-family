@@ -39,6 +39,31 @@ require_once __DIR__ . '/../includes/auth.php';
 
 header('Content-Type: application/json');
 
+// ── Kostenschutz: fail-closed in CVS 1.0 ─────────────────────────────────────
+// Für KI-Generierung existiert derzeit KEIN Kostenpfad: der Endpunkt verlangt
+// keinen Login, es ist kein Kristallpreis definiert, es findet keine
+// Guthabenprüfung und keine Abbuchung statt (siehe Kommentar am Auth-Block
+// weiter unten: "Crystals-Spend kommt in V1 wenn Stripe live ist").
+// Jeder Aufruf würde damit unmittelbar kostenpflichtige Kie.ai-Credits
+// verbrauchen — anonym und nur durch ein IP-Rate-Limit gebremst.
+//
+// Bis die Abbuchung VOR dem Provider-Aufruf greift, bleibt der Endpunkt
+// deaktiviert: es werden keine Kristalle gebucht und der Provider wird nie
+// kontaktiert. Reaktivierung: Konstante auf true setzen, sobald
+// csf_auth_require() + csf_auth_spend_crystals() vor csf_kie_post() laufen.
+const CSF_AI_GENERATION_ENABLED = false;
+
+if (!CSF_AI_GENERATION_ENABLED) {
+    http_response_code(503);
+    header('Retry-After: 3600');
+    echo json_encode([
+        'status'  => 'error',
+        'message' => 'KI-Generierung ist temporär nicht verfügbar.',
+        'code'    => 'ai_temporarily_unavailable',
+    ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
 // ── Hilfsfunktionen ──────────────────────────────────────────────────────────
 
 /**

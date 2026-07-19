@@ -1,5 +1,15 @@
 <?php
 declare(strict_types=1);
+// Nur ueber die Kommandozeile ausfuehrbar.
+// Ueber den Webserver erreichbar waere dieses Skript ein
+// unauthentifizierter Ausloeser fuer kostenpflichtige Kie.ai-Generierungen:
+// der Server-API-Key steht auf Render in der Umgebung, ein einzelner
+// anonymer HTTP-Aufruf wuerde die komplette Batch-Schleife starten.
+if (PHP_SAPI !== "cli") {
+    http_response_code(404);
+    exit;
+}
+
 
 echo "=== PHP Netzwerk-Diagnose ===\n\n";
 

@@ -37,6 +37,26 @@ declare(strict_types=1);
 
 header('Content-Type: application/json');
 
+// ── Kostenschutz: fail-closed in CVS 1.0 ─────────────────────────────────────
+// Gegenstück zu generate-ai.php, das in CVS 1.0 deaktiviert ist (kein
+// Kostenpfad). Ohne generate-ai können keine neuen Tasks entstehen, die hier
+// abgefragt werden könnten — der Endpunkt hätte also keine gültige Funktion
+// mehr, würde aber weiterhin ohne Login und ohne Rate-Limit ausgehende
+// Aufrufe mit dem Server-API-Key auslösen. Deshalb ebenfalls fail-closed.
+// Reaktivierung gemeinsam mit generate-ai.php.
+const CSF_AI_STATUS_ENABLED = false;
+
+if (!CSF_AI_STATUS_ENABLED) {
+    http_response_code(503);
+    header('Retry-After: 3600');
+    echo json_encode([
+        'status'  => 'error',
+        'message' => 'KI-Generierung ist temporär nicht verfügbar.',
+        'code'    => 'ai_temporarily_unavailable',
+    ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
 // ── Hilfsfunktionen ──────────────────────────────────────────────────────────
 
 /**

@@ -1,0 +1,8 @@
+# Cinematic Vision Studio — archive/
+# Historische QA-Artefakte und CLI-Werkzeuge. Kein Web-Zugriff.
+#
+# Die Skripte in archive/tools/ nutzen den Server-API-Key aus der Umgebung
+# und wuerden per HTTP kostenpflichtige Kie.ai-Generierungen ausloesen.
+# Zweite Verteidigungslinie zusaetzlich zum CLI-Guard in den Skripten selbst.
+
+Require all denied
