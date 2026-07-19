@@ -351,7 +351,14 @@ function csf_auth_user(): ?array
         session_regenerate_id(delete_old_session: true);
         $_SESSION[CSF_AUTH_SESSION_KEY] = $user;
 
-        // Remember-Token erneuern (Rolling)
+        // Remember-Token erneuern (Rolling). Der praesentierte Vorgaenger wird
+        // dabei entwertet: ohne dieses DELETE bleibt eine kopierte Fassung des
+        // alten Cookies die vollen CSF_AUTH_REMEMBER_DAYS gueltig, obwohl das
+        // echte Geraet laengst auf einen neuen Token rotiert hat — die Rotation
+        // haette dann keinerlei Schutzwirkung.
+        $pdo->prepare("DELETE FROM remember_tokens WHERE token_hash = :th")
+            ->execute([':th' => $tokenHash]);
+
         csf_auth_set_remember_cookie($userId);
     }
 
