@@ -1,0 +1,204 @@
+================================================================================
+DOCKER-VERIFIKATION - EXTERNES PRE-DEPLOY-GATE
+Cinematic Vision Studio 1.0 "Free Solid"
+================================================================================
+Stand:      2026-07-19
+RC-Branch:  release/cvs-1.0-free-solid
+Status:     OFFEN - lokal nicht ausfuehrbar
+
+Diese Datei enthaelt keine Zugangsdaten, Passwoerter oder Secrets.
+
+--------------------------------------------------------------------------------
+0. WARUM DIESES GATE OFFEN IST
+--------------------------------------------------------------------------------
+Auf dem Arbeitsrechner ist keine Container-Runtime vorhanden. Geprueft wurde:
+
+    docker                        nicht vorhanden
+    podman                        nicht vorhanden
+    nerdctl                       nicht vorhanden
+    buildah                       nicht vorhanden
+    Docker Desktop                nicht installiert
+    Dienst com.docker.service     nicht registriert
+    WSL-Distribution              keine installiert
+
+Es wurde bewusst nichts installiert. Damit ist das Produktions-Image in dieser
+Session nicht gebaut und nicht gestartet worden. Alle Aussagen unten sind
+Soll-Werte aus der statischen Analyse von Dockerfile und docker/apache.conf -
+sie sind NICHT durch einen Lauf bestaetigt und duerfen bis zur Gegenprobe nicht
+als verifiziert behandelt werden.
+
+--------------------------------------------------------------------------------
+1. BUILD UND START
+--------------------------------------------------------------------------------
+Im Wurzelverzeichnis des RC-Worktrees ausfuehren:
+
+    docker build -t cvs-rc-verify .
+    docker run -d --name cvs-rc -p 8080:80 -e APACHE_PORT=80 cvs-rc-verify
+
+Aufraeumen nach der Pruefung:
+
+    docker rm -f cvs-rc
+    docker rmi cvs-rc-verify
+
+--------------------------------------------------------------------------------
+2. PHP-KONFIGURATION
+--------------------------------------------------------------------------------
+    docker exec cvs-rc php -v
+    docker exec cvs-rc php --ini
+    docker exec cvs-rc php -i | grep -E "^(session.name|display_errors|display_startup_errors|log_errors|error_reporting|error_log|expose_php|session.cookie_httponly|session.cookie_samesite)"
+
+ERWARTUNG (Pflicht):
+    session.name              => csf_session => csf_session
+    display_errors            => Off => Off
+    display_startup_errors    => Off => Off
+    log_errors                => On => On
+
+ERWARTUNG (weiter):
+    PHP-Version               8.2.x
+    Geladenes ini-Verzeichnis /usr/local/etc/php/conf.d
+    csf.ini vorhanden         /usr/local/etc/php/conf.d/csf.ini
+    error_reporting           E_ALL (32767)
+    error_log                 leer -> mod_php schreibt ins Apache-ErrorLog
+                              (/var/log/apache2/csf_error.log), also AUSSERHALB
+                              des DocumentRoot /var/www/html
+
+HINWEIS zu session.name: Der Wert stammt aus csf.ini. Zusaetzlich setzen
+includes/config.php und includes/auth.php den Namen im Code identisch
+(getenv('PHP_SESSION_NAME') ?: 'csf_session'). Auf Render setzt render.yaml
+PHP_SESSION_NAME=csf_session. Alle drei Wege ergeben denselben Namen.
+
+HINWEIS zu expose_php: In csf.ini nicht gesetzt, es gilt der PHP-Default On.
+Der X-Powered-By-Header wird dadurch gesendet. Das ist reine Versionspreisgabe,
+kein Zugriffsproblem. Falls gewuenscht, waere 'expose_php = Off' in der csf.ini
+die passende Stelle - bewusst NICHT im Rahmen dieses RC geaendert.
+
+HINWEIS zu session.cookie_httponly / session.cookie_samesite: In csf.ini nicht
+gesetzt, die ini-Werte sind daher Default. Massgeblich ist der Code: sowohl
+includes/config.php als auch includes/auth.php rufen vor jedem Session-Start
+session_set_cookie_params() mit httponly=true und samesite=Lax auf; secure wird
+gesetzt, sobald HTTPS bzw. X-Forwarded-Proto=https erkannt wird. Lokal
+nachgewiesen: Set-Cookie enthaelt "HttpOnly; SameSite=Lax".
+
+--------------------------------------------------------------------------------
+3. APACHE-KONFIGURATION
+--------------------------------------------------------------------------------
+    docker exec cvs-rc apache2ctl -S
+    docker exec cvs-rc apache2ctl -M
+    docker exec cvs-rc cat /etc/apache2/sites-available/000-default.conf
+
+ERWARTUNG:
+    AllowOverride All      auf /var/www/html   (damit .htaccess greift)
+    AllowOverride None     auf storage, data, includes
+    Options                FollowSymLinks ohne Indexes -> kein Directory Listing
+    ErrorLog               /var/log/apache2/csf_error.log
+
+--------------------------------------------------------------------------------
+4. ZUGRIFFSSCHUTZ - JEDER AUFRUF MUSS 403 ODER 404 LIEFERN
+--------------------------------------------------------------------------------
+    for p in \
+      includes/config.php includes/auth.php \
+      docker/apache.conf docker/entrypoint.sh \
+      bin/backup-db.php bin/cleanup-cron.php \
+      archive/tools/generate-batch-a.php \
+      render.yaml Dockerfile \
+      storage/cinematic.db render-data/cinematic.db \
+      render-data/backups/ \
+      data/projects/projects.json ; do \
+      echo "$(curl -s -o /dev/null -w '%{http_code}' http://localhost:8080/$p)  $p"; \
+    done
+
+ERWARTUNG: durchgaengig 403 (bzw. 404, wenn die Datei nicht existiert).
+Ein 200 ist ein Sicherheitsvorfall und blockiert den Deploy.
+
+Grundlage im Repo (docker/apache.conf):
+    includes/            Require all denied
+    data/                Require all denied
+    storage/             Require all denied  (jobs/exports/thumbnails gezielt frei)
+    docker/              Require all denied
+    bin/                 Require all denied
+    archive/             Require all denied
+    render.yaml,Dockerfile  FilesMatch  Require all denied
+    *.db,*.sqlite,*.sqlite3,*.db-wal,*.db-shm  global denied
+    render-data/         DB-Endungen denied
+
+--------------------------------------------------------------------------------
+5. DIRECTORY LISTING
+--------------------------------------------------------------------------------
+    curl -s -o /dev/null -w "%{http_code}\n" http://localhost:8080/assets/
+    curl -s http://localhost:8080/assets/ | head -20
+
+ERWARTUNG: kein Verzeichnisindex. /var/www/html setzt Options FollowSymLinks
+ohne Indexes, ein Listing darf nicht erscheinen.
+
+--------------------------------------------------------------------------------
+6. HEALTH-ENDPUNKT
+--------------------------------------------------------------------------------
+    curl -s -o /dev/null -w "%{http_code}\n" http://localhost:8080/api/health.php
+    curl -s http://localhost:8080/api/health.php
+
+ERWARTUNG: HTTP 200, JSON-Antwort, KEINE Debug-Details ohne Berechtigung
+(Debug-Ausgabe wurde in Commit 7e95a86 eingeschraenkt).
+
+--------------------------------------------------------------------------------
+7. SESSION IM CONTAINER GEGENPRUEFEN
+--------------------------------------------------------------------------------
+    curl -si -X POST http://localhost:8080/api/auth/register.php \
+      -H "Content-Type: application/json" \
+      -d '{"email":"rc-docker@example.invalid","password":"RcSynthetic!123","password_confirm":"RcSynthetic!123"}'
+
+    curl -si -X POST http://localhost:8080/api/auth/login.php \
+      -H "Content-Type: application/json" \
+      -d '{"email":"rc-docker@example.invalid","password":"RcSynthetic!123","remember":false}' \
+      | grep -i "^set-cookie"
+
+ERWARTUNG: Set-Cookie: csf_session=...; path=/; HttpOnly; SameSite=Lax
+Es darf KEIN PHPSESSID auftauchen.
+Nur synthetische Konten verwenden, niemals echte Zugangsdaten.
+
+--------------------------------------------------------------------------------
+8. OFFENE BEFUNDE AUS DER STATISCHEN ANALYSE
+--------------------------------------------------------------------------------
+Beide Punkte sind Bestandsbefunde - sie entstehen NICHT durch diesen RC und
+wurden bewusst nicht eigenmaechtig geaendert, weil sie ohne laufenden Container
+nicht nachpruefbar sind. Entscheidung liegt bei Bjoern.
+
+  B1  render-data/backups/backup.log ist nicht per Deny geschuetzt.
+      docker/apache.conf denied unter render-data/ ausschliesslich DB-Endungen,
+      damit der storage-Symlink-Baum erreichbar bleibt. Die Backup-Datenbanken
+      selbst (*.db) sind dadurch geschuetzt, die Logdatei daneben nicht.
+      Inhalt laut bin/backup-db.php: ausschliesslich Zeitstempel, Ereignis und
+      Dateinamen, ausdruecklich ohne Personenbezug. Ein Verzeichnislisting ist
+      nicht moeglich (kein Options Indexes), ein Treffer erfordert also den
+      exakten Pfad. Einstufung: niedrig, Informationspreisgabe.
+      Vorschlag, falls gewuenscht, in docker/apache.conf:
+          <Directory /var/www/html/render-data/backups>
+              Require all denied
+          </Directory>
+      Unbedenklich, weil Backups ausschliesslich per CLI erzeugt und gelesen
+      werden - es gibt keinen HTTP-Pfad, der sie braucht.
+      Gegenprobe nach der Aenderung:
+          curl -s -o /dev/null -w "%{http_code}\n" http://localhost:8080/render-data/backups/backup.log
+      Erwartung danach: 403.
+
+  B2  docker/apache.conf setzt vhost-weit
+      Header always set Access-Control-Allow-Origin "*"
+      Das gilt fuer jede Antwort der Render-App, nicht nur fuer die API.
+      Entschaerfend: Access-Control-Allow-Credentials wird NICHT gesetzt, daher
+      senden Browser bei Cross-Origin-Anfragen keine Cookies mit - Session-
+      geschuetzte Endpunkte sind dadurch nicht fremdnutzbar. Einstufung: niedrig.
+      Eine Eingrenzung auf die eigenen Origins waere sauberer, ist aber eine
+      Produktentscheidung ueber die erlaubten Domains und daher hier nicht
+      vorweggenommen.
+
+--------------------------------------------------------------------------------
+9. ABNAHME
+--------------------------------------------------------------------------------
+Das Gate gilt als bestanden, wenn:
+  [ ] Abschnitt 2 liefert session.name=csf_session, display_errors=Off,
+      display_startup_errors=Off, log_errors=On
+  [ ] Abschnitt 4 liefert durchgaengig 403/404, kein einziges 200
+  [ ] Abschnitt 5 zeigt kein Directory Listing
+  [ ] Abschnitt 6 liefert 200 ohne ungeschuetzte Debug-Details
+  [ ] Abschnitt 7 zeigt csf_session und kein PHPSESSID
+  [ ] Abschnitt 8 ist entschieden (belassen oder behoben)
+================================================================================

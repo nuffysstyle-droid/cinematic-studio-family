@@ -1,0 +1,180 @@
+================================================================================
+SMTP-EINRICHTUNG - RENDER-DASHBOARD-CHECKLISTE
+Cinematic Vision Studio 1.0 "Free Solid"
+================================================================================
+Stand:      2026-07-19
+RC-Branch:  release/cvs-1.0-free-solid
+Status:     OFFEN - externes Konfigurations-Gate
+
+WICHTIG: Diese Datei enthaelt bewusst KEINE echten Werte, Benutzernamen oder
+Passwoerter. Sie benennt ausschliesslich Variablennamen und Erwartungen.
+SMTP_PASS und SMTP_USER duerfen niemals in Git, in render.yaml, in Logs oder
+in Testausgaben stehen. Sie gehoeren ausschliesslich in die Environment-
+Verwaltung des Render-Dashboards.
+
+In dieser Session wurde keine Mail versendet, keine Credential gesetzt und
+keine Render-Einstellung veraendert.
+
+--------------------------------------------------------------------------------
+1. VARIABLEN - WAS IM RENDER-DASHBOARD ZU SETZEN IST
+--------------------------------------------------------------------------------
+Service: cinematic-studio-family (Web Service) > Environment
+
+  Name        Pflicht  Geheim  Default
+  ----------  -------  ------  ---------------------------------------------
+  SMTP_HOST   ja       nein    - (leer)   Mailserver-Hostname des Postfachs
+  SMTP_USER   ja       JA      - (leer)   Postfach-Login (meist die Adresse)
+  SMTP_PASS   ja       JA      - (leer)   Postfach-Passwort
+  SMTP_PORT   nein     nein    587        Submission-Port mit STARTTLS
+  MAIL_FROM   nein     nein    noreply@cinematic-vision-studio.de
+
+Pflichtlogik (docker/entrypoint.sh Zeile 79): msmtp wird NUR konfiguriert, wenn
+SMTP_HOST UND SMTP_USER UND SMTP_PASS gesetzt sind. Fehlt eine der drei, bleibt
+der Versand komplett aus - es gibt keinen Teilbetrieb.
+
+Was NICHT in render.yaml gehoert:
+  SMTP_USER und SMTP_PASS. render.yaml liegt im Git-Repository; jeder dort
+  eingetragene Wert waere dauerhaft in der Historie. Beide Werte ausschliesslich
+  im Dashboard setzen und dort als geheim markieren.
+  SMTP_HOST, SMTP_PORT und MAIL_FROM sind nicht geheim und koennten in
+  render.yaml stehen - der Einheitlichkeit halber werden aber alle fuenf
+  Variablen im Dashboard gepflegt.
+
+--------------------------------------------------------------------------------
+2. WERTE FUER IONOS-SMTP (empfohlener Weg)
+--------------------------------------------------------------------------------
+Empfehlung: das vorhandene IONOS-Domainpostfach nutzen. Es sendet von der
+eigenen Domain, deren SPF-Eintrag IONOS bereits verwaltet - das ist der
+kuerzeste Weg zu zustellbaren Transaktionsmails.
+
+  SMTP_HOST   Mailserver-Hostname aus der IONOS-Postfachverwaltung
+  SMTP_PORT   587
+  SMTP_USER   vollstaendige Adresse des Postfachs
+  SMTP_PASS   Passwort dieses Postfachs
+  MAIL_FROM   dieselbe Adresse wie SMTP_USER
+
+Verschluesselung: STARTTLS auf Port 587. Die msmtp-Konfiguration setzt
+'tls on' plus 'auth on' und prueft gegen /etc/ssl/certs/ca-certificates.crt.
+Port 465 (implizites TLS) wird von dieser Konfiguration NICHT korrekt bedient,
+weil dort zusaetzlich 'tls_starttls off' noetig waere - bei Port 465 muesste
+entrypoint.sh angepasst werden. Deshalb: 587 verwenden.
+
+Absenderdomain: MAIL_FROM muss zur authentifizierten Domain passen. Eine
+Absenderadresse einer fremden Domain wird vom Empfaenger als Spoofing gewertet
+und landet im Spam oder wird abgewiesen.
+
+--------------------------------------------------------------------------------
+3. WAS DER CONTAINER DARAUS MACHT
+--------------------------------------------------------------------------------
+docker/entrypoint.sh schreibt beim Start /etc/msmtprc nach diesem Muster
+(spitze Klammern = Platzhalter, keine echten Werte):
+
+    defaults
+    auth           on
+    tls            on
+    tls_trust_file /etc/ssl/certs/ca-certificates.crt
+    logfile        /var/log/msmtp.log
+    account        default
+    host           <SMTP_HOST>
+    port           <SMTP_PORT>
+    from           <MAIL_FROM>
+    user           <SMTP_USER>
+    password       <SMTP_PASS>
+
+Dateirechte:   chmod 600 /etc/msmtprc, Eigentuemer www-data:www-data.
+               Das Passwort steht im Klartext in dieser Datei - deshalb 600.
+               Die Datei liegt ausserhalb des DocumentRoot und ist per HTTP
+               nicht erreichbar.
+Logpfad:       /var/log/msmtp.log, Eigentuemer www-data, ausserhalb des
+               DocumentRoot.
+PHP-Anbindung: Dockerfile setzt sendmail_path = /usr/bin/msmtp -t, PHP mail()
+               laeuft dadurch ueber msmtp.
+Timeout:       msmtp bringt hier keinen expliziten Timeout mit; es gilt der
+               System-Default. Bei nicht erreichbarem Host blockiert der Request
+               bis zum TCP-Timeout - relevant fuer die Antwortzeit von
+               forgot-password.
+
+--------------------------------------------------------------------------------
+4. VERHALTEN OHNE SMTP
+--------------------------------------------------------------------------------
+Sauber fail-closed, kein stiller Fehlschlag:
+
+  csf_mail_is_configured() prueft ausschliesslich SMTP_HOST.
+  api/auth/forgot-password.php Zeile 123: ist nichts konfiguriert, antwortet der
+  Endpunkt mit HTTP 503 und der Meldung "Passwort-Reset ist aktuell nicht
+  verfuegbar. Kontaktiere den Support." Es wird KEIN Token erzeugt.
+
+  Folge: Solange SMTP nicht gesetzt ist, ist der Passwort-Reset funktionslos,
+  aber ehrlich - er behauptet nicht, eine Mail verschickt zu haben.
+
+  ACHTUNG Reihenfolge: SMTP_HOST allein aktiviert bereits diesen Pfad
+  (csf_mail_is_configured prueft nur SMTP_HOST), waehrend msmtp erst mit allen
+  drei Werten konfiguriert wird. Wird nur SMTP_HOST gesetzt, erzeugt der
+  Endpunkt Tokens und meldet Erfolg, ohne dass eine Mail hinausgeht.
+  Deshalb: die drei Pflichtvariablen immer GEMEINSAM setzen und erst danach
+  deployen.
+
+--------------------------------------------------------------------------------
+5. RESET-TOKEN - GESICHERTES VERHALTEN (aus dem Code)
+--------------------------------------------------------------------------------
+  Erzeugung      bin2hex(random_bytes(32)) -> 64 Hex-Zeichen
+  Speicherung    nur als SHA-256-Hash in password_resets.token_hash (UNIQUE)
+  Gueltigkeit    3600 Sekunden (1 Stunde), Feld expires_at als Unix-Zeit
+  Einmaligkeit   nach erfolgreichem Reset wird die Zeile geloescht (Zeile 114)
+  Nur ein Token  vor dem Erzeugen werden alte Tokens des Users geloescht (148)
+  Nebeneffekt    nach erfolgreichem Reset werden ALLE remember_tokens des Users
+                 geloescht (Zeile 115) - Altgeraete sind damit ausgeloggt
+  Enumeration    die Anfrage antwortet immer mit 200/ok, unabhaengig davon, ob
+                 die Adresse existiert
+  Rate Limit     5 Anfragen pro Stunde und IP
+  Link-Ziel      https://cinematic-studio-family.onrender.com/forgot-password.php?token=...
+
+--------------------------------------------------------------------------------
+6. SPF UND DKIM - VOR DEM ERSTEN VERSAND PRUEFEN
+--------------------------------------------------------------------------------
+  [ ] SPF-Eintrag der Domain enthaelt den IONOS-Mailserver.
+          dig +short TXT cinematic-vision-studio.de | grep spf
+      Bei einem IONOS-Postfach ist der Eintrag ueblicherweise vorhanden.
+  [ ] DKIM ist in der IONOS-Verwaltung fuer die Domain aktiv.
+          dig +short TXT <selector>._domainkey.cinematic-vision-studio.de
+  [ ] DMARC-Eintrag vorhanden (mindestens p=none zum Mitlesen).
+          dig +short TXT _dmarc.cinematic-vision-studio.de
+  [ ] MAIL_FROM verwendet exakt die Domain, die durch SPF/DKIM gedeckt ist.
+  [ ] Der Reset-Link im Mailtext zeigt auf die Domain, die spaeter dauerhaft
+      gilt. Steht ein Domainwechsel an, vorher Zeile 162 in
+      api/auth/forgot-password.php anpassen - sonst verweisen versendete Links
+      auf die alte Adresse.
+
+--------------------------------------------------------------------------------
+7. MANUELLER RESET-TEST NACH DEM SETZEN DER VARIABLEN
+--------------------------------------------------------------------------------
+Erst ausfuehren, wenn Abschnitt 1 und 6 erledigt sind. Ausschliesslich mit
+einem synthetischen Konto auf einer eigenen, kontrollierten Adresse.
+
+   1  [ ] Synthetisches Testkonto registrieren (keine echte Kundenadresse).
+   2  [ ] Als Zieladresse eine eigene, kontrollierte Mailbox verwenden.
+   3  [ ] Reset anfordern: forgot-password mit dieser Adresse.
+   4  [ ] Zustellung pruefen: Mail kommt an - auch den Spam-Ordner ansehen.
+   5  [ ] Link-Domain im Mailtext ist korrekt und aufrufbar.
+   6  [ ] Token einmal verwenden: neues Passwort wird akzeptiert.
+   7  [ ] Denselben Link ein zweites Mal aufrufen: muss abgelehnt werden.
+   8  [ ] Abgelaufenen Token pruefen: Anfrage stellen, mehr als 1 Stunde warten,
+          danach aufrufen - muss abgelehnt werden.
+   9  [ ] Login mit dem NEUEN Passwort funktioniert.
+  10  [ ] Login mit dem ALTEN Passwort wird abgelehnt.
+  11  [ ] Alte Sessions und Remember-Cookies sind ungueltig (Altgeraet testen).
+  12  [ ] Keine Tokens in Logs: weder /var/log/msmtp.log noch das Apache-Log
+          duerfen den Reset-Token im Klartext enthalten.
+  13  [ ] Rate Limit greift: nach 5 Anfragen in einer Stunde folgt HTTP 429.
+  14  [ ] Testkonto danach entfernen.
+
+--------------------------------------------------------------------------------
+8. ABNAHME
+--------------------------------------------------------------------------------
+  [ ] Alle drei Pflichtvariablen gesetzt und als geheim markiert
+  [ ] SMTP_PASS steht nachweislich NICHT in render.yaml oder im Git-Verlauf
+  [ ] Port 587 mit STARTTLS bestaetigt
+  [ ] SPF/DKIM/DMARC geprueft
+  [ ] Reset-Test aus Abschnitt 7 vollstaendig bestanden
+  [ ] Testkonto entfernt
+================================================================================
