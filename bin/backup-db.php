@@ -1,4 +1,3 @@
-#!/usr/bin/env php
 <?php
 /**
  * bin/backup-db.php — SQLite-Backup der CVS-Datenbank per VACUUM INTO (P0.1)

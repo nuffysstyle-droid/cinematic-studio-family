@@ -17,7 +17,13 @@
 declare(strict_types=1);
 
 if (PHP_SAPI !== 'cli') {
-    fwrite(STDERR, "cleanup-cron.php darf nur via CLI ausgeführt werden.\n");
+    // STDERR ist nur unter CLI definiert. Im HTTP-Kontext erzeugte fwrite(STDERR)
+    // hier einen Fatal Error samt absolutem Dateipfad, statt sauber zu blocken —
+    // der Guard hat also genau dort versagt, wo er greifen sollte.
+    if (function_exists('http_response_code')) {
+        http_response_code(403);
+    }
+    echo 'Forbidden';
     exit(1);
 }
 
