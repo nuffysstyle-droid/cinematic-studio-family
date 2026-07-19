@@ -162,23 +162,29 @@ Beide Punkte sind Bestandsbefunde - sie entstehen NICHT durch diesen RC und
 wurden bewusst nicht eigenmaechtig geaendert, weil sie ohne laufenden Container
 nicht nachpruefbar sind. Entscheidung liegt bei Bjoern.
 
-  B1  render-data/backups/backup.log ist nicht per Deny geschuetzt.
-      docker/apache.conf denied unter render-data/ ausschliesslich DB-Endungen,
-      damit der storage-Symlink-Baum erreichbar bleibt. Die Backup-Datenbanken
-      selbst (*.db) sind dadurch geschuetzt, die Logdatei daneben nicht.
-      Inhalt laut bin/backup-db.php: ausschliesslich Zeitstempel, Ereignis und
-      Dateinamen, ausdruecklich ohne Personenbezug. Ein Verzeichnislisting ist
-      nicht moeglich (kein Options Indexes), ein Treffer erfordert also den
-      exakten Pfad. Einstufung: niedrig, Informationspreisgabe.
-      Vorschlag, falls gewuenscht, in docker/apache.conf:
-          <Directory /var/www/html/render-data/backups>
-              Require all denied
-          </Directory>
-      Unbedenklich, weil Backups ausschliesslich per CLI erzeugt und gelesen
-      werden - es gibt keinen HTTP-Pfad, der sie braucht.
-      Gegenprobe nach der Aenderung:
+  B1  Backups sind geschuetzt - urspruenglicher Verdacht ausgeraeumt.
+      Zunaechst sah es so aus, als sei render-data/backups/backup.log
+      ungeschuetzt, weil docker/apache.conf unter render-data/ absichtlich nur
+      DB-Endungen sperrt (damit der storage-Symlink-Baum erreichbar bleibt).
+      Der tatsaechliche Backup-Lauf zeigt jedoch: bin/backup-db.php legt im
+      Backup-Verzeichnis selbst eine .htaccess an mit dem Inhalt
+
+          # Backups niemals per HTTP ausliefern (Zusatzschutz zu docker/apache.conf)
+          Require all denied
+
+      Da docker/apache.conf fuer /var/www/html AllowOverride All setzt, greift
+      diese .htaccess. Damit ist das GESAMTE Backup-Verzeichnis inklusive
+      backup.log per HTTP gesperrt, nicht nur die *.db-Dateien.
+      Ergebnis: kein Handlungsbedarf.
+
+      Beim Docker-Lauf trotzdem mitpruefen:
           curl -s -o /dev/null -w "%{http_code}\n" http://localhost:8080/render-data/backups/backup.log
-      Erwartung danach: 403.
+      Erwartung: 403.
+
+      Abhaengigkeit, die dabei bewusst zu beachten ist: der Schutz haengt an
+      AllowOverride All. Wuerde AllowOverride fuer /var/www/html je auf None
+      gestellt, fiele diese Verteidigungslinie weg und es braeuchte dann ein
+      explizites Directory-Deny in docker/apache.conf.
 
   B2  docker/apache.conf setzt vhost-weit
       Header always set Access-Control-Allow-Origin "*"
