@@ -32,7 +32,19 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/db.php';
 
-// Session-Cookie-Hardening für Seiten die config.php nicht einbinden
+// Session-Cookie-Hardening für Seiten die config.php nicht einbinden.
+//
+// Der Session-NAME muss hier ebenfalls gesetzt werden: login.php, dashboard.php,
+// profile.php, studio-demo.php und api/auth/* binden config.php nicht ein,
+// starten aber über csf_auth_login()/csf_auth_user()/csf_auth_logout() eine
+// Session. Ohne die Zeile unten liefe die Anwendung auf zwei parallelen
+// Sessions — PHPSESSID auf diesen Seiten, csf_session in config.php — und
+// api/upload.php, api/analyze.php sowie api/render-final.php (die config.php
+// einbinden) würden den eingeloggten Nutzer nicht sehen.
+//
+// Der Ausdruck ist absichtlich identisch zu includes/config.php, damit beide
+// Stellen denselben Namen aus derselben Quelle ableiten und nicht divergieren
+// können, wenn PHP_SESSION_NAME gesetzt ist.
 if (session_status() === PHP_SESSION_NONE) {
     $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
         || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
@@ -43,6 +55,7 @@ if (session_status() === PHP_SESSION_NONE) {
         'httponly' => true,
         'samesite' => 'Lax',
     ]);
+    session_name(getenv('PHP_SESSION_NAME') ?: 'csf_session');
 }
 
 // ── Konstanten ────────────────────────────────────────────────────────────────

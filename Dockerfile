@@ -45,6 +45,7 @@ RUN { \
         echo 'max_execution_time = 360'; \
         echo 'memory_limit = 512M'; \
         echo 'session.gc_maxlifetime = 3600'; \
+        echo 'session.name = csf_session'; \
         echo 'sendmail_path = /usr/bin/msmtp -t'; \
         echo 'display_errors = Off'; \
         echo 'display_startup_errors = Off'; \
