@@ -70,8 +70,7 @@ if (is_dir($storageTemp) && @file_put_contents($probe, 'ok') !== false) {
 }
 
 // ── KI-Konfiguration (Wert nie ausgeben, nur Präsenz) ────────────────────────
-$kieKey    = getenv('KIE_AI_API_KEY') ?: ($_SERVER['KIE_AI_API_KEY'] ?? $_ENV['KIE_AI_API_KEY'] ?? '');
-$debugMode = isset($_GET['debug']) && $_GET['debug'] === '1';
+$kieKey = getenv('KIE_AI_API_KEY') ?: ($_SERVER['KIE_AI_API_KEY'] ?? $_ENV['KIE_AI_API_KEY'] ?? '');
 
 $response['ai'] = [
     'kie_key_set'    => $kieKey !== '',
@@ -80,22 +79,11 @@ $response['ai'] = [
         : 'none',
 ];
 
-// Verbose debug-Felder nur bei ?debug=1 — nicht in Produktion sichtbar
-if ($debugMode) {
-    $response['ai']['env_keys'] = array_values(array_filter(
-        array_keys((array)(getenv() ?: [])),
-        fn($k) => !str_starts_with($k, 'APACHE_') && !str_starts_with($k, 'HTTPS')
-    ));
-    $response['ai']['server_keys_custom'] = array_values(array_filter(
-        array_keys($_SERVER),
-        fn($k) => !str_starts_with($k, 'HTTP_') && !str_starts_with($k, 'APACHE_')
-                && !in_array($k, ['SERVER_NAME','SERVER_PORT','SERVER_ADDR','SERVER_PROTOCOL',
-                                   'REQUEST_METHOD','REQUEST_URI','QUERY_STRING','DOCUMENT_ROOT',
-                                   'SCRIPT_FILENAME','SCRIPT_NAME','PHP_SELF','GATEWAY_INTERFACE',
-                                   'SERVER_SOFTWARE','REMOTE_ADDR','REMOTE_PORT','REQUEST_TIME',
-                                   'REQUEST_TIME_FLOAT','SERVER_SIGNATURE'], true)
-    ));
-}
+// Der frühere Modus ?debug=1 gab die NAMEN aller Umgebungs- und
+// $_SERVER-Variablen öffentlich aus. Auch ohne Werte ist das eine
+// Infrastruktur-Landkarte (welche Dienste, Secrets und Integrationen
+// konfiguriert sind) — für einen unauthentifizierten Endpunkt zu viel.
+// Ersatzlos entfernt: Diagnose läuft über die Render-Service-Logs.
 
 // ── Storage-Nutzung (Job-Count, Export-Count) ─────────────────────────────────
 $jobsDir    = __DIR__ . '/../storage/jobs';
@@ -126,11 +114,10 @@ $response['storage'] = [
     'export_mb'      => round($exportBytes / 1048576, 2),
 ];
 
-// ── Manuelles Cleanup per ?cleanup=1 (nur im Debug-Modus) ────────────────────
-if ($debugMode && isset($_GET['cleanup']) && $_GET['cleanup'] === '1') {
-    $cleaned = csf_cleanup_old_jobs();
-    $response['cleanup_run'] = $cleaned;
-}
+// Kein Cleanup-Trigger mehr an diesem Endpunkt: ?debug=1&cleanup=1 hat
+// csf_cleanup_old_jobs() ohne jede Authentifizierung ausgelöst. Der Vorgang
+// bleibt über api/cleanup.php verfügbar, das ein CLEANUP_SECRET per
+// hash_equals prüft. Health bleibt read-only.
 
 http_response_code($response['ok'] ? 200 : 503);
 echo json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);

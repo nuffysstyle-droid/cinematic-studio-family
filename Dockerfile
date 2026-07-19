@@ -28,6 +28,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # ── PHP-Konfiguration ─────────────────────────────────────────────────────────
+#
+# Fehlerausgabe: das offizielle php:8.2-apache liefert php.ini-development
+# und php.ini-production mit, aktiviert aber KEINE von beiden. Ohne die
+# folgenden Zeilen gelten die einkompilierten PHP-Defaults, gemessen mit
+# `php -n`: display_errors=1, display_startup_errors=1, log_errors=0.
+# Das heisst: PHP-Fehler samt Dateipfaden gehen in die HTTP-Antwort und
+# werden nirgends protokolliert. Deshalb hier explizit festgelegt.
+#
+# error_log bleibt bewusst ungesetzt: mod_php schreibt dann in das
+# Apache-ErrorLog (docker/apache.conf -> ${APACHE_LOG_DIR}/csf_error.log,
+# also /var/log/apache2/) — ausserhalb des Web-Roots /var/www/html.
 RUN { \
         echo 'upload_max_filesize = 150M'; \
         echo 'post_max_size = 155M'; \
@@ -35,6 +46,10 @@ RUN { \
         echo 'memory_limit = 512M'; \
         echo 'session.gc_maxlifetime = 3600'; \
         echo 'sendmail_path = /usr/bin/msmtp -t'; \
+        echo 'display_errors = Off'; \
+        echo 'display_startup_errors = Off'; \
+        echo 'log_errors = On'; \
+        echo 'error_reporting = E_ALL'; \
     } > /usr/local/etc/php/conf.d/csf.ini
 
 # ── Apache-Konfiguration ──────────────────────────────────────────────────────
